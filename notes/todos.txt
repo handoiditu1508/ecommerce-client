@@ -1,2 +1,63 @@
 - node version: 22.14.0
 - npm version: 10.9.2
+
+
+
+- admin
+  + manage configurations
+  + manage file system
+    + rename
+    + move
+  + login
+  + manage users
+    + resent confirm email
+    + manage user roles
+    + manage user policies
+    + impersonate
+      + impersonate logout
+  + manage roles
+    + manage role policies
+  + manage products
+    + manage product variants
+      + quantity
+    + populate product manually
+    + manage product attributes
+  + manage categories
+  + manage promotions
+    + manage gift promotions
+      + manage gifts
+    + manage discounts
+      + manage invoice discounts
+      + manage product discounts
+  + manage logs
+    + runtime logs
+    + email logs
+    + user logs
+  + manage invoices
+
+
+
+
+- web
+  + login
+    + confirm email
+      + self resent email
+    + logout
+    + 2fa
+  + register
+    + preconfirm email
+    + register with preconfirmed email
+  + forgot password
+    + reset password
+  + user profile
+    + change email
+      + confirm change email
+    + user settings
+      + toggle 2fa
+      + close account
+  + change password
+  + view products
+    + search products
+    + filter products
+  + cart
+  + checkout
