@@ -1,0 +1,22 @@
+**/*.Dockerfile
+**/*.dockerignore
+# **/.env
+**/.git
+**/.gitattributes
+**/.gitignore
+**/.github
+**/.vscode
+**/build
+**/compose*
+**/coverage
+**/docker-compose*
+**/Dockerfile*
+**/dist
+**/environments
+**/node_modules
+**/notes
+**/README.md
+**/tsconfig.node.tsbuildinfo
+**/tsconfig.tsbuildinfo
+**/vite.config.d.ts
+**/vite.config.js

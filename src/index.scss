@@ -1,0 +1,21 @@
+@import "/node_modules/@fontsource/roboto/300.css";
+@import "/node_modules/@fontsource/roboto/400.css";
+@import "/node_modules/@fontsource/roboto/500.css";
+@import "/node_modules/@fontsource/roboto/700.css";
+
+* {
+  margin: 0;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+
+  &:not(ul):not(ol) {
+    padding: 0;
+  }
+}
+
+code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+code * {
+  font-family: inherit;
+}

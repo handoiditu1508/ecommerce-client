@@ -1,0 +1,120 @@
+# App folder structure
+
+- 📁 assets
+  - 🗯️ images used in components
+  - 📑 background.jpg
+  - 📑 logo.svg
+- 📁 common
+  - 🗯️ helpers
+  - 📑 eventHelpers.ts
+  - 📑 fileHelpers.ts
+  - 📑 formats.ts
+- 📁 components
+  - 🗯️ reusable components that are meant to be used anywhere across the app
+  - 📂 DraggableList
+    - 📑 DraggableList.tsx
+    - 📑 DraggableListItem.tsx
+    - 📑 index.ts
+  - 📑 FileInput.tsx
+- 📁 configs
+  - 🗯️ hold configs from environment or static configs
+- 📁 contexts
+  - 🗯️ global contexts for the whole app
+  - 📂 breakpoints
+    - 📑 BreakpointsContext.ts
+    - 📑 breakpointsHelpers.ts
+    - 📑 BreakpointsProvider.tsx
+    - 📑 index.ts
+  - 📂 info
+    - 📑 index.ts
+    - 📑 InfoContext.ts
+    - 📑 InfoProvider.tsx
+- 📁 extensions
+  - 🗯️ module augmentation for node packages
+  - 📑 pictogrammers-memory.d.ts
+- 📁 features
+  - 🗯️ supporting features
+  - 📂 confirmationDialog
+    - 📑 CancelReason.ts
+    - 📑 ConfirmationDialog.tsx
+    - 📑 ConfirmationDialogContext.ts
+    - 📑 index.ts
+  - 📂 notification
+    - 📑 index.ts
+    - 📑 NotificationMessage.ts
+    - 📑 NotificationSnackbar.tsx
+    - 📑 useNotificationScheduler.ts
+- 📁 hocs
+  - 🗯️ reusable higher order components that are meant to be used anywhere across the app
+  - 📑 withFadingOverlay.tsx
+- 📁 hooks
+  - 🗯️ reusable hooks that are meant to be used anywhere across the app
+  - 📑 index.ts
+  - 📑 useAppDispatch.ts
+  - 📑 useAppSelector.ts
+- 📁 layouts
+  - 📂 MainLayout
+    - 📂 Header
+      - 📑 Header.tsx
+      - 📑 HeaderCustomButton.tsx
+      - 📑 index.ts
+    - 📑 Footer.tsx
+    - 📑 index.ts
+    - 📑 MainLayout.tsx
+  - 📑 EmptyLayout.tsx
+- 📁 models
+  - 🗯️ reusable types or interfaces that are meant to be used anywhere across the app
+- 📁 modules
+  - 🗯️ divide app into separated modules
+  - 📂 Main
+    - 📂 components
+      - 🗯️ reusable components that are meant to be used anywhere across Main module
+      - 📑 PreviewCard.tsx
+      - 📑 RateableCard.tsx
+    - 📂 hocs
+      - 🗯️ reusable higher order components that are meant to be used anywhere across Main module
+    - 📂 pages
+      - 🗯️ page components should suffix with "Page"
+      - 📂 HomePage
+        - 📑 Chart.tsx
+        - 📑 HomePage.tsx
+        - 📑 index.ts
+      - 📑 AboutPage.tsx
+    - 📑 index.ts
+    - 📑 MainModule.tsx
+  - 📂 Auth
+    - 📂 pages
+      - 📑 LoginPage.tsx
+      - 📑 RegisterPage.tsx
+    - 📑 AuthModule.tsx
+    - 📑 index.ts
+- 📁 redux
+  - 🗯️ redux related files
+  - 📂 apis
+    - 📑 appApi.ts
+    - 📑 authApi.ts
+    - 📑 productApi.ts
+  - 📂 slices
+    - 📑 authSlice.ts
+    - 📑 cartSlice.ts
+  - 📂 utils
+    - 📑 axiosBaseQuery.ts
+    - 📑 reauthBaseQueryWrapper.ts
+    - 📑 rtkQueryErrorLoggerMiddleware.ts
+  - 📑 store.ts
+- 📁 routes
+  - 🗯️ splitted react router configs
+  - 📑 AppRoutes.tsx
+  - 📑 AuthRoute.tsx
+  - 📑 index.ts
+  - 📑 MainRoute.tsx
+- 📁 themes
+  - 🗯️ mui themes configs
+  - 📑 index.ts
+  - 📑 mainTheme.ts
+  - 📑 theme.d.ts
+- 📁 styles
+  - 🗯️ css variables declaration or custom scss styles for 3rd party libraries which are @use in index.scss
+  - 📑 _overlayscrollbars.scss
+  - 📑 _prismjs.scss
+  - 📑 _variables.scss

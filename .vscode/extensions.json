@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "oderwat.indent-rainbow",
+    "docsmsft.docs-markdown",
+    "ms-edgedevtools.vscode-edge-devtools",
+    "darian-benam.vscode-robots-dot-txt-support",
+    "syler.sass-indented",
+    "jock.svg",
+  ]
+}

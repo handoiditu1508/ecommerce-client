@@ -1,0 +1,282 @@
+==========> useState <==========
+- pass in an initial state
+- return [state, setState]
+- setState can acception object or prev => {} func
+- new state returned in setState func must use spread operator {...state} [...state]
+==========> useState <==========
+
+==========> useEffect <==========
+- used to handle componentDidMount, componentUpdated, componentWillUnmount
+- first parameter is a function that run after every renders (likes componentUpdated)
+- second parameter is an array of dependencies to prevent useEffect hook from rerun unnecessarily
+- to run effect only once (likes componentDidMount), define second parameter to an empty array []
+- first parameter return a function which run before every rerenders, we can use this function to cancel watchers, timers, ... (likes componentWillUmount)
+- can use multiple useEffects to group related logics
+==========> useEffect <==========
+
+==========> useContext <==========
+- used to consume context value in context provider
+- first parameter is the Context instance export from the source
+- return context value
+- can call multiple useContexts for different contexts
+==========> useContext <==========
+
+==========> useReducer <==========
+- used to manage a state object
+- first parameter is a reducer function, second parameter is a initial state
+- reducer function accept 2 parameters:
+  + current state
+  + action: an object passed in dispatch function {type: string, payload: any}
+- reducer function return new state object, also need spread operator {...state} [...state]
+- reducer function update the state base on action.type value, default return current state
+- useReducer returns [state, dispatch]
+- dispatch function accepts an object {type: string, payload: any} which will be passed to reducer function
+==========> useReducer <==========
+
+==========> useRef <==========
+- create a reference variable that can reference to component, element, string, number, ...
+- when component rerender, variable created by useRef persist (likes state)
+- unlike state, variable created by useRef doesn't cause additional rerender when change
+- good for holding value that assigned once in useEffect so when component rerender, variable won't be reset
+==========> useRef <==========
+
+==========> useTransition <==========
+- enable app to call long running setState without freezing the UI
+- take no parameter, return [isPending, startTransition]
+- isPending tell whether there is a pending useTransition
+- startTransition take a call back function called Action, which let us run setState inside it
+  + setState run inside Action is run synchronously so it won't block the UI
+  + when there are multiple Transitions, React batches them together
+  + the final state might is not the result of the last setState since backend API might return response not in order
+  + Action can be an async function
+    + setState call after await statement must be wrapped in a startTransition call
+  + Action executes immediately, but setState calls inside Action are batched
+  + startTransition can be import to use in non-hook scope
+==========> useTransition <==========
+
+==========> useActionState <==========
+- used to handle form submit
+- const [state, formAction, isPending] = useActionState(fn, initialState, permalink?);
+- state: the current state
+- formAction: action to pass to <form>'s action or <button>'s formAction property
+  + the action can also be called manually within startTransition
+- isPending: flag that tells you whether there is a pending Transition
+- fn: the function to be called when the form is submitted or button pressed
+  + 2 parameters: the current state and FormData
+- initialState: initial state
+- permalink: redirect link, use for perserving form state across pages
+==========> useActionState <==========
+
+==========> useDebugValue <==========
+- add a label to a custom Hook in React DevTools
+- useDebugValue(value, format?)
+==========> useDebugValue <==========
+
+==========> useId <==========
+- create unique id string that can be passed to accessibility attributes
+- const id = useId()
+- <input type="password" aria-describedby={id} />
+==========> useId <==========
+
+==========> useImperativeHandle <==========
+- allow customize ref object exposed to parent
+- useImperativeHandle(ref, createHandle, dependencies?)
+- ref: the ref you received as a prop to the component
+  + function MyComponent({ ref }) { ... }
+- createHandle: a function that takes no arguments and returns the ref handle you want to expose
+  + that ref handle can have any type
+- dependencies: states or props to watch in order to know when to re-execute createHandle function
+==========> useImperativeHandle <==========
+
+==========> useLayoutEffect <==========
+- is a version of useEffect that fires before the browser repaints the screen
+- useLayoutEffect(setup, dependencies?)
+- example scenario:
+  + you want to show the tooltip on top of the button if there is enough space
+  + to do that, you need to
+    + render tooltip (even in a wrong position) and button
+    + get tooltip's height
+    + set tooltip's position based on its height
+  + when using useEffect hook, user will see the tooltip move from its start position to the correct position since component rerender after those steps
+    + render tooltip (even in a wrong position) and button
+    + paint the UI
+    + get tooltip's height
+    + set tooltip's position based on its height
+    + repaint the UI
+  + when using useLayoutEffect hook, the UI only paint after you run the logic
+    + render tooltip (even in a wrong position) and button
+    + get tooltip's height
+    + set tooltip's position based on its height
+    + paint the UI
+==========> useLayoutEffect <==========
+
+==========> useOptimistic <==========
+- let you show a temporary state while an async action is underway
+- const [optimisticState, addOptimistic] = useOptimistic(state, updateFn)
+- optimisticState: the resulting optimistic state, equal to state unless an action is pending, in which case it is equal to the value returned by updateFn
+- addOptimistic: the dispatch function to call when you have an optimistic update
+  + take 1 argument, optimisticValue of any type
+  + call the updateFn with state and optimisticValue
+- state: the value to be returned initially and whenever no action is pending
+- updateFn: the function to return optimisticState
+  + 2 arguments: currentState and optimisticValue
+  + must be a pure function
+  + merge currentState and optimisticValue to create optimisticState
+  + notice: if called when the last action is not finished, updateFn is called multiple times with old optimisticValues
+==========> useOptimistic <==========
+
+==========> useFormStatus <==========
+- provides status information of the last form submission
+- const { pending, data, method, action } = useFormStatus();
+- pending: boolean value to tell whether <form> is pending submission
+- data: an object implementing the FormData interface that contains the data the parent <form> is submitting
+  + null when <form> is not submitting, no parent <form>
+- method: a string value of either 'get' or 'post'
+- action: a reference to the function passed to the action prop on the parent <form>
+  + null when no parent <form>, no action prop, URI value provided to the action prop
+- must be called in a component that render within a <form>
+==========> useFormStatus <==========
+
+==========> useDeferredValue <==========
+- create a deferred version of a value
+- const deferredValue = useDeferredValue(value, initialValue?);
+- value: value to defer
+- initialValue: value to use during the initial render of a component
+- deferedValue: return initialValue during first render or the current value. During value update, rerender component in the background and only update deferedValue once background rerender complete
+  + background rerender can be interupt when value is updated before background rerender complete
+- use for scenario when user type in an input which require expensive loading
+- use with React.memo so that slow component only rerender when user stop typing and the final value actually different from the last value
+  + without useDeferredValue, value change every time user type in the input and slow component rerender every time the value change
+==========> useDeferredValue <==========
+
+==========> useCallback <==========
+- used to cache function, because function is recreate every render, when pass function as prop, child component doesn't know if function is the same or not and will rerender itself unnecessarily
+- first parameter is function we want to cache, second parameter is an array of dependencies
+- returns a cached function
+==========> useCallback <==========
+
+==========> useMemo <==========
+- used to cache result from a function, because function might take long to generate result and when unrelated state changed => component rerender => function recalculated.
+- first parameter is function whose result we want to cache, second parameter is an array of dependencies
+- returns a cached result
+==========> useMemo <==========
+
+==========> React.memo <==========
+- likes PureComponent, only rerender component when props or states changed (equality compare)
+- Export default React.memo(MyComponent) instead of Export default MyComponent
+==========> React.memo <==========
+
+==========> React.use <==========
+- read the value of a resource like a Promise or context
+- const message = use(messagePromise)
+- const theme = use(ThemeContext)
+==========> React.use <==========
+
+==========> Notes <==========
+- useCallback - cache a function, useMemo - cache result from function
+- it's unnecessary to use useCallback, useMemo and React.memo all the time since they also do calculation and allocation under the hood which slow down our app.
+- use useCallback when function is passed as prop to child component and child component is costly to rerender, child component also has to wrap in HOC React.memo(Component) to do equality compare on function prop
+- use useMemo when result generated by function are costly or take long time
+- use React.memo for component which take substantial amount of time to render (graphs, charts, animations, ...)
+==========> Notes <==========
+
+==========> Type notes <==========
+- types can be union using |
+- types can be intersect using &
+- type P = keyof {name: string; age: number;}. P = "name" | "age"
+- never type is used to blocking specific properties from including in a type
+- Exclude<ButtonVariant, "primary"> exclude "primary" from type ButtonVariant
+- React.ComponentProps<typeof CustomButton>
+- React.ComponentProps<"button">
+- Omit<ButtonProps, "disabled"> to remove disabled prop from type ButtonProps
+- Omit<ButtonProps, keyof LinkProps> to remove from ButtonProps all properties with the same name as LinkProps's properties
+- Pick<ButtonProps, "disabled" | "color"> to create a type with disabled and color props from ButtonProps
+- React.ElementType consist of "div", "button", "input", ... is used for dynamic programming
+- React.ReactNode: consist of string, number, component, element, ...
+- React.CSSProperties: consist of color, border, width, height, ...
+- Partial<CustomType> to make all properties optional
+- Required<CustomType> to make all properties required
+- Awaited<boolean | Promise<number> | Promise<Promise<string>>> == (boolean | number | string)
+==========> Type notes <==========
+
+==========> useNavigate <==========
+- return function to navigate between routes
+- initiate: const navigate = useNavigate()
+- usage: navigate("about")
+- go back to previous page: navigate(-1)
+- navigate and replace history: navigate("about", {replace: true})
+- we can also use navigate component to navigate: <Navigate to="/login" replace state={{redirect: "/"}} />
+- and use location.state.redirect (see useLocation below)
+==========> useNavigate <==========
+
+==========> useParams <==========
+- return param object from url
+- initiate: const { userId } = useParam()
+==========> useParams <==========
+
+==========> useSearchParams <==========
+- used to manipulate url queries
+- initiate: const [searchParams, setSearchParams] = useSearchParams()
+- get: searchParams.get("genre")
+- set: setSearchParams({ genre: "action", year: "2022" })
+==========> useSearchParams <==========
+
+==========> useLocation <==========
+- used to get current location info
+- initiate: const location = useLocation()
+- location.hash return url tag begin with '#'
+- location.pathname return url path begin with '/'
+- location.search return url query string begin with '?'
+==========> useLocation <==========
+
+==========> check {to} match current url <==========
+- const resolved = useResolvedPath(to);
+- const match = useMatch({ path: resolved.pathname, end: true });
+==========> check {to} match current url <==========
+
+==========> useTheme <==========
+- const theme = useTheme()
+- theme.palette.primary.main
+==========> useTheme <==========
+
+
+==========> which MUI overlay method to use <==========
+- dialog:
+  + position: center of the screen
+  + content: card or any UI
+- portal:
+  + position: any position
+  + content: any UI
+- menu:
+  + position: relative to an anchor element
+  + content: dropdown list
+- popper:
+  + position: relative to an anchor element
+  + content: any UI
+- popover:
+  + likes popper, but block scrolling and clicking
+==========> which MUI overlay method to use <==========
+
+
+==========> Lighten/darken color <==========
+- import { lighten, darken } from '@mui/system';
+- lighten(theme.palette.primary.light, 0.85)
+- darken(theme.palette.primary.main, 0.8)
+==========> Lighten/darken color <==========
+
+
+==========> Dark mode media query <==========
+- theme.applyStyles("dark", CSSProperties)
+==========> Dark mode media query <==========
+
+
+==========> Get color's transparent version <==========
+- import { alpha } from '@mui/material/styles';
+- alpha("#f5f5f5", 0.5)
+==========> Get color's transparent version <==========
+
+
+==========> getContrastRatio <==========
+- import { getContrastRatio } from '@mui/material/styles';
+- getContrastRatio(violetMain, '#fff') > 4.5 ? '#fff' : '#111'
+==========> getContrastRatio <==========

@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    [
+      "babel-plugin-direct-import",
+      {
+        "modules": [
+          "@mui/material",
+          "@mui/icons-material",
+          "@mui/lab",
+          "@mui/x-data-grid"
+        ]
+      }
+    ]
+  ]
+}
