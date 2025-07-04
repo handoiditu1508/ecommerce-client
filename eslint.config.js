@@ -66,7 +66,7 @@ export default tseslint.config(
       ],
       "react/jsx-fragments": "warn",
       "import/newline-after-import": "warn",
-      "@stylistic/array-bracket-newline": ["warn", { multiline: true }],
+      "@stylistic/array-bracket-newline": ["warn", "consistent"],
       "@stylistic/array-bracket-spacing": ["warn", "never"],
       "@stylistic/array-element-newline": [
         "warn",
