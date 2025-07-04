@@ -8,7 +8,7 @@ import Header, { withHeaderProvider } from "./Header";
 import LayoutContainer from "./LayoutContainer";
 import Sidebar, { SidebarContext, withSidebarProvider } from "./Sidebar";
 
-function InnerMainLayout() {
+function InnerAdminLayout() {
   const { sidebarState, miniSidebarTransition, permanentSidebarTransition } = useContext(SidebarContext);
   const { smAndDown } = useContext(BreakpointsContext);
   const theme = useTheme();
@@ -65,6 +65,6 @@ function InnerMainLayout() {
   );
 }
 
-const MainLayout = withHeaderProvider(withSidebarProvider(InnerMainLayout));
+const AdminLayout = withHeaderProvider(withSidebarProvider(InnerAdminLayout));
 
-export default MainLayout;
+export default AdminLayout;

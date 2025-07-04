@@ -1,5 +1,5 @@
-import MainLayout from "./MainLayout";
+import AdminLayout from "./AdminLayout";
 import { SidebarContext } from "./Sidebar";
 
-export default MainLayout;
+export default AdminLayout;
 export { SidebarContext };
