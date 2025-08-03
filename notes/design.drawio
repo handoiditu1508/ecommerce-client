@@ -975,7 +975,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="register email" id="h809CVhOin-eLkubVnW2">
-    <mxGraphModel dx="3545" dy="1985" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2026" dy="1134" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="1fky5Egq9y842fy2Gakt-0" />
         <mxCell id="1fky5Egq9y842fy2Gakt-1" parent="1fky5Egq9y842fy2Gakt-0" />
@@ -1049,22 +1049,22 @@
           <mxGeometry x="1435" y="720" width="50" height="20" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-0" value="Email address" style="rounded=1;whiteSpace=wrap;html=1;align=center;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="2000" y="200" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="240" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-1" value="SEND OTP" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="2000" y="282.5" width="240" height="60" as="geometry" />
+          <mxGeometry x="2000" y="322.5" width="240" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-2" value="Create Account" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=40;fontStyle=1" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="1960" y="80" width="320" height="40" as="geometry" />
+          <mxGeometry x="2000" y="80" width="240" height="80" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-3" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="2000" y="379.25" width="240" height="10" as="geometry" />
+          <mxGeometry x="2000" y="419.25" width="240" height="10" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-4" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="2000" y="419.25" width="115" height="60" as="geometry" />
+          <mxGeometry x="2000" y="459.25" width="115" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-5" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
-          <mxGeometry x="2135" y="419.25" width="105" height="60" as="geometry" />
+          <mxGeometry x="2135" y="459.25" width="105" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eideVC6u91yuyeFSQtzJ-6" value="Have account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1fky5Egq9y842fy2Gakt-1" vertex="1">
           <mxGeometry x="2055" y="720" width="90" height="20" as="geometry" />
@@ -1081,13 +1081,13 @@
         <mxCell id="pUCOSlHcjt3PGIhhABCw-0" />
         <mxCell id="pUCOSlHcjt3PGIhhABCw-1" parent="pUCOSlHcjt3PGIhhABCw-0" />
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=1;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="1960" width="320" height="920" as="geometry" />
+          <mxGeometry x="1960" width="320" height="960" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-0" value="" style="rounded=0;whiteSpace=wrap;html=1;movable=1;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=#d6b656;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
           <mxGeometry x="1120" width="600" height="830" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;gradientColor=none;strokeColor=none;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="1960" y="730" width="320" height="190" as="geometry" />
+          <mxGeometry x="1960" y="730" width="320" height="230" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
           <mxGeometry x="1960" y="440" width="320" height="290" as="geometry" />
@@ -1162,40 +1162,40 @@
           <mxGeometry x="510" y="80" width="310" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-61" value="Email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#f5f5f5;fontColor=#B3B3B3;strokeColor=#666666;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="200" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="240" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-62" value="First name" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="270" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="310" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-63" value="Middle name" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="340.75" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="380.75" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-64" value="Last name" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="410" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="450" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-65" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="479.25" width="240" height="50" as="geometry" />
+          <mxGeometry x="2000" y="519.25" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-66" value="SIGN UP" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="589.25" width="240" height="60" as="geometry" />
+          <mxGeometry x="2000" y="629.25" width="240" height="60" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-67" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="539.25" width="10" height="10" as="geometry" />
+          <mxGeometry x="2000" y="579.25" width="10" height="10" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-68" value="I&#39;ve read and agree to Terms &amp;amp; Conditions" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2020" y="536.75" width="230" height="15" as="geometry" />
+          <mxGeometry x="2020" y="576.75" width="230" height="15" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-69" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 204, 0), rgb(237, 237, 237));&quot;&gt;v Password must at least 8 characters.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires special character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires lowercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires uppercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires numeric character.&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="2000" y="690" width="240" height="190" as="geometry" />
+          <mxGeometry x="2000" y="730" width="240" height="190" as="geometry" />
         </mxCell>
         <mxCell id="_GV_CtNWGVThxPkdm5Z_-70" value="Create Account" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=40;fontStyle=1" parent="pUCOSlHcjt3PGIhhABCw-1" vertex="1">
-          <mxGeometry x="1965" y="80" width="310" height="40" as="geometry" />
+          <mxGeometry x="2000" y="80" width="240" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram name="forgot password" id="uhEL2MyPcS4IhiLJe_rk">
-    <mxGraphModel dx="2363" dy="1323" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3545" dy="1985" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="IJUr-5Cmx6vqeyMBovbU-0" />
         <mxCell id="IJUr-5Cmx6vqeyMBovbU-1" parent="IJUr-5Cmx6vqeyMBovbU-0" />
@@ -1260,7 +1260,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="reset password" id="gwKRgbcv44CCGO_wBLUW">
-    <mxGraphModel dx="1418" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="810" dy="454" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="6XgFG6Pim4IWUfKKQIw9-0" />
         <mxCell id="6XgFG6Pim4IWUfKKQIw9-1" parent="6XgFG6Pim4IWUfKKQIw9-0" />
@@ -1338,6 +1338,81 @@
         </mxCell>
         <mxCell id="edEFKAsGjzbf9W6yzyyQ-2" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 204, 0), rgb(237, 237, 237));&quot;&gt;v Password must at least 8 characters.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires special character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires lowercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires uppercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires numeric character.&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="6XgFG6Pim4IWUfKKQIw9-1" vertex="1">
           <mxGeometry x="2470" y="420" width="310" height="94.49" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;movable=1;gradientColor=#ffd966;strokeColor=#d6b656;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1120" y="1100" width="600" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;gradientColor=none;strokeColor=none;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1960" y="1690" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1960" y="1400" width="320" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;resizable=1;resizeHeight=0;movable=1;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry y="1100" width="900" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=1;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1960" y="1100" width="320" height="790" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="40" y="1140" width="390" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-6" value="" style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;strokeColor=none;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1120" y="1100" width="600" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-19" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#f5f5f5;fontColor=#B3B3B3;strokeColor=#666666;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="470" y="1300" width="390" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-20" value="RESET PASSWORD" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="470" y="1460" width="390" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-21" value="Reset Password" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=40;fontStyle=1" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="505" y="1180" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-22" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="615" y="1820" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-23" value="New password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="470" y="1370" width="390" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4U7M08KTm24SJzD7Ne-24" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 204, 0), rgb(237, 237, 237));&quot;&gt;v Password must at least 8 characters.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires special character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires lowercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires uppercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires numeric character.&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="470" y="1560" width="310" height="94.49" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-0" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#f5f5f5;fontColor=#B3B3B3;strokeColor=#666666;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1160" y="1300" width="520" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-1" value="RESET PASSWORD" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1160" y="1460" width="520" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-2" value="Reset Password" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=40;fontStyle=1" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1260" y="1180" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-3" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1370" y="1820" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-4" value="New password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1160" y="1370" width="520" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-5" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 204, 0), rgb(237, 237, 237));&quot;&gt;v Password must at least 8 characters.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires special character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires lowercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires uppercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires numeric character.&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="1160" y="1560" width="310" height="94.49" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-6" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#f5f5f5;fontColor=#B3B3B3;strokeColor=#666666;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2000" y="1340" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-7" value="RESET PASSWORD" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2000" y="1500" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-8" value="Reset Password" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=40;fontStyle=1" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2000" y="1180" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-9" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2070" y="1830" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-10" value="New password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2000" y="1410" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctf_63QL8hVJu7OmqRDE-11" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 204, 0), rgb(237, 237, 237));&quot;&gt;v Password must at least 8 characters.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires special character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;x Password requires lowercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires uppercase character.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;v Password requires numeric character.&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="6XgFG6Pim4IWUfKKQIw9-1">
+          <mxGeometry x="2000" y="1600" width="240" height="190" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
