@@ -701,275 +701,275 @@
     </mxGraphModel>
   </diagram>
   <diagram id="Jd-26O9su1hY9uF0zMp-" name="login">
-    <mxGraphModel dx="1233" dy="1790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1668" dy="934" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="74U4b9jvF8oYzszCITdN-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;movable=1;gradientColor=#ffd966;strokeColor=none;" vertex="1" parent="1">
+        <mxCell id="74U4b9jvF8oYzszCITdN-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;movable=1;gradientColor=#ffd966;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="1120" width="600" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-52" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;gradientColor=none;strokeColor=none;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-52" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;gradientColor=none;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1960" y="590" width="320" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-54" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-54" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1960" y="300" width="320" height="290" as="geometry" />
         </mxCell>
-        <mxCell id="8g--rEsrNSHgtLIEfF3l-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;resizable=1;resizeHeight=0;movable=1;" vertex="1" parent="1">
+        <mxCell id="8g--rEsrNSHgtLIEfF3l-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;resizable=1;resizeHeight=0;movable=1;" parent="1" vertex="1">
           <mxGeometry width="900" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=1;" parent="1" vertex="1">
           <mxGeometry x="1960" width="320" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-4" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-4" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="470" y="230" width="390" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-5" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-5" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="470" y="300" width="390" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-6" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-6" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="760" y="357.5" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-7" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-7" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="470" y="420" width="390" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-8" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-8" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="575" y="720" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-9" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-9" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" parent="1" vertex="1">
           <mxGeometry x="705" y="720" width="50" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-10" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-10" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" parent="1" vertex="1">
           <mxGeometry x="623.42" y="80" width="31.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-11" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-11" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="655" y="80" width="51.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-12" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-12" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="570" y="120" width="190" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-13" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-13" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" parent="1" vertex="1">
           <mxGeometry x="470" y="520" width="390" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-14" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-14" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="470" y="560" width="185" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-15" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-15" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="675" y="560" width="185" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-16" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-16" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="470" y="360" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-17" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-17" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="490" y="357.5" width="60" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" parent="1" vertex="1">
           <mxGeometry x="40" y="40" width="390" height="700" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-21" value="" style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=1;strokeColor=none;fillColor=default;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-21" value="" style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;strokeColor=none;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="1120" width="600" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-22" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-22" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="1160" y="230" width="520" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-23" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-23" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="1160" y="300" width="520" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-24" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-24" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1580" y="357.5" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-25" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-25" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="1160" y="420" width="520" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-26" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-26" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1330" y="720" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-27" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-27" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" parent="1" vertex="1">
           <mxGeometry x="1460" y="720" width="50" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-28" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-28" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" parent="1" vertex="1">
           <mxGeometry x="1378.42" y="80" width="31.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-29" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-29" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="1410" y="80" width="51.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-30" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-30" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="1325" y="120" width="190" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-31" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-31" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" parent="1" vertex="1">
           <mxGeometry x="1160" y="520" width="520" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-32" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-32" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1160" y="560" width="250" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-33" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-33" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1430" y="560" width="250" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-34" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-34" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1160" y="360" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-35" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-35" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1180" y="357.5" width="60" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-37" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-37" value="Username or email address" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="2000" y="230" width="240" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-38" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-38" value="Password" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="2000" y="300" width="240" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-39" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-39" value="Forgot Password?" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="2140" y="357.5" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-40" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-40" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="2000" y="420" width="240" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-41" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-41" value="Don&#39;t have an account?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="2030" y="720" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-42" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-42" value="Sign up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#0000FF;" parent="1" vertex="1">
           <mxGeometry x="2160" y="720" width="50" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-43" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-43" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" parent="1" vertex="1">
           <mxGeometry x="2078.42" y="80" width="31.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-44" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-44" value="&lt;font&gt;Logo&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="2110" y="80" width="51.58" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-45" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-45" value="Welcome to MyApp" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="2025" y="120" width="190" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-46" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-46" value="Or sign in with" style="line;strokeWidth=2;html=1;strokeColor=#B3B3B3;" parent="1" vertex="1">
           <mxGeometry x="2000" y="520" width="240" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-47" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-47" value="Google" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="2000" y="560" width="110" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-48" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-48" value="Facebook" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="2130" y="560" width="110" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-49" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-49" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="2000" y="360" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="kVVyTXKNTBcToAsDxL6W-50" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="kVVyTXKNTBcToAsDxL6W-50" value="Remember" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="2020" y="357.5" width="60" height="15" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram name="login 2fa" id="fWWJbytzPGlrJO0wCGnU">
-    <mxGraphModel dx="2578" dy="1444" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3545" dy="1985" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="oubDg25fobspvyyIst0h-0" />
         <mxCell id="oubDg25fobspvyyIst0h-1" parent="oubDg25fobspvyyIst0h-0" />
-        <mxCell id="oubDg25fobspvyyIst0h-2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2440" y="280" width="600" height="359" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;movable=1;gradientColor=#ffd966;strokeColor=#d6b656;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1120" width="600" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-3" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#FFD966;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2440" y="639" width="600" height="281" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;gradientColor=none;strokeColor=none;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1960" y="590" width="320" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;resizable=1;resizeHeight=0;movable=0;gradientColor=#ffd966;strokeColor=#d6b656;glass=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1360" width="900" height="920" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.orthogonal_triangle;fillColor=#fff2cc;gradientColor=#ffd966;strokeColor=none;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1960" y="300" width="320" height="290" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-5" value="" style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=1;strokeColor=none;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1500" y="80" width="620" height="760" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;resizable=1;resizeHeight=0;movable=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry width="900" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=0;resizeHeight=0;resizable=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry width="1200" height="920" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1960" width="320" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-7" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="40" y="40" width="540" height="840" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="40" y="40" width="390" height="700" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-8" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="620" y="280" width="540" height="50" as="geometry" />
+        <mxCell id="atdraR3sw5ovwQvEecIt-20" value="" style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;strokeColor=none;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1120" width="600" height="780" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-10" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="840" y="860" width="100" height="20" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-0" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="537.5" y="170" width="255" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-11" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="620" y="362.5" width="540" height="60" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-1" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="605" y="80" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-12" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="970" y="437.5" width="110" height="20" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-2" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="505" y="200" width="320" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-13" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1080" y="437.5" width="80" height="20" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-3" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="470" y="310" width="390" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-16" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="762.5" y="170" width="255" height="30" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-4" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="470" y="392.5" width="390" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-32" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;movable=0;resizable=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2440" width="600" height="920" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-5" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="670" y="467.5" width="110" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-45" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="620" y="442.5" width="10" height="10" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-6" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="780" y="467.5" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="oubDg25fobspvyyIst0h-46" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="640" y="440" width="90" height="15" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-7" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="470" y="472.5" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="q2SReJEXpJfsssGCtHyD-1" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="830" y="80" width="120" height="80" as="geometry" />
+        <mxCell id="sDAa47C7NLrm0rP1poJo-8" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="490" y="470" width="90" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="q2SReJEXpJfsssGCtHyD-2" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="730" y="200" width="320" height="30" as="geometry" />
+        <mxCell id="IlVscCtqOq2s0xCSMXZq-0" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="615" y="720" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-0" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1540" y="320" width="540" height="50" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-0" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1292.5" y="170" width="255" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-1" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1760" y="780" width="100" height="20" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-1" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1360" y="80" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-2" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1540" y="402.5" width="540" height="60" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-2" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1260" y="200" width="320" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-3" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1890" y="477.5" width="110" height="20" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-3" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1160" y="310" width="520" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-4" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2000" y="477.5" width="80" height="20" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-4" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1160" y="392.5" width="520" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-5" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1682.5" y="210" width="255" height="30" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-5" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1490" y="467.5" width="110" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-6" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1540" y="482.5" width="10" height="10" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-6" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1600" y="467.5" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-7" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1560" y="480" width="90" height="15" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-7" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1160" y="472.5" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-8" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1750" y="120" width="120" height="80" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-8" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1180" y="470" width="90" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-9" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="1650" y="240" width="320" height="30" as="geometry" />
+        <mxCell id="_HITpOqP1-hpYgP_y9-Q-9" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1370" y="720" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-22" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2470" y="240" width="540" height="50" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-0" value="Enter OTP" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2000" y="310" width="240" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-23" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2470" y="322.5" width="540" height="60" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-1" value="SIGN IN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2000" y="392.5" width="240" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-24" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2820" y="397.5" width="110" height="20" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-2" value="Didn&#39;t receive OTP?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2050" y="492.5" width="110" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-25" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2930" y="397.5" width="80" height="20" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-3" value="Resend OTP" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=4;fontColor=#000000;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2160" y="492.5" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-26" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2612.5" y="130" width="255" height="30" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-4" value="Two-Factor authentication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1992.5" y="170" width="255" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-27" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2470" y="402.5" width="10" height="10" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-5" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2000" y="472.5" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-28" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2490" y="400" width="90" height="15" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-6" value="Trusted Device" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2020" y="470" width="90" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-29" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2680" y="40" width="120" height="80" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-7" value="Lock Icon" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2060" y="80" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-30" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2580" y="160" width="320" height="30" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-8" value="Check your inbox at e****le@gmail.com for your 2FA code." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="1960" y="200" width="320" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xoVQY4z-SN_2qRD5G_Qe-31" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" parent="oubDg25fobspvyyIst0h-1" vertex="1">
-          <mxGeometry x="2690" y="740" width="100" height="20" as="geometry" />
+        <mxCell id="vf2_XgViUIJhrlUY3TRU-9" value="&amp;lt; Return to login" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000FF;" vertex="1" parent="oubDg25fobspvyyIst0h-1">
+          <mxGeometry x="2070" y="720" width="100" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
