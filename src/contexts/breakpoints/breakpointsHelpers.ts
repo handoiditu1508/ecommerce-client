@@ -1,5 +1,6 @@
 import { Breakpoints } from "@mui/material";
 
+export const xsAndDownMediaQuery = (breakpoints: Breakpoints) => breakpoints.down("sm");
 export const xsMediaQuery = (breakpoints: Breakpoints) => breakpoints.only("xs");
 export const xsAndUpMediaQuery = (breakpoints: Breakpoints) => breakpoints.up("xs");
 export const smAndDownMediaQuery = (breakpoints: Breakpoints) => breakpoints.down("md");

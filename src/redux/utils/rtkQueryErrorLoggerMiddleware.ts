@@ -9,11 +9,32 @@ const rtkQueryErrorLoggerMiddleware: Middleware = (api) => (next) => (action) =>
     api.dispatch(pushNotification({
       severity: "error",
       // todo: get the error message from the action
-      text: "An error occurred. Please try again later.",
+      text: extractErrorMessage(action.payload),
     }));
   }
 
   return next(action);
+};
+
+const extractErrorMessage = (payload: unknown): string => {
+  const defaultMessage = "An error occurred. Please try again later.";
+  if (!payload) {
+    return defaultMessage;
+  }
+
+  if (typeof payload === "string") {
+    return payload;
+  }
+
+  if (typeof payload !== "object") {
+    return defaultMessage;
+  }
+
+  if ("error" in payload && typeof payload.error === "string") {
+    return payload.error;
+  }
+
+  return defaultMessage;
 };
 
 export default rtkQueryErrorLoggerMiddleware;

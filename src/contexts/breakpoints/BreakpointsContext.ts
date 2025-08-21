@@ -1,6 +1,7 @@
 import React from "react";
 
 export type BreakpointsContextType = {
+  xsAndDown: boolean;
   xs: boolean;
   xsAndUp: boolean;
   smAndDown: boolean;

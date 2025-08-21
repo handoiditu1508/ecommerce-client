@@ -10,7 +10,7 @@ import Sidebar, { SidebarContext, withSidebarProvider } from "./Sidebar";
 
 function InnerAdminLayout() {
   const { sidebarState, miniSidebarTransition, permanentSidebarTransition } = useContext(SidebarContext);
-  const { smAndDown } = useContext(BreakpointsContext);
+  const { mdAndDown } = useContext(BreakpointsContext);
   const theme = useTheme();
 
   return (
@@ -47,7 +47,7 @@ function InnerAdminLayout() {
             display: { lg: "flex" },
           }}>{/* center content & limit content size */}
             <Paper
-              square={smAndDown}
+              square={mdAndDown}
               sx={{
                 boxShadow: "none",
                 width: "100%",

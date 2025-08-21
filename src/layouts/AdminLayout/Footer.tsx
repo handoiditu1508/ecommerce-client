@@ -73,7 +73,7 @@ const handleClickLink = () => {
 
 const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
   const { t } = useTranslation();
-  const { xs, smAndUp, lgAndUp } = useContext(BreakpointsContext);
+  const { xsAndDown, smAndUp, lgAndUp } = useContext(BreakpointsContext);
   const year = new Date().getFullYear();
 
   return (
@@ -122,7 +122,7 @@ const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
             </Typography>
             <CustomLink to="/privacy-policy" underline="hover" variant="subtitle2">{t("Privacy Policy")}</CustomLink>
           </Breadcrumbs>}
-          {xs && <Stack alignItems="center">
+          {xsAndDown && <Stack alignItems="center">
             <Typography className="copyright-text" variant="subtitle2" textAlign="center">
               <CopyrightIcon />
               Copyright {year}, {window.location.host}

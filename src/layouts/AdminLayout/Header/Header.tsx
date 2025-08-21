@@ -29,7 +29,7 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const { sidebarOpen, setSidebarOpen, sidebarState, miniSidebarTransition, permanentSidebarTransition } = useContext(SidebarContext);
-  const { smAndDown } = useContext(BreakpointsContext);
+  const { mdAndDown } = useContext(BreakpointsContext);
   const { mobile } = useContext(InfoContext);
   const hideHeaderTrigger = useScrollTrigger({ threshold: 250 });
   const shadowHeaderTrigger = useScrollTrigger({ threshold: 0, disableHysteresis: true });
@@ -83,12 +83,12 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
                 boxShadow: shadowHeaderTrigger ? undefined : "none",
               }}>
               <Toolbar>
-                {(smAndDown || mobile) && <Box flexGrow={1}>
+                {(mdAndDown || mobile) && <Box flexGrow={1}>
                   <IconButton edge="start" sx={{ marginRight: 1 }} onClick={() => setSidebarOpen(!sidebarOpen)}><MenuIcon /></IconButton>
                 </Box>}
                 <img src={logo} alt="logo" width={30} height={30} style={{ marginRight: theme.spacing(1) }} />
                 <Typography variant="h6">{CONFIG.APP_NAME}</Typography>
-                {!(smAndDown || mobile) && <Box sx={{
+                {!(mdAndDown || mobile) && <Box sx={{
                   marginLeft: 3,
                   ">.MuiLink-root": {
                     ...theme.typography.button,

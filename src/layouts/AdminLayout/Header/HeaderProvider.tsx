@@ -7,8 +7,8 @@ type HeaderProviderProps = Omit<ProviderProps<HeaderContextType>, "value">;
 
 function HeaderProvider(props: HeaderProviderProps) {
   const theme = useTheme();
-  const { xs, lgAndUp } = useContext(BreakpointsContext);
-  const [headerHeight, setHeaderHeight] = useState<number>((xs ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0);
+  const { xsAndDown, lgAndUp } = useContext(BreakpointsContext);
+  const [headerHeight, setHeaderHeight] = useState<number>((xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0);
   const [headerTopSpacing, setHeaderTopSpacing] = useState<number>(lgAndUp ? theme.constants.scalingFactor * 2 : 0);
   const [headerClientHeight, setHeaderClientHeight] = useState<number>(headerHeight + headerTopSpacing);
   document.body.style.setProperty("--header-top-spacing", `${headerTopSpacing}px`);
@@ -16,11 +16,11 @@ function HeaderProvider(props: HeaderProviderProps) {
   document.body.style.setProperty("--header-client-height", `${headerHeight + headerTopSpacing}px`);
 
   useEffect(() => {
-    const height: number = (xs ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0;
+    const height: number = (xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0;
     setHeaderHeight(height);
     setHeaderClientHeight(height + headerTopSpacing);
     document.body.style.setProperty("--header-height", `${height}px`);
-  }, [xs, headerTopSpacing, theme]);
+  }, [xsAndDown, headerTopSpacing, theme]);
 
   useEffect(() => {
     const newValue: number = lgAndUp ? theme.constants.scalingFactor * 2 : 0;

@@ -1,7 +1,7 @@
 import { useMediaQuery, useTheme } from "@mui/material";
 import { ProviderProps } from "react";
 import BreakpointsContext, { BreakpointsContextType } from "./BreakpointsContext";
-import { lgAndDownMediaQuery, lgAndUpMediaQuery, lgMediaQuery, mdAndDownMediaQuery, mdAndUpMediaQuery, mdMediaQuery, smAndDownMediaQuery, smAndUpMediaQuery, smMediaQuery, xsAndUpMediaQuery, xsMediaQuery } from "./breakpointsHelpers";
+import { lgAndDownMediaQuery, lgAndUpMediaQuery, lgMediaQuery, mdAndDownMediaQuery, mdAndUpMediaQuery, mdMediaQuery, smAndDownMediaQuery, smAndUpMediaQuery, smMediaQuery, xsAndDownMediaQuery, xsAndUpMediaQuery, xsMediaQuery } from "./breakpointsHelpers";
 
 type BreakpointsProviderProps = Omit<ProviderProps<BreakpointsContextType>, "value">;
 
@@ -11,6 +11,7 @@ export default function BreakpointsProvider(props: BreakpointsProviderProps) {
   return (
     <BreakpointsContext.Provider
       value={{
+        xsAndDown: useMediaQuery(xsAndDownMediaQuery(theme.breakpoints)),
         xs: useMediaQuery(xsMediaQuery(theme.breakpoints)),
         xsAndUp: useMediaQuery(xsAndUpMediaQuery(theme.breakpoints)),
         smAndDown: useMediaQuery(smAndDownMediaQuery(theme.breakpoints)),

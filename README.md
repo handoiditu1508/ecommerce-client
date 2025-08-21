@@ -29,6 +29,11 @@ export default {
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
+## Recommended Node.js version
+
+- node: 22.14.0
+- npm: 10.9.2
+
 ## Fetch latest code from template repository
 
 ```bash
