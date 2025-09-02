@@ -2,7 +2,9 @@ import CONFIG from "@/configs";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { nextNotification, selectCurrentNotification } from "@/redux/slices/notificationSlice";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert, IconButton, Snackbar } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
 import React, { useEffect, useState } from "react";
 
 function NotificationSnackbar() {

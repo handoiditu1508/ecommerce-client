@@ -8,7 +8,19 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
-import { AppBar, Box, Drawer, IconButton, MenuItem, Select, SelectChangeEvent, Slide, ToggleButton, ToggleButtonGroup, Toolbar, Typography, useColorScheme, useScrollTrigger, useTheme } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Slide from "@mui/material/Slide";
+import { useColorScheme, useTheme } from "@mui/material/styles";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LayoutContainer from "../LayoutContainer";
@@ -68,7 +80,7 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
             ...((sidebarState === "permanent" || sidebarState === "miniHovered") && {
               transition: `${permanentSidebarTransition("margin", "width")}, ${slideTransition} !important`,
             }),
-            zIndex: theme.zIndex.appBar,
+            zIndex: theme.vars.zIndex.appBar,
           }}>
           <LayoutContainer sx={{
             paddingTop: "var(--header-top-spacing)",
@@ -115,8 +127,8 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
           ...theme.typography.h6,
           paddingY: 1,
           textAlign: "center",
-          borderBottom: theme.shape.smallBorder,
-          borderColor: theme.palette.divider,
+          borderBottom: theme.vars.shape.smallBorder,
+          borderColor: theme.vars.palette.divider,
         }}>
           Settings
         </Box>

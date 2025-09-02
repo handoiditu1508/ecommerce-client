@@ -1,7 +1,6 @@
 import ColorOption from "@/models/ColorOption";
 import "@mui/material/styles";
-import { CSSProperties } from "@mui/material/styles/createMixins";
-import "@mui/system/createTheme";
+import { CSSProperties } from "node_modules/@mui/material/styles/createMixins";
 
 export interface ThemeConstants {
   scalingFactor: number;
@@ -66,7 +65,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-declare module "@mui/system/createTheme/shape" {
+declare module "node_modules/@mui/system/esm/createTheme/shape" {
   export interface Shape {
     smallBorder: string;
     mediumBorder: string;

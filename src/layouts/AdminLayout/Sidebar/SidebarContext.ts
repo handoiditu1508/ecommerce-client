@@ -1,4 +1,4 @@
-import { SwipeableDrawerProps } from "@mui/material";
+import { SwipeableDrawerProps } from "@mui/material/SwipeableDrawer";
 import React from "react";
 import { SidebarTab } from "./SidebarItem";
 

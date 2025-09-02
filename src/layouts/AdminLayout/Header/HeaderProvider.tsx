@@ -1,5 +1,5 @@
 import { BreakpointsContext } from "@/contexts/breakpoints";
-import { useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { ProviderProps, useContext, useEffect, useState } from "react";
 import HeaderContext, { HeaderContextType } from "./HeaderContext";
 
@@ -18,9 +18,8 @@ function HeaderProvider(props: HeaderProviderProps) {
   useEffect(() => {
     const height: number = (xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0;
     setHeaderHeight(height);
-    setHeaderClientHeight(height + headerTopSpacing);
     document.body.style.setProperty("--header-height", `${height}px`);
-  }, [xsAndDown, headerTopSpacing, theme]);
+  }, [xsAndDown, theme]);
 
   useEffect(() => {
     const newValue: number = lgAndUp ? theme.constants.scalingFactor * 2 : 0;
@@ -29,6 +28,7 @@ function HeaderProvider(props: HeaderProviderProps) {
   }, [lgAndUp, theme]);
 
   useEffect(() => {
+    setHeaderClientHeight(headerHeight + headerTopSpacing);
     document.body.style.setProperty("--header-client-height", `${headerHeight + headerTopSpacing}px`);
   }, [headerHeight, headerTopSpacing]);
 

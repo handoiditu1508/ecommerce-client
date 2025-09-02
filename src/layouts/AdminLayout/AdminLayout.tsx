@@ -1,6 +1,8 @@
 import Suspense from "@/components/Suspense";
 import { BreakpointsContext } from "@/contexts/breakpoints";
-import { Box, Paper, useTheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
@@ -20,7 +22,7 @@ function InnerAdminLayout() {
         sx={{
           boxShadow: "none",
           overflow: "auto",
-          backgroundColor: { lg: theme.palette.background.default },
+          backgroundColor: { lg: theme.vars.palette.background.default },
           backgroundImage: { lg: "none" },
         }}>{/* background for app */}
         <Header />

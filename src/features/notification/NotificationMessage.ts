@@ -1,4 +1,4 @@
-import { AlertColor } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 
 type NotificationMessage = {
   id?: React.Key;

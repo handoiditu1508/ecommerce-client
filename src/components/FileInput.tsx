@@ -3,7 +3,15 @@ import { loadFileFromUrl } from "@/common/fileHelpers";
 import CONFIG from "@/configs";
 import ForwardIcon from "@mui/icons-material/Forward";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { Box, Button, CircularProgress, IconButton, InputAdornment, Stack, StackProps, styled, TextField, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Stack, { StackProps } from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
 import { v1 as uuidv1 } from "uuid";
 
@@ -12,10 +20,10 @@ const StyledStack = styled(Stack, { shouldForwardProp: (prop) => !(["status", "e
   error?: boolean;
 }>(({ theme, status, error }) => ({
   minHeight: 100,
-  border: theme.shape.largeBorder,
-  borderColor: error ? theme.palette.error.main : theme.palette.primary.main,
+  border: theme.vars.shape.largeBorder,
+  borderColor: error ? theme.vars.palette.error.main : theme.vars.palette.primary.main,
   borderStyle: "dashed",
-  borderRadius: theme.shape.borderRadius * 2,
+  borderRadius: `calc(${theme.vars.shape.borderRadius} * 2)`,
   padding: theme.spacing(1),
   display: "inline-flex",
   position: "relative",
@@ -25,7 +33,7 @@ const StyledStack = styled(Stack, { shouldForwardProp: (prop) => !(["status", "e
   }),
   ".dropzone": {
     cursor: "pointer",
-    color: theme.palette.grey[500],
+    color: theme.vars.palette.grey[500],
     display: "flex",
     flexGrow: 1,
     justifyContent: "center",
@@ -217,10 +225,12 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
         value={inputValue}
         error={!!error}
         helperText={error}
-        InputProps={{
-          endAdornment: (<InputAdornment position="end">
-            <IconButton size="small" edge="end" onClick={loadFileFromInputValue}><ForwardIcon /></IconButton>
-          </InputAdornment>),
+        slotProps={{
+          input: {
+            endAdornment: (<InputAdornment position="end">
+              <IconButton size="small" edge="end" onClick={loadFileFromInputValue}><ForwardIcon /></IconButton>
+            </InputAdornment>),
+          },
         }}
         onChange={(e) => {
           setInputValue(e.target.value);

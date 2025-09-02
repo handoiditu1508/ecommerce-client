@@ -38,4 +38,7 @@
     "typescriptreact"
   ],
   "files.eol": "\r\n",
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^@mui/[^/]+$"
+  ],
 }

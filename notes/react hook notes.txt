@@ -236,7 +236,7 @@
 
 ==========> useTheme <==========
 - const theme = useTheme()
-- theme.palette.primary.main
+- theme.vars.palette.primary.main
 ==========> useTheme <==========
 
 
@@ -259,9 +259,8 @@
 
 
 ==========> Lighten/darken color <==========
-- import { lighten, darken } from '@mui/system';
-- lighten(theme.palette.primary.light, 0.85)
-- darken(theme.palette.primary.main, 0.8)
+- theme.lighten(theme.vars.palette.primary.light, 0.85)
+- theme.darken(theme.vars.palette.primary.main, 0.8)
 ==========> Lighten/darken color <==========
 
 
@@ -271,8 +270,8 @@
 
 
 ==========> Get color's transparent version <==========
-- import { alpha } from '@mui/material/styles';
-- alpha("#f5f5f5", 0.5)
+- theme.alpha("#f5f5f5", 0.5)
+- `color-mix(in srgb, ${"#f5f5f5"}, transparent 50%)`
 ==========> Get color's transparent version <==========
 
 

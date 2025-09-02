@@ -1,5 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import { SvgIcon, SvgIconProps } from "@mui/material";
+import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon";
 
 type FaSvgIconProps = {
   icon: IconDefinition;

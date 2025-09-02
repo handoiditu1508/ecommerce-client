@@ -1,4 +1,5 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { ProviderProps } from "react";
 import BreakpointsContext, { BreakpointsContextType } from "./BreakpointsContext";
 import { lgAndDownMediaQuery, lgAndUpMediaQuery, lgMediaQuery, mdAndDownMediaQuery, mdAndUpMediaQuery, mdMediaQuery, smAndDownMediaQuery, smAndUpMediaQuery, smMediaQuery, xsAndDownMediaQuery, xsAndUpMediaQuery, xsMediaQuery } from "./breakpointsHelpers";

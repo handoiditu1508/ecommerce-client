@@ -1,5 +1,7 @@
 import SupportAction from "@/models/SupportAction";
-import { Divider, Menu, MenuItemProps, MenuProps } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import Menu, { MenuProps } from "@mui/material/Menu";
+import { MenuItemProps } from "@mui/material/MenuItem";
 import SupportActionMenuItem from "./SupportActionMenuItem";
 
 type OwnProps = {

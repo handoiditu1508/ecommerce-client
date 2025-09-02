@@ -1,6 +1,7 @@
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
-import { AccordionSummary, AccordionSummaryProps, styled } from "@mui/material";
+import AccordionSummary, { AccordionSummaryProps } from "@mui/material/AccordionSummary";
+import { styled } from "@mui/material/styles";
 
 type OwnProps = {
   onClose?: React.MouseEventHandler<SVGSVGElement>;
@@ -32,9 +33,9 @@ const ClosableAccordionSummary = styled(({ onClose, children, ...props }: Closab
     marginLeft: theme.spacing(1),
     justifyContent: "space-between",
     ".closeIcon": {
-      color: theme.palette.action.active,
+      color: theme.vars.palette.action.active,
       "&:hover": {
-        color: theme.palette.error.main,
+        color: theme.vars.palette.error.main,
       },
     },
   },

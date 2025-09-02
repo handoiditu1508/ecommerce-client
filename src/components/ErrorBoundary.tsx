@@ -1,5 +1,5 @@
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import React, { Component } from "react";
 
 type ErrorBoundaryProps = {

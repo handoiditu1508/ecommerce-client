@@ -5,7 +5,14 @@ import { BreakpointsContext } from "@/contexts/breakpoints";
 import { InfoContext } from "@/contexts/info";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { Divider, IconButton, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, useTheme } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { useTheme } from "@mui/material/styles";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import React, { Fragment, useContext, useState } from "react";
 import SidebarContext from "./SidebarContext";
 import SidebarItem from "./SidebarItem";
@@ -56,30 +63,32 @@ const Sidebar = () => {
       sx={{
         width: sidebarState === "mini" ? miniSidebarWidth : undefined,
       }}
-      PaperProps={{
-        elevation: 4,
-        sx: {
-          ...(sidebarState === "mini" && {
-            transition: `${miniSidebarTransition("width")}, ${boxShadowTransition}`,
-            width: miniSidebarWidth,
-          }),
-          ...((sidebarState === "permanent" || sidebarState === "miniHovered") && {
-            transition: `${permanentSidebarTransition("width")}, ${boxShadowTransition}`,
-          }),
-          ".MuiListItemText-root, .MuiListItemButton-root>.MuiSvgIcon-root": {
-            opacity: sidebarState === "mini" ? 0 : undefined,
-            transition: transformTransition,
-            ...((sidebarState === "permanent" || sidebarState === "miniHovered") && {
-              transition: `${permanentSidebarTransition("opacity")}, ${transformTransition}`,
-            }),
+      slotProps={{
+        paper: {
+          elevation: 4,
+          sx: {
             ...(sidebarState === "mini" && {
-              transition: `${miniSidebarTransition("opacity")}, ${transformTransition}`,
+              transition: `${miniSidebarTransition("width")}, ${boxShadowTransition}`,
+              width: miniSidebarWidth,
             }),
+            ...((sidebarState === "permanent" || sidebarState === "miniHovered") && {
+              transition: `${permanentSidebarTransition("width")}, ${boxShadowTransition}`,
+            }),
+            ".MuiListItemText-root, .MuiListItemButton-root>.MuiSvgIcon-root": {
+              opacity: sidebarState === "mini" ? 0 : undefined,
+              transition: transformTransition,
+              ...((sidebarState === "permanent" || sidebarState === "miniHovered") && {
+                transition: `${permanentSidebarTransition("opacity")}, ${transformTransition}`,
+              }),
+              ...(sidebarState === "mini" && {
+                transition: `${miniSidebarTransition("opacity")}, ${transformTransition}`,
+              }),
+            },
+            boxShadow: sidebarState === "miniHovered" ? undefined : "none",
           },
-          boxShadow: sidebarState === "miniHovered" ? undefined : "none",
+          onMouseEnter: () => setSidebarHovered(true),
+          onMouseLeave: () => setSidebarHovered(false),
         },
-        onMouseEnter: () => setSidebarHovered(true),
-        onMouseLeave: () => setSidebarHovered(false),
       }}
       onClose={toggleDrawer(false)}
       onOpen={toggleDrawer(true)}

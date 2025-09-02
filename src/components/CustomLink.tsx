@@ -1,4 +1,5 @@
-import { Link, LinkProps, styled } from "@mui/material";
+import Link, { LinkProps } from "@mui/material/Link";
+import { styled } from "@mui/material/styles";
 import { Link as RouterLink, LinkProps as RouterLinkProps } from "react-router-dom";
 
 export type CustomLinkProps = Omit<RouterLinkProps, keyof LinkProps> & Omit<LinkProps, "href" | "component"> & {
@@ -38,7 +39,7 @@ const CustomLink = styled(({
 })(({ theme, disabled }) => ({
   ...(disabled && {
     "&, &:active": {
-      color: theme.palette.text.disabled,
+      color: theme.vars.palette.text.disabled,
     },
   }),
 }));

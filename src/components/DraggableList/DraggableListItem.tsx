@@ -1,5 +1,9 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, ListItem, ListItemButton, ListItemProps, ListItemText, styled } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import ListItem, { ListItemProps } from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import { styled } from "@mui/material/styles";
 
 type OwnProps = {
   dragging?: boolean;
@@ -43,12 +47,12 @@ const DraggableListItem = styled(({ dragging, selected, disableHoverEffect, text
     </ListItem>
   );
 })(({ theme, dragging, disableHoverEffect }) => ({
-  borderBottom: theme.shape.smallBorder,
+  borderBottom: theme.vars.shape.smallBorder,
   opacity: dragging ? 0.5 : undefined,
   ".MuiListItemSecondaryAction-root": {
     ".MuiIconButton-root": {
       "&:hover": {
-        color: theme.palette.error.main,
+        color: theme.vars.palette.error.main,
       },
     },
   },

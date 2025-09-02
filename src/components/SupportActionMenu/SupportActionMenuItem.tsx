@@ -1,5 +1,8 @@
 import SupportAction from "@/models/SupportAction";
-import { ListItemIcon, ListItemText, MenuItem, MenuItemProps, Typography, useTheme } from "@mui/material";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem, { MenuItemProps } from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 
 type OwnProps = {
   supportAction: SupportAction;
@@ -8,13 +11,11 @@ type OwnProps = {
 type SupportActionMenuItemProps = OwnProps & Omit<MenuItemProps, keyof OwnProps>;
 
 function SupportActionMenuItem({ supportAction, ...props }: SupportActionMenuItemProps) {
-  const theme = useTheme();
-
   return (
     <MenuItem disabled={supportAction.disabled} onClick={supportAction.actionHandler} {...props}>
       {supportAction.idleIcon && <ListItemIcon>{supportAction.idleIcon}</ListItemIcon>}
       <ListItemText>{supportAction.text}</ListItemText>
-      {supportAction.secondaryText && <Typography variant="body2" color={theme.palette.text.secondary}>{supportAction.secondaryText}</Typography>}
+      {supportAction.secondaryText && <Typography variant="body2" color="textSecondary">{supportAction.secondaryText}</Typography>}
     </MenuItem>
   );
 }

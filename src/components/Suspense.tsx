@@ -1,4 +1,7 @@
-import { Backdrop, Box, CircularProgress, useTheme } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 import ErrorBoundary from "./ErrorBoundary";
 
@@ -31,7 +34,7 @@ export default function Suspense({ fallbackType = "inline", errorCallback, ...pr
             </Box>}
             {fallbackType === "backdrop" && <Backdrop
               open={open}
-              sx={{ zIndex: theme.zIndex.drawer + 1 }}
+              sx={{ zIndex: theme.vars.zIndex.drawer + 1 }}
               onClick={handleClose}>
               <CircularProgress />
             </Backdrop>}

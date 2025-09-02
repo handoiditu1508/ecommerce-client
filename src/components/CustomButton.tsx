@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@mui/material";
+import Button, { ButtonProps } from "@mui/material/Button";
 import { Link, LinkProps } from "react-router-dom";
 
 type CustomButtonProps = Omit<LinkProps, keyof ButtonProps> & Omit<ButtonProps, "LinkComponent" | "href">;

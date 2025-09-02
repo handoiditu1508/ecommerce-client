@@ -1,6 +1,8 @@
 import CONFIG from "@/configs";
 import { useDragListItem } from "@/hooks";
-import { Collapse, List, ListProps, styled } from "@mui/material";
+import Collapse from "@mui/material/Collapse";
+import List, { ListProps } from "@mui/material/List";
+import { styled } from "@mui/material/styles";
 import React from "react";
 import { TransitionGroup } from "react-transition-group";
 import DraggableListItem from "./DraggableListItem";

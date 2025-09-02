@@ -537,6 +537,12 @@ export default tseslint.config(
       ],
       "@stylistic/wrap-regex": "off",
       "@stylistic/yield-star-spacing": ["warn", "after"],
+      "no-restricted-imports": [
+        "warn",
+        {
+          patterns: [{ regex: "^@mui/[^/]+$" }],
+        },
+      ],
     },
   },
 );

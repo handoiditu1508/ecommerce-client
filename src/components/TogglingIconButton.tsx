@@ -1,4 +1,5 @@
-import { IconButton, IconButtonProps, alpha, styled, useTheme } from "@mui/material";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import { styled, useTheme } from "@mui/material/styles";
 import React, { JSX } from "react";
 
 type OwnProps = {
@@ -11,10 +12,10 @@ type TogglingIconButtonProps = OwnProps & Omit<IconButtonProps, keyof OwnProps>;
 
 const TogglingIconButton = styled(({ idleIcon, activeIcon, customColor, color, style, ...props }: TogglingIconButtonProps) => {
   const theme = useTheme();
-  const standardizedColor = customColor || (theme.palette.isPaletteColorOption(color) && theme.palette[color].main) || color;
+  const standardizedColor = customColor || (theme.palette.isPaletteColorOption(color) && theme.vars.palette[color].main) || color;
   const hoverColor = standardizedColor && standardizedColor.startsWith("#")
-    ? alpha(standardizedColor, theme.palette.action.hoverOpacity)
-    : `rgba(0, 0, 0, ${theme.palette.action.hoverOpacity})`;
+    ? `color-mix(in srgb, ${standardizedColor}, transparent ${theme.vars.palette.action.hoverOpacity * 100}%)`
+    : `rgba(0, 0, 0, ${theme.vars.palette.action.hoverOpacity})`;
 
   return (
     <IconButton style={{ ...style, "--custom-color": standardizedColor, "--hover-color": hoverColor } as React.CSSProperties} {...props}>
