@@ -3,7 +3,7 @@ import type { } from "@mui/lab/themeAugmentation";
 // When using TypeScript 3.x and below
 // import "@mui/lab/themeAugmentation";
 
-import { smAndUpMediaQuery } from "@/contexts/breakpoints";
+import { smAndUpMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import ColorOption, { colorOptions } from "@/models/ColorOption";
 import { grey } from "@mui/material/colors";
 import { alpha, createTheme } from "@mui/material/styles";
@@ -14,16 +14,16 @@ const normalGrey = grey[500];
 const darkGrey = grey[700];
 const scalingFactor = 8;
 const scrollbarSize = 10;
-const sidebarWidth = 260;
-const miniSidebarWidth = 80;
-const sidebarIconSize = 24;
-const sidebarLeftPadding = (miniSidebarWidth - sidebarIconSize) / 2;
+const sidebarWidth = 280;
+const miniSidebarWidth = 0;// unused in client theme
+const sidebarIconSize = 0;// unused in client theme
+const sidebarLeftPadding = (miniSidebarWidth - sidebarIconSize) / 2;// unused in client theme
 const headerHeight = 64;
 const xsHeaderHeight = 56;
-const topHeaderHeight = 0;// unused in admin theme
+const topHeaderHeight = 20;
 const isPaletteColorOption = (color?: string): color is ColorOption => colorOptions.some((value) => value === color);
 
-const adminTheme = createTheme({
+const clientTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: "class",
     nativeColor: true,
@@ -185,9 +185,6 @@ const adminTheme = createTheme({
   },
   components: {
     MuiPaper: {
-      defaultProps: {
-        elevation: 4,
-      },
       styleOverrides: {
         root: ({ theme }) => ({
           ...theme.mixins.scrollbar,
@@ -195,57 +192,19 @@ const adminTheme = createTheme({
       },
     },
     MuiDrawer: {
-      defaultProps: {
-        slotProps: {
-          paper: {
-            elevation: 4,
-          },
-        },
-      },
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           width: sidebarWidth,
-          whiteSpace: "nowrap",
-          boxSizing: "border-box",
-          overflowX: "hidden",
-        },
-        paper: {
+          [xsAndDownMediaQuery(theme.breakpoints)]: {
+            width: "100%",
+          },
+        }),
+        paper: ({ theme }) => ({
           width: sidebarWidth,
-          border: "none",
-          overflowX: "hidden",
-          ".MuiListItemButton-root": {
-            ".MuiListItemIcon-root:first-of-type": {
-              ".MuiSvgIcon-root": {
-                fontSize: sidebarIconSize,
-              },
-            },
+          [xsAndDownMediaQuery(theme.breakpoints)]: {
+            width: "100%",
           },
-          "> .MuiList-root": {
-            "> .MuiListItem-root": {
-              "> .MuiListItemButton-root": {
-                paddingLeft: sidebarLeftPadding,
-              },
-            },
-          },
-          ".os-viewport": {
-            "> .MuiList-root": {
-              "> .MuiListItem-root": {
-                "> .MuiListItemButton-root": {
-                  paddingLeft: sidebarLeftPadding,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    MuiSwipeableDrawer: {
-      defaultProps: {
-        slotProps: {
-          paper: {
-            elevation: 4,
-          },
-        },
+        }),
       },
     },
     MuiToolbar: {
@@ -358,4 +317,4 @@ const adminTheme = createTheme({
   },
 });
 
-export default adminTheme;
+export default clientTheme;
