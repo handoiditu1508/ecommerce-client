@@ -22,7 +22,7 @@ const headerHeight = 64;
 const xsHeaderHeight = 56;
 const isPaletteColorOption = (color?: string): color is ColorOption => colorOptions.some((value) => value === color);
 
-const mainTheme = createTheme({
+const adminTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: "class",
     nativeColor: true,
@@ -356,4 +356,4 @@ const mainTheme = createTheme({
   },
 });
 
-export default mainTheme;
+export default adminTheme;

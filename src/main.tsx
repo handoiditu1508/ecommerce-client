@@ -10,7 +10,7 @@ import { ConfirmationDialogProvider } from "./features/confirmationDialog";
 import "./i18n";
 import "./index.scss";
 import store from "./redux/store";
-import { mainTheme } from "./themes";
+import { adminTheme } from "./themes";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -20,7 +20,7 @@ root.render(
     <Provider store={store}>{/* redux store */}
       <ConfirmationDialogProvider>{/* shared confirmation dialog */}
         <InfoProvider>{/* info about style and environment changes */}
-          <ThemeProvider theme={mainTheme} noSsr>{/* mui theme */}
+          <ThemeProvider theme={adminTheme} noSsr>{/* mui theme */}
             <BreakpointsProvider>{/* breakpoints helper */}
               <BrowserRouter>{/* react router */}
                 <App />
