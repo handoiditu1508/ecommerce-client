@@ -18,18 +18,15 @@ function HeaderProvider(props: HeaderProviderProps) {
   useEffect(() => {
     const height: number = (xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0;
     setHeaderHeight(height);
-    document.body.style.setProperty("--header-height", `${height}px`);
   }, [xsAndDown, theme]);
 
   useEffect(() => {
     const newValue: number = lgAndUp ? theme.constants.scalingFactor * 2 : 0;
     setHeaderTopSpacing(newValue);
-    document.body.style.setProperty("--header-top-spacing", `${newValue}px`);
   }, [lgAndUp, theme]);
 
   useEffect(() => {
     setHeaderClientHeight(headerHeight + headerTopSpacing);
-    document.body.style.setProperty("--header-client-height", `${headerHeight + headerTopSpacing}px`);
   }, [headerHeight, headerTopSpacing]);
 
   return <HeaderContext.Provider value={{ headerHeight, headerTopSpacing, headerClientHeight }} {...props} />;

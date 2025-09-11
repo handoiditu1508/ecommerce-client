@@ -2,8 +2,11 @@
   "recommendations": [
     "dsznajder.es7-react-js-snippets",
     "dbaeumer.vscode-eslint",
+    "anteprimorac.html-end-tag-labels",
     "oderwat.indent-rainbow",
     "docsmsft.docs-markdown",
+    "DavidAnson.vscode-markdownlint",
+    "lukas-tr.materialdesignicons-intellisense",
     "ms-edgedevtools.vscode-edge-devtools",
     "darian-benam.vscode-robots-dot-txt-support",
     "syler.sass-indented",

@@ -23,7 +23,7 @@ const StyledStack = styled(Stack, { shouldForwardProp: (prop) => !(["status", "e
   border: theme.vars.shape.largeBorder,
   borderColor: error ? theme.vars.palette.error.main : theme.vars.palette.primary.main,
   borderStyle: "dashed",
-  borderRadius: `calc(${theme.vars.shape.borderRadius} * 2)`,
+  borderRadius: 2,
   padding: theme.spacing(1),
   display: "inline-flex",
   position: "relative",
