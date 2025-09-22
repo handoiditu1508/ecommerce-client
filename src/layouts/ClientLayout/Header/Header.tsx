@@ -13,7 +13,6 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import ButtonBase from "@mui/material/ButtonBase";
-import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputBase from "@mui/material/InputBase";
@@ -24,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import LayoutContainer from "../LayoutContainer";
 import LanguageSelect from "./LanguageSelect";
 import MenuButton from "./MenuButton";
 import MoreOptionsButton from "./MoreOptionsButton";
@@ -42,9 +42,7 @@ function Header() {
           backgroundColor: "primary.dark",
         }}
       >
-        <Container
-          maxWidth="xl"
-          disableGutters
+        <LayoutContainer
           sx={{
             display: "flex",
             justifyContent: "flex-end",
@@ -53,12 +51,10 @@ function Header() {
           }}>
           <PaletteModeSelect />
           <LanguageSelect />
-        </Container>
+        </LayoutContainer>
       </Toolbar>}
       <Toolbar>
-        <Container
-          maxWidth="xl"
-          disableGutters
+        <LayoutContainer
           sx={{
             display: "flex",
             alignItems: "center",
@@ -127,12 +123,10 @@ function Header() {
               <ShoppingCartIcon />
             </IconButton>}
           </Stack>
-        </Container>
+        </LayoutContainer>
       </Toolbar>
       {mdAndUp && <Toolbar sx={{ minHeight: "var(--bottom-header-height) !important" }}>
-        <Container
-          maxWidth="xl"
-          disableGutters
+        <LayoutContainer
           sx={{
             display: "flex",
             alignItems: "center",
@@ -179,7 +173,7 @@ function Header() {
             <Typography variant="h6">Sale Off</Typography>
           </ButtonBase>
           <MoreOptionsButton />
-        </Container>
+        </LayoutContainer>
       </Toolbar>}
     </AppBar>
   );
