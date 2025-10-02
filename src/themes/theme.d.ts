@@ -11,6 +11,7 @@ export interface ThemeConstants {
   sidebarLeftPadding: number;
   headerHeight: number;
   xsHeaderHeight: number;
+  topHeaderHeight: number;
 }
 
 export type ScrollbarPalette = {

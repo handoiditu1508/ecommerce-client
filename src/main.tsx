@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -10,7 +9,7 @@ import { ConfirmationDialogProvider } from "./features/confirmationDialog";
 import "./i18n";
 import "./index.scss";
 import store from "./redux/store";
-import { adminTheme } from "./themes";
+import AppThemeProvider from "./themes/AppThemeProvider";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -20,13 +19,13 @@ root.render(
     <Provider store={store}>{/* redux store */}
       <ConfirmationDialogProvider>{/* shared confirmation dialog */}
         <InfoProvider>{/* info about style and environment changes */}
-          <ThemeProvider theme={adminTheme} noSsr>{/* mui theme */}
-            <BreakpointsProvider>{/* breakpoints helper */}
-              <BrowserRouter>{/* react router */}
+          <BrowserRouter>{/* react router */}
+            <AppThemeProvider noSsr>{/* mui theme */}
+              <BreakpointsProvider>{/* breakpoints helper */}
                 <App />
-              </BrowserRouter>
-            </BreakpointsProvider>
-          </ThemeProvider>
+              </BreakpointsProvider>
+            </AppThemeProvider>
+          </BrowserRouter>
         </InfoProvider>
       </ConfirmationDialogProvider>
     </Provider>
