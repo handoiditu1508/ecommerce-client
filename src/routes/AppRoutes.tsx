@@ -1,5 +1,4 @@
 import Suspense from "@/components/Suspense";
-import EmptyLayout from "@/layouts/EmptyLayout";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
@@ -10,13 +9,14 @@ import ProductRoute from "./ProductRoute";
 import UserRoute from "./UserRoute";
 
 const ClientLayout = React.lazy(() => import("@/layouts/ClientLayout"));
+const AuthLayout = React.lazy(() => import("@/layouts/AuthLayout"));
 
 export default function AppRoutes() {
   const { t } = useTranslation();
 
   return (
     <Routes>
-      <Route element={<EmptyLayout />}>
+      <Route element={<Suspense><AuthLayout /></Suspense>}>
         {AuthRoute}
       </Route>
       <Route element={<Suspense><ClientLayout /></Suspense>}>
