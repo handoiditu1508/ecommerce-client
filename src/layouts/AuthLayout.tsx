@@ -70,7 +70,7 @@ function AuthLayout() {
               zIndex: 1,
             },
             [xsAndDownMediaQuery(theme.breakpoints)]: {
-              backgroundColor: "transparent",
+              backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.5)`,
               borderRadius: 0,
             },
           }}

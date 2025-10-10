@@ -94,8 +94,6 @@ function HomePage() {
             delay: 2500,
           }}
           modules={[FreeMode, Navigation, Autoplay]}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
         >
           {[...new Array(15)].map((_, index) => <SwiperSlide key={index}>
             <Avatar
