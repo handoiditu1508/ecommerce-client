@@ -1,5 +1,5 @@
 import Suspense from "@/components/Suspense";
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 
@@ -34,7 +34,8 @@ function LoginPage() {
     }
   };
 
-  const handleReturnToLogin = () => {
+  const handleReturnToLogin: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault();
     setStep(LoginStep.Login);
   };
 

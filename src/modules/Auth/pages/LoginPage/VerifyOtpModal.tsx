@@ -1,5 +1,5 @@
+import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LockIcon from "@mui/icons-material/Lock";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,7 +8,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 type OtpInput = {
@@ -18,7 +18,7 @@ type OtpInput = {
 
 type VerifyOtpModalProps = {
   onLoginSuccess?: () => void;
-  onReturnToLogin?: () => void;
+  onReturnToLogin?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 function VerifyOtpModal({ onLoginSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = CONFIG.EMPTY_FUNCTION }: VerifyOtpModalProps) {
@@ -94,7 +94,7 @@ function VerifyOtpModal({ onLoginSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogi
         </Box>
       </Box>
       <Box sx={{ flex: 1 }} />
-      <Box sx={{
+      {/* <Box sx={{
         display: "flex",
         justifyContent: "center",
       }}>
@@ -108,7 +108,8 @@ function VerifyOtpModal({ onLoginSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogi
           onClick={onReturnToLogin}>
           Return to login
         </Button>
-      </Box>
+      </Box> */}
+      <CustomLink to="/login" align="center" onClick={onReturnToLogin}>Return to login</CustomLink>
     </Box>
   );
 }
