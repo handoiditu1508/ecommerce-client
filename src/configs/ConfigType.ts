@@ -12,6 +12,10 @@ type ConfigType = {
    * miliseconds
    */
   NOTIFICATION_MESSAGE_TIMEOUT: number;
+  PASSWORD_MIN_LENGTH: number;
+  PASSWORD_MAX_LENGTH: number;
+  EMAIL_MAX_LENGTH: number;
+  NAME_MAX_LENGTH: number;
 };
 
 export default ConfigType;

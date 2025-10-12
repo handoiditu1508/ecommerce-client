@@ -15,7 +15,7 @@ enum LoginStep {
 
 function LoginPage() {
   const navigate = useNavigate();
-  const location2 = useLocation();
+  const location = useLocation();
   const [step, setStep] = useState<LoginStep>(LoginStep.Login);
 
   const handleLogin2fa = () => {
@@ -23,7 +23,7 @@ function LoginPage() {
   };
 
   const handleLoginSuccess = () => {
-    const urlSearchParam = new URLSearchParams(location2.search);
+    const urlSearchParam = new URLSearchParams(location.search);
     const returnUrl = urlSearchParam.get("returnUrl") || urlSearchParam.get("returnurl");
 
     if (returnUrl) {
@@ -43,10 +43,10 @@ function LoginPage() {
   };
 
   return (step === LoginStep.Login)
-    ? <LoginModal onLogin2fa={handleLogin2fa} onLoginSuccess={handleLoginSuccess} />
+    ? <LoginModal onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
     : (
       <Suspense>
-        <VerifyOtpModal onLoginSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
+        <VerifyOtpModal onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
       </Suspense>
     );
 }

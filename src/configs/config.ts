@@ -8,6 +8,10 @@ const defaultConfig: ConfigType = {
   EMPTY_OBJECT: {},
   EMPTY_ARRAY: [],
   NOTIFICATION_MESSAGE_TIMEOUT: 3000,
+  PASSWORD_MIN_LENGTH: 8,
+  PASSWORD_MAX_LENGTH: 256,
+  EMAIL_MAX_LENGTH: 256,
+  NAME_MAX_LENGTH: 30,
 };
 
 export default defaultConfig;

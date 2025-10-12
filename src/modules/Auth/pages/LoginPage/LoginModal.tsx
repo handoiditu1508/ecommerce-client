@@ -25,10 +25,10 @@ type LoginInput = {
 
 type LoginModalProps = {
   onLogin2fa?: () => void;
-  onLoginSuccess?: () => void;
+  onSuccess?: () => void;
 };
 
-function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onLoginSuccess = CONFIG.EMPTY_FUNCTION }: LoginModalProps) {
+function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMPTY_FUNCTION }: LoginModalProps) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onLoginSuccess = CONFI
     if (isLogin2fa) {
       onLogin2fa();
     } else {
-      onLoginSuccess();
+      onSuccess();
     }
   };
 
@@ -97,7 +97,7 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onLoginSuccess = CONFI
             <TextField
               fullWidth
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               margin="normal"
               error={!!fieldState.error}
               helperText={fieldState.error && fieldState.error.message}
