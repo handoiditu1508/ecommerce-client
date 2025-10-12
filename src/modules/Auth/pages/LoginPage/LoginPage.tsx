@@ -5,6 +5,9 @@ import LoginModal from "./LoginModal";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
 
+// step 1 enter email and password: show email/username input and password input
+// step 2 confirm otp: hide email/username input and password input
+// step 3 success
 enum LoginStep {
   Login,
   VerifyOtp
@@ -39,9 +42,6 @@ function LoginPage() {
     setStep(LoginStep.Login);
   };
 
-  // step 1 enter email and password: show email/username input and password input
-  // step 2 confirm otp: hide email/username input and password input
-  // step 3 success
   return (step === LoginStep.Login)
     ? <LoginModal onLogin2fa={handleLogin2fa} onLoginSuccess={handleLoginSuccess} />
     : (

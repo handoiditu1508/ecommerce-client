@@ -21,8 +21,8 @@ function AuthLayout() {
           minHeight: "100vh",
           display: "flex",
           justifyContent: "space-evenly",
-          gap: 3,
-          p: 3,
+          gap: 4,
+          p: 4,
           [smAndDownMediaQuery(theme.breakpoints)]: {
             p: 0,
           },

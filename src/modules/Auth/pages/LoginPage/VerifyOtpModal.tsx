@@ -1,5 +1,6 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
+import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LockIcon from "@mui/icons-material/Lock";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -42,8 +43,11 @@ function VerifyOtpModal({ onLoginSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogi
       display: "flex",
       flexDirection: "column",
       minHeight: "100%",
-      p: 4,
+      py: 4,
       boxSizing: "border-box",
+      [smAndDownMediaQuery(theme.breakpoints)]: {
+        px: 4,
+      },
     }}>
       <LockIcon sx={{
         fontSize: 100,
@@ -94,21 +98,6 @@ function VerifyOtpModal({ onLoginSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogi
         </Box>
       </Box>
       <Box sx={{ flex: 1 }} />
-      {/* <Box sx={{
-        display: "flex",
-        justifyContent: "center",
-      }}>
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon />}
-          sx={{
-            textTransform: "initial",
-            ...theme.typography.body1,
-          }}
-          onClick={onReturnToLogin}>
-          Return to login
-        </Button>
-      </Box> */}
       <CustomLink to="/login" align="center" onClick={onReturnToLogin}>Return to login</CustomLink>
     </Box>
   );

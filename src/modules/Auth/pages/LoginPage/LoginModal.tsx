@@ -1,6 +1,7 @@
 import logo from "@/assets/logo.svg";
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
+import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
@@ -10,6 +11,7 @@ import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
@@ -27,6 +29,7 @@ type LoginModalProps = {
 };
 
 function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onLoginSuccess = CONFIG.EMPTY_FUNCTION }: LoginModalProps) {
+  const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { handleSubmit, control } = useForm<LoginInput>({
@@ -53,8 +56,11 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onLoginSuccess = CONFI
       display: "flex",
       flexDirection: "column",
       minHeight: "100%",
-      p: 4,
+      py: 4,
       boxSizing: "border-box",
+      [smAndDownMediaQuery(theme.breakpoints)]: {
+        px: 4,
+      },
     }}>
       <Box component="img" src={logo} alt="logo" width={100} height={100} sx={{ mx: "auto", display: "block" }} />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Welcome to {CONFIG.APP_NAME}</Typography>
