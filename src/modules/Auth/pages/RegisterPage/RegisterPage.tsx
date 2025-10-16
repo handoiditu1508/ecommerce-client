@@ -1,8 +1,10 @@
-import { MouseEventHandler, useState } from "react";
+import Suspense from "@/components/Suspense";
+import React, { MouseEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AdditionalInfoModal from "./AdditionalInfoModal";
 import RegisterEmailModal from "./RegisterEmailModal";
-import VerifyOtpModal from "./VerifyOtpModal";
+
+const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
+const AdditionalInfoModal = React.lazy(() => import("./AdditionalInfoModal"));
 
 // step 1 enter email: show only email input
 // step 2 confirm otp: disable email input and show otp input
@@ -51,9 +53,17 @@ function RegisterPage() {
     case RegisterStep.RegisterEmail:
       return <RegisterEmailModal onSuccess={handleRegisterEmailSuccess} />;
     case RegisterStep.VerifyOtp:
-      return <VerifyOtpModal onSuccess={handleVerifyOtpSuccess} onChangeEmail={handleChangeEmail} />;
+      return (
+        <Suspense>
+          <VerifyOtpModal onSuccess={handleVerifyOtpSuccess} onChangeEmail={handleChangeEmail} />
+        </Suspense>
+      );
     case RegisterStep.AdditionalInfo:
-      return <AdditionalInfoModal onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />;
+      return (
+        <Suspense>
+          <AdditionalInfoModal onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
+        </Suspense>
+      );
   }
 }
 

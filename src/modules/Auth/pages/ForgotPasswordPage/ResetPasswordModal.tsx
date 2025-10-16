@@ -4,56 +4,43 @@ import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-type RegisterInput = {
+type ResetPasswordInput = {
   email: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  password: string;
-  agreed: boolean;
+  newPassword: string;
 };
 
-type AdditionalInfoModalProps = {
+type ResetPasswordModalProps = {
   onSuccess?: () => void;
-  onChangeEmail?: MouseEventHandler<HTMLButtonElement>;
 };
 
-function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONFIG.EMPTY_FUNCTION }: AdditionalInfoModalProps) {
+function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPasswordModalProps) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { handleSubmit, control, watch, trigger } = useForm<RegisterInput>({
+  const { handleSubmit, control, watch, trigger } = useForm<ResetPasswordInput>({
     defaultValues: {
       email: "example@gmail.com",
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      password: "",
-      agreed: false,
+      newPassword: "",
     },
-    mode: "onSubmit",
+    mode: "onChange",
   });
-  const password = watch("password");
+  const password = watch("newPassword");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
 
-  const onSubmit: SubmitHandler<RegisterInput> = (data) => {
+  const onSubmit: SubmitHandler<ResetPasswordInput> = (data) => {
     console.log(data);
     onSuccess();
   };
@@ -69,8 +56,7 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Create Account</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>Finish your registration</Typography>
+      <Typography variant="h4" align="center">Reset Password</Typography>
       <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
         <Controller
           control={control}
@@ -92,21 +78,8 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
               helperText={fieldState.error && fieldState.error.message}
               type="email"
               slotProps={{
-                input: {
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="change email"
-                        edge="end"
-                        onClick={onChangeEmail}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
                 htmlInput: {
+                  readOnly: true,
                   maxLength: CONFIG.EMAIL_MAX_LENGTH,
                 },
               }}
@@ -116,87 +89,7 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
         />
         <Controller
           control={control}
-          name="firstName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="First Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="middleName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              label="Middle Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="lastName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="Last Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
+          name="newPassword"
           rules={{
             validate: (value) => {
               const validationResult = validatePassword(value);
@@ -210,11 +103,11 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
             <TextField
               fullWidth
               required
-              label="Password"
+              label="New password"
               type={showPassword ? "text" : "password"}
               margin="normal"
-              error={fieldState.invalid}
-              helperText={fieldState.error && fieldState.error.message}
+              // error={fieldState.invalid}
+              // helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 input: {
                   readOnly: loading,
@@ -235,29 +128,10 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
                 },
               }}
               {...field}
-              onChange={(event) => {
-                field.onChange(event);
-                // trigger password validation
-                trigger("password");
-              }}
             />
           )}
         />
-        <Controller
-          control={control}
-          name="agreed"
-          render={({ field, fieldState }) => (
-            <FormControl error={fieldState.invalid} component="fieldset">
-              <FormControlLabel
-                control={<Checkbox required disabled={loading} />}
-                label={<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>}
-                {...field}
-              />
-              {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
-            </FormControl>
-          )}
-        />
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>Sign up</Button>
+        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>Reset password</Button>
       </Box>
       <Box sx={{ mt: 4 }}>
         <Box sx={{
@@ -311,8 +185,19 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
           Password requires numeric character.
         </Box>
       </Box>
+      <Box sx={{ flex: 1 }} />
+      <CustomLink
+        to="/login-in"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "fit-content",
+          mx: "auto",
+        }}>
+        <NavigateBeforeIcon fontSize="inherit" /> Return to login
+      </CustomLink>
     </Box>
   );
 }
 
-export default AdditionalInfoModal;
+export default ResetPasswordModal;

@@ -44,7 +44,7 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Create Account</Typography>
+      <Typography variant="h4" align="center">Create Account</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
       <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
         <Controller
