@@ -1,6 +1,7 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
@@ -44,7 +45,13 @@ function VerifyOtpModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CON
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Create Account</Typography>
+      <LockResetIcon
+        sx={{
+          fontSize: 100,
+          mx: "auto",
+        }}
+      />
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Create Account</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>An OTP has been sent to your email at e****le@gmail.com</Typography>
       <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
         <Controller

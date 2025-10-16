@@ -1,6 +1,7 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -44,7 +45,13 @@ function UsernameOrEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: UsernameOrE
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Forgot Password</Typography>
+      <LockResetIcon
+        sx={{
+          fontSize: 100,
+          mx: "auto",
+        }}
+      />
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Forgot Password</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
       <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
         <Controller

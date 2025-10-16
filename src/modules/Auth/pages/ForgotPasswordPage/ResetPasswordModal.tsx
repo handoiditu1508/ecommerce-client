@@ -4,6 +4,7 @@ import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -56,7 +57,13 @@ function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPassword
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Reset Password</Typography>
+      <LockResetIcon
+        sx={{
+          fontSize: 100,
+          mx: "auto",
+        }}
+      />
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Reset Password</Typography>
       <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
         <Controller
           control={control}
