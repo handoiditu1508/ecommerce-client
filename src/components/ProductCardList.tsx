@@ -20,6 +20,7 @@ function ProductCardList({ quantity }: ProductCardListProps) {
       display: "flex",
       gap: "16px",
       flexWrap: "wrap",
+      justifyContent: "center",
       [smAndDownMediaQuery(theme.breakpoints)]: {
         maxWidth: theme.breakpoints.values.sm - 20, // 20px is to prevent horizontal scrollbar
         px: "10px",

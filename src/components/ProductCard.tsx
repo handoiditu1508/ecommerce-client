@@ -1,3 +1,4 @@
+import { toVndCurrency } from "@/common/formats";
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -49,7 +50,7 @@ function ProductCard() {
           <Tooltip title="Product name zxc sdfd asdas" placement="top">
             <Typography variant="body1" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">Product name zxc sdfd asdas</Typography>
           </Tooltip>
-          <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>₫300.000</Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>{toVndCurrency(300000)}</Typography>
         </CardContent>
       </CardActionArea>
     </Card>

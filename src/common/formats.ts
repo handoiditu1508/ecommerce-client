@@ -5,5 +5,11 @@ export const camelToTitleCase = (value: string) => value.charAt(0).toUpperCase()
 export const kebabToTitleCase = (value: string) => value.replace(/(^\w|-\w)/g, (s) => s.replace(/-/, " ").toUpperCase());
 export const kebabToPascalCase = (value: string) => value.replace(/(^\w|-\w)/g, kebabReplacer);
 export const kebabToCamelCase = (value: string) => value.replace(/-\w/g, kebabReplacer);
+export const toVndCurrency = (value: number) => vndCurrencyFormat.format(value);
 
 const kebabReplacer = (substring: string) => substring.replace(/-/, "").toUpperCase();
+const vndCurrencyFormat = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+  maximumFractionDigits: 0, // optional: removes decimal places
+});

@@ -35,7 +35,10 @@ function Header() {
   const { smAndUp, mdAndUp } = useContext(BreakpointsContext);
 
   return (
-    <AppBar elevation={shadowHeaderTrigger ? 4 : 0}>
+    <AppBar
+      elevation={shadowHeaderTrigger ? 4 : 0}
+      sx={{ zIndex: theme.zIndex.drawer + 1 }}
+    >
       {mdAndUp && <Toolbar
         sx={{
           minHeight: "var(--top-header-height) !important",

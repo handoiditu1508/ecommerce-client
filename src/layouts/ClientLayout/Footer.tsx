@@ -10,17 +10,38 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { useEffect, useRef } from "react";
 
 function Footer() {
   const theme = useTheme();
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const footerHeight = entry.target.clientHeight;
+        document.body.style.setProperty("--footer-height", `${footerHeight}px`);
+      }
+    });
+    if (ref.current) {
+      resizeObserver.observe(ref.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+      document.body.style.removeProperty("--footer-height");
+    };
+  }, []);
 
   return (
     <Paper
+      ref={ref}
       square
       component="footer"
       sx={{
         mt: 10,
         py: 2,
+        zIndex: theme.zIndex.drawer + 1,
         [smAndDownMediaQuery(theme.breakpoints)]: {
           px: 1,
         },

@@ -15,11 +15,12 @@ function InnerClientLayout() {
   const { xsAndDown } = useContext(BreakpointsContext);
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Header />
       <Box
         sx={{
           mt: "var(--header-client-height)",
+          flex: 1,
         }}>
         <Suspense>
           <Outlet />
