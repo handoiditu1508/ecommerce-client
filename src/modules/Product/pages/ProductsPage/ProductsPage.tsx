@@ -3,9 +3,11 @@ import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
+import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { useContext, useState } from "react";
 import FilterCriteria from "./FilterCriteria";
 import Searchbar from "./Searchbar";
@@ -65,6 +67,32 @@ function ProductsPage() {
         flex: 1,
       }}>
         {mdAndUp && <Searchbar />}
+        <Box sx={{
+          display: "flex",
+          mt: 1,
+          ml: 2,
+          pr: 1,
+          gap: 1,
+        }}>
+          <Box sx={{
+            flex: 1,
+            display: "flex",
+            gap: 0.5,
+            flexWrap: "wrap",
+          }}>
+            {[...Array(10)].map((_, index) => <Chip
+              key={index}
+              label={`category ${index + 1}`}
+              size="small"
+              color="primary"
+              component="a"
+              href="#"
+              clickable
+              onDelete={(e) => e.preventDefault()}
+            />)}
+          </Box>
+          <Typography variant="caption" color="textDisabled">99 results found</Typography>
+        </Box>
         <ProductCardList quantity={12} />
       </Box>
     </Box>
