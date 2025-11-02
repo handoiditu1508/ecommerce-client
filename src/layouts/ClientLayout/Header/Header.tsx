@@ -37,7 +37,6 @@ function Header() {
   return (
     <AppBar
       elevation={shadowHeaderTrigger ? 4 : 0}
-      sx={{ zIndex: theme.zIndex.drawer + 1 }}
     >
       {mdAndUp && <Toolbar
         sx={{

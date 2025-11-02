@@ -14,22 +14,22 @@ function ProductCardList({ quantity }: ProductCardListProps) {
     <Box sx={{
       mt: 2,
       mx: "auto",
-      px: "16px",
+      px: 2,
       boxSizing: "border-box",
       maxWidth: theme.breakpoints.values.md - 20, // 20px is to prevent horizontal scrollbar
       display: "flex",
-      gap: "16px",
+      gap: 2,
       flexWrap: "wrap",
       justifyContent: "center",
       [smAndDownMediaQuery(theme.breakpoints)]: {
         maxWidth: theme.breakpoints.values.sm - 20, // 20px is to prevent horizontal scrollbar
-        px: "10px",
-        gap: "10px",
+        px: 1.25,
+        gap: 1.25,
       },
       [xsAndDownMediaQuery(theme.breakpoints)]: {
         maxWidth: theme.breakpoints.values.xs - 20, // 20px is to prevent horizontal scrollbar
-        px: "2px",
-        gap: "6px",
+        px: 0.25,
+        gap: 0.75,
       },
     }}>
       {[...new Array(quantity)].map((_, index) => <ProductCard key={index} />)}
