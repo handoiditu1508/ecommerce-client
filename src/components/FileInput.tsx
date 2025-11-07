@@ -138,7 +138,7 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
     if (element) {
       hiddenFileInputRef.current = element;
       if (inputProps && inputProps.ref) {
-        (inputProps.ref as React.MutableRefObject<HTMLInputElement>).current = element;
+        (inputProps.ref as React.RefObject<HTMLInputElement>).current = element;
       }
     }
   };
