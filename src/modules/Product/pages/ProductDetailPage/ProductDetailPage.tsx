@@ -17,6 +17,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import ProductAttributeSelector from "./ProductAttributeSelector";
+import ProductDescription from "./ProductDescription";
 import QuantityInput from "./QuantityInput";
 import RelatedProducts from "./RelatedProducts";
 
@@ -164,6 +165,7 @@ function ProductDetailPage() {
         </Box>
       </Box>
       <RelatedProducts />
+      <ProductDescription />
     </LayoutContainer>
   );
 }
