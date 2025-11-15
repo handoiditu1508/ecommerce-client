@@ -6,14 +6,15 @@ function ProductDescription() {
   const theme = useTheme();
 
   return (
-    <Box sx={{
-      mt: 4,
-      padding: 2,
-      img: {
-        display: "block",
-        mx: "auto",
-      },
-    }}>
+    <Box
+      component="section"
+      sx={{
+        mt: 4,
+        img: {
+          display: "block",
+          mx: "auto",
+        },
+      }}>
       <Typography variant="h5">Description</Typography>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id dui ac tortor congue mattis. Aliquam in tortor ut velit rhoncus cursus. Phasellus ipsum dolor, viverra ac elementum sed, fringilla eu ex. Suspendisse tempor tristique massa, eget semper nibh venenatis at. Proin hendrerit rutrum lacus, quis vestibulum augue egestas at. Sed rutrum, elit nec interdum pulvinar, ligula lorem interdum urna, in consequat justo ipsum vel ipsum. Nunc venenatis tortor nec est porta, eget luctus justo consequat. Curabitur mattis lacinia sem eu pellentesque. In et erat sit amet enim maximus eleifend. Nullam semper dui sed justo hendrerit porttitor. Phasellus semper euismod lorem, non mollis eros porttitor vitae. Ut vulputate tempor quam, non iaculis diam. Phasellus pretium libero at nisi sodales, sit amet malesuada erat malesuada. Ut vel ex augue.</p>
       <br />

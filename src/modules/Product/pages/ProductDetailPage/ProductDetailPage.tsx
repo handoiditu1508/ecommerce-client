@@ -38,13 +38,14 @@ function ProductDetailPage() {
   };
 
   return (
-    <LayoutContainer>
-      <Box sx={{
-        display: "flex",
-        pt: 1,
-        px: 1,
-        gap: 2,
-      }}>
+    <LayoutContainer disableGutters={false}>
+      <Box
+        component="section"
+        sx={{
+          display: "flex",
+          mt: 1,
+          gap: 2,
+        }}>
         {/* left */}
         <Box sx={{
           flexgrow: 0,

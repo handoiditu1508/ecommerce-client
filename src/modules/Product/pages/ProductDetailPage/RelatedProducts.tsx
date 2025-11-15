@@ -1,5 +1,4 @@
 import ProductCard from "@/components/ProductCard";
-import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
@@ -27,9 +26,8 @@ function RelatedProducts() {
   };
 
   return (
-    <Container
-      maxWidth="md"
-      fixed
+    <Box
+      component="section"
       sx={{
         mt: 4,
         ".swiper-slide": {
@@ -79,7 +77,7 @@ function RelatedProducts() {
           <ArrowForwardIosIcon />
         </IconButton>
       </Swiper>
-    </Container>
+    </Box>
   );
 }
 
