@@ -150,6 +150,12 @@ git fetch origin
 git merge master
 ```
 
+### Resolve packages after switching branch
+
+```bash
+npm install
+```
+
 ### Build and deploy
 
 ```bash
