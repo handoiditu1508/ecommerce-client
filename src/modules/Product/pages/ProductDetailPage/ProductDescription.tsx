@@ -13,6 +13,7 @@ function ProductDescription() {
         img: {
           display: "block",
           mx: "auto",
+          maxWidth: "100%",
         },
       }}>
       <Typography variant="h5">Description</Typography>
@@ -22,9 +23,6 @@ function ProductDescription() {
         component="img"
         src="https://placehold.co/600x400"
         alt="Product Image"
-        sx={{
-          maxWidth: theme.breakpoints.values.md,
-        }}
       />
       <br />
       <p>Nunc quis lobortis lacus, sed viverra magna. Ut ac orci vestibulum, consequat dui sed, ultricies metus. Praesent rutrum est neque, et accumsan libero commodo sit amet. Aenean scelerisque elementum augue, quis ornare magna vestibulum ac. Curabitur at massa accumsan, vestibulum odio at, gravida nulla. Mauris ut arcu justo. Fusce nisi risus, mattis quis libero molestie, convallis vestibulum augue. In hendrerit vestibulum arcu, euismod faucibus justo placerat et. Donec facilisis lectus vitae ante tincidunt aliquet. Donec eleifend enim non nunc finibus, in bibendum quam semper.</p>
@@ -38,9 +36,6 @@ function ProductDescription() {
         component="img"
         src="https://placehold.co/600x400"
         alt="Product Image"
-        sx={{
-          maxWidth: theme.breakpoints.values.md,
-        }}
       />
       <br />
       <p>Proin sed enim a metus dapibus blandit. Pellentesque fringilla non nulla id tristique. Quisque faucibus pulvinar tortor at bibendum. Phasellus in dapibus risus. Proin porttitor elit eget turpis porta viverra. Nulla id libero tellus. Etiam et sapien sed arcu volutpat sollicitudin. Vestibulum dictum nisi eu hendrerit mollis. Morbi pellentesque placerat pulvinar. Donec aliquam neque orci, lobortis porta nisi finibus vitae. Duis malesuada suscipit sodales. Sed hendrerit efficitur lectus ut pharetra. Cras accumsan dui et diam commodo ornare. Phasellus gravida metus in vestibulum volutpat. Nulla eu eleifend eros, vel condimentum mauris. Donec aliquet justo felis, vel pharetra odio congue non.</p>

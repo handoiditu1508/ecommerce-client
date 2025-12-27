@@ -14,7 +14,7 @@ import { useEffect, useRef } from "react";
 
 function Footer() {
   const theme = useTheme();
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>({} as HTMLElement);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -23,9 +23,7 @@ function Footer() {
         document.body.style.setProperty("--footer-height", `${footerHeight}px`);
       }
     });
-    if (ref.current) {
-      resizeObserver.observe(ref.current);
-    }
+    resizeObserver.observe(ref.current);
 
     return () => {
       resizeObserver.disconnect();

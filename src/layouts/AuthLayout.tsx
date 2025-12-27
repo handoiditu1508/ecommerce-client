@@ -24,6 +24,7 @@ function AuthLayout() {
           gap: 4,
           p: 4,
           [smAndDownMediaQuery(theme.breakpoints)]: {
+            position: "relative",
             p: 0,
           },
         }}>

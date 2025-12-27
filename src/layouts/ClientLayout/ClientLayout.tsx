@@ -5,7 +5,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -13,11 +13,28 @@ import withHeaderProvider from "./Header/withHeaderProvider";
 
 function InnerClientLayout() {
   const { xsAndDown } = useContext(BreakpointsContext);
+  const bodyContentRef = useRef<HTMLElement>({} as HTMLElement);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const bodyContentHeight = entry.target.clientHeight;
+        document.body.style.setProperty("--body-content-height", `${bodyContentHeight}px`);
+      }
+    });
+    resizeObserver.observe(bodyContentRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      document.body.style.removeProperty("--body-content-height");
+    };
+  }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Header />
       <Box
+        ref={bodyContentRef}
         sx={{
           mt: "var(--header-client-height)",
           flex: 1,

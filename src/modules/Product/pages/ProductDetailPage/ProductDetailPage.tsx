@@ -1,5 +1,6 @@
 import { toVndCurrency } from "@/common/formats";
 import CustomLink from "@/components/CustomLink";
+import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import Box from "@mui/material/Box";
@@ -12,11 +13,10 @@ import Typography from "@mui/material/Typography";
 import { useContext, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
+import ProductAttributeSelector from "../../components/ProductAttributeSelector";
+import ProductAttributeSelectorDialog from "../../components/ProductAttributeSelectorDialog";
 import ImageCarousel from "./ImageCarousel";
-import ProductAttributeSelector from "./ProductAttributeSelector";
-import ProductAttributeSelectorDialog from "./ProductAttributeSelectorDialog";
 import ProductDescription from "./ProductDescription";
-import QuantityInput from "./QuantityInput";
 import RelatedProducts from "./RelatedProducts";
 import SocialSharingButtonGroup from "./SocialSharingButtonGroup";
 
@@ -62,6 +62,20 @@ function ProductDetailPage() {
       onClick={handleAddToCartButtonClick}>
       Add to cart
     </Button>
+  );
+
+  const QuantityInput = (
+    <NumberSpinner
+      min={0}
+      defaultValue={1}
+      size="small"
+      sx={{
+        maxWidth: 200,
+        width: "100%",
+        alignSelf: "flex-end",
+        mt: 4,
+      }}
+    />
   );
 
   return (
@@ -110,9 +124,9 @@ function ProductDetailPage() {
             {sm && ProductPrice}
           </Box>}
           {smAndDown && <>
-            <QuantityInput />
+            {QuantityInput}
             {AddToCartButton}
-            <ProductAttributeSelectorDialog open={attributeDialogOpen} onClose={() => setAttributeDialogOpen(false)} />
+            <ProductAttributeSelectorDialog open={attributeDialogOpen} confirmButtonText="Add to cart" onClose={() => setAttributeDialogOpen(false)} />
           </>}
         </Box>
         {/* right */}
@@ -133,7 +147,7 @@ function ProductDetailPage() {
           </Box>
           <Divider sx={{ my: 1 }} />
           <ProductAttributeSelector />
-          <QuantityInput />
+          {QuantityInput}
           {AddToCartButton}
         </Box>}
       </Box>

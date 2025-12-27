@@ -1,3 +1,4 @@
+import { BreakpointsContext } from "@/contexts/breakpoints";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -8,11 +9,12 @@ import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { useTheme } from "@mui/material/styles";
 import { TransitionProps } from "@mui/material/transitions";
-import React from "react";
-import ProductAttributeSelector from "./ProductAttributeSelector";
+import React, { useContext, useId } from "react";
+import ProductAttributeSelector from "./ProductAttributeSelector/ProductAttributeSelector";
 
 type ProductAttributeSelectorDialogProps = {
   open: boolean;
+  confirmButtonText?: string;
   onClose: () => void;
 };
 
@@ -23,19 +25,28 @@ const Transition = (props: TransitionProps & {
   return <Slide direction="up" {...props} />;
 };
 
-function ProductAttributeSelectorDialog({ open, onClose }: ProductAttributeSelectorDialogProps) {
+function ProductAttributeSelectorDialog({
+  open,
+  confirmButtonText = "Confirm",
+  onClose,
+}: ProductAttributeSelectorDialogProps) {
+  const dialogLabelId = useId();
   const theme = useTheme();
+  const { smAndDown } = useContext(BreakpointsContext);
 
   return (
     <Dialog
       open={open}
-      fullScreen
+      fullScreen={smAndDown}
       scroll="paper"
+      maxWidth="md"
+      fullWidth
+      aria-labelledby={dialogLabelId}
       slots={{
         transition: Transition,
       }}
       onClose={onClose}>
-      <DialogTitle>Select product attributes</DialogTitle>
+      <DialogTitle id={dialogLabelId}>Select product attributes</DialogTitle>
       <IconButton
         aria-label="close"
         color="default"
@@ -52,7 +63,7 @@ function ProductAttributeSelectorDialog({ open, onClose }: ProductAttributeSelec
         <ProductAttributeSelector />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Add to cart</Button>
+        <Button onClick={onClose}>{confirmButtonText}</Button>
       </DialogActions>
     </Dialog>
   );
