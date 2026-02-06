@@ -18,11 +18,24 @@ export type ValidationProblemDetails = {
  */
 export type Problem = {
   code: string;
-  group: number;
+  group: ExceptionGroup;
   message: string;
 };
 
 export const isValidationProblemDetails = (error: KnownApiError): error is ValidationProblemDetails => "errors" in error;
+
+export enum ExceptionGroup {
+  Database,
+  System,
+  Validation,
+  Authentication,
+  Identity,
+  Resource,
+  Logging,
+  Email,
+  FileSystem,
+  Inventory,
+}
 
 export type SendEmailResponse = {
   sentTime: string;
