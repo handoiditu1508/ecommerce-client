@@ -1,5 +1,6 @@
 type ConfigType = {
   APP_NAME: string;
+  API_URL: string;
   IS_AWESOME: boolean;
   /**
    * theme.spacing(CONFIG.LAYOUT_PADDING)
