@@ -1,18 +1,15 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { PreConfirmEmailCommand } from "@/models/apis/preConfirmEmail";
+import { usePreConfirmEmailMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-
-type RegisterEmailInput = {
-  email: string;
-};
 
 type RegisterEmailModalProps = {
   onSuccess?: () => void;
@@ -20,17 +17,22 @@ type RegisterEmailModalProps = {
 
 function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmailModalProps) {
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<RegisterEmailInput>({
+  const [preconfirmEmail, result] = usePreConfirmEmailMutation();
+  const { handleSubmit, control } = useForm<PreConfirmEmailCommand>({
     defaultValues: {
       email: "",
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<RegisterEmailInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  const onSubmit: SubmitHandler<PreConfirmEmailCommand> = async (data) => {
+    const response = await preconfirmEmail(data);
+    if (response.data) {
+      console.log(response.data);
+      onSuccess();
+    } else {
+      console.error(response.error);
+    }
   };
 
   return (
@@ -64,7 +66,7 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
               placeholder="Email address"
               slotProps={{
                 htmlInput: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   maxLength: CONFIG.EMAIL_MAX_LENGTH,
                   sx: {
                     textAlign: "center",
@@ -77,7 +79,7 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
             />
           )}
         />
-        <Button fullWidth size="large" loading={loading} sx={{ mt: 2 }} type="submit">SIGN UP</Button>
+        <Button fullWidth size="large" loading={result.isLoading} sx={{ mt: 2 }} type="submit">SIGN UP</Button>
       </Box>
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{
@@ -86,8 +88,8 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
         alignItems: "center",
         gap: 2,
       }}>
-        <Button fullWidth variant="outlined" disabled={loading}>Google</Button>
-        <Button fullWidth variant="outlined" disabled={loading}>Facebook</Button>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Google</Button>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
       <Typography align="center">Already have an account? <CustomLink to="/login-in">Sign in</CustomLink></Typography>
