@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 type RegisterEmailModalProps = {
   onSuccess?: () => void;
@@ -17,8 +18,9 @@ type RegisterEmailModalProps = {
 
 function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmailModalProps) {
   const theme = useTheme();
+  const { t: tError } = useTranslation("errors");
   const [preconfirmEmail, result] = usePreConfirmEmailMutation();
-  const { handleSubmit, control } = useForm<PreConfirmEmailCommand>({
+  const { handleSubmit, control, setError } = useForm<PreConfirmEmailCommand>({
     defaultValues: {
       email: "",
     },
@@ -28,10 +30,16 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
   const onSubmit: SubmitHandler<PreConfirmEmailCommand> = async (data) => {
     const response = await preconfirmEmail(data);
     if (response.data) {
-      console.log(response.data);
       onSuccess();
     } else {
       console.error(response.error);
+      if (response.error.code) {
+        setError(
+          "email",
+          { message: tError(response.error.code) },
+          { shouldFocus: true }
+        );
+      }
     }
   };
 
