@@ -9,20 +9,28 @@ import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { ActionDispatch } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
 
 type RegisterEmailModalProps = {
+  registerState: RegisterReducerState;
+  registerDispatch: ActionDispatch<[RegisterReducerAction]>;
   onSuccess?: () => void;
 };
 
-function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmailModalProps) {
+function RegisterEmailModal({
+  registerState,
+  registerDispatch,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+}: RegisterEmailModalProps) {
   const theme = useTheme();
   const { t: tError } = useTranslation("errors");
   const [preconfirmEmail, result] = usePreConfirmEmailMutation();
   const { handleSubmit, control, setError } = useForm<PreConfirmEmailCommand>({
     defaultValues: {
-      email: "",
+      email: registerState.email,
     },
     mode: "onSubmit",
   });
@@ -30,6 +38,7 @@ function RegisterEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: RegisterEmail
   const onSubmit: SubmitHandler<PreConfirmEmailCommand> = async (data) => {
     const response = await preconfirmEmail(data);
     if (response.data) {
+      registerDispatch({ type: "SET_EMAIL", payload: data.email });
       onSuccess();
     } else {
       console.error(response.error);

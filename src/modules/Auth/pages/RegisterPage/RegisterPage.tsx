@@ -2,6 +2,7 @@ import Suspense from "@/components/Suspense";
 import React, { MouseEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import RegisterEmailModal from "./RegisterEmailModal";
+import useRegisterReducer from "./useRegisterReducer";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
 const AdditionalInfoModal = React.lazy(() => import("./AdditionalInfoModal"));
@@ -20,6 +21,7 @@ function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [step, setStep] = useState<RegisterStep>(RegisterStep.RegisterEmail);
+  const [registerState, registerDispatch] = useRegisterReducer();
 
   const handleRegisterEmailSuccess = () => {
     setStep(RegisterStep.VerifyOtp);
@@ -51,7 +53,7 @@ function RegisterPage() {
 
   switch (step) {
     case RegisterStep.RegisterEmail:
-      return <RegisterEmailModal onSuccess={handleRegisterEmailSuccess} />;
+      return <RegisterEmailModal registerState={registerState} registerDispatch={registerDispatch} onSuccess={handleRegisterEmailSuccess} />;
     case RegisterStep.VerifyOtp:
       return (
         <Suspense>
