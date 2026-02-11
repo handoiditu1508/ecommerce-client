@@ -109,7 +109,7 @@ function RegisterEmailModal({
         <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
-      <Typography align="center">Already have an account? <CustomLink to="/login-in">Sign in</CustomLink></Typography>
+      <Typography align="center">Already have an account? <CustomLink to="/login">Sign in</CustomLink></Typography>
     </Box>
   );
 }
