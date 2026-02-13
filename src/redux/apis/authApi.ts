@@ -1,6 +1,6 @@
 import { SendEmailResponse } from "@/models/apis/common";
 import { LoginResponse } from "@/models/apis/login";
-import { PreConfirmEmailCommand } from "@/models/apis/preConfirmEmail";
+import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
 import { clearAuthState, setAuthState } from "../slices/authSlice";
 import appApi from "./appApi";
@@ -25,9 +25,9 @@ const authApi = appApi.injectEndpoints({
       },
       invalidatesTags: (result) => (result ? ["UNAUTHORIZED"] : []),
     }),
-    preConfirmEmail: builder.mutation<SendEmailResponse, PreConfirmEmailCommand>({
+    sendPreConfirmEmail: builder.mutation<SendEmailResponse, SendPreConfirmEmailCommand>({
       query: (body) => ({
-        url: "auth/register/preConfirmEmail",
+        url: "auth/sendPreConfirmEmail",
         method: "POST",
         body,
       }),
@@ -39,5 +39,5 @@ export default authApi;
 
 export const {
   useRefreshTokenMutation,
-  usePreConfirmEmailMutation,
+  useSendPreConfirmEmailMutation,
 } = authApi;

@@ -1,8 +1,8 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { PreConfirmEmailCommand } from "@/models/apis/preConfirmEmail";
-import { usePreConfirmEmailMutation } from "@/redux/apis/authApi";
+import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
+import { useSendPreConfirmEmailMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -27,16 +27,16 @@ function RegisterEmailModal({
 }: RegisterEmailModalProps) {
   const theme = useTheme();
   const { t: tError } = useTranslation("errors");
-  const [preconfirmEmail, result] = usePreConfirmEmailMutation();
-  const { handleSubmit, control, setError } = useForm<PreConfirmEmailCommand>({
+  const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
+  const { handleSubmit, control, setError } = useForm<SendPreConfirmEmailCommand>({
     defaultValues: {
       email: registerState.email,
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<PreConfirmEmailCommand> = async (data) => {
-    const response = await preconfirmEmail(data);
+  const onSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
+    const response = await sendPreconfirmEmail(data);
     if (response.data) {
       registerDispatch({ type: "SET_EMAIL", payload: data.email });
       onSuccess();
