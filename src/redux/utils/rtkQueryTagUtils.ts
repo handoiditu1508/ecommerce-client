@@ -1,7 +1,8 @@
+import { EntityId } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 /**
- * Default tags used by the cacher helpers
+ * Default tags used by the tag helpers
  */
 export const defaultTags = ["UNAUTHORIZED", "UNKNOWN_ERROR"] as const;
 export type DefaultTags = typeof defaultTags[number];
@@ -13,20 +14,20 @@ export const allTags = [
 ] as const;
 
 /**
- * An individual cache item
+ * An individual tag item
  */
-export type CacheItem<T extends EntityTags, ID extends string | number> = {
+export type TagItem<T extends EntityTags, ID extends EntityId> = {
   type: T;
   id: ID;
 };
 
 /**
- * A list of cache items, including a LIST entity cache
+ * A list of tag items, including a LIST entity tag
  */
-export type CacheList<T extends EntityTags, ID extends string | number> = (
-  | CacheItem<T, "LIST">
-  | CacheItem<T, `LIST-${string}`>// invalidate only lists that contain specific id without invalidate getById
-  | CacheItem<T, ID>
+export type TagList<T extends EntityTags, ID extends EntityId> = (
+  | TagItem<T, "LIST">
+  | TagItem<T, `LIST-${string}`>// invalidate only lists that contain specific id without invalidate getById
+  | TagItem<T, ID>
   | DefaultTags
 )[];
 
@@ -45,12 +46,12 @@ export type CacheList<T extends EntityTags, ID extends string | number> = (
  * @param error Error object returned by RTK Query.
  * @returns Array of tags.
  */
-export function providesListTags<T extends EntityTags, R extends { id: string | number; }>(
+export function providesListTags<T extends EntityTags, R extends { id: EntityId; }>(
   tagType: T,
   resultsWithIds: R[] | undefined,
   error: FetchBaseQueryError | undefined
-): CacheList<T, R["id"]> {
-  var tags: CacheList<T, R["id"]> = [{ type: tagType, id: "LIST" }];
+): TagList<T, R["id"]> {
+  var tags: TagList<T, R["id"]> = [{ type: tagType, id: "LIST" }];
 
   if (resultsWithIds) {
     tags.push(...resultsWithIds.flatMap(({ id }) => [
@@ -81,12 +82,12 @@ export function providesListTags<T extends EntityTags, R extends { id: string | 
  * @param error Error object returned by RTK Query.
  * @returns Array of tags.
  */
-export function providesIdTag<T extends EntityTags, ID extends string | number>(
+export function providesIdTag<T extends EntityTags, ID extends EntityId>(
   tagType: T,
   id: ID,
   error: FetchBaseQueryError | undefined
-): CacheList<T, ID> {
-  var tags: CacheList<T, ID> = [{ type: tagType, id }];
+): TagList<T, ID> {
+  var tags: TagList<T, ID> = [{ type: tagType, id }];
 
   if (error) {
     tags.push(error.status === 401 ? "UNAUTHORIZED" : "UNKNOWN_ERROR");
@@ -110,7 +111,7 @@ export function providesIdTag<T extends EntityTags, ID extends string | number>(
 export function invalidatesListTag<T extends EntityTags>(
   tagType: T,
   error: FetchBaseQueryError | undefined
-): CacheList<T, "LIST"> {
+): TagList<T, "LIST"> {
   return error ? [] : [{ type: tagType, id: "LIST" }];
 }
 
@@ -127,11 +128,11 @@ export function invalidatesListTag<T extends EntityTags>(
  * @param error Error object returned by RTK Query.
  * @returns Array of tags.
  */
-export function invalidatesIdTag<T extends EntityTags, ID extends string | number>(
+export function invalidatesIdTag<T extends EntityTags, ID extends EntityId>(
   tagType: T,
   id: ID,
   error: FetchBaseQueryError | undefined
-): CacheList<T, ID> {
+): TagList<T, ID> {
   return error ? [] : [{ type: tagType, id: id }];
 }
 
@@ -148,10 +149,10 @@ export function invalidatesIdTag<T extends EntityTags, ID extends string | numbe
  * @param error Error object returned by RTK Query.
  * @returns Array of tags.
  */
-export function invalidatesOptimisticPessimisticIdTag<T extends EntityTags, ID extends string | number>(
+export function invalidatesOptimisticPessimisticIdTag<T extends EntityTags, ID extends EntityId>(
   tagType: T,
   id: ID,
   error: FetchBaseQueryError | undefined
-): CacheList<T, ID> {
+): TagList<T, ID> {
   return error ? [{ type: tagType, id }] : [{ type: tagType, id: `LIST-${id}` }];
 }

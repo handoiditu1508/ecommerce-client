@@ -1,18 +1,18 @@
-import SignInResponse from "@/models/apis/responses/SignInResponse";
+import { LoginResponse } from "@/models/apis/login";
 import User from "@/models/entities/User";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";
 import { RootState } from "../store";
 
 export type AuthState = {
-  expirationTime: number | null;// miliseconds
+  expiration: number | null;// miliseconds
   user: User | null;
 };
 
-export const expirationTimeStorageKey = "expirationTime";
+export const expirationStorageKey = "expiration";
 
 const initialState: AuthState = {
-  expirationTime: null,
+  expiration: null,
   user: null,
 };
 
@@ -21,10 +21,10 @@ export const loadAuthStateFromLocalAsync = createAsyncThunk(
   async (_arg, thunkApi) => {
     const { auth: state } = thunkApi.getState() as RootState;
 
-    state.expirationTime = Number(localStorage.getItem(expirationTimeStorageKey));
+    state.expiration = Number(localStorage.getItem(expirationStorageKey));
 
     // check token expired
-    if (isNaN(state.expirationTime) || state.expirationTime <= Date.now()) {
+    if (isNaN(state.expiration) || state.expiration <= Date.now()) {
       // call refresh token api
       const refreshTokenPromise = thunkApi.dispatch(authApi.endpoints.refreshToken.initiate());
       await refreshTokenPromise;
@@ -39,13 +39,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthState: (state, action: PayloadAction<SignInResponse>) => {
-      state.expirationTime = Date.parse(action.payload.expirationTime);
-      localStorage.setItem(expirationTimeStorageKey, state.expirationTime.toString());
+    setAuthState: (state, action: PayloadAction<LoginResponse>) => {
+      if (action.payload.expiration) {
+        state.expiration = action.payload.expiration;
+        localStorage.setItem(expirationStorageKey, state.expiration.toString());
+      }
     },
     clearAuthState: (state) => {
-      localStorage.removeItem(expirationTimeStorageKey);
-      state.expirationTime = null;
+      localStorage.removeItem(expirationStorageKey);
+      state.expiration = null;
     },
   },
 });
@@ -55,9 +57,9 @@ export const {
   clearAuthState,
 } = authSlice.actions;
 
-export const selectIsSignedIn = (state: RootState): boolean => !!state.auth.expirationTime;
-export const selectIsTokenExpired = (state: RootState): boolean => !!state.auth.expirationTime && state.auth.expirationTime <= Date.now();
-export const selectExpirationTime = (state: RootState) => state.auth.expirationTime;
+export const selectIsSignedIn = (state: RootState): boolean => !!state.auth.expiration;
+export const selectIsTokenExpired = (state: RootState): boolean => !!state.auth.expiration && state.auth.expiration <= Date.now();
+export const selectExpiration = (state: RootState) => state.auth.expiration;
 export const selectAuthUser = (state: RootState) => state.auth.user;
 
 export default authSlice;

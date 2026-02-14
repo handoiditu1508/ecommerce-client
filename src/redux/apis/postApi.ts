@@ -1,6 +1,6 @@
 import Post from "@/models/entities/Post";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import { invalidatesIdTag, invalidatesListTag, invalidatesOptimisticPessimisticIdTag, providesIdTag, providesListTags } from "../utils/rtkQueryCacheUtils";
+import { invalidatesIdTag, invalidatesListTag, invalidatesOptimisticPessimisticIdTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 let postsAdapter = createEntityAdapter<Post>();

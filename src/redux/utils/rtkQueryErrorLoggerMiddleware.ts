@@ -1,4 +1,5 @@
 import { isRejectedWithValue, Middleware } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { pushNotification } from "../slices/notificationSlice";
 
 /**
@@ -9,30 +10,23 @@ const rtkQueryErrorLoggerMiddleware: Middleware = (api) => (next) => (action) =>
     api.dispatch(pushNotification({
       severity: "error",
       // todo: get the error message from the action
-      text: extractErrorMessage(action.payload),
+      text: extractErrorMessage(action.payload as FetchBaseQueryError),
     }));
   }
 
   return next(action);
 };
 
-const extractErrorMessage = (payload: unknown): string => {
-  const defaultMessage = "An error occurred. Please try again later.";
-  if (!payload) {
-    return defaultMessage;
-  }
-
-  if (typeof payload === "string") {
-    return payload;
-  }
-
-  if (typeof payload !== "object") {
-    return defaultMessage;
-  }
-
-  if ("error" in payload && typeof payload.error === "string") {
+const extractErrorMessage = (payload: FetchBaseQueryError): string => {
+  if ("error" in payload) {
     return payload.error;
   }
+
+  if (typeof payload.data === "string") {
+    return payload.data;
+  }
+
+  const defaultMessage = "An error occurred. Please try again later.";
 
   return defaultMessage;
 };

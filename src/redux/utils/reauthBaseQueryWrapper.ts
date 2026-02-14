@@ -1,7 +1,7 @@
-import SignInResponse from "@/models/apis/responses/SignInResponse";
+import { LoginResponse } from "@/models/apis/login";
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
-import { clearAuthState, expirationTimeStorageKey, setAuthState } from "../slices/authSlice";
+import { clearAuthState, expirationStorageKey, setAuthState } from "../slices/authSlice";
 
 const mutex = new Mutex();
 
@@ -22,7 +22,7 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
     let result = await baseQuery(args, api, extraOptions);
 
     // check response is unauthorized
-    if (result.error && result.error.status === 401 && localStorage.getItem(expirationTimeStorageKey)) {
+    if (result.error && result.error.status === 401 && localStorage.getItem(expirationStorageKey)) {
       // checking whether the mutex is unlocked
       if (!mutex.isLocked()) {
         // lock other requests until refresh token api returned
@@ -32,7 +32,7 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
 
         if (refreshResult.data) {
           // store the new token info into store and local storage
-          api.dispatch(setAuthState(refreshResult.data as SignInResponse));
+          api.dispatch(setAuthState(refreshResult.data as LoginResponse));
 
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
@@ -49,7 +49,7 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
         await mutex.waitForUnlock();
 
         // check expiration time to know if user token is stored in cookie or not
-        if (localStorage.getItem(expirationTimeStorageKey)) {
+        if (localStorage.getItem(expirationStorageKey)) {
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
         }
