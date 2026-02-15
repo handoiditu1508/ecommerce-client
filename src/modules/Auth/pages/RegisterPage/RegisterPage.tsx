@@ -5,7 +5,7 @@ import SendPreConfirmEmailModal from "./SendPreConfirmEmailModal";
 import useRegisterReducer from "./useRegisterReducer";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
-const AdditionalInfoModal = React.lazy(() => import("./AdditionalInfoModal"));
+const RegisterModal = React.lazy(() => import("./RegisterModal"));
 
 // step 1 enter email: show only email input
 // step 2 confirm otp: disable email input and show otp input
@@ -14,7 +14,7 @@ const AdditionalInfoModal = React.lazy(() => import("./AdditionalInfoModal"));
 enum RegisterStep {
   SendPreConfirmEmail,
   VerifyOtp,
-  AdditionalInfo
+  Register
 }
 
 function RegisterPage() {
@@ -28,7 +28,7 @@ function RegisterPage() {
   };
 
   const handleVerifyOtpSuccess = () => {
-    setStep(RegisterStep.AdditionalInfo);
+    setStep(RegisterStep.Register);
   };
 
   const handleRegisterSuccess = () => {
@@ -60,10 +60,10 @@ function RegisterPage() {
           <VerifyOtpModal onSuccess={handleVerifyOtpSuccess} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
-    case RegisterStep.AdditionalInfo:
+    case RegisterStep.Register:
       return (
         <Suspense>
-          <AdditionalInfoModal onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
+          <RegisterModal onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
   }

@@ -30,12 +30,12 @@ type RegisterInput = {
   agreed: boolean;
 };
 
-type AdditionalInfoModalProps = {
+type RegisterModalProps = {
   onSuccess?: () => void;
   onChangeEmail?: MouseEventHandler<HTMLButtonElement>;
 };
 
-function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONFIG.EMPTY_FUNCTION }: AdditionalInfoModalProps) {
+function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONFIG.EMPTY_FUNCTION }: RegisterModalProps) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -315,4 +315,4 @@ function AdditionalInfoModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail 
   );
 }
 
-export default AdditionalInfoModal;
+export default RegisterModal;
