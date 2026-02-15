@@ -14,17 +14,17 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
 
-type RegisterEmailModalProps = {
+type SendPreConfirmEmailModalProps = {
   registerState: RegisterReducerState;
   registerDispatch: ActionDispatch<[RegisterReducerAction]>;
   onSuccess?: () => void;
 };
 
-function RegisterEmailModal({
+function SendPreConfirmEmailModal({
   registerState,
   registerDispatch,
   onSuccess = CONFIG.EMPTY_FUNCTION,
-}: RegisterEmailModalProps) {
+}: SendPreConfirmEmailModalProps) {
   const theme = useTheme();
   const { t: tError } = useTranslation("errors");
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
@@ -114,4 +114,4 @@ function RegisterEmailModal({
   );
 }
 
-export default RegisterEmailModal;
+export default SendPreConfirmEmailModal;

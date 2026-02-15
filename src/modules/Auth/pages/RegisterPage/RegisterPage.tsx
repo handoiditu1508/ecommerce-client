@@ -1,7 +1,7 @@
 import Suspense from "@/components/Suspense";
 import React, { MouseEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import RegisterEmailModal from "./RegisterEmailModal";
+import SendPreConfirmEmailModal from "./SendPreConfirmEmailModal";
 import useRegisterReducer from "./useRegisterReducer";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
@@ -12,7 +12,7 @@ const AdditionalInfoModal = React.lazy(() => import("./AdditionalInfoModal"));
 // step 3 additional info: hide otp input and show other inputs like password, name, phone number, username
 // step 4 success
 enum RegisterStep {
-  RegisterEmail,
+  SendPreConfirmEmail,
   VerifyOtp,
   AdditionalInfo
 }
@@ -20,10 +20,10 @@ enum RegisterStep {
 function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [step, setStep] = useState<RegisterStep>(RegisterStep.RegisterEmail);
+  const [step, setStep] = useState<RegisterStep>(RegisterStep.SendPreConfirmEmail);
   const [registerState, registerDispatch] = useRegisterReducer();
 
-  const handleRegisterEmailSuccess = () => {
+  const handleSendPreConfirmEmailSuccess = () => {
     setStep(RegisterStep.VerifyOtp);
   };
 
@@ -48,12 +48,12 @@ function RegisterPage() {
 
   const handleChangeEmail: MouseEventHandler<HTMLElement> = (event) => {
     event.preventDefault();
-    setStep(RegisterStep.RegisterEmail);
+    setStep(RegisterStep.SendPreConfirmEmail);
   };
 
   switch (step) {
-    case RegisterStep.RegisterEmail:
-      return <RegisterEmailModal registerState={registerState} registerDispatch={registerDispatch} onSuccess={handleRegisterEmailSuccess} />;
+    case RegisterStep.SendPreConfirmEmail:
+      return <SendPreConfirmEmailModal registerState={registerState} registerDispatch={registerDispatch} onSuccess={handleSendPreConfirmEmailSuccess} />;
     case RegisterStep.VerifyOtp:
       return (
         <Suspense>
