@@ -30,6 +30,7 @@ const axiosBaseQuery = (
 
     return { data: result.data };
   } catch (axiosError) {
+    console.log(axiosError);
     // convert AxiosError to FetchBaseQueryError so that axiosBaseQuery can replace fetchBaseQuery with minimal changes
     const err = axiosError as AxiosError<KnownApiError>;
 

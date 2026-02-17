@@ -54,7 +54,7 @@ function RegisterPage() {
     case RegisterStep.VerifyEmail:
       return (
         <Suspense>
-          <VerifyEmailModal onChangeEmail={handleChangeEmail} />
+          <VerifyEmailModal registerState={registerState} registerDispatch={registerDispatch} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
     case RegisterStep.Register:

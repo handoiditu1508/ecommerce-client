@@ -39,9 +39,12 @@ function SendPreConfirmEmailModal({
     const response = await sendPreconfirmEmail(data);
     if (response.data) {
       registerDispatch({ type: "SET_EMAIL", payload: data.email });
+      registerDispatch({
+        type: "SET_COOLDOWN",
+        payload: response.data.cooldown,
+      });
       onSuccess();
     } else {
-      console.error(response.error);
       if (response.error.code) {
         setError(
           "email",
