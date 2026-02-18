@@ -30,8 +30,8 @@ function VerifyEmailModal({
     if (registerState.cooldown > 0) {
       interval = setInterval(() => {
         registerDispatch({
-          type: "SET_COOLDOWN",
-          payload: registerState.cooldown - 1,
+          type: "DECREASE_COOLDOWN",
+          payload: 1,
         });
       }, 1000);
     }
@@ -46,11 +46,10 @@ function VerifyEmailModal({
     const response = await sendPreconfirmEmail({ email: registerState.email });
     if (response.data) {
       registerDispatch({
-        type: "SET_COOLDOWN",
-        payload: response.data.cooldown,
+        type: "SET_COOLDOWN_FROM_RESPONSE",
+        payload: response.data,
       });
     }
-    // console.log
   };
 
   return (

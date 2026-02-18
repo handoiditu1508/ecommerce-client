@@ -40,8 +40,8 @@ function SendPreConfirmEmailModal({
     if (response.data) {
       registerDispatch({ type: "SET_EMAIL", payload: data.email });
       registerDispatch({
-        type: "SET_COOLDOWN",
-        payload: response.data.cooldown,
+        type: "SET_COOLDOWN_FROM_RESPONSE",
+        payload: response.data,
       });
       onSuccess();
     } else {
