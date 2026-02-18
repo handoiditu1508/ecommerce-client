@@ -1,6 +1,6 @@
 import Suspense from "@/components/Suspense";
-import React, { MouseEventHandler, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SendPreConfirmEmailModal from "./SendPreConfirmEmailModal";
 import useRegisterReducer from "./useRegisterReducer";
 
@@ -20,17 +20,39 @@ enum RegisterStep {
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState<RegisterStep>(RegisterStep.SendPreConfirmEmail);
   const [registerState, registerDispatch] = useRegisterReducer();
+
+  // handle when user click the link in email and redirect to step 3
+  useEffect(() => {
+    const email = searchParams.get("email");
+    if (email) {
+      registerDispatch({
+        type: "SET_EMAIL",
+        payload: email,
+      });
+
+      const expiredTimeMiliseconds = parseInt(searchParams.get("expiredTime")!);
+      const token = searchParams.get("token");
+
+      if (token && !isNaN(expiredTimeMiliseconds) && expiredTimeMiliseconds > Date.now()) {
+        registerDispatch({
+          type: "SET_TOKEN",
+          payload: token,
+        });
+        setStep(RegisterStep.Register);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const handleSendPreConfirmEmailSuccess = () => {
     setStep(RegisterStep.VerifyEmail);
   };
 
   const handleRegisterSuccess = () => {
-    const urlSearchParam = new URLSearchParams(location.search);
-    const returnUrl = urlSearchParam.get("returnUrl") || urlSearchParam.get("returnurl");
+    const returnUrl = searchParams.get("returnUrl") || searchParams.get("returnurl");
 
     if (returnUrl) {
       if (returnUrl.startsWith("http")) {

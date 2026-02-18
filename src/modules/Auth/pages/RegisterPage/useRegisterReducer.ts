@@ -4,10 +4,11 @@ import { useReducer } from "react";
 export type RegisterReducerState = {
   email: string;
   cooldown: number;
+  token: string;
 };
 
 export type RegisterReducerAction = {
-  type: "SET_EMAIL";
+  type: "SET_EMAIL" | "SET_TOKEN";
   payload: string;
 } | {
   type: "SET_COOLDOWN_FROM_RESPONSE";
@@ -20,6 +21,7 @@ export type RegisterReducerAction = {
 const initialState: RegisterReducerState = {
   email: "",
   cooldown: 0,
+  token: "",
 };
 
 const useRegisterReducer = () =>
@@ -44,6 +46,11 @@ const useRegisterReducer = () =>
           return {
             ...state,
             cooldown: state.cooldown - action.payload,
+          };
+        case "SET_TOKEN":
+          return {
+            ...state,
+            token: action.payload,
           };
       }
     },

@@ -1,6 +1,6 @@
 import Suspense from "@/components/Suspense";
 import React, { MouseEventHandler, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import LoginModal from "./LoginModal";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
@@ -15,7 +15,7 @@ enum LoginStep {
 
 function LoginPage() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState<LoginStep>(LoginStep.Login);
 
   const handleLogin2fa = () => {
@@ -23,8 +23,7 @@ function LoginPage() {
   };
 
   const handleLoginSuccess = () => {
-    const urlSearchParam = new URLSearchParams(location.search);
-    const returnUrl = urlSearchParam.get("returnUrl") || urlSearchParam.get("returnurl");
+    const returnUrl = searchParams.get("returnUrl") || searchParams.get("returnurl");
 
     if (returnUrl) {
       if (returnUrl.startsWith("http")) {
