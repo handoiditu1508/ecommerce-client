@@ -68,6 +68,10 @@ function RegisterPage() {
   const handleChangeEmail: MouseEventHandler<HTMLElement> = (event) => {
     event.preventDefault();
     setStep(RegisterStep.SendPreConfirmEmail);
+    registerDispatch({
+      type: "SET_TOKEN",
+      payload: "",
+    });
   };
 
   switch (step) {
