@@ -36,7 +36,7 @@ const useRegisterReducer = () =>
         case "SET_COOLDOWN_FROM_RESPONSE":
           const finishCooldownTime = new Date(action.payload.sentTime);
           finishCooldownTime.setSeconds(finishCooldownTime.getSeconds() + action.payload.cooldown);
-          const remainingCooldown = Math.max((finishCooldownTime.getTime() - Date.now()) / 1000, 0);
+          const remainingCooldown = Math.max(Math.ceil((finishCooldownTime.getTime() - Date.now()) / 1000), 0);
 
           return {
             ...state,
@@ -45,7 +45,7 @@ const useRegisterReducer = () =>
         case "DECREASE_COOLDOWN":
           return {
             ...state,
-            cooldown: state.cooldown - action.payload,
+            cooldown: Math.max(state.cooldown - action.payload, 0),
           };
         case "SET_TOKEN":
           return {
