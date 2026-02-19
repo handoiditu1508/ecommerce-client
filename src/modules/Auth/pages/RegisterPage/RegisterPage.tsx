@@ -86,7 +86,7 @@ function RegisterPage() {
     case RegisterStep.Register:
       return (
         <Suspense>
-          <RegisterModal onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
+          <RegisterModal registerState={registerState} onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
   }

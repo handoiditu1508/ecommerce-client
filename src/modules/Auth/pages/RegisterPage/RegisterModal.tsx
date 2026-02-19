@@ -2,6 +2,8 @@ import { PasswordValidatonResult, validatePassword } from "@/common/rules";
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { RegisterConfirmedEmailCommand } from "@/models/apis/registerConfirmedEmail";
+import { useRegisterConfirmedEmailMutation } from "@/redux/apis/authApi";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -20,32 +22,34 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { MouseEventHandler, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { RegisterReducerState } from "./useRegisterReducer";
 
-type RegisterInput = {
-  email: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  password: string;
+type RegisterInput = RegisterConfirmedEmailCommand & {
   agreed: boolean;
 };
 
 type RegisterModalProps = {
+  registerState: RegisterReducerState;
   onSuccess?: () => void;
   onChangeEmail?: MouseEventHandler<HTMLButtonElement>;
 };
 
-function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONFIG.EMPTY_FUNCTION }: RegisterModalProps) {
+function RegisterModal({
+  registerState,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+  onChangeEmail = CONFIG.EMPTY_FUNCTION,
+}: RegisterModalProps) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control, watch, trigger } = useForm<RegisterInput>({
+  const [registerConfirmedEmail, result] = useRegisterConfirmedEmailMutation();
+  const { handleSubmit, control, watch, trigger, register } = useForm<RegisterInput>({
     defaultValues: {
-      email: "example@gmail.com",
+      email: registerState.email,
       firstName: "",
       lastName: "",
       middleName: "",
       password: "",
+      token: registerState.token,
       agreed: false,
     },
     mode: "onSubmit",
@@ -53,9 +57,11 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
   const password = watch("password");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
 
-  const onSubmit: SubmitHandler<RegisterInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
+    const response = await registerConfirmedEmail(data);
+    if (response.data) {
+      onSuccess();
+    }
   };
 
   return (
@@ -133,7 +139,7 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 htmlInput: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   maxLength: CONFIG.NAME_MAX_LENGTH,
                 },
               }}
@@ -159,7 +165,7 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 htmlInput: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   maxLength: CONFIG.NAME_MAX_LENGTH,
                 },
               }}
@@ -186,7 +192,7 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 htmlInput: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   maxLength: CONFIG.NAME_MAX_LENGTH,
                 },
               }}
@@ -217,7 +223,7 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 input: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -243,13 +249,14 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
             />
           )}
         />
+        <input type="hidden" {...register("token", { required: true })} />
         <Controller
           control={control}
           name="agreed"
           render={({ field, fieldState }) => (
             <FormControl error={fieldState.invalid} component="fieldset">
               <FormControlLabel
-                control={<Checkbox required disabled={loading} />}
+                control={<Checkbox required disabled={result.isLoading} />}
                 label={<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>}
                 {...field}
               />
@@ -257,7 +264,7 @@ function RegisterModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONF
             </FormControl>
           )}
         />
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>Sign up</Button>
+        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={result.isLoading}>Sign up</Button>
       </Box>
       <Box sx={{ mt: 4 }}>
         <Box sx={{

@@ -1,5 +1,6 @@
 import { SendEmailResponse } from "@/models/apis/common";
 import { LoginResponse } from "@/models/apis/login";
+import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
 import { clearAuthState, setAuthState } from "../slices/authSlice";
@@ -32,6 +33,20 @@ const authApi = appApi.injectEndpoints({
         body,
       }),
     }),
+    registerConfirmedEmail: builder.mutation<RegisterResponse, RegisterConfirmedEmailCommand>({
+      query: (body) => ({
+        url: "auth/register/confirmedEmail",
+        method: "POST",
+        body,
+      }),
+      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+          // todo: handle login
+        } catch {
+        }
+      },
+    }),
   }),
 });
 
@@ -40,4 +55,5 @@ export default authApi;
 export const {
   useRefreshTokenMutation,
   useSendPreConfirmEmailMutation,
+  useRegisterConfirmedEmailMutation,
 } = authApi;
