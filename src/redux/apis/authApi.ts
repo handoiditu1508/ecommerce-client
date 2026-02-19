@@ -1,5 +1,5 @@
 import { SendEmailResponse } from "@/models/apis/common";
-import { LoginResponse } from "@/models/apis/login";
+import { LoginCommand, LoginResponse } from "@/models/apis/login";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
@@ -8,6 +8,20 @@ import appApi from "./appApi";
 
 const authApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
+    login: builder.mutation<LoginResponse, LoginCommand>({
+      query: (body) => ({
+        url: "auth/login",
+        method: "POST",
+        body,
+      }),
+      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+          dispatch(setAuthState(response.data));
+        } catch {
+        }
+      },
+    }),
     refreshToken: builder.mutation<LoginResponse, void>({
       queryFn: async (arg, api, _extraOptions, baseQuery) => {
         const res = await baseQuery({
@@ -42,7 +56,7 @@ const authApi = appApi.injectEndpoints({
       onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
         try {
           const response = await queryFulfilled;
-          // todo: handle login
+          dispatch(setAuthState(response.data));
         } catch {
         }
       },
@@ -54,6 +68,7 @@ export default authApi;
 
 export const {
   useRefreshTokenMutation,
+  useLoginMutation,
   useSendPreConfirmEmailMutation,
   useRegisterConfirmedEmailMutation,
 } = authApi;

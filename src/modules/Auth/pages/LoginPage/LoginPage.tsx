@@ -2,6 +2,7 @@ import Suspense from "@/components/Suspense";
 import React, { MouseEventHandler, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LoginModal from "./LoginModal";
+import useLoginReducer from "./useLoginReducer";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
 
@@ -17,6 +18,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState<LoginStep>(LoginStep.Login);
+  const [loginState, loginDispatch] = useLoginReducer();
 
   const handleLogin2fa = () => {
     setStep(LoginStep.VerifyOtp);
@@ -42,7 +44,7 @@ function LoginPage() {
   };
 
   return (step === LoginStep.Login)
-    ? <LoginModal onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
+    ? <LoginModal loginState={loginState} loginDispatch={loginDispatch} onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
     : (
       <Suspense>
         <VerifyOtpModal onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />

@@ -2,6 +2,8 @@ import logo from "@/assets/logo.svg";
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { LoginCommand } from "@/models/apis/login";
+import { useLoginMutation } from "@/redux/apis/authApi";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
@@ -14,40 +16,43 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { ActionDispatch, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-
-type LoginInput = {
-  username: string;
-  password: string;
-  remember: boolean;
-};
+import { LoginReducerAction, LoginReducerState } from "./useLoginReducer";
 
 type LoginModalProps = {
+  loginState: LoginReducerState;
+  loginDispatch: ActionDispatch<[LoginReducerAction]>;
   onLogin2fa?: () => void;
   onSuccess?: () => void;
 };
 
-function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMPTY_FUNCTION }: LoginModalProps) {
+function LoginModal({
+  loginState,
+  loginDispatch,
+  onLogin2fa = CONFIG.EMPTY_FUNCTION,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+}: LoginModalProps) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<LoginInput>({
+  const [login, result] = useLoginMutation();
+  const { handleSubmit, control } = useForm<LoginCommand>({
     defaultValues: {
-      username: "",
-      password: "",
-      remember: false,
+      username: loginState.username,
+      password: loginState.password,
+      isPersistent: loginState.isPersistent,
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<LoginInput> = (data) => {
-    console.log(data);
-    const isLogin2fa = true;
-    if (isLogin2fa) {
-      onLogin2fa();
-    } else {
-      onSuccess();
+  const onSubmit: SubmitHandler<LoginCommand> = async (data) => {
+    const response = await login(data);
+    if (response.data) {
+      if (response.data.twoFactorAuthenticate) {
+        onLogin2fa();
+      } else {
+        onSuccess();
+      }
     }
   };
 
@@ -80,7 +85,7 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMP
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 input: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                 },
               }}
               {...field}
@@ -103,7 +108,7 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMP
               helperText={fieldState.error && fieldState.error.message}
               slotProps={{
                 input: {
-                  readOnly: loading,
+                  readOnly: result.isLoading,
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -128,14 +133,14 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMP
         }}>
           <Controller
             control={control}
-            name="remember"
+            name="isPersistent"
             render={({ field }) => (
-              <FormControlLabel control={<Checkbox disabled={loading} />} label="Remember me" {...field} />
+              <FormControlLabel control={<Checkbox disabled={result.isLoading} />} label="Remember me" {...field} />
             )}
           />
           <CustomLink to="/forgot-password">Forgot Password?</CustomLink>
         </Box>
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>SIGN IN</Button>
+        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={result.isLoading}>SIGN IN</Button>
       </form>
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{
@@ -144,8 +149,8 @@ function LoginModal({ onLogin2fa = CONFIG.EMPTY_FUNCTION, onSuccess = CONFIG.EMP
         alignItems: "center",
         gap: 2,
       }}>
-        <Button fullWidth variant="outlined" disabled={loading}>Google</Button>
-        <Button fullWidth variant="outlined" disabled={loading}>Facebook</Button>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Google</Button>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
       <Typography align="center">Don't have an account? <CustomLink to="/register">Sign up</CustomLink></Typography>
