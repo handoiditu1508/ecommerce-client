@@ -56,9 +56,11 @@ const authSlice = createSlice({
       state.expiration = action.payload;
       localStorage.setItem(expirationStorageKey, state.expiration.toString());
     },
-    clearAuthState: (state) => {
+    // use this to logout
+    clearAuthState: () => {
       localStorage.removeItem(expirationStorageKey);
-      state.expiration = null;
+
+      return initialState;
     },
   },
 });

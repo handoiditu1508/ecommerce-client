@@ -1,8 +1,10 @@
 import CustomLink from "@/components/CustomLink";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useAppDispatch } from "@/hooks";
 import UKRoundedFlagIcon from "@/icons/UKRoundedFlagIcon";
 import VNRoundedFlagIcon from "@/icons/VNRoundedFlagIcon";
+import { clearAuthState } from "@/redux/slices/authSlice";
 import { mdiSale } from "@mdi/js";
 import CategoryIcon from "@mui/icons-material/Category";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -34,7 +36,7 @@ import { useColorScheme, useTheme } from "@mui/material/styles";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
+import { MouseEventHandler, useContext, useState } from "react";
 
 function MenuButton() {
   const theme = useTheme();
@@ -42,6 +44,12 @@ function MenuButton() {
   const [languageOpen, setLanguageOpen] = useState(false);
   const { xsAndDown } = useContext(BreakpointsContext);
   const { mode, setMode } = useColorScheme();
+  const dispatch = useAppDispatch();
+
+  const logout: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault();
+    dispatch(clearAuthState());
+  };
 
   return (
     <>
@@ -129,7 +137,7 @@ function MenuButton() {
             <Typography variant="h6">John Doe</Typography>
             <Box flexGrow={1} />
             <CustomLink to="/" typography="caption">Setting</CustomLink>
-            <CustomLink to="/" typography="caption">Sign out</CustomLink>
+            <CustomLink to="/" typography="caption" onClick={logout}>Sign out</CustomLink>
           </Stack>
         </Box>
         <List>
