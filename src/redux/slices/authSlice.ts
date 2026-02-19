@@ -2,6 +2,7 @@ import { LoginResponse } from "@/models/apis/login";
 import User from "@/models/entities/User";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";
+import userApi from "../apis/userApi";
 import { RootState } from "../store";
 
 export type AuthState = {
@@ -30,7 +31,7 @@ export const loadAuthStateFromLocalAsync = createAsyncThunk(
       await refreshTokenPromise;
       refreshTokenPromise.reset();
     } else if (!state.user) {
-      // todo: load signed in user details from BE
+      await thunkApi.dispatch(userApi.endpoints.getSelf.initiate());
     }
   }
 );
@@ -48,6 +49,13 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       }
     },
+    setAuthUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+    setAuthExpiration: (state, action: PayloadAction<number>) => {
+      state.expiration = action.payload;
+      localStorage.setItem(expirationStorageKey, state.expiration.toString());
+    },
     clearAuthState: (state) => {
       localStorage.removeItem(expirationStorageKey);
       state.expiration = null;
@@ -57,12 +65,14 @@ const authSlice = createSlice({
 
 export const {
   setAuthState,
+  setAuthUser,
+  setAuthExpiration,
   clearAuthState,
 } = authSlice.actions;
 
 export const selectIsSignedIn = (state: RootState): boolean => !!state.auth.expiration;
 export const selectIsTokenExpired = (state: RootState): boolean => !!state.auth.expiration && state.auth.expiration <= Date.now();
-export const selectExpiration = (state: RootState) => state.auth.expiration;
+export const selectAuthExpiration = (state: RootState) => state.auth.expiration;
 export const selectAuthUser = (state: RootState) => state.auth.user;
 
 export default authSlice;
