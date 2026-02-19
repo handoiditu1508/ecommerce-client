@@ -9,5 +9,6 @@ export type LoginCommand = {
 export type LoginResponse = {
   expiration?: number;
   user?: User;
+  refreshTokenExpiration?: number;
   twoFactorAuthenticate: boolean;
 };
