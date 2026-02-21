@@ -1,5 +1,6 @@
 import { PasswordValidatonResult, validatePassword } from "@/common/rules";
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { RegisterConfirmedEmailCommand } from "@/models/apis/registerConfirmedEmail";
@@ -7,22 +8,81 @@ import { useRegisterConfirmedEmailMutation } from "@/redux/apis/authApi";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { MouseEventHandler, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { RegisterReducerState } from "./useRegisterReducer";
+
+const formModel: DynamicFormModel<RegisterInput> = {
+  submitButtonText: "Sign up",
+  inputs: [
+    {
+      name: "email",
+      label: "Email",
+      inputType: "email",
+      required: true,
+      readonly: true,
+    },
+    {
+      name: "firstName",
+      label: "First Name",
+      inputType: "text",
+      required: true,
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      rules: {
+        pattern: {
+          value: /^[A-Za-z]+$/,
+          message: "Invalid name",
+        },
+      },
+    },
+    {
+      name: "middleName",
+      label: "Middle Name",
+      inputType: "text",
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      rules: {
+        pattern: {
+          value: /^[A-Za-z]+$/,
+          message: "Invalid name",
+        },
+      },
+    },
+    {
+      name: "lastName",
+      label: "Last Name",
+      inputType: "text",
+      required: true,
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      rules: {
+        pattern: {
+          value: /^[A-Za-z]+$/,
+          message: "Invalid name",
+        },
+      },
+    },
+    {
+      name: "password",
+      label: "Password",
+      inputType: "password",
+      required: true,
+      validateOnChange: true,
+    },
+    {
+      name: "token",
+      inputType: "hidden",
+      required: true,
+    },
+    {
+      name: "agreed",
+      inputType: "checkbox",
+      required: true,
+    },
+  ],
+};
 
 type RegisterInput = RegisterConfirmedEmailCommand & {
   agreed: boolean;
@@ -40,9 +100,8 @@ function RegisterModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: RegisterModalProps) {
   const theme = useTheme();
-  const [showPassword, setShowPassword] = useState(false);
   const [registerConfirmedEmail, result] = useRegisterConfirmedEmailMutation();
-  const { handleSubmit, control, watch, trigger, register } = useForm<RegisterInput>({
+  const formContext = useForm<RegisterInput>({
     defaultValues: {
       email: registerState.email,
       firstName: "",
@@ -54,6 +113,7 @@ function RegisterModal({
     },
     mode: "onSubmit",
   });
+  const { watch } = formContext;
   const password = watch("password");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
 
@@ -77,133 +137,24 @@ function RegisterModal({
     }}>
       <Typography variant="h4" align="center">Create Account</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>Finish your registration</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="email"
-          rules={{
-            pattern: {
-              ignoreCase: true,
-              value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Invalid email address",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="Email"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              type="email"
-              slotProps={{
-                input: {
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="change email"
-                        edge="end"
-                        onClick={onChangeEmail}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-                htmlInput: {
-                  maxLength: CONFIG.EMAIL_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="firstName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="First Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: result.isLoading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="middleName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              label="Middle Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: result.isLoading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="lastName"
-          rules={{
-            pattern: {
-              value: /^[A-Za-z]+$/,
-              message: "Invalid name",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="Last Name"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                htmlInput: {
-                  readOnly: result.isLoading,
-                  maxLength: CONFIG.NAME_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          rules={{
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        sx={{ mt: 10 }}
+        overwriteEndAdornments={{
+          email: (
+            <IconButton
+              aria-label="change email"
+              edge="end"
+              onClick={onChangeEmail}
+            >
+              <EditIcon />
+            </IconButton>
+          ),
+        }}
+        overwriteRules={{
+          password: {
             validate: (value) => {
               const validationResult = validatePassword(value);
               setPasswordValidation(validationResult);
@@ -211,61 +162,13 @@ function RegisterModal({
 
               return isPasswordValid;
             },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              margin="normal"
-              error={fieldState.invalid}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                input: {
-                  readOnly: result.isLoading,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        edge="end"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-                htmlInput: {
-                  maxLength: CONFIG.PASSWORD_MAX_LENGTH,
-                },
-              }}
-              {...field}
-              onChange={(event) => {
-                field.onChange(event);
-                // trigger password validation
-                trigger("password");
-              }}
-            />
-          )}
-        />
-        <input type="hidden" {...register("token", { required: true })} />
-        <Controller
-          control={control}
-          name="agreed"
-          render={({ field, fieldState }) => (
-            <FormControl error={fieldState.invalid} component="fieldset">
-              <FormControlLabel
-                control={<Checkbox required disabled={result.isLoading} />}
-                label={<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>}
-                {...field}
-              />
-              {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
-            </FormControl>
-          )}
-        />
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={result.isLoading}>Sign up</Button>
-      </Box>
+          },
+        }}
+        overwriteLabels={{
+          agreed: (<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>),
+        }}
+        onSubmit={onSubmit}
+      />
       <Box sx={{ mt: 4 }}>
         <Box sx={{
           display: "flex",

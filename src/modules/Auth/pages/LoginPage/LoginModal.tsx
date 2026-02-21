@@ -1,24 +1,45 @@
 import logo from "@/assets/logo.svg";
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { LoginCommand } from "@/models/apis/login";
 import { useLoginMutation } from "@/redux/apis/authApi";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { ActionDispatch, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ActionDispatch } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginReducerAction, LoginReducerState } from "./useLoginReducer";
+
+const formModel: DynamicFormModel<LoginCommand> = {
+  submitButtonText: "Sign in",
+  inputs: [
+    {
+      name: "username",
+      inputType: "text",
+      label: "Email or Username",
+      rules: {
+        required: "This field is required",
+      },
+    },
+    {
+      name: "password",
+      inputType: "password",
+      label: "Password",
+      rules: {
+        required: "This field is required",
+      },
+    },
+    {
+      name: "isPersistent",
+      inputType: "checkbox",
+      label: "Remember me",
+    },
+  ],
+};
 
 type LoginModalProps = {
   loginState: LoginReducerState;
@@ -34,9 +55,8 @@ function LoginModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: LoginModalProps) {
   const theme = useTheme();
-  const [showPassword, setShowPassword] = useState(false);
   const [login, result] = useLoginMutation();
-  const { handleSubmit, control } = useForm<LoginCommand>({
+  const formContext = useForm<LoginCommand>({
     defaultValues: {
       username: loginState.username,
       password: loginState.password,
@@ -69,79 +89,15 @@ function LoginModal({
     }}>
       <Box component="img" src={logo} alt="logo" width={100} height={100} sx={{ mx: "auto", display: "block" }} />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Welcome to {CONFIG.APP_NAME}</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="username"
-          rules={{
-            required: "This field is required",
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              label="Email or Username"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                input: {
-                  readOnly: result.isLoading,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          rules={{
-            required: "This field is required",
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                input: {
-                  readOnly: result.isLoading,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        edge="end"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Box sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}>
-          <Controller
-            control={control}
-            name="isPersistent"
-            render={({ field }) => (
-              <FormControlLabel control={<Checkbox disabled={result.isLoading} />} label="Remember me" {...field} />
-            )}
-          />
-          <CustomLink to="/forgot-password">Forgot Password?</CustomLink>
-        </Box>
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={result.isLoading}>SIGN IN</Button>
-      </form>
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        overwriteLabels={{
+          isPersistent: (<Box sx={{ display: "flex", justifyContent: "space-between" }}>Remember me <CustomLink to="/forgot-password">Forgot Password?</CustomLink></Box>),
+        }}
+        onSubmit={onSubmit}
+      />
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{
         display: "flex",

@@ -1,4 +1,5 @@
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
@@ -7,12 +8,27 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
+
+const formModel: DynamicFormModel<SendPreConfirmEmailCommand> = {
+  submitButtonText: "Sign up",
+  inputs: [
+    {
+      name: "email",
+      inputType: "email",
+      required: true,
+      placeholder: "Email address",
+      rules: {
+        required: "This field is required",
+      },
+      textAlign: "center",
+    },
+  ],
+};
 
 type SendPreConfirmEmailModalProps = {
   registerState: RegisterReducerState;
@@ -28,12 +44,13 @@ function SendPreConfirmEmailModal({
   const theme = useTheme();
   const { t: tError } = useTranslation("errors");
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
-  const { handleSubmit, control, setError } = useForm<SendPreConfirmEmailCommand>({
+  const formContext = useForm<SendPreConfirmEmailCommand>({
     defaultValues: {
       email: registerState.email,
     },
     mode: "onSubmit",
   });
+  const { setError } = formContext;
 
   const onSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
     const response = await sendPreconfirmEmail(data);
@@ -68,39 +85,13 @@ function SendPreConfirmEmailModal({
     }}>
       <Typography variant="h4" align="center">Create Account</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="email"
-          rules={{
-            required: "This field is required",
-            pattern: {
-              ignoreCase: true,
-              value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Invalid email address",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              placeholder="Email address"
-              slotProps={{
-                htmlInput: {
-                  readOnly: result.isLoading,
-                  maxLength: CONFIG.EMAIL_MAX_LENGTH,
-                  sx: {
-                    textAlign: "center",
-                  },
-                },
-              }}
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              {...field}
-            />
-          )}
-        />
-        <Button fullWidth size="large" loading={result.isLoading} sx={{ mt: 2 }} type="submit">SIGN UP</Button>
-      </Box>
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        sx={{ mt: 10 }}
+        onSubmit={onSubmit}
+      />
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{
         display: "flex",
