@@ -1,6 +1,6 @@
 import { JSX } from "react";
 
-type SupportAction = {
+export type SupportAction = {
   id: number;
   text: string;
   idleIcon?: JSX.Element;
@@ -10,5 +10,3 @@ type SupportAction = {
   secondaryText?: string;
   actionHandler?: () => void;
 };
-
-export default SupportAction;
