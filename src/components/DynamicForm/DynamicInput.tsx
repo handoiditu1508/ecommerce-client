@@ -62,6 +62,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             error={fieldState.invalid}
             helperText={fieldState.error && fieldState.error.message}
             type="text"
+            disabled={model.disabled}
             slotProps={{
               input: {
                 readOnly: model.readonly || loading,
@@ -124,6 +125,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             error={fieldState.invalid}
             helperText={fieldState.error && fieldState.error.message}
             type="email"
+            disabled={model.disabled}
             slotProps={{
               input: {
                 readOnly: model.readonly || loading,
@@ -181,6 +183,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             error={fieldState.invalid}
             helperText={fieldState.error && fieldState.error.message}
             type={showPassword ? "text" : "password"}
+            disabled={model.disabled}
             slotProps={{
               input: {
                 readOnly: model.readonly || loading,
@@ -322,7 +325,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.readonly || loading}>
+            disabled={model.readonly || loading || model.disabled}>
             <FormControlLabel
               slotProps={{
                 typography: {

@@ -13,6 +13,7 @@ type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> =
   label?: string;
   required?: boolean;
   readonly?: boolean;
+  disabled?: boolean;
   rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
   validateOnChange?: boolean;
 };
@@ -34,7 +35,6 @@ export type DynamicSelectInputModel<T extends Record<string, any>, K extends Pat
     value: any;
   }[];
   multiple?: boolean;
-  disabled?: boolean;
   showCheckbox?: boolean;
   showSelectedAsChips?: boolean;
 };
