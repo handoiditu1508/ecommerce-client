@@ -1,12 +1,21 @@
 import CONFIG from "@/configs";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
@@ -31,6 +40,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   overwriteLabel,
   overwriteRules,
 }: DynamicInputProps<T, K>) {
+  const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
 
   if (model.inputType === "text") {
@@ -217,6 +227,81 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
     );
   }
 
+  if (model.inputType === "select") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...overwriteRules,
+        }}
+        render={({ field, fieldState }) => (
+          <FormControl
+            fullWidth
+            required={model.required}
+            margin="normal"
+            error={fieldState.invalid}
+            disabled={model.disabled}
+          >
+            <InputLabel>{overwriteLabel || model.label}</InputLabel>
+            <Select
+              label={overwriteLabel || model.label}
+              readOnly={model.readonly || loading}
+              multiple={model.multiple}
+              displayEmpty={!!model.placeholder && !model.label}
+              renderValue={(selected) => {
+                const isNotSelected = !selected || (Array.isArray(selected) && selected.length === 0);
+                if (isNotSelected && model.placeholder && !model.label) {
+                  return <span style={{ color: theme.vars.palette.text.disabled }}>{model.placeholder}</span>;
+                }
+
+                if (model.showSelectedAsChips) {
+                  return (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {Array.isArray(selected)
+                        ? (selected as any[]).map((value) => <Chip key={value} label={value} size="small" />)
+                        : <Chip label={selected} size="small" />}
+                    </Box>
+                  );
+                }
+
+                return Array.isArray(selected) ? (selected as any[]).join(", ") : selected;
+              }}
+              {...field}
+              onChange={
+                model.validateOnChange
+                  ? (event) => {
+                    field.onChange(event);
+                    // trigger validation
+                    formContext.trigger(model.name);
+                  }
+                  : field.onChange
+              }
+            >
+              {model.showCheckbox
+                ? model.options.map((option) => {
+                  const selected = model.multiple && Array.isArray(field.value) ? field.value.includes(option.value) : field.value === option.value;
+                  const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
+
+                  return (
+                    <MenuItem key={option.key} value={option.value}>
+                      <SelectionIcon fontSize="small" style={{ marginRight: 8, padding: 9, boxSizing: "content-box" }} />
+                      <ListItemText primary={option.label} />
+                    </MenuItem>
+                  );
+                })
+                : model.options.map((option) => (
+                  <MenuItem key={option.key} value={option.value}>{option.label}</MenuItem>
+                ))}
+            </Select>
+            {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
+          </FormControl>
+        )}
+      />
+    );
+  }
+
   if (model.inputType === "checkbox") {
     return (
       <Controller
@@ -227,7 +312,12 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           ...overwriteRules,
         }}
         render={({ field, fieldState }) => (
-          <FormControl error={fieldState.invalid} component="fieldset" sx={{ display: "flex" }}>
+          <FormControl
+            fullWidth
+            required={model.required}
+            margin="normal"
+            error={fieldState.invalid}
+            disabled={model.readonly || loading}>
             <FormControlLabel
               slotProps={{
                 typography: {
@@ -237,8 +327,6 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 },
               }}
               control={<Checkbox
-                required={model.required}
-                disabled={model.readonly || loading}
                 {...field}
                 onChange={
                   model.validateOnChange
