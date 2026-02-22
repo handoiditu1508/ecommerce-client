@@ -209,6 +209,11 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               htmlInput: {
                 minLength: model.minLength || CONFIG.PASSWORD_MIN_LENGTH,
                 maxLength: model.maxLength || CONFIG.PASSWORD_MAX_LENGTH,
+                sx: {
+                  "&::-ms-reveal": {
+                    display: "none",
+                  },
+                },
               },
             }}
             {...field}
