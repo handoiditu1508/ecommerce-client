@@ -1,18 +1,37 @@
 import { Property } from "csstype";
 import { Path, RegisterOptions } from "react-hook-form";
 
-export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> = {
+export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> =
+  | DynamicTextInputModel<T, K>
+  | DynamicCheckboxInputModel<T, K>
+  | DynamicHiddenInputModel<T, K>;
+
+type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
   name: K;
-  inputType: "text" | "email" | "password" | "checkbox" | "hidden";
   label?: string;
   required?: boolean;
   readonly?: boolean;
   rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
+  validateOnChange?: boolean;
+};
+
+export type DynamicTextInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "text" | "email" | "password";
   placeholder?: string;
   textAlign?: Property.TextAlign;
   maxLength?: number;
   minLength?: number;
-  validateOnChange?: boolean;
+};
+
+export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "checkbox";
+};
+
+export type DynamicHiddenInputModel<T extends Record<string, any>, K extends Path<T>> = {
+  name: K;
+  inputType: "hidden";
+  required?: boolean;
+  rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
 };
 
 export type DynamicFormModel<T extends Record<string, any>> = {

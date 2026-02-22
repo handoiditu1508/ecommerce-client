@@ -261,7 +261,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
 
   if (model.inputType === "hidden") {
     return (
-      <input type="hidden" {...formContext.register(model.name, model.rules)} />
+      <input type="hidden" required={model.required} {...formContext.register(model.name, model.rules)} />
     );
   }
 }
