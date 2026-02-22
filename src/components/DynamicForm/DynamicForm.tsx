@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import React from "react";
 import { Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
 import DynamicInput from "./DynamicInput";
-import { DynamicFormModel } from "./models";
+import { DynamicFormModel, DynamicSelectInputOption } from "./models";
 
 type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
   model: DynamicFormModel<T>;
@@ -14,6 +14,7 @@ type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "c
   overwriteEndAdornments?: Partial<Record<Path<T>, React.ReactNode>>;
   overwriteLabels?: Partial<Record<Path<T>, React.ReactNode>>;
   overwriteRules?: { [K in Path<T>]?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> };
+  overwriteOptions?: { [K in Path<T>]?: DynamicSelectInputOption<T, K> };
   onSubmit: SubmitHandler<T>;
 };
 
@@ -21,10 +22,11 @@ function DynamicForm<T extends Record<string, any>>({
   model,
   formContext,
   loading = false,
-  overwriteStartAdornments = {},
-  overwriteEndAdornments = {},
-  overwriteLabels = {},
-  overwriteRules = {},
+  overwriteStartAdornments = CONFIG.EMPTY_OBJECT,
+  overwriteEndAdornments = CONFIG.EMPTY_OBJECT,
+  overwriteLabels = CONFIG.EMPTY_OBJECT,
+  overwriteRules = CONFIG.EMPTY_OBJECT,
+  overwriteOptions = CONFIG.EMPTY_OBJECT,
   onSubmit = CONFIG.EMPTY_FUNCTION,
   ...props
 }: DynamicFormProps<T>) {
@@ -40,6 +42,7 @@ function DynamicForm<T extends Record<string, any>>({
           overwriteEndAdornment={overwriteEndAdornments[inputModel.name]}
           overwriteLabel={overwriteLabels[inputModel.name]}
           overwriteRules={overwriteRules[inputModel.name]}
+          overwriteOptions={overwriteOptions[inputModel.name]}
         />
       ))}
       <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>

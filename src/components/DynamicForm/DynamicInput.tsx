@@ -19,7 +19,7 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
-import { DynamicInputModel } from "./models";
+import { DynamicInputModel, DynamicSelectInputOption } from "./models";
 
 type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   model: DynamicInputModel<T, K>;
@@ -29,6 +29,7 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   overwriteEndAdornment?: React.ReactNode;
   overwriteLabel?: React.ReactNode;
   overwriteRules?: DynamicInputModel<T, K>["rules"];
+  overwriteOptions?: DynamicSelectInputOption<T, K>;
 };
 
 function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
@@ -39,6 +40,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   overwriteEndAdornment,
   overwriteLabel,
   overwriteRules,
+  overwriteOptions,
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
@@ -236,6 +238,8 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   }
 
   if (model.inputType === "select") {
+    const options = overwriteOptions || model.options;
+
     return (
       <Controller
         control={formContext.control}
@@ -288,7 +292,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               }
             >
               {model.showCheckbox
-                ? model.options.map((option) => {
+                ? options.map((option) => {
                   const selected = model.multiple && Array.isArray(field.value) ? field.value.includes(option.value) : field.value === option.value;
                   const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
 
@@ -299,7 +303,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                     </MenuItem>
                   );
                 })
-                : model.options.map((option) => (
+                : options.map((option) => (
                   <MenuItem key={option.key} value={option.value}>{option.label}</MenuItem>
                 ))}
             </Select>
