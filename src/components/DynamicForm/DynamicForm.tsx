@@ -11,14 +11,14 @@ type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "c
   model: DynamicFormModel<T>;
   formContext: UseFormReturn<T>;
   loading?: boolean;
-  overwriteStartAdornments?: Partial<Record<Path<T>, React.ReactNode>>;
-  overwriteEndAdornments?: Partial<Record<Path<T>, React.ReactNode>>;
-  overwriteLabels?: Partial<Record<Path<T>, React.ReactNode>>;
+  overwriteStartAdornment?: Partial<Record<Path<T>, React.ReactNode>>;
+  overwriteEndAdornment?: Partial<Record<Path<T>, React.ReactNode>>;
+  overwriteLabel?: Partial<Record<Path<T>, React.ReactNode>>;
   overwriteRules?: { [K in Path<T>]?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> };
   overwriteOptions?: { [K in Path<T>]?: DynamicInputOption<T, K>[] };
-  overwriteAutocompleteRenderInputs?: Partial<Record<Path<T>, (params: AutocompleteRenderInputParams) => React.ReactNode>>;
-  overwriteAutocompleteRenderOptions?: { [K in Path<T>]?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"] };
-  overwriteOnInputChange?: Partial<Record<Path<T>, (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void>>;
+  overwriteAutocompleteRenderInput?: Partial<Record<Path<T>, (params: AutocompleteRenderInputParams) => React.ReactNode>>;
+  overwriteAutocompleteRenderOption?: { [K in Path<T>]?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"] };
+  overwriteAutocompleteOnInputChange?: Partial<Record<Path<T>, (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void>>;
   overwriteLoading?: Partial<Record<Path<T>, boolean>>;
   onSubmit: SubmitHandler<T>;
 };
@@ -27,14 +27,14 @@ function DynamicForm<T extends Record<string, any>>({
   model,
   formContext,
   loading = false,
-  overwriteStartAdornments = CONFIG.EMPTY_OBJECT,
-  overwriteEndAdornments = CONFIG.EMPTY_OBJECT,
-  overwriteLabels = CONFIG.EMPTY_OBJECT,
+  overwriteStartAdornment = CONFIG.EMPTY_OBJECT,
+  overwriteEndAdornment = CONFIG.EMPTY_OBJECT,
+  overwriteLabel = CONFIG.EMPTY_OBJECT,
   overwriteRules = CONFIG.EMPTY_OBJECT,
   overwriteOptions = CONFIG.EMPTY_OBJECT,
-  overwriteAutocompleteRenderInputs = CONFIG.EMPTY_OBJECT,
-  overwriteAutocompleteRenderOptions = CONFIG.EMPTY_OBJECT,
-  overwriteOnInputChange = CONFIG.EMPTY_OBJECT,
+  overwriteAutocompleteRenderInput = CONFIG.EMPTY_OBJECT,
+  overwriteAutocompleteRenderOption = CONFIG.EMPTY_OBJECT,
+  overwriteAutocompleteOnInputChange = CONFIG.EMPTY_OBJECT,
   overwriteLoading = CONFIG.EMPTY_OBJECT,
   onSubmit = CONFIG.EMPTY_FUNCTION,
   ...props
@@ -47,14 +47,14 @@ function DynamicForm<T extends Record<string, any>>({
           model={inputModel}
           formContext={formContext}
           formLoading={loading}
-          overwriteStartAdornment={overwriteStartAdornments[inputModel.name]}
-          overwriteEndAdornment={overwriteEndAdornments[inputModel.name]}
-          overwriteLabel={overwriteLabels[inputModel.name]}
+          overwriteStartAdornment={overwriteStartAdornment[inputModel.name]}
+          overwriteEndAdornment={overwriteEndAdornment[inputModel.name]}
+          overwriteLabel={overwriteLabel[inputModel.name]}
           overwriteRules={overwriteRules[inputModel.name]}
           overwriteOptions={overwriteOptions[inputModel.name]}
-          overwriteAutocompleteRenderInput={overwriteAutocompleteRenderInputs[inputModel.name]}
-          overwriteAutocompleteRenderOption={overwriteAutocompleteRenderOptions[inputModel.name]}
-          overwriteOnInputChange={overwriteOnInputChange[inputModel.name]}
+          overwriteAutocompleteRenderInput={overwriteAutocompleteRenderInput[inputModel.name]}
+          overwriteAutocompleteRenderOption={overwriteAutocompleteRenderOption[inputModel.name]}
+          overwriteAutocompleteOnInputChange={overwriteAutocompleteOnInputChange[inputModel.name]}
           overwriteLoading={overwriteLoading[inputModel.name]}
         />
       ))}

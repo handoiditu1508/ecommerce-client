@@ -34,7 +34,7 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   overwriteOptions?: DynamicInputOption<T, K>[];
   overwriteAutocompleteRenderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
   overwriteAutocompleteRenderOption?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"];
-  overwriteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
+  overwriteAutocompleteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
   overwriteLoading?: boolean;
 };
 
@@ -49,7 +49,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   overwriteOptions,
   overwriteAutocompleteRenderInput,
   overwriteAutocompleteRenderOption,
-  overwriteOnInputChange,
+  overwriteAutocompleteOnInputChange,
   overwriteLoading,
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
@@ -356,7 +356,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             autoComplete={model.searchAsYouType}
             includeInputInList={model.searchAsYouType}
             noOptionsText="Empty"
-            onInputChange={overwriteOnInputChange}
+            onInputChange={overwriteAutocompleteOnInputChange}
             {...field}
             renderOption={overwriteAutocompleteRenderOption as any}
             renderInput={overwriteAutocompleteRenderInput || ((params) => (

@@ -93,7 +93,7 @@ function LoginModal({
         model={formModel}
         formContext={formContext}
         loading={result.isLoading}
-        overwriteLabels={{
+        overwriteLabel={{
           isPersistent: (<Box sx={{ display: "flex", justifyContent: "space-between" }}>Remember me <CustomLink to="/forgot-password">Forgot Password?</CustomLink></Box>),
         }}
         onSubmit={onSubmit}
