@@ -11,11 +11,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
+import FormLabel from "@mui/material/FormLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
@@ -443,7 +446,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.readonly || formLoading || model.disabled}>
+            disabled={model.disabled}>
             <FormControlLabel
               slotProps={{
                 typography: {
@@ -454,6 +457,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               }}
               control={<Checkbox
                 {...field}
+                readOnly={model.readonly || formLoading}
                 onChange={
                   model.validateOnChange
                     ? (event) => {
@@ -466,6 +470,54 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               />}
               label={overwriteLabel || model.label}
             />
+            {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
+          </FormControl>
+        )}
+      />
+    );
+  }
+
+  if (model.inputType === "radio") {
+    const options = overwriteOptions || model.options;
+
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...overwriteRules,
+        }}
+        render={({ field, fieldState }) => (
+          <FormControl
+            fullWidth
+            required={model.required}
+            margin="normal"
+            error={fieldState.invalid}
+            disabled={model.disabled}>
+            <FormLabel>{overwriteLabel || model.label}</FormLabel>
+            <RadioGroup
+              {...field}
+              row={model.row}
+              onChange={
+                model.validateOnChange
+                  ? (event) => {
+                    field.onChange(event);
+                    // trigger validation
+                    formContext.trigger(model.name);
+                  }
+                  : field.onChange
+              }
+            >
+              {options.map((option) => (
+                <FormControlLabel
+                  key={option.key}
+                  value={option.value}
+                  control={<Radio readOnly={model.readonly || formLoading} />}
+                  label={option.label}
+                />
+              ))}
+            </RadioGroup>
             {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
           </FormControl>
         )}

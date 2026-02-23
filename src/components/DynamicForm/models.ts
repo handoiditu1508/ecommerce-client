@@ -7,6 +7,7 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
   | DynamicSelectInputModel<T, K>
   | DynamicAutoCompleteInputModel<T, K>
   | DynamicCheckboxInputModel<T, K>
+  | DynamicRadioInputModel<T, K>
   | DynamicHiddenInputModel<T, K>;
 
 type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
@@ -53,6 +54,12 @@ export type DynamicAutoCompleteInputModel<T extends Record<string, any>, K exten
 
 export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "checkbox";
+};
+
+export type DynamicRadioInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "radio";
+  options: DynamicInputOption<T, K>[];
+  row?: boolean;
 };
 
 export type DynamicHiddenInputModel<T extends Record<string, any>, K extends Path<T>> = {
