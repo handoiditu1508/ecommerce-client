@@ -50,6 +50,8 @@ export type DynamicAutoCompleteInputModel<T extends Record<string, any>, K exten
   options: DynamicInputOption<T, K>[];
   freeSolo?: boolean;
   searchAsYouType?: boolean;
+  // required for freeSolo autocomplete to convert string input to the correct value type
+  stringToValueConverter?: (str: string) => ArrayItemType<PathValue<T, K>> | undefined;
 };
 
 export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {

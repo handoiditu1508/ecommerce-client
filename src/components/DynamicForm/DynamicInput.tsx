@@ -336,6 +336,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   // creatable, grouped, disabled options, fixed option, showSelectedAsChips, showCheckbox, limit tags
   if (model.inputType === "autocomplete") {
     const options = overwriteOptions || model.options;
+    const stringToValueConverter = model.stringToValueConverter || ((str: string) => undefined);
 
     return (
       <Controller
@@ -406,17 +407,17 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 }}
               />
             ))}
-            // Convert string -> object for Autocomplete
+            // Convert valueType -> optionType for Autocomplete
             value={options.find((option) => option.value === field.value) || null}
-            // Convert object -> string for RHF
+            // Convert optionType -> valueType for React Hook Form
             onChange={
               (event, value, _reason, _details) => {
                 if (typeof value === "string") {
-                  field.onChange(event, value);
+                  field.onChange(event, stringToValueConverter(value));
                 } else if (Array.isArray(value)) {
-                  field.onChange(event, value.map((v) => (typeof v === "string" ? v : v.value)));
+                  field.onChange(event, value.map((v) => (typeof v === "string" ? stringToValueConverter(v) : v.value)));
                 } else {
-                  field.onChange(event, value ? value.value : "");
+                  field.onChange(event, value ? value.value : undefined);
                 }
 
                 if (model.validateOnChange) {
