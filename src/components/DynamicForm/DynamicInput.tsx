@@ -29,7 +29,7 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   overwriteEndAdornment?: React.ReactNode;
   overwriteLabel?: React.ReactNode;
   overwriteRules?: DynamicInputModel<T, K>["rules"];
-  overwriteOptions?: DynamicSelectInputOption<T, K>;
+  overwriteOptions?: DynamicSelectInputOption<T, K>[];
 };
 
 function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
@@ -262,6 +262,11 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               readOnly={model.readonly || loading}
               multiple={model.multiple}
               displayEmpty={!!model.placeholder && !model.label}
+              startAdornment={overwriteStartAdornment && (
+                <InputAdornment position="start">
+                  {overwriteStartAdornment}
+                </InputAdornment>
+              )}
               renderValue={(selected) => {
                 const isNotSelected = !selected || (Array.isArray(selected) && selected.length === 0);
                 if (isNotSelected && model.placeholder && !model.label) {

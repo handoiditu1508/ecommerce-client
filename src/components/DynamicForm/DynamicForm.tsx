@@ -14,7 +14,7 @@ type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "c
   overwriteEndAdornments?: Partial<Record<Path<T>, React.ReactNode>>;
   overwriteLabels?: Partial<Record<Path<T>, React.ReactNode>>;
   overwriteRules?: { [K in Path<T>]?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> };
-  overwriteOptions?: { [K in Path<T>]?: DynamicSelectInputOption<T, K> };
+  overwriteOptions?: { [K in Path<T>]?: DynamicSelectInputOption<T, K>[] };
   onSubmit: SubmitHandler<T>;
 };
 

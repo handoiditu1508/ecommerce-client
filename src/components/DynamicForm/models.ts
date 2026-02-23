@@ -1,3 +1,4 @@
+import { ArrayItemType } from "@/common/typeHelpers";
 import { Property } from "csstype";
 import React from "react";
 import { Path, PathValue, RegisterOptions } from "react-hook-form";
@@ -31,23 +32,16 @@ export type DynamicSelectInputModel<T extends Record<string, any>, K extends Pat
   placeholder?: string;
   showCheckbox?: boolean;
   showSelectedAsChips?: boolean;
-} & ({
-  multiple: true;
-  options: {
-    key: React.Key;
-    label: string;
-    value: PathValue<T, K>[number];
-  }[];
-} | {
-  multiple: false;
-  options: {
-    key: React.Key;
-    label: string;
-    value: PathValue<T, K>;
-  }[];
-});
+  multiple?: boolean;
+  options: DynamicSelectInputOption<T, K>[];
+};
 
-export type DynamicSelectInputOption<T extends Record<string, any>, K extends Path<T>> = DynamicSelectInputModel<T, K>["options"];
+export type DynamicSelectInputOption<T extends Record<string, any>, K extends Path<T>> = {
+  key: React.Key;
+  label: string;
+  value: ArrayItemType<PathValue<T, K>>;
+};
+
 
 export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "checkbox";
