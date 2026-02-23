@@ -3,9 +3,11 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Autocomplete, { AutocompleteInputChangeReason, AutocompleteProps, AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -19,28 +21,36 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
-import { DynamicInputModel, DynamicSelectInputOption } from "./models";
+import { DynamicInputModel, DynamicInputOption } from "./models";
 
 type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   model: DynamicInputModel<T, K>;
   formContext: UseFormReturn<T>;
-  loading?: boolean;
+  formLoading?: boolean;
   overwriteStartAdornment?: React.ReactNode;
   overwriteEndAdornment?: React.ReactNode;
   overwriteLabel?: React.ReactNode;
   overwriteRules?: DynamicInputModel<T, K>["rules"];
-  overwriteOptions?: DynamicSelectInputOption<T, K>[];
+  overwriteOptions?: DynamicInputOption<T, K>[];
+  overwriteAutocompleteRenderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
+  overwriteAutocompleteRenderOption?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"];
+  overwriteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
+  overwriteLoading?: boolean;
 };
 
 function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   model,
   formContext,
-  loading = false,
+  formLoading = false,
   overwriteStartAdornment,
   overwriteEndAdornment,
   overwriteLabel,
   overwriteRules,
   overwriteOptions,
+  overwriteAutocompleteRenderInput,
+  overwriteAutocompleteRenderOption,
+  overwriteOnInputChange,
+  overwriteLoading,
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
@@ -67,7 +77,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || loading,
+                readOnly: model.readonly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -130,7 +140,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || loading,
+                readOnly: model.readonly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -188,7 +198,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || loading,
+                readOnly: model.readonly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -259,7 +269,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             <InputLabel>{overwriteLabel || model.label}</InputLabel>
             <Select
               label={overwriteLabel || model.label}
-              readOnly={model.readonly || loading}
+              readOnly={model.readonly || formLoading}
               multiple={model.multiple}
               displayEmpty={!!model.placeholder && !model.label}
               startAdornment={overwriteStartAdornment && (
@@ -319,6 +329,105 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
     );
   }
 
+  // todo: features omitted for simplicity and to be implemented in the future when needed:
+  // creatable, grouped, disabled options, fixed option, showSelectedAsChips, showCheckbox, limit tags
+  if (model.inputType === "autocomplete") {
+    const options = overwriteOptions || model.options;
+
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...overwriteRules,
+        }}
+        render={({ field, fieldState }) => (
+          <Autocomplete
+            fullWidth
+            options={options}
+            isOptionEqualToValue={(option, value) => option.key === value.key}
+            getOptionKey={(option) => (typeof option === "string" ? "" : option.key)}
+            disabled={model.disabled}
+            readOnly={model.readonly || formLoading}
+            multiple={model.multiple}
+            freeSolo={model.freeSolo}
+            filterOptions={model.searchAsYouType ? (options) => options : undefined}
+            autoComplete={model.searchAsYouType}
+            includeInputInList={model.searchAsYouType}
+            noOptionsText="Empty"
+            onInputChange={overwriteOnInputChange}
+            {...field}
+            renderOption={overwriteAutocompleteRenderOption as any}
+            renderInput={overwriteAutocompleteRenderInput || ((params) => (
+              <TextField
+                {...params}
+                required={model.required}
+                label={overwriteLabel || model.label}
+                placeholder={model.placeholder}
+                margin="normal"
+                error={fieldState.invalid}
+                helperText={fieldState.error && fieldState.error.message}
+                type="text"
+                slotProps={{
+                  input: {
+                    ...params.InputProps,
+                    startAdornment: overwriteStartAdornment
+                      ? (
+                        <InputAdornment position="start">
+                          {overwriteStartAdornment}
+                        </InputAdornment>
+                      )
+                      : params.InputProps.startAdornment,
+                    endAdornment: (
+                      <>
+                        {
+                          overwriteEndAdornment
+                            ? (
+                              <InputAdornment position="end">
+                                {overwriteEndAdornment}
+                              </InputAdornment>
+                            )
+                            : overwriteLoading
+                              ? (
+                                <InputAdornment position="end">
+                                  <CircularProgress color="inherit" size={20} />
+                                </InputAdornment>
+                              )
+                              : null
+                        }
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  },
+                }}
+              />
+            ))}
+            // Convert string -> object for Autocomplete
+            value={options.find((option) => option.value === field.value) || null}
+            // Convert object -> string for RHF
+            onChange={
+              (event, value, _reason, _details) => {
+                if (typeof value === "string") {
+                  field.onChange(event, value);
+                } else if (Array.isArray(value)) {
+                  field.onChange(event, value.map((v) => (typeof v === "string" ? v : v.value)));
+                } else {
+                  field.onChange(event, value ? value.value : "");
+                }
+
+                if (model.validateOnChange) {
+                  // trigger validation
+                  formContext.trigger(model.name);
+                }
+              }
+            }
+          />
+        )}
+      />
+    );
+  }
+
   if (model.inputType === "checkbox") {
     return (
       <Controller
@@ -334,7 +443,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.readonly || loading || model.disabled}>
+            disabled={model.readonly || formLoading || model.disabled}>
             <FormControlLabel
               slotProps={{
                 typography: {

@@ -1,11 +1,11 @@
 import { ArrayItemType } from "@/common/typeHelpers";
 import { Property } from "csstype";
-import React from "react";
 import { Path, PathValue, RegisterOptions } from "react-hook-form";
 
 export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> =
   | DynamicTextInputModel<T, K>
   | DynamicSelectInputModel<T, K>
+  | DynamicAutoCompleteInputModel<T, K>
   | DynamicCheckboxInputModel<T, K>
   | DynamicHiddenInputModel<T, K>;
 
@@ -33,15 +33,23 @@ export type DynamicSelectInputModel<T extends Record<string, any>, K extends Pat
   showCheckbox?: boolean;
   showSelectedAsChips?: boolean;
   multiple?: boolean;
-  options: DynamicSelectInputOption<T, K>[];
+  options: DynamicInputOption<T, K>[];
 };
 
-export type DynamicSelectInputOption<T extends Record<string, any>, K extends Path<T>> = {
-  key: React.Key;
+export type DynamicInputOption<T extends Record<string, any>, K extends Path<T>> = {
+  key: string | number;
   label: string;
   value: ArrayItemType<PathValue<T, K>>;
 };
 
+export type DynamicAutoCompleteInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "autocomplete";
+  placeholder?: string;
+  multiple?: boolean;
+  options: DynamicInputOption<T, K>[];
+  freeSolo?: boolean;
+  searchAsYouType?: boolean;
+};
 
 export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "checkbox";
