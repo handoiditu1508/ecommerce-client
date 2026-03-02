@@ -59,6 +59,23 @@ function DynamicForm<T extends Record<string, any>>({
         />
       ))}
       <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>
+      {model.postActionInputs && model.postActionInputs.map((inputModel) => (
+        <DynamicInput
+          key={inputModel.name}
+          model={inputModel}
+          formContext={formContext}
+          formLoading={loading}
+          overwriteStartAdornment={overwriteStartAdornment[inputModel.name]}
+          overwriteEndAdornment={overwriteEndAdornment[inputModel.name]}
+          overwriteLabel={overwriteLabel[inputModel.name]}
+          overwriteRules={overwriteRules[inputModel.name]}
+          overwriteOptions={overwriteOptions[inputModel.name]}
+          overwriteAutocompleteRenderInput={overwriteAutocompleteRenderInput[inputModel.name]}
+          overwriteAutocompleteRenderOption={overwriteAutocompleteRenderOption[inputModel.name]}
+          overwriteAutocompleteOnInputChange={overwriteAutocompleteOnInputChange[inputModel.name]}
+          overwriteLoading={overwriteLoading[inputModel.name]}
+        />
+      ))}
     </Box>
   );
 }
