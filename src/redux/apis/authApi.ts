@@ -1,5 +1,6 @@
 import { SendEmailResponse } from "@/models/apis/common";
 import { LoginCommand, LoginResponse } from "@/models/apis/login";
+import { Login2faCommand } from "@/models/apis/login2fa";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
@@ -25,7 +26,7 @@ const authApi = appApi.injectEndpoints({
     refreshToken: builder.mutation<LoginResponse, void>({
       queryFn: async (arg, api, _extraOptions, baseQuery) => {
         const res = await baseQuery({
-          url: "refreshToken",
+          url: "auth/refreshToken",
           method: "POST",
           body: arg,
         }) as QueryReturnValue<LoginResponse, FetchBaseQueryError, {} | undefined>;
@@ -61,6 +62,20 @@ const authApi = appApi.injectEndpoints({
         }
       },
     }),
+    login2fa: builder.mutation<LoginResponse, Login2faCommand>({
+      query: (body) => ({
+        url: "auth/login2fa",
+        method: "POST",
+        body,
+      }),
+      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+          dispatch(setAuthState(response.data));
+        } catch {
+        }
+      },
+    }),
   }),
 });
 
@@ -71,4 +86,5 @@ export const {
   useLoginMutation,
   useSendPreConfirmEmailMutation,
   useRegisterConfirmedEmailMutation,
+  useLogin2faMutation,
 } = authApi;

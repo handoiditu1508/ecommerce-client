@@ -27,6 +27,12 @@ const formModel: DynamicFormModel<RegisterInput> = {
       readonly: true,
     },
     {
+      name: "username",
+      label: "Username",
+      inputType: "text",
+      required: true,
+    },
+    {
       name: "firstName",
       label: "First Name",
       inputType: "text",

@@ -69,6 +69,10 @@ function LoginModal({
     const response = await login(data);
     if (response.data) {
       if (response.data.twoFactorAuthenticate) {
+        loginDispatch({
+          type: "SET_FORM_STATE",
+          payload: data,
+        });
         onLogin2fa();
       } else {
         onSuccess();

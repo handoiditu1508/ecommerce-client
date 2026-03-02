@@ -2,6 +2,7 @@ import { LoginResponse } from "./login";
 
 export type RegisterConfirmedEmailCommand = {
   email: string;
+  username: string;
   firstName: string;
   middleName?: string;
   lastName: string;

@@ -1,41 +1,72 @@
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Login2faCommand } from "@/models/apis/login2fa";
+import { useLogin2faMutation } from "@/redux/apis/authApi";
 import LockIcon from "@mui/icons-material/Lock";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { MouseEventHandler, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { MouseEventHandler } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { LoginReducerState } from "./useLoginReducer";
 
-type OtpInput = {
-  otp: string;
-  trusted: boolean;
+const formModel: DynamicFormModel<Login2faCommand> = {
+  submitButtonText: "Sign in",
+  inputs: [
+    {
+      name: "username",
+      inputType: "hidden",
+      required: true,
+    },
+    {
+      name: "token",
+      inputType: "text",
+      rules: {
+        required: "This field is required",
+      },
+      placeholder: "Enter OTP",
+      textAlign: "center",
+    },
+  ],
+  postActionInputs: [
+    {
+      name: "isPersistent",
+      inputType: "checkbox",
+      label: "Trusted device",
+    },
+  ],
 };
 
 type Login2faModalProps = {
+  loginState: LoginReducerState;
   onSuccess?: () => void;
   onReturnToLogin?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function Login2faModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = CONFIG.EMPTY_FUNCTION }: Login2faModalProps) {
+function Login2faModal({
+  loginState,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+  onReturnToLogin = CONFIG.EMPTY_FUNCTION,
+}: Login2faModalProps) {
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<OtpInput>({
+  const [login2fa, result] = useLogin2faMutation();
+  const formContext = useForm<Login2faCommand>({
     defaultValues: {
-      otp: "",
-      trusted: false,
+      username: loginState.username,
+      token: "",
+      isPersistent: false,
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<OtpInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  const onSubmit: SubmitHandler<Login2faCommand> = async (data) => {
+    const response = await login2fa(data);
+    if (response.data) {
+      onSuccess();
+    }
   };
 
   return (
@@ -56,47 +87,22 @@ function Login2faModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = CO
       />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Two-Factor Authentication</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>Check you inbox at e****le@gmail.com for your 2FA code</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="otp"
-          rules={{
-            required: "This field is required",
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              placeholder="Enter OTP"
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  sx: {
-                    textAlign: "center",
-                  },
-                },
-              }}
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              {...field}
-            />
-          )}
-        />
-        <Button fullWidth size="large" loading={loading} sx={{ mt: 2 }} type="submit">SIGN IN</Button>
-        <Box sx={{
-          display: "flex",
-          alignItems: "center",
-        }}>
-          <Controller
-            control={control}
-            name="trusted"
-            render={({ field }) => (
-              <FormControlLabel control={<Checkbox disabled={loading} />} label="Trusted device" {...field} />
-            )}
-          />
-          <Typography sx={{ flex: 1 }} align="right">Didn't receive OTP?</Typography>
-          <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }}>Resend OTP</Button>
-        </Box>
-      </Box>
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        sx={{ mt: 10 }}
+        overwriteLabel={{
+          isPersistent: (
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              Trusted device
+              <Typography sx={{ flex: 1 }} align="right">Didn't receive OTP?</Typography>
+              <Button variant="text" disabled={result.isLoading} sx={{ textTransform: "initial", ...theme.typography.body1 }}>Resend OTP</Button>
+            </Box>
+          ),
+        }}
+        onSubmit={onSubmit}
+      />
       <Box sx={{ flex: 1 }} />
       <CustomLink to="/login" align="center" onClick={onReturnToLogin}>Return to login</CustomLink>
     </Box>
