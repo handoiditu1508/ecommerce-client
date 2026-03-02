@@ -4,14 +4,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import useLoginReducer from "./useLoginReducer";
 
-const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
+const Login2faModal = React.lazy(() => import("./Login2faModal"));
 
 // step 1 enter email and password: show email/username input and password input
 // step 2 confirm otp: hide email/username input and password input
 // step 3 success
 enum LoginStep {
   Login,
-  VerifyOtp
+  Login2fa
 }
 
 function LoginPage() {
@@ -21,7 +21,7 @@ function LoginPage() {
   const [loginState, loginDispatch] = useLoginReducer();
 
   const handleLogin2fa = () => {
-    setStep(LoginStep.VerifyOtp);
+    setStep(LoginStep.Login2fa);
   };
 
   const handleLoginSuccess = () => {
@@ -47,7 +47,7 @@ function LoginPage() {
     ? <LoginModal loginState={loginState} loginDispatch={loginDispatch} onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
     : (
       <Suspense>
-        <VerifyOtpModal onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
+        <Login2faModal onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
       </Suspense>
     );
 }

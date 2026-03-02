@@ -17,12 +17,12 @@ type OtpInput = {
   trusted: boolean;
 };
 
-type VerifyOtpModalProps = {
+type Login2faModalProps = {
   onSuccess?: () => void;
   onReturnToLogin?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function VerifyOtpModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = CONFIG.EMPTY_FUNCTION }: VerifyOtpModalProps) {
+function Login2faModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = CONFIG.EMPTY_FUNCTION }: Login2faModalProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const { handleSubmit, control } = useForm<OtpInput>({
@@ -103,4 +103,4 @@ function VerifyOtpModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onReturnToLogin = C
   );
 }
 
-export default VerifyOtpModal;
+export default Login2faModal;
