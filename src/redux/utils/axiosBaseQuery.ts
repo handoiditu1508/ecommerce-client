@@ -19,13 +19,14 @@ const axiosBaseQuery = (
 > => async (arg) => {
   try {
     const result = typeof arg === "string"
-      ? await axios(baseUrl + arg)
+      ? await axios(baseUrl + arg, { withCredentials: true })
       : await axios({
         url: baseUrl + arg.url,
         method: arg.method,
         data: arg.body,
         params: arg.params,
         headers: arg.headers,
+        withCredentials: true,
       });
 
     return { data: result.data };
