@@ -40,8 +40,6 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
 
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
-        } else {
-          api.dispatch(clearAuthState());
         }
 
         // release must be called once the mutex should be released again.
@@ -58,6 +56,10 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
           result = await baseQuery(args, api, extraOptions);
         }
       }
+    }
+
+    if (result.error && result.error.status === 401) {
+      api.dispatch(clearAuthState());
     }
 
     return result;
