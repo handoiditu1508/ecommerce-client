@@ -1,12 +1,11 @@
 import { PasswordValidatonResult, validatePassword } from "@/common/rules";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import PasswordValidatonDisplayer from "@/components/PasswordValidatonDisplayer";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { RegisterConfirmedEmailCommand } from "@/models/apis/registerConfirmedEmail";
 import { useRegisterConfirmedEmailMutation } from "@/redux/apis/authApi";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -175,58 +174,7 @@ function RegisterModal({
         }}
         onSubmit={handleSubmit}
       />
-      <Box sx={{ mt: 4 }}>
-        <Box sx={{
-          display: "flex",
-          gap: 0.5,
-          alignItems: "center",
-          color: passwordValidation.minLength ? theme.vars.palette.success.main : theme.vars.palette.error.main,
-          ...theme.typography.body1,
-        }}>
-          {passwordValidation.minLength ? <CheckIcon fontSize="inherit" /> : <CloseIcon fontSize="inherit" />}
-          Password must at least 8 characters.
-        </Box>
-        <Box sx={{
-          display: "flex",
-          gap: 0.5,
-          alignItems: "center",
-          color: passwordValidation.special ? theme.vars.palette.success.main : theme.vars.palette.error.main,
-          ...theme.typography.body1,
-        }}>
-          {passwordValidation.special ? <CheckIcon fontSize="inherit" /> : <CloseIcon fontSize="inherit" />}
-          Password requires special character.
-        </Box>
-        <Box sx={{
-          display: "flex",
-          gap: 0.5,
-          alignItems: "center",
-          color: passwordValidation.lower ? theme.vars.palette.success.main : theme.vars.palette.error.main,
-          ...theme.typography.body1,
-        }}>
-          {passwordValidation.lower ? <CheckIcon fontSize="inherit" /> : <CloseIcon fontSize="inherit" />}
-          Password requires lowercase character.
-        </Box>
-        <Box sx={{
-          display: "flex",
-          gap: 0.5,
-          alignItems: "center",
-          color: passwordValidation.upper ? theme.vars.palette.success.main : theme.vars.palette.error.main,
-          ...theme.typography.body1,
-        }}>
-          {passwordValidation.upper ? <CheckIcon fontSize="inherit" /> : <CloseIcon fontSize="inherit" />}
-          Password requires uppercase character.
-        </Box>
-        <Box sx={{
-          display: "flex",
-          gap: 0.5,
-          alignItems: "center",
-          color: passwordValidation.number ? theme.vars.palette.success.main : theme.vars.palette.error.main,
-          ...theme.typography.body1,
-        }}>
-          {passwordValidation.number ? <CheckIcon fontSize="inherit" /> : <CloseIcon fontSize="inherit" />}
-          Password requires numeric character.
-        </Box>
-      </Box>
+      <PasswordValidatonDisplayer validationResult={passwordValidation} sx={{ mt: 4 }} />
     </Box>
   );
 }
