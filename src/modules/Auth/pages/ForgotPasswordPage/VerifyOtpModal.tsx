@@ -1,37 +1,63 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Problem } from "@/models/apis/common";
+import { useForgotPasswordMutation } from "@/redux/apis/authApi";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { MouseEventHandler, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-
-type OtpInput = {
-  otp: string;
-};
+import { ActionDispatch, MouseEventHandler, useEffect } from "react";
+import { ForgotPasswordReducerAction, ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
 type VerifyOtpModalProps = {
-  onSuccess?: () => void;
+  forgotPasswordState: ForgotPasswordReducerState;
+  forgotPasswordDispatch: ActionDispatch<[ForgotPasswordReducerAction]>;
   onChangeEmail?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function VerifyOtpModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CONFIG.EMPTY_FUNCTION }: VerifyOtpModalProps) {
+function VerifyOtpModal({
+  forgotPasswordState,
+  forgotPasswordDispatch,
+  onChangeEmail = CONFIG.EMPTY_FUNCTION,
+}: VerifyOtpModalProps) {
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<OtpInput>({
-    defaultValues: {
-      otp: "",
-    },
-    mode: "onSubmit",
-  });
+  const [resendToken, result] = useForgotPasswordMutation();
 
-  const onSubmit: SubmitHandler<OtpInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (forgotPasswordState.emailCountdown > 0) {
+        forgotPasswordDispatch({
+          type: "REFRESH_EMAIL_COUNTDOWN",
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forgotPasswordState.emailCountdown]);
+
+  const handleResendEmail: MouseEventHandler<HTMLButtonElement> = async () => {
+    const response = await resendToken(forgotPasswordState.forgotPasswordCommand);
+    if (response.data) {
+      forgotPasswordDispatch({
+        type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+        payload: response.data,
+      });
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
+      // send token failed because email sending is cooldown => start countdown
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        forgotPasswordDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
+      }
+    }
   };
 
   return (
@@ -52,41 +78,29 @@ function VerifyOtpModal({ onSuccess = CONFIG.EMPTY_FUNCTION, onChangeEmail = CON
         }}
       />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Create Account</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>An OTP has been sent to your email at e****le@gmail.com</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="otp"
-          rules={{
-            required: "This field is required",
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              placeholder="Enter OTP"
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  sx: {
-                    textAlign: "center",
-                  },
-                },
-              }}
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              {...field}
-            />
-          )}
-        />
-        <Button fullWidth size="large" loading={loading} sx={{ mt: 2 }} type="submit">Verify</Button>
-        <Box sx={{
-          display: "flex",
-          alignItems: "center",
-        }}>
-          <Typography sx={{ flex: 1 }} align="right">Didn't receive OTP?</Typography>
-          <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }}>Resend OTP</Button>
-        </Box>
-      </Box>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>A confirmation email has been sent to your email address at e****le@gmail.com</Typography>
+      {forgotPasswordState.emailCountdown > 0
+        ? (
+          <Typography align="right">
+            Resend OTP in {forgotPasswordState.emailCountdown} seconds
+          </Typography>
+        )
+        : (
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}>
+            <Typography>Didn't receive email?</Typography>
+            <Button
+              variant="text"
+              disabled={result.isLoading}
+              sx={{ textTransform: "initial", ...theme.typography.body1 }}
+              onClick={handleResendEmail}>
+              Resend email
+            </Button>
+          </Box>
+        )}
       <Box sx={{ flex: 1 }} />
       <CustomLink to="" align="center" onClick={onChangeEmail}>Use different email</CustomLink>
     </Box>

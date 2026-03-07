@@ -28,10 +28,6 @@ function ForgotPasswordPage() {
     setStep(ForgotPasswordStep.VerifyOtp);
   };
 
-  const handleVerifyOtpSuccess = () => {
-    setStep(ForgotPasswordStep.ResetPassword);
-  };
-
   const handleChangeEmail: MouseEventHandler<HTMLElement> = (event) => {
     event.preventDefault();
     setStep(ForgotPasswordStep.SendEmail);
@@ -47,7 +43,7 @@ function ForgotPasswordPage() {
     case ForgotPasswordStep.VerifyOtp:
       return (
         <Suspense>
-          <VerifyOtpModal onSuccess={handleVerifyOtpSuccess} onChangeEmail={handleChangeEmail} />
+          <VerifyOtpModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
     case ForgotPasswordStep.ResetPassword:
