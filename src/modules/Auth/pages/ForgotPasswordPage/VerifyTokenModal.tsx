@@ -81,9 +81,7 @@ function VerifyTokenModal({
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>A confirmation email has been sent to your email address at e****le@gmail.com</Typography>
       {forgotPasswordState.emailCountdown > 0
         ? (
-          <Typography align="right">
-            Resend email in {forgotPasswordState.emailCountdown} seconds
-          </Typography>
+          <Typography align="right">Resend email in {forgotPasswordState.emailCountdown} seconds</Typography>
         )
         : (
           <Box sx={{

@@ -1,49 +1,83 @@
 import { PasswordValidatonResult, validatePassword } from "@/common/rules";
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { ResetPasswordCommand } from "@/models/apis/resetPassword";
+import { useResetPasswordMutation } from "@/redux/apis/authApi";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
-type ResetPasswordInput = {
-  email: string;
-  newPassword: string;
+type ResetPasswordInput = ResetPasswordCommand & {
+  repassword: string;
+};
+
+const formModel: DynamicFormModel<ResetPasswordInput> = {
+  submitButtonText: "Reset password",
+  inputs: [
+    {
+      name: "userId",
+      inputType: "hidden",
+      required: true,
+    },
+    {
+      name: "token",
+      inputType: "hidden",
+      required: true,
+    },
+    {
+      name: "newPassword",
+      inputType: "password",
+      required: true,
+      label: "New password",
+    },
+    {
+      name: "repassword",
+      inputType: "password",
+      required: true,
+      label: "Confirm password",
+      rules: {
+        validate: (value, formValues) => value === formValues.newPassword || "Password not match.",
+      },
+    },
+  ],
 };
 
 type ResetPasswordModalProps = {
+  forgotPasswordState: ForgotPasswordReducerState;
   onSuccess?: () => void;
 };
 
-function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPasswordModalProps) {
+function ResetPasswordModal({
+  forgotPasswordState,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+}: ResetPasswordModalProps) {
   const theme = useTheme();
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control, watch, trigger } = useForm<ResetPasswordInput>({
+  const [resetPassword, result] = useResetPasswordMutation();
+  const formContext = useForm<ResetPasswordInput>({
     defaultValues: {
-      email: "example@gmail.com",
+      ...forgotPasswordState.resetPasswordCommand,
       newPassword: "",
     },
     mode: "onChange",
   });
+  const { watch } = formContext;
   const password = watch("newPassword");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
 
-  const onSubmit: SubmitHandler<ResetPasswordInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  const handleSubmit: SubmitHandler<ResetPasswordInput> = async (data) => {
+    const response = await resetPassword(data);
+    if (response.data) {
+      onSuccess();
+    }
   };
 
   return (
@@ -64,40 +98,13 @@ function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPassword
         }}
       />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Reset Password</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="email"
-          rules={{
-            pattern: {
-              ignoreCase: true,
-              value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Invalid email address",
-            },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="Email"
-              margin="normal"
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              type="email"
-              slotProps={{
-                htmlInput: {
-                  readOnly: true,
-                  maxLength: CONFIG.EMAIL_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="newPassword"
-          rules={{
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        sx={{ mt: 10 }}
+        overwriteRules={{
+          newPassword: {
             validate: (value) => {
               const validationResult = validatePassword(value);
               setPasswordValidation(validationResult);
@@ -105,41 +112,10 @@ function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPassword
 
               return isPasswordValid;
             },
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              required
-              label="New password"
-              type={showPassword ? "text" : "password"}
-              margin="normal"
-              // error={fieldState.invalid}
-              // helperText={fieldState.error && fieldState.error.message}
-              slotProps={{
-                input: {
-                  readOnly: loading,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        edge="end"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-                htmlInput: {
-                  maxLength: CONFIG.PASSWORD_MAX_LENGTH,
-                },
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>Reset password</Button>
-      </Box>
+          },
+        }}
+        onSubmit={handleSubmit}
+      />
       <Box sx={{ mt: 4 }}>
         <Box sx={{
           display: "flex",
@@ -194,7 +170,7 @@ function ResetPasswordModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: ResetPassword
       </Box>
       <Box sx={{ flex: 1 }} />
       <CustomLink
-        to="/login-in"
+        to="/login"
         sx={{
           display: "flex",
           alignItems: "center",

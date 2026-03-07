@@ -1,4 +1,5 @@
 import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/forgotPassword";
+import { ResetPasswordCommand } from "@/models/apis/resetPassword";
 import { useReducer } from "react";
 
 export type ForgotPasswordReducerState = {
@@ -6,6 +7,7 @@ export type ForgotPasswordReducerState = {
   emailSentTime: number;
   emailCooldown: number;
   emailCountdown: number;
+  resetPasswordCommand: ResetPasswordCommand;
 };
 
 export type ForgotPasswordReducerAction = {
@@ -16,6 +18,9 @@ export type ForgotPasswordReducerAction = {
   payload: Pick<ForgotPasswordResponse, "sentTime" | "cooldown">;
 } | {
   type: "REFRESH_EMAIL_COUNTDOWN" | "RESET_EMAIL_COUNTDOWN";
+} | {
+  type: "SET_RESET_PASSWORD_COMMAND";
+  payload: ResetPasswordCommand;
 };
 
 const initialState: ForgotPasswordReducerState = {
@@ -25,6 +30,11 @@ const initialState: ForgotPasswordReducerState = {
   emailSentTime: 0,
   emailCooldown: 0,
   emailCountdown: 0,
+  resetPasswordCommand: {
+    userId: 0,
+    token: "",
+    newPassword: "",
+  },
 };
 
 const useForgotPasswordReducer = () =>
@@ -65,6 +75,11 @@ const useForgotPasswordReducer = () =>
             emailSentTime: initialState.emailSentTime,
             emailCooldown: initialState.emailCooldown,
             emailCountdown: initialState.emailCountdown,
+          };
+        case "SET_RESET_PASSWORD_COMMAND":
+          return {
+            ...state,
+            resetPasswordCommand: action.payload,
           };
       }
     },

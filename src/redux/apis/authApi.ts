@@ -3,6 +3,7 @@ import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/for
 import { LoginCommand, LoginResponse } from "@/models/apis/login";
 import { Login2faCommand } from "@/models/apis/login2fa";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
+import { ResetPasswordCommand } from "@/models/apis/resetPassword";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
 import { clearAuthState, setAuthState } from "../slices/authSlice";
@@ -84,6 +85,13 @@ const authApi = appApi.injectEndpoints({
         body,
       }),
     }),
+    resetPassword: builder.mutation<void, ResetPasswordCommand>({
+      query: (body) => ({
+        url: `auth/${body.userId}/resetPassword`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -96,4 +104,5 @@ export const {
   useRegisterConfirmedEmailMutation,
   useLogin2faMutation,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;
