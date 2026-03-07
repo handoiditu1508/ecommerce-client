@@ -2,6 +2,7 @@ import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Problem } from "@/models/apis/common";
 import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { useSendPreConfirmEmailMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
@@ -57,18 +58,40 @@ function SendPreConfirmEmailModal({
     if (response.data) {
       registerDispatch({ type: "SET_EMAIL", payload: data.email });
       registerDispatch({
-        type: "SET_COOLDOWN_FROM_RESPONSE",
+        type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
         payload: response.data,
       });
       onSuccess();
-    } else {
-      if (response.error.code) {
-        setError(
-          "email",
-          { message: tError(response.error.code) },
-          { shouldFocus: true }
-        );
+    } else if (response.error.code === "Identity-005") {
+      // email already sent and need to wait before can send more => to verify otp step
+
+      registerDispatch({ type: "SET_EMAIL", payload: data.email });
+
+      // in case count down still keep the state before go back to send email step
+      registerDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      if ("data" in response.error) {
+        const problem = response.error.data as Problem;
+        if ("sentTime" in problem.data && "cooldown" in problem.data) {
+          registerDispatch({
+            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+            payload: {
+              sentTime: problem.data["sentTime"] as string,
+              cooldown: problem.data["cooldown"] as number,
+            },
+          });
+        }
       }
+
+      onSuccess();
+    } else if (response.error.code) {
+      setError(
+        "email",
+        { message: tError(response.error.code) },
+        { shouldFocus: true }
+      );
     }
   };
 

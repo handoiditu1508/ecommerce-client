@@ -3,7 +3,9 @@ import { useReducer } from "react";
 
 export type RegisterReducerState = {
   email: string;
-  cooldown: number;
+  emailSentTime: number;
+  emailCooldown: number;
+  emailCountdown: number;
   token: string;
 };
 
@@ -11,16 +13,17 @@ export type RegisterReducerAction = {
   type: "SET_EMAIL" | "SET_TOKEN";
   payload: string;
 } | {
-  type: "SET_COOLDOWN_FROM_RESPONSE";
-  payload: SendEmailResponse;
+  type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE";
+  payload: Pick<SendEmailResponse, "sentTime" | "cooldown">;
 } | {
-  type: "DECREASE_COOLDOWN";
-  payload: number;
+  type: "REFRESH_EMAIL_COUNTDOWN" | "RESET_EMAIL_COUNTDOWN";
 };
 
 const initialState: RegisterReducerState = {
   email: "",
-  cooldown: 0,
+  emailSentTime: 0,
+  emailCooldown: 0,
+  emailCountdown: 0,
   token: "",
 };
 
@@ -33,19 +36,35 @@ const useRegisterReducer = () =>
             ...state,
             email: action.payload,
           };
-        case "SET_COOLDOWN_FROM_RESPONSE":
-          const finishCooldownTime = new Date(action.payload.sentTime);
-          finishCooldownTime.setSeconds(finishCooldownTime.getSeconds() + action.payload.cooldown);
-          const remainingCooldown = Math.max(Math.ceil((finishCooldownTime.getTime() - Date.now()) / 1000), 0);
+        case "SET_EMAIL_COUNTDOWN_FROM_RESPONSE":
+          const sentTimeMilis = Date.parse(action.payload.sentTime);
+          const nowMilis = Date.now();
+
+          const elapsed = (nowMilis - sentTimeMilis) / 1000;
+          const remainingCountdown = Math.max(0, Math.ceil(action.payload.cooldown - elapsed));
 
           return {
             ...state,
-            cooldown: remainingCooldown,
+            emailSentTime: sentTimeMilis,
+            emailCooldown: action.payload.cooldown,
+            emailCountdown: remainingCountdown,
           };
-        case "DECREASE_COOLDOWN":
+        case "REFRESH_EMAIL_COUNTDOWN": {
+          const nowMilis = Date.now();
+          const elapsed = (nowMilis - state.emailSentTime) / 1000;
+          const remainingCountdown = Math.max(0, Math.ceil(state.emailCooldown - elapsed));
+
           return {
             ...state,
-            cooldown: Math.max(state.cooldown - action.payload, 0),
+            emailCountdown: remainingCountdown,
+          };
+        }
+        case "RESET_EMAIL_COUNTDOWN":
+          return {
+            ...state,
+            emailSentTime: initialState.emailSentTime,
+            emailCooldown: initialState.emailCooldown,
+            emailCountdown: initialState.emailCountdown,
           };
         case "SET_TOKEN":
           return {

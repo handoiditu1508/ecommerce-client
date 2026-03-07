@@ -1,6 +1,7 @@
 import CustomLink from "@/components/CustomLink";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Problem } from "@/models/apis/common";
 import { useSendPreConfirmEmailMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,33 +23,39 @@ function VerifyEmailModal({
 }: VerifyEmailModalProps) {
   const theme = useTheme();
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
-  const isResendEmailDisabled = result.isLoading || registerState.cooldown > 0;
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined = undefined;
-
-    if (registerState.cooldown > 0) {
-      interval = setInterval(() => {
+    const interval = setInterval(() => {
+      if (registerState.emailCountdown > 0) {
         registerDispatch({
-          type: "DECREASE_COOLDOWN",
-          payload: 1,
+          type: "REFRESH_EMAIL_COUNTDOWN",
         });
-      }, 1000);
-    }
+      }
+    }, 1000);
 
     return () => clearInterval(interval);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registerState.cooldown]);
+  }, [registerState.emailCountdown]);
 
   const handleResendEmail = async () => {
-    if (isResendEmailDisabled) return;
-
     const response = await sendPreconfirmEmail({ email: registerState.email });
     if (response.data) {
       registerDispatch({
-        type: "SET_COOLDOWN_FROM_RESPONSE",
+        type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
         payload: response.data,
       });
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
+      // send token failed because email sending is cooldown => start countdown
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        registerDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
+      }
     }
   };
 
@@ -65,8 +72,8 @@ function VerifyEmailModal({
     }}>
       <Typography variant="h4" align="center">Verify Email</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>A confirmation email has been sent to your email address at e****le@gmail.com</Typography>
-      {isResendEmailDisabled
-        ? <Typography textAlign="end">Resend email in {registerState.cooldown} seconds</Typography>
+      {registerState.emailCountdown > 0
+        ? <Typography align="right">Resend email in {registerState.emailCooldown} seconds</Typography>
         : (
           <Box sx={{
             display: "flex",
@@ -76,6 +83,7 @@ function VerifyEmailModal({
             <Typography>Didn't receive email?</Typography>
             <Button
               variant="text"
+              disabled={result.isLoading}
               sx={{ textTransform: "initial", ...theme.typography.body1 }}
               onClick={handleResendEmail}>
               Resend email
