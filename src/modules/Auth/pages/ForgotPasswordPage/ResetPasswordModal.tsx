@@ -64,7 +64,7 @@ function ResetPasswordModal({
   const formContext = useForm<ResetPasswordInput>({
     defaultValues: {
       ...forgotPasswordState.resetPasswordCommand,
-      newPassword: "",
+      repassword: "",
     },
     mode: "onChange",
   });
@@ -74,7 +74,7 @@ function ResetPasswordModal({
 
   const handleSubmit: SubmitHandler<ResetPasswordInput> = async (data) => {
     const response = await resetPassword(data);
-    if (response.data) {
+    if (!response.error) {
       onSuccess();
     }
   };
