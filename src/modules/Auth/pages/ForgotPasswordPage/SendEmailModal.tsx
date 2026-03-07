@@ -118,7 +118,7 @@ function SendEmailModal({
       />
       <Box sx={{ flex: 1 }} />
       <CustomLink
-        to="/login-in"
+        to="/login"
         sx={{
           display: "flex",
           alignItems: "center",
