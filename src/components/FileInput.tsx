@@ -1,4 +1,4 @@
-import { stopBubbling } from "@/common/eventHelpers";
+import { preventDefault, stopBubbling } from "@/common/eventHelpers";
 import { loadFileFromUrl } from "@/common/fileHelpers";
 import CONFIG from "@/configs";
 import ForwardIcon from "@mui/icons-material/Forward";
@@ -242,7 +242,7 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
       />
       <Box
         className="drop-overlay"
-        onDragOver={(e) => e.preventDefault()}
+        onDragOver={preventDefault}
         onDragLeave={endDrag}
         onDrop={dropFile}>
         <UploadFileIcon fontSize="large" color="primary" />

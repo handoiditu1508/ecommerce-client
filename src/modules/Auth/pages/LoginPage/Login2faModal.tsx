@@ -1,17 +1,19 @@
+import { preventDefault } from "@/common/eventHelpers";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Problem } from "@/models/apis/common";
 import { Login2faCommand } from "@/models/apis/login2fa";
-import { useLogin2faMutation } from "@/redux/apis/authApi";
+import { useLogin2faMutation, useLoginMutation } from "@/redux/apis/authApi";
 import LockIcon from "@mui/icons-material/Lock";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { MouseEventHandler } from "react";
+import { ActionDispatch, MouseEventHandler, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginReducerState } from "./useLoginReducer";
+import { LoginReducerAction, LoginReducerState } from "./useLoginReducer";
 
 const formModel: DynamicFormModel<Login2faCommand> = {
   submitButtonText: "Sign in",
@@ -42,30 +44,75 @@ const formModel: DynamicFormModel<Login2faCommand> = {
 
 type Login2faModalProps = {
   loginState: LoginReducerState;
+  loginDispatch: ActionDispatch<[LoginReducerAction]>;
   onSuccess?: () => void;
   onReturnToLogin?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 function Login2faModal({
   loginState,
+  loginDispatch,
   onSuccess = CONFIG.EMPTY_FUNCTION,
   onReturnToLogin = CONFIG.EMPTY_FUNCTION,
 }: Login2faModalProps) {
   const theme = useTheme();
   const [login2fa, result] = useLogin2faMutation();
+  const [login] = useLoginMutation();
   const formContext = useForm<Login2faCommand>({
     defaultValues: {
-      username: loginState.username,
+      username: loginState.loginCommand.username,
       token: "",
       isPersistent: false,
     },
     mode: "onSubmit",
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (loginState.emailCountdown > 0) {
+        loginDispatch({
+          type: "REFRESH_EMAIL_COUNTDOWN",
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginState.emailCountdown]);
+
   const onSubmit: SubmitHandler<Login2faCommand> = async (data) => {
     const response = await login2fa(data);
     if (response.data) {
       onSuccess();
+    }
+  };
+
+  const onResentOtp: MouseEventHandler<HTMLButtonElement> = async (_event) => {
+    const response = await login(loginState.loginCommand);
+    if (response.data) {
+      if (response.data.twoFactorAuthenticate) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: response.data,
+        });
+      } else {
+        // somehow 2fa is disabled => successful login
+        onSuccess();
+      }
+    } else {
+      // send otp failed because email sending is cooldown => start countdown
+      if (response.error.code === "Identity-005" && "data" in response.error) {
+        const problem = response.error.data as Problem;
+        if ("sentTime" in problem.data && "cooldown" in problem.data) {
+          loginDispatch({
+            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+            payload: {
+              sentTime: problem.data["sentTime"] as string,
+              cooldown: problem.data["cooldown"] as number,
+            },
+          });
+        }
+      }
     }
   };
 
@@ -96,8 +143,17 @@ function Login2faModal({
           isPersistent: (
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               Trusted device
-              <Typography sx={{ flex: 1 }} align="right">Didn't receive OTP?</Typography>
-              <Button variant="text" disabled={result.isLoading} sx={{ textTransform: "initial", ...theme.typography.body1 }}>Resend OTP</Button>
+              {loginState.emailCountdown > 0
+                ? (
+                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>
+                    Resend OTP in {loginState.emailCountdown} seconds
+                  </Typography>
+                )
+                : (<>
+                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>Didn't receive OTP?</Typography>
+                  <Button variant="text" disabled={result.isLoading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={onResentOtp}>Resend OTP</Button>
+                </>)}
+
             </Box>
           ),
         }}

@@ -47,7 +47,7 @@ function LoginPage() {
     ? <LoginModal loginState={loginState} loginDispatch={loginDispatch} onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
     : (
       <Suspense>
-        <Login2faModal loginState={loginState} onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
+        <Login2faModal loginState={loginState} loginDispatch={loginDispatch} onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
       </Suspense>
     );
 }

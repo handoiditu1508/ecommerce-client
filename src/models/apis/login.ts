@@ -11,4 +11,6 @@ export type LoginResponse = {
   user?: User;
   refreshTokenExpiration?: number;
   twoFactorAuthenticate: boolean;
+  sentTime: string;
+  cooldown: number;
 };
