@@ -9,13 +9,13 @@ import React, { MouseEventHandler, useState } from "react";
 import SendEmailModal from "./SendEmailModal";
 import useForgotPasswordReducer from "./useForgotPasswordReducer";
 
-const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
+const VerifyTokenModal = React.lazy(() => import("./VerifyTokenModal"));
 const ResetPasswordModal = React.lazy(() => import("./ResetPasswordModal"));
 const SuccessModal = React.lazy(() => import("./SuccessModal"));
 
 enum ForgotPasswordStep {
   SendEmail,
-  VerifyOtp,
+  VerifyToken,
   ResetPassword,
   Success
 }
@@ -25,7 +25,7 @@ function ForgotPasswordPage() {
   const [forgotPasswordState, forgotPasswordDispatch] = useForgotPasswordReducer();
 
   const handleSendUsernameEmailSuccess = () => {
-    setStep(ForgotPasswordStep.VerifyOtp);
+    setStep(ForgotPasswordStep.VerifyToken);
   };
 
   const handleChangeEmail: MouseEventHandler<HTMLElement> = (event) => {
@@ -40,10 +40,10 @@ function ForgotPasswordPage() {
   switch (step) {
     case ForgotPasswordStep.SendEmail:
       return <SendEmailModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onSuccess={handleSendUsernameEmailSuccess} />;
-    case ForgotPasswordStep.VerifyOtp:
+    case ForgotPasswordStep.VerifyToken:
       return (
         <Suspense>
-          <VerifyOtpModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onChangeEmail={handleChangeEmail} />
+          <VerifyTokenModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onChangeEmail={handleChangeEmail} />
         </Suspense>
       );
     case ForgotPasswordStep.ResetPassword:

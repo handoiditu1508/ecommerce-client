@@ -11,17 +11,17 @@ import Typography from "@mui/material/Typography";
 import { ActionDispatch, MouseEventHandler, useEffect } from "react";
 import { ForgotPasswordReducerAction, ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
-type VerifyOtpModalProps = {
+type VerifyTokenModalProps = {
   forgotPasswordState: ForgotPasswordReducerState;
   forgotPasswordDispatch: ActionDispatch<[ForgotPasswordReducerAction]>;
   onChangeEmail?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function VerifyOtpModal({
+function VerifyTokenModal({
   forgotPasswordState,
   forgotPasswordDispatch,
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
-}: VerifyOtpModalProps) {
+}: VerifyTokenModalProps) {
   const theme = useTheme();
   const [resendToken, result] = useForgotPasswordMutation();
 
@@ -82,7 +82,7 @@ function VerifyOtpModal({
       {forgotPasswordState.emailCountdown > 0
         ? (
           <Typography align="right">
-            Resend OTP in {forgotPasswordState.emailCountdown} seconds
+            Resend email in {forgotPasswordState.emailCountdown} seconds
           </Typography>
         )
         : (
@@ -107,4 +107,4 @@ function VerifyOtpModal({
   );
 }
 
-export default VerifyOtpModal;
+export default VerifyTokenModal;
