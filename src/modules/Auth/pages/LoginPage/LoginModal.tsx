@@ -89,6 +89,11 @@ function LoginModal({
           payload: data,
         });
 
+        // in case count down still keep the state before go back to login step
+        loginDispatch({
+          type: "RESET_EMAIL_COUNTDOWN",
+        });
+
         if ("data" in response.error) {
           const problem = response.error.data as Problem;
           if ("sentTime" in problem.data && "cooldown" in problem.data) {

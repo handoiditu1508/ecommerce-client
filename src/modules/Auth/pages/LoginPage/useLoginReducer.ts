@@ -15,7 +15,7 @@ export type LoginReducerAction = {
   type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE";
   payload: Pick<LoginResponse, "sentTime" | "cooldown">;
 } | {
-  type: "REFRESH_EMAIL_COUNTDOWN";
+  type: "REFRESH_EMAIL_COUNTDOWN" | "RESET_EMAIL_COUNTDOWN";
 };
 
 const initialState: LoginReducerState = {
@@ -61,6 +61,13 @@ const useLoginReducer = () =>
             emailCountdown: remainingCountdown,
           };
         }
+        case "RESET_EMAIL_COUNTDOWN":
+          return {
+            ...state,
+            emailSentTime: initialState.emailSentTime,
+            emailCooldown: initialState.emailCooldown,
+            emailCountdown: initialState.emailCountdown,
+          };
       }
     },
     initialState
