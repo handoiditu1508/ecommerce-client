@@ -1,4 +1,5 @@
 import { SendEmailResponse } from "@/models/apis/common";
+import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/forgotPassword";
 import { LoginCommand, LoginResponse } from "@/models/apis/login";
 import { Login2faCommand } from "@/models/apis/login2fa";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
@@ -76,6 +77,13 @@ const authApi = appApi.injectEndpoints({
         }
       },
     }),
+    forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordCommand>({
+      query: (body) => ({
+        url: "auth/forgotPassword",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -87,4 +95,5 @@ export const {
   useSendPreConfirmEmailMutation,
   useRegisterConfirmedEmailMutation,
   useLogin2faMutation,
+  useForgotPasswordMutation,
 } = authApi;

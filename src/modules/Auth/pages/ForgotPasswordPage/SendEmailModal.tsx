@@ -1,37 +1,94 @@
 import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { Problem } from "@/models/apis/common";
+import { ForgotPasswordCommand } from "@/models/apis/forgotPassword";
+import { useForgotPasswordMutation } from "@/redux/apis/authApi";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ActionDispatch } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ForgotPasswordReducerAction, ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
-type SendEmailInput = {
-  email: string;
+const formModel: DynamicFormModel<ForgotPasswordCommand> = {
+  submitButtonText: "Send OTP",
+  inputs: [
+    {
+      name: "username",
+      inputType: "text",
+      rules: {
+        required: "This field is required",
+      },
+      placeholder: "Username or email address",
+      textAlign: "center",
+    },
+  ],
 };
 
 type SendEmailModalProps = {
+  forgotPasswordState: ForgotPasswordReducerState;
+  forgotPasswordDispatch: ActionDispatch<[ForgotPasswordReducerAction]>;
   onSuccess?: () => void;
 };
 
-function SendEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: SendEmailModalProps) {
+function SendEmailModal({
+  forgotPasswordState,
+  forgotPasswordDispatch,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+}: SendEmailModalProps) {
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<SendEmailInput>({
+  const [forgotPassword, result] = useForgotPasswordMutation();
+  const formContext = useForm<ForgotPasswordCommand>({
     defaultValues: {
-      email: "",
+      ...forgotPasswordState.forgotPasswordCommand,
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<SendEmailInput> = (data) => {
-    console.log(data);
-    onSuccess();
+  const onSubmit: SubmitHandler<ForgotPasswordCommand> = async (data) => {
+    const response = await forgotPassword(data);
+    if (response.data) {
+      forgotPasswordDispatch({
+        type: "SET_FORGOT_PASSWORD_COMMAND",
+        payload: data,
+      });
+      forgotPasswordDispatch({
+        type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+        payload: response.data,
+      });
+      onSuccess();
+    } else if (response.error.code === "Identity-005") {
+      // email already sent and need to wait before can send more => to verify otp step
+
+      forgotPasswordDispatch({
+        type: "SET_FORGOT_PASSWORD_COMMAND",
+        payload: data,
+      });
+
+      // in case count down still keep the state before go back to send email step
+      forgotPasswordDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      if ("data" in response.error) {
+        const problem = response.error.data as Problem;
+        if ("sentTime" in problem.data && "cooldown" in problem.data) {
+          forgotPasswordDispatch({
+            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+            payload: {
+              sentTime: problem.data["sentTime"] as string,
+              cooldown: problem.data["cooldown"] as number,
+            },
+          });
+        }
+      }
+
+      onSuccess();
+    }
   };
 
   return (
@@ -53,34 +110,12 @@ function SendEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: SendEmailModalPro
       />
       <Typography variant="h4" align="center" sx={{ mt: 1 }}>Forgot Password</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
-      <Box component="form" sx={{ mt: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="email"
-          rules={{
-            required: "This field is required",
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              fullWidth
-              placeholder="Username or email address"
-              slotProps={{
-                htmlInput: {
-                  readOnly: loading,
-                  maxLength: CONFIG.EMAIL_MAX_LENGTH,
-                  sx: {
-                    textAlign: "center",
-                  },
-                },
-              }}
-              error={!!fieldState.error}
-              helperText={fieldState.error && fieldState.error.message}
-              {...field}
-            />
-          )}
-        />
-        <Button fullWidth size="large" loading={loading} sx={{ mt: 2 }} type="submit">Send OTP</Button>
-      </Box>
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        onSubmit={onSubmit}
+      />
       <Box sx={{ flex: 1 }} />
       <CustomLink
         to="/login-in"

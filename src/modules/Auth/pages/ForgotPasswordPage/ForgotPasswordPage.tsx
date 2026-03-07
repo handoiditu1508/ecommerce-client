@@ -7,6 +7,7 @@
 import Suspense from "@/components/Suspense";
 import React, { MouseEventHandler, useState } from "react";
 import SendEmailModal from "./SendEmailModal";
+import useForgotPasswordReducer from "./useForgotPasswordReducer";
 
 const VerifyOtpModal = React.lazy(() => import("./VerifyOtpModal"));
 const ResetPasswordModal = React.lazy(() => import("./ResetPasswordModal"));
@@ -21,6 +22,7 @@ enum ForgotPasswordStep {
 
 function ForgotPasswordPage() {
   const [step, setStep] = useState<ForgotPasswordStep>(ForgotPasswordStep.SendEmail);
+  const [forgotPasswordState, forgotPasswordDispatch] = useForgotPasswordReducer();
 
   const handleSendUsernameEmailSuccess = () => {
     setStep(ForgotPasswordStep.VerifyOtp);
@@ -41,7 +43,7 @@ function ForgotPasswordPage() {
 
   switch (step) {
     case ForgotPasswordStep.SendEmail:
-      return <SendEmailModal onSuccess={handleSendUsernameEmailSuccess} />;
+      return <SendEmailModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onSuccess={handleSendUsernameEmailSuccess} />;
     case ForgotPasswordStep.VerifyOtp:
       return (
         <Suspense>
