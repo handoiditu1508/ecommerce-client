@@ -11,25 +11,25 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-type UsernameOrEmailInput = {
+type SendEmailInput = {
   email: string;
 };
 
-type UsernameOrEmailModalProps = {
+type SendEmailModalProps = {
   onSuccess?: () => void;
 };
 
-function UsernameOrEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: UsernameOrEmailModalProps) {
+function SendEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: SendEmailModalProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
-  const { handleSubmit, control } = useForm<UsernameOrEmailInput>({
+  const { handleSubmit, control } = useForm<SendEmailInput>({
     defaultValues: {
       email: "",
     },
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<UsernameOrEmailInput> = (data) => {
+  const onSubmit: SubmitHandler<SendEmailInput> = (data) => {
     console.log(data);
     onSuccess();
   };
@@ -96,4 +96,4 @@ function UsernameOrEmailModal({ onSuccess = CONFIG.EMPTY_FUNCTION }: UsernameOrE
   );
 }
 
-export default UsernameOrEmailModal;
+export default SendEmailModal;
