@@ -123,7 +123,7 @@ function RegisterModal({
   const password = watch("password");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
 
-  const onSubmit: SubmitHandler<RegisterInput> = async (data) => {
+  const handleSubmit: SubmitHandler<RegisterInput> = async (data) => {
     const response = await registerConfirmedEmail(data);
     if (response.data) {
       onSuccess();
@@ -173,7 +173,7 @@ function RegisterModal({
         overwriteLabel={{
           agreed: (<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>),
         }}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
       <Box sx={{ mt: 4 }}>
         <Box sx={{

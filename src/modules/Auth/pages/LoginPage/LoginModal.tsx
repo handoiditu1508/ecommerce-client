@@ -65,7 +65,7 @@ function LoginModal({
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<LoginCommand> = async (data) => {
+  const handleSubmit: SubmitHandler<LoginCommand> = async (data) => {
     const response = await login(data);
     if (response.data) {
       if (response.data.twoFactorAuthenticate) {
@@ -135,7 +135,7 @@ function LoginModal({
             <CustomLink to="/forgot-password">Forgot Password?</CustomLink>
           </Box>),
         }}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{

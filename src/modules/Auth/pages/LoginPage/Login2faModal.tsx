@@ -57,7 +57,8 @@ function Login2faModal({
 }: Login2faModalProps) {
   const theme = useTheme();
   const [login2fa, result] = useLogin2faMutation();
-  const [login] = useLoginMutation();
+  const [resendOtp, resendOtpResult] = useLoginMutation();
+  const loading = result.isLoading || resendOtpResult.isLoading;
   const formContext = useForm<Login2faCommand>({
     defaultValues: {
       username: loginState.loginCommand.username,
@@ -80,15 +81,15 @@ function Login2faModal({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginState.emailCountdown]);
 
-  const onSubmit: SubmitHandler<Login2faCommand> = async (data) => {
+  const handleSubmit: SubmitHandler<Login2faCommand> = async (data) => {
     const response = await login2fa(data);
     if (response.data) {
       onSuccess();
     }
   };
 
-  const onResentOtp: MouseEventHandler<HTMLButtonElement> = async (_event) => {
-    const response = await login(loginState.loginCommand);
+  const handleResentOtp: MouseEventHandler<HTMLButtonElement> = async (_event) => {
+    const response = await resendOtp(loginState.loginCommand);
     if (response.data) {
       if (response.data.twoFactorAuthenticate) {
         loginDispatch({
@@ -135,7 +136,7 @@ function Login2faModal({
       <DynamicForm
         model={formModel}
         formContext={formContext}
-        loading={result.isLoading}
+        loading={loading}
         sx={{ mt: 10 }}
         overwriteLabel={{
           isPersistent: (
@@ -149,13 +150,12 @@ function Login2faModal({
                 )
                 : (<>
                   <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>Didn't receive OTP?</Typography>
-                  <Button variant="text" disabled={result.isLoading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={onResentOtp}>Resend OTP</Button>
+                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>Resend OTP</Button>
                 </>)}
-
             </Box>
           ),
         }}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
       <Box sx={{ flex: 1 }} />
       <CustomLink to="/login" align="center" onClick={onReturnToLogin}>Return to login</CustomLink>

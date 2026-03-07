@@ -49,7 +49,7 @@ function SendEmailModal({
     mode: "onSubmit",
   });
 
-  const onSubmit: SubmitHandler<ForgotPasswordCommand> = async (data) => {
+  const handleSubmit: SubmitHandler<ForgotPasswordCommand> = async (data) => {
     const response = await forgotPassword(data);
     if (response.data) {
       forgotPasswordDispatch({
@@ -114,7 +114,7 @@ function SendEmailModal({
         model={formModel}
         formContext={formContext}
         loading={result.isLoading}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
       <Box sx={{ flex: 1 }} />
       <CustomLink

@@ -52,7 +52,7 @@ function SendPreConfirmEmailModal({
   });
   const { setError } = formContext;
 
-  const onSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
+  const handleSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
     const response = await sendPreconfirmEmail(data);
     if (response.data) {
       registerDispatch({ type: "SET_EMAIL", payload: data.email });
@@ -90,7 +90,7 @@ function SendPreConfirmEmailModal({
         formContext={formContext}
         loading={result.isLoading}
         sx={{ mt: 10 }}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
       <Divider sx={{ my: 2 }}>Or sign in with</Divider>
       <Box sx={{
