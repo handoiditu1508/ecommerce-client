@@ -81,34 +81,33 @@ function LoginModal({
       } else {
         onSuccess();
       }
-    } else {
+    } else if (response.error.code === "Identity-005") {
       // 2fa otp email already sent and need to wait before can send more => to login 2fa step
-      if (response.error.code === "Identity-005") {
-        loginDispatch({
-          type: "SET_LOGIN_COMMAND",
-          payload: data,
-        });
 
-        // in case count down still keep the state before go back to login step
-        loginDispatch({
-          type: "RESET_EMAIL_COUNTDOWN",
-        });
+      loginDispatch({
+        type: "SET_LOGIN_COMMAND",
+        payload: data,
+      });
 
-        if ("data" in response.error) {
-          const problem = response.error.data as Problem;
-          if ("sentTime" in problem.data && "cooldown" in problem.data) {
-            loginDispatch({
-              type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
-              payload: {
-                sentTime: problem.data["sentTime"] as string,
-                cooldown: problem.data["cooldown"] as number,
-              },
-            });
-          }
+      // in case count down still keep the state before go back to login step
+      loginDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      if ("data" in response.error) {
+        const problem = response.error.data as Problem;
+        if ("sentTime" in problem.data && "cooldown" in problem.data) {
+          loginDispatch({
+            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+            payload: {
+              sentTime: problem.data["sentTime"] as string,
+              cooldown: problem.data["cooldown"] as number,
+            },
+          });
         }
-
-        onLogin2fa();
       }
+
+      onLogin2fa();
     }
   };
 

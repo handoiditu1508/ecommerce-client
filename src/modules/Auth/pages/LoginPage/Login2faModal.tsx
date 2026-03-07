@@ -99,19 +99,17 @@ function Login2faModal({
         // somehow 2fa is disabled => successful login
         onSuccess();
       }
-    } else {
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
       // send otp failed because email sending is cooldown => start countdown
-      if (response.error.code === "Identity-005" && "data" in response.error) {
-        const problem = response.error.data as Problem;
-        if ("sentTime" in problem.data && "cooldown" in problem.data) {
-          loginDispatch({
-            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
-            payload: {
-              sentTime: problem.data["sentTime"] as string,
-              cooldown: problem.data["cooldown"] as number,
-            },
-          });
-        }
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
       }
     }
   };
