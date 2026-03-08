@@ -1,4 +1,4 @@
-import { LoginResponse } from "@/models/apis/login";
+import { LoginResponse } from "@/models/apis/auth/login";
 import User from "@/models/entities/User";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";

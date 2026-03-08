@@ -1,5 +1,5 @@
-import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/forgotPassword";
-import { ResetPasswordCommand } from "@/models/apis/resetPassword";
+import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/auth/forgotPassword";
+import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { useReducer } from "react";
 
 export type ForgotPasswordReducerState = {

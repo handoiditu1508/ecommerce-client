@@ -1,4 +1,4 @@
-import { LoginCommand, LoginResponse } from "@/models/apis/login";
+import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
 import { useReducer } from "react";
 
 export type LoginReducerState = {

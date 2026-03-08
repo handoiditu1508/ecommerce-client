@@ -4,7 +4,7 @@ import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import PasswordValidatonDisplayer from "@/components/PasswordValidatonDisplayer";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { RegisterConfirmedEmailCommand } from "@/models/apis/registerConfirmedEmail";
+import { RegisterConfirmedEmailCommand } from "@/models/apis/auth/registerConfirmedEmail";
 import { useRegisterConfirmedEmailMutation } from "@/redux/apis/authApi";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";

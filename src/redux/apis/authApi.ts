@@ -1,10 +1,10 @@
+import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/auth/forgotPassword";
+import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
+import { Login2faCommand } from "@/models/apis/auth/login2fa";
+import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/auth/registerConfirmedEmail";
+import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
+import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
 import { SendEmailResponse } from "@/models/apis/common";
-import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/forgotPassword";
-import { LoginCommand, LoginResponse } from "@/models/apis/login";
-import { Login2faCommand } from "@/models/apis/login2fa";
-import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/registerConfirmedEmail";
-import { ResetPasswordCommand } from "@/models/apis/resetPassword";
-import { SendPreConfirmEmailCommand } from "@/models/apis/sendPreConfirmEmail";
 import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
 import { clearAuthState, setAuthState } from "../slices/authSlice";
 import appApi from "./appApi";

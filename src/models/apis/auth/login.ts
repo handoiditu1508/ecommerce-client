@@ -1,4 +1,4 @@
-import User from "../entities/User";
+import User from "@/models/entities/User";
 
 export type LoginCommand = {
   username: string;

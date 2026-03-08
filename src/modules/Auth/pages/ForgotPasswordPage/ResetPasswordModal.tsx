@@ -4,7 +4,7 @@ import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import PasswordValidatonDisplayer from "@/components/PasswordValidatonDisplayer";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { ResetPasswordCommand } from "@/models/apis/resetPassword";
+import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { useResetPasswordMutation } from "@/redux/apis/authApi";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
