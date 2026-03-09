@@ -14,12 +14,12 @@ function ProductCard() {
   return (
     <Card sx={{
       boxSizing: "border-box",
-      maxWidth: 200,
+      width: 200,
       [smAndDownMediaQuery(theme.breakpoints)]: {
-        maxWidth: 180,
+        width: 180,
       },
       [xsAndDownMediaQuery(theme.breakpoints)]: {
-        maxWidth: 145,
+        width: 145,
       },
     }}>
       <CardActionArea disableRipple>

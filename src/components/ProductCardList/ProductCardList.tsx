@@ -1,7 +1,7 @@
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 
 type ProductCardListProps = {
   quantity: number;
