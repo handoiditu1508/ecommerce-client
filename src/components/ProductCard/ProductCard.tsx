@@ -1,5 +1,6 @@
 import { toVndCurrency } from "@/common/formats";
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { ProductView } from "@/models/entities/Product";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -7,8 +8,14 @@ import CardMedia from "@mui/material/CardMedia";
 import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { CSSProperties } from "react";
+import { Link } from "react-router-dom";
 
-function ProductCard() {
+type ProductCardProps = {
+  product: ProductView;
+};
+
+function ProductCard({ product }: ProductCardProps) {
   const theme = useTheme();
 
   return (
@@ -22,11 +29,35 @@ function ProductCard() {
         width: 145,
       },
     }}>
-      <CardActionArea disableRipple>
+      <CardActionArea
+        disableRipple
+        component={Link}
+        to={`/products/${product.id}`}
+        style={{
+          "--sale-off-percentage": `-${product.discountPercentage}%`,
+        } as CSSProperties}
+        {...(product.discountPercentage && {
+          sx: {
+            position: "relative",
+            "&::after": {
+              content: "var(--sale-off-percentage)",
+              backgroundColor: theme.vars.palette.error.main,
+              color: theme.vars.palette.error.contrastText,
+              textAlign: "center",
+              position: "absolute",
+              top: 10,
+              right: -20,
+              ...theme.typography.caption,
+              transform: "rotateZ(45deg)",
+              width: 80,
+            },
+          },
+        })}
+      >
         <CardMedia
           component="img"
-          image="https://placehold.co/600x400"
-          alt="Place holder"
+          image={product.thumbnailPath}
+          alt={product.name}
           sx={{
             aspectRatio: "1 / 1",
           }}
@@ -48,9 +79,12 @@ function ProductCard() {
           },
         }}>
           <Tooltip title="Product name zxc sdfd asdas" placement="top">
-            <Typography variant="body1" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">Product name zxc sdfd asdas</Typography>
+            <Typography variant="body1" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{product.name}</Typography>
           </Tooltip>
-          <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>{toVndCurrency(300000)}</Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>
+            {toVndCurrency(product.discountPrice)}
+            &nbsp;<sup style={{ color: theme.vars.palette.text.disabled, textDecorationLine: "line-through" }}>{toVndCurrency(product.price)}</sup>
+          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
