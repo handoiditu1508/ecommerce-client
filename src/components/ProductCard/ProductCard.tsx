@@ -1,6 +1,8 @@
 import { toVndCurrency } from "@/common/formats";
+import CONFIG from "@/configs";
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import { ProductView } from "@/models/entities/Product";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -56,7 +58,7 @@ function ProductCard({ product }: ProductCardProps) {
       >
         <CardMedia
           component="img"
-          image={product.thumbnailPath}
+          image={CONFIG.FILE_URL + product.thumbnailPath}
           alt={product.name}
           sx={{
             aspectRatio: "1 / 1",
@@ -83,7 +85,9 @@ function ProductCard({ product }: ProductCardProps) {
           </Tooltip>
           <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>
             {toVndCurrency(product.discountPrice)}
-            &nbsp;<sup style={{ color: theme.vars.palette.text.disabled, textDecorationLine: "line-through" }}>{toVndCurrency(product.price)}</sup>
+            {!!product.discountPercentage && <>
+              &nbsp;<Box component="sup" sx={{ color: theme.vars.palette.text.disabled, textDecorationLine: "line-through" }}>{toVndCurrency(product.price)}</Box>
+            </>}
           </Typography>
         </CardContent>
       </CardActionArea>

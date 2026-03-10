@@ -1,5 +1,6 @@
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { useGetNewProductsQuery } from "@/redux/apis/productApi";
 import Avatar, { avatarClasses } from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -15,6 +16,7 @@ import PromotionalProductList from "./PromotionalProductList";
 
 function HomePage() {
   const theme = useTheme();
+  const getNewProductsResult = useGetNewProductsQuery({ pageSize: 12 });
 
   return (
     <>
@@ -66,8 +68,8 @@ function HomePage() {
           </Box>
         </Box>
       </LayoutContainer>
-      <PromotionalProductList title="New Collection" />
-      <PromotionalProductList title="Popular Products" />
+      <PromotionalProductList title="New Collection" products={getNewProductsResult.data} loading={getNewProductsResult.isLoading} />
+      <PromotionalProductList title="Popular Products" loading={true} />
       <Paper
         square
         sx={{

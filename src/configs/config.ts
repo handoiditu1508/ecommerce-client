@@ -3,6 +3,7 @@ import ConfigType from "./ConfigType";
 const defaultConfig: ConfigType = {
   APP_NAME: "React Template",
   API_URL: import.meta.env.VITE_API_URL,
+  FILE_URL: import.meta.env.VITE_FILE_URL,
   IS_AWESOME: import.meta.env.VITE_IS_AWESOME === "true" ? true : false,
   LAYOUT_PADDING: 1,
   EMPTY_FUNCTION: () => { },
