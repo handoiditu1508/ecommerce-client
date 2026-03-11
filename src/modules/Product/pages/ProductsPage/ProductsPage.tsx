@@ -93,7 +93,7 @@ function ProductsPage() {
           </Box>
           <Typography variant="caption" color="textDisabled">99 results found</Typography>
         </Box>
-        <ProductCardList quantity={12} />
+        <ProductCardList products={[]} />
       </Box>
     </Box>
   );

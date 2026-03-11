@@ -68,8 +68,18 @@ function HomePage() {
           </Box>
         </Box>
       </LayoutContainer>
-      <PromotionalProductList title="New Collection" products={getNewProductsResult.data} loading={getNewProductsResult.isLoading} />
-      <PromotionalProductList title="Popular Products" loading={true} />
+      <PromotionalProductList
+        title="New Collection"
+        products={getNewProductsResult.data}
+        loading={getNewProductsResult.isLoading}
+        viewAllUrlPath="/products/new"
+        onRefresh={getNewProductsResult.refetch}
+      />
+      <PromotionalProductList
+        title="Popular Products"
+        loading={true}
+        viewAllUrlPath="products/popular"
+      />
       <Paper
         square
         sx={{
