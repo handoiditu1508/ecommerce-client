@@ -82,7 +82,7 @@ function Footer() {
         <Grid size={{ xs: 1, sm: 2, md: 1 }}>
           <Stack sx={{ alignItems: "flex-start" }}>
             <Typography variant="subtitle1" fontWeight={700}>Shop</Typography>
-            <CustomLink to="/" underline="hover" variant="subtitle2">New Collections</CustomLink>
+            <CustomLink to="/products/new" underline="hover" variant="subtitle2">New Collections</CustomLink>
             <CustomLink to="/" underline="hover" variant="subtitle2">Popular Products</CustomLink>
             <CustomLink to="/" underline="hover" variant="subtitle2">Best Rate</CustomLink>
           </Stack>

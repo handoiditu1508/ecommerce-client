@@ -133,14 +133,17 @@ function Header() {
             display: "flex",
             alignItems: "center",
           }}>
-          <ButtonBase sx={{
-            display: "flex",
-            gap: 0.5,
-            alignItems: "center",
-            height: "100%",
-            px: 1.5,
-            ml: -1.5,
-          }}>
+          <ButtonBase
+            component={Link}
+            to="/products/new"
+            sx={{
+              display: "flex",
+              gap: 0.5,
+              alignItems: "center",
+              height: "100%",
+              px: 1.5,
+              ml: -1.5,
+            }}>
             <NewReleasesIcon />
             <Typography variant="h6">New Collection</Typography>
           </ButtonBase>
