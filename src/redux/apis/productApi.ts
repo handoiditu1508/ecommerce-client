@@ -1,6 +1,6 @@
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { ProductView } from "@/models/entities/Product";
-import { providesListTags } from "../utils/rtkQueryTagUtils";
+import { providesCountTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 const productApi = appApi.injectEndpoints({
@@ -19,6 +19,10 @@ const productApi = appApi.injectEndpoints({
       },
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
+    countAllProducts: builder.query<number, void>({
+      query: () => "products/count/all",
+      providesTags: (_result, error) => providesCountTag("Product", error),
+    }),
   }),
 });
 
@@ -27,4 +31,6 @@ export default productApi;
 export const {
   useGetNewProductsQuery,
   useLazyGetNewProductsQuery,
+  useCountAllProductsQuery,
+  useLazyCountAllProductsQuery,
 } = productApi;
