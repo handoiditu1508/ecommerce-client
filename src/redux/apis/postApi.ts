@@ -25,9 +25,11 @@ const postApi = appApi.injectEndpoints({
           pageNumber: 1,
         },
         maxPages: 3,
-        getNextPageParam: (currentPage, allPages, currentPageParam, allPageParams) => ({
-          pageNumber: currentPageParam.pageNumber + 1,
-        }),
+        getNextPageParam: (currentPage, allPages, currentPageParam, allPageParams) => currentPage.length
+          ? {
+            pageNumber: currentPageParam.pageNumber + 1,
+          }
+          : undefined,
         getPreviousPageParam: (currentPage, allPages, currentPageParam, allPageParams) => currentPageParam.pageNumber > 1
           ? ({
             pageNumber: currentPageParam.pageNumber - 1,
