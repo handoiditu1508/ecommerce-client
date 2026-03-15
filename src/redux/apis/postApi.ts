@@ -14,12 +14,12 @@ const postApi = appApi.injectEndpoints({
       providesTags: (_result, error, id) => providesIdTag("Post", id, error),
     }),
     getPosts: builder.query<Post[], void>({
-      query: () => "posts",
+      query: () => "/posts",
       providesTags: (result, error) => providesListTags("Post", result, error),
     }),
     // infinite scroll pagination
     getInfinitePosts: builder.infiniteQuery<Post[], { postTitle: string; }, { pageNumber: number; }>({
-      query: ({ queryArg, pageParam }) => `posts?t=${queryArg.postTitle}&p=${pageParam.pageNumber}`,
+      query: ({ queryArg, pageParam }) => `/posts?t=${queryArg.postTitle}&p=${pageParam.pageNumber}`,
       infiniteQueryOptions: {
         initialPageParam: {
           pageNumber: 1,
