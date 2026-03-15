@@ -39,16 +39,6 @@ function PromotionalProductList({
             ? (
               <>
                 <ProductCardList products={products} />
-                <Button
-                  variant="outlined"
-                  disabled={loading}
-                  sx={{
-                    display: "flex",
-                    mx: "auto",
-                    mt: 2,
-                  }}>
-                  View All
-                </Button>
                 {viewAllUrlPath && <CustomButton
                   to={viewAllUrlPath}
                   variant="outlined"
@@ -57,6 +47,7 @@ function PromotionalProductList({
                     display: "flex",
                     mx: "auto",
                     mt: 2,
+                    width: "fit-content",
                   }}>
                   View All
                 </CustomButton>}

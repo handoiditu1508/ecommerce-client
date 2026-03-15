@@ -36,7 +36,7 @@ function ProductCard({ product }: ProductCardProps) {
         component={Link}
         to={`/products/${product.id}`}
         style={{
-          "--sale-off-percentage": `-${product.discountPercentage}%`,
+          "--sale-off-percentage": `'-${product.discountPercentage}%'`,
         } as CSSProperties}
         {...(product.discountPercentage && {
           sx: {

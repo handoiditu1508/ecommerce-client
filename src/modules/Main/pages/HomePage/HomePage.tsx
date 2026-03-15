@@ -1,6 +1,6 @@
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
-import { useGetNewProductsQuery } from "@/redux/apis/productApi";
+import { useGetDiscountedProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
 import Avatar, { avatarClasses } from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -17,6 +17,7 @@ import PromotionalProductList from "./PromotionalProductList";
 function HomePage() {
   const theme = useTheme();
   const getNewProductsResult = useGetNewProductsQuery({ pageSize: 12 });
+  const getDiscountedProductsResult = useGetDiscountedProductsQuery({ pageSize: 12 });
 
   return (
     <>
@@ -74,6 +75,13 @@ function HomePage() {
         loading={getNewProductsResult.isLoading}
         viewAllUrlPath="/products/new"
         onRefresh={getNewProductsResult.refetch}
+      />
+      <PromotionalProductList
+        title="Discount"
+        products={getDiscountedProductsResult.data}
+        loading={getDiscountedProductsResult.isLoading}
+        viewAllUrlPath="/products/discount"
+        onRefresh={getDiscountedProductsResult.refetch}
       />
       <PromotionalProductList
         title="Popular Products"
