@@ -26,27 +26,26 @@ export const loadAuthStateFromLocalAsync = createAsyncThunk(
     const { auth: state } = thunkApi.getState() as RootState;
 
     const expiration = Number(localStorage.getItem(expirationStorageKey));
+    const isAccessTokenValid = !!expiration && expiration <= Date.now();
     const refreshTokenExpiration = Number(localStorage.getItem(refreshTokenExpirationStorageKey));
+    const isRefreshTokenValid = !!refreshTokenExpiration && refreshTokenExpiration <= Date.now();
 
-    // check token expired
-    if (expiration && expiration <= Date.now()) {
-      // check refresh token expired
-      if (refreshTokenExpiration && refreshTokenExpiration <= Date.now()) {
-        thunkApi.dispatch(clearAuthState());
-      } else {
-        // call refresh token api
-        const refreshTokenPromise = thunkApi.dispatch(authApi.endpoints.refreshToken.initiate());
-        await refreshTokenPromise;
-        refreshTokenPromise.reset();
-      }
-    } else {
+    if (isRefreshTokenValid) {
+      thunkApi.dispatch(setRefreshTokenExpiration(refreshTokenExpiration));
+    }
+
+    if (isAccessTokenValid) {
       thunkApi.dispatch(setAuthExpiration(expiration));
-      if (refreshTokenExpiration) {
-        thunkApi.dispatch(setRefreshTokenExpiration(refreshTokenExpiration));
-      }
       if (!state.user) {
         await thunkApi.dispatch(userApi.endpoints.getSelf.initiate());
       }
+    } else if (isRefreshTokenValid) {
+      // call refresh token api
+      const refreshTokenPromise = thunkApi.dispatch(authApi.endpoints.refreshToken.initiate());
+      await refreshTokenPromise;
+      refreshTokenPromise.reset();
+    } else {
+      thunkApi.dispatch(clearAuthState());
     }
   }
 );
