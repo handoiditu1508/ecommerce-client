@@ -37,6 +37,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import { MouseEventHandler, useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 function MenuButton() {
   const theme = useTheme();
@@ -142,7 +143,7 @@ function MenuButton() {
         </Box>
         <List>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products/new">
               <ListItemIcon>
                 <NewReleasesIcon />
               </ListItemIcon>
@@ -166,11 +167,11 @@ function MenuButton() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products/discount">
               <ListItemIcon>
                 <MdiSvgIcon path={mdiSale} />
               </ListItemIcon>
-              <ListItemText primary="Sale Off" />
+              <ListItemText primary="Discount" />
             </ListItemButton>
           </ListItem>
           <ListItem>

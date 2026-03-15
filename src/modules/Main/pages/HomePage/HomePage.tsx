@@ -77,16 +77,16 @@ function HomePage() {
         onRefresh={getNewProductsResult.refetch}
       />
       <PromotionalProductList
+        title="Popular Products"
+        loading={true}
+        viewAllUrlPath="products/popular"
+      />
+      <PromotionalProductList
         title="Discount"
         products={getDiscountedProductsResult.data}
         loading={getDiscountedProductsResult.isLoading}
         viewAllUrlPath="/products/discount"
         onRefresh={getDiscountedProductsResult.refetch}
-      />
-      <PromotionalProductList
-        title="Popular Products"
-        loading={true}
-        viewAllUrlPath="products/popular"
       />
       <Paper
         square

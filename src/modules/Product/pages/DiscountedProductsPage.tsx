@@ -1,10 +1,11 @@
 import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcrumbs";
+import MdiSvgIcon from "@/components/MdiSvgIcon";
 import ProductCardList from "@/components/ProductCardList";
 import ProductCardListSkeleton from "@/components/ProductCardList/ProductCardListSkeleton";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
-import DiscountIcon from "@mui/icons-material/Discount";
+import { mdiSale } from "@mdi/js";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import React, { useContext, useState } from "react";
@@ -17,7 +18,7 @@ const breadcrumbsItems: BreadcrumbsItem[] = [
     label: "Products",
   },
   {
-    icon: <DiscountIcon />,
+    icon: <MdiSvgIcon path={mdiSale} />,
     label: "Discount",
   },
 ];

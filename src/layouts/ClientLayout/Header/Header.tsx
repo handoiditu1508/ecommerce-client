@@ -167,15 +167,18 @@ function Header() {
             <ThumbUpIcon />
             <Typography variant="h6">Best Rated</Typography>
           </ButtonBase>
-          <ButtonBase sx={{
-            display: "flex",
-            gap: 0.5,
-            alignItems: "center",
-            height: "100%",
-            px: 1.5,
-          }}>
+          <ButtonBase
+            component={Link}
+            to="/products/discount"
+            sx={{
+              display: "flex",
+              gap: 0.5,
+              alignItems: "center",
+              height: "100%",
+              px: 1.5,
+            }}>
             <MdiSvgIcon path={mdiSale} />
-            <Typography variant="h6">Sale Off</Typography>
+            <Typography variant="h6">Discount</Typography>
           </ButtonBase>
           <MoreOptionsButton />
         </LayoutContainer>
