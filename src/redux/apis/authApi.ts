@@ -5,7 +5,7 @@ import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/a
 import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
 import { SendEmailResponse } from "@/models/apis/common";
-import { FetchBaseQueryError, QueryReturnValue } from "@reduxjs/toolkit/query";
+import { FetchBaseQueryError, FetchBaseQueryMeta, QueryReturnValue } from "@reduxjs/toolkit/query";
 import { clearAuthState, setAuthState } from "../slices/authSlice";
 import appApi from "./appApi";
 
@@ -13,7 +13,7 @@ const authApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginCommand>({
       query: (body) => ({
-        url: "auth/login",
+        url: "/auth/login",
         method: "POST",
         body,
       }),
@@ -28,10 +28,10 @@ const authApi = appApi.injectEndpoints({
     refreshToken: builder.mutation<LoginResponse, void>({
       queryFn: async (arg, api, _extraOptions, baseQuery) => {
         const res = await baseQuery({
-          url: "auth/refreshToken",
+          url: "/auth/refreshToken",
           method: "POST",
           body: arg,
-        }) as QueryReturnValue<LoginResponse, FetchBaseQueryError, {} | undefined>;
+        }) as QueryReturnValue<LoginResponse, FetchBaseQueryError, FetchBaseQueryMeta>;
 
         if (res.data) {
           api.dispatch(setAuthState(res.data));
@@ -45,14 +45,14 @@ const authApi = appApi.injectEndpoints({
     }),
     sendPreConfirmEmail: builder.mutation<SendEmailResponse, SendPreConfirmEmailCommand>({
       query: (body) => ({
-        url: "auth/sendPreConfirmEmail",
+        url: "/auth/sendPreConfirmEmail",
         method: "POST",
         body,
       }),
     }),
     registerConfirmedEmail: builder.mutation<RegisterResponse, RegisterConfirmedEmailCommand>({
       query: (body) => ({
-        url: "auth/register/confirmedEmail",
+        url: "/auth/register/confirmedEmail",
         method: "POST",
         body,
       }),
@@ -66,7 +66,7 @@ const authApi = appApi.injectEndpoints({
     }),
     login2fa: builder.mutation<LoginResponse, Login2faCommand>({
       query: (body) => ({
-        url: "auth/login2fa",
+        url: "/auth/login2fa",
         method: "POST",
         body,
       }),
@@ -80,14 +80,14 @@ const authApi = appApi.injectEndpoints({
     }),
     forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordCommand>({
       query: (body) => ({
-        url: "auth/forgotPassword",
+        url: "/auth/forgotPassword",
         method: "POST",
         body,
       }),
     }),
     resetPassword: builder.mutation<void, ResetPasswordCommand>({
       query: (body) => ({
-        url: `auth/${body.userId}/resetPassword`,
+        url: `/auth/${body.userId}/resetPassword`,
         method: "PUT",
         body,
       }),

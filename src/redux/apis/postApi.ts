@@ -9,7 +9,7 @@ const postApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     getPost: builder.query<Post, number>({
       query: (id) => ({
-        url: `posts/${id}`,
+        url: `/posts/${id}`,
       }),
       providesTags: (_result, error, id) => providesIdTag("Post", id, error),
     }),
@@ -39,7 +39,7 @@ const postApi = appApi.injectEndpoints({
     }),
     // streaming update through websocket
     getWsPosts: builder.query<EntityState<Post, number>, void>({
-      query: () => "posts",
+      query: () => "/posts",
       transformResponse: (posts: Post[]) => {
         return postsAdapter.addMany(postsAdapter.getInitialState(), posts);
       },
@@ -69,7 +69,7 @@ const postApi = appApi.injectEndpoints({
     }),
     addPost: builder.mutation<Post, Partial<Post>>({
       query: (body) => ({
-        url: "posts",
+        url: "/posts",
         method: "POST",
         body,
       }),
@@ -86,7 +86,7 @@ const postApi = appApi.injectEndpoints({
     }),
     updatePost: builder.mutation<Post, Partial<Post> & Pick<Post, "id">>({
       query: (body) => ({
-        url: `posts/${body.id}`,
+        url: `/posts/${body.id}`,
         method: "PUT",
         body,
       }),
@@ -110,7 +110,7 @@ const postApi = appApi.injectEndpoints({
     }),
     deletePost: builder.mutation<{ success: boolean; id: number; }, number>({
       query: (id) => ({
-        url: `posts/${id}`,
+        url: `/posts/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (_result, error, id) => invalidatesIdTag("Post", id, error),

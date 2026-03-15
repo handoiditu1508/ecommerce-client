@@ -1,5 +1,5 @@
 import { isValidationProblemDetails, KnownApiError } from "@/models/apis/common";
-import { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchBaseQueryError, FetchBaseQueryMeta } from "@reduxjs/toolkit/query/react";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 const axiosBaseQuery = (
@@ -15,7 +15,9 @@ const axiosBaseQuery = (
      * Optional error code returned by the API.
      */
     code?: string;
-  }
+  },
+  {},
+  FetchBaseQueryMeta
 > => async (arg) => {
   try {
     const result = typeof arg === "string"
