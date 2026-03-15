@@ -6,7 +6,7 @@ import appApi from "./appApi";
 const userApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     getSelf: builder.query<User, void>({
-      query: () => "users/self",
+      query: () => "/users/self",
       providesTags: (_result, error, arg) => providesIdTag("User", "self", error),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {

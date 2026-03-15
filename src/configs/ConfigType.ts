@@ -1,7 +1,7 @@
 type ConfigType = {
   APP_NAME: string;
   /**
-   * API base URL ended with a slash.
+   * API base URL without slash suffix.
    */
   API_URL: string;
   /**

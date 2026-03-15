@@ -15,12 +15,12 @@ const productApi = appApi.injectEndpoints({
           searchParams.set("pageSize", arg.pageSize.toString());
         }
 
-        return "products/new?" + searchParams.toString();
+        return "/products/new?" + searchParams.toString();
       },
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
     countAllProducts: builder.query<number, void>({
-      query: () => "products/count/all",
+      query: () => "/products/count/all",
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
   }),
