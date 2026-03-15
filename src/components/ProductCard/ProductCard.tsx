@@ -41,7 +41,7 @@ function ProductCard({ product }: ProductCardProps) {
         {...(product.discountPercentage && {
           sx: {
             position: "relative",
-            "&::after": {
+            "&::before": {
               content: "var(--sale-off-percentage)",
               backgroundColor: theme.vars.palette.error.main,
               color: theme.vars.palette.error.contrastText,
