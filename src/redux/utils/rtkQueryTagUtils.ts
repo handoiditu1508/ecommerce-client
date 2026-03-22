@@ -6,7 +6,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
  */
 export const defaultTags = ["UNAUTHORIZED", "UNKNOWN_ERROR"] as const;
 export type DefaultTags = typeof defaultTags[number];
-export const entityTags = ["Post", "User", "Product"] as const;
+export const entityTags = ["Post", "User", "Product", "Brand"] as const;
 export type EntityTags = typeof entityTags[number];
 export const allTags = [
   ...defaultTags,

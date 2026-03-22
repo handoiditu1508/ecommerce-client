@@ -35,8 +35,8 @@ function DiscountedProductsPage() {
   };
 
   return (
-    <Box sx={{ mt: 2 }}>
-      <LayoutContainer disableGutters={false}>
+    <>
+      <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
         <DynamicBreadcrumbs items={breadcrumbsItems} />
       </LayoutContainer>
       {(countDiscountedProductsResult.isLoading || getDiscountedProductsResult.isLoading) && <ProductCardListSkeleton quantity={12} />}
@@ -53,7 +53,7 @@ function DiscountedProductsPage() {
           onChange={handlePageChange}
         />
       </Box>
-    </Box>
+    </>
   );
 }
 

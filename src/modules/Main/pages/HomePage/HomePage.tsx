@@ -1,18 +1,13 @@
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { useGetDiscountedProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
-import Avatar, { avatarClasses } from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
-import { Autoplay, FreeMode, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import PromotionalProductList from "./PromotionalProductList";
+import TopBrandsCarousel from "./TopBrandsCarousel";
 
 function HomePage() {
   const theme = useTheme();
@@ -88,46 +83,7 @@ function HomePage() {
         viewAllUrlPath="/products/discount"
         onRefresh={getDiscountedProductsResult.refetch}
       />
-      <Paper
-        square
-        sx={{
-          mt: 4,
-          py: 4,
-          ".swiper": {
-            mt: 4,
-          },
-          ".swiper-slide": {
-            width: 120,
-          },
-          [`.${avatarClasses.root}`]: {
-            width: 120,
-            height: 120,
-          },
-        }}>
-        <Typography variant="h5" textAlign="center">Top Brands</Typography>
-        <Swiper
-          spaceBetween={40}
-          slidesPerView="auto"
-          loop
-          freeMode
-          autoplay={{
-            delay: 2500,
-          }}
-          modules={[FreeMode, Navigation, Autoplay]}
-        >
-          {[...new Array(15)].map((_, index) => <SwiperSlide key={index}>
-            <Avatar
-              alt="Brand logo"
-              src="https://placehold.co/600x400"
-            />
-          </SwiperSlide>)}
-        </Swiper>
-        <Button
-          variant="outlined"
-          sx={{ display: "flex", mx: "auto", mt: 4 }}>
-          View All
-        </Button>
-      </Paper>
+      <TopBrandsCarousel />
     </>
   );
 }
