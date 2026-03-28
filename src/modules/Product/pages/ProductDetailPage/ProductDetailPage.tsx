@@ -15,8 +15,8 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
-import ProductAttributeSelector from "../../components/ProductAttributeSelector";
-import ProductAttributeSelectorDialog from "../../components/ProductAttributeSelectorDialog";
+import ProductVariantSelector from "../../components/ProductVariantSelector";
+import ProductVariantSelectorDialog from "../../components/ProductVariantSelectorDialog";
 import ImageCarousel from "./ImageCarousel";
 import ProductDescription from "./ProductDescription";
 import RelatedProducts from "./RelatedProducts";
@@ -143,7 +143,12 @@ function ProductDetailPage() {
           {smAndDown && <>
             {QuantityInput}
             {AddToCartButton}
-            <ProductAttributeSelectorDialog open={attributeDialogOpen} confirmButtonText="Add to cart" onClose={() => setAttributeDialogOpen(false)} />
+            <ProductVariantSelectorDialog
+              open={attributeDialogOpen}
+              variants={product.productVariants}
+              confirmButtonText="Add to cart"
+              onClose={() => setAttributeDialogOpen(false)}
+            />
           </>}
         </Box>
         {/* right */}
@@ -163,7 +168,7 @@ function ProductDetailPage() {
             {ProductRating}
           </Box>
           <Divider sx={{ my: 1 }} />
-          <ProductAttributeSelector />
+          <ProductVariantSelector variants={product.productVariants} />
           {QuantityInput}
           {AddToCartButton}
         </Box>}

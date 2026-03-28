@@ -4,9 +4,9 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import ProductAttributeSelectorDialog from "../../components/ProductAttributeSelectorDialog";
+import ProductVariantSelectorDialog from "../../components/ProductVariantSelectorDialog";
 
-function ProductAttributesEditButton() {
+function ProductVariantsEditButton() {
   const theme = useTheme();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
 
@@ -42,9 +42,9 @@ function ProductAttributesEditButton() {
         </Typography>
         <EditIcon color="inherit" fontSize="inherit" />
       </ButtonBase>
-      <ProductAttributeSelectorDialog open={attributeDialogOpen} confirmButtonText="Save" onClose={() => setAttributeDialogOpen(false)} />
+      <ProductVariantSelectorDialog open={attributeDialogOpen} confirmButtonText="Save" variants={[]} onClose={() => setAttributeDialogOpen(false)} />
     </>
   );
 }
 
-export default ProductAttributesEditButton;
+export default ProductVariantsEditButton;

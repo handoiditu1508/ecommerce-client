@@ -1,13 +1,13 @@
+import { ProductVariant } from "@/models/entities/Product";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { useState } from "react";
-import { ProductAttributeValue } from "./ProductAttribute";
 
-type ProductAttibuteValueChipProps = {
-  value: ProductAttributeValue;
+type ProductVariantChipProps = {
+  value: ProductVariant;
 };
 
-function ProductAttibuteValueChip({ value }: ProductAttibuteValueChipProps) {
+function ProductVariantChip({ value }: ProductVariantChipProps) {
   const [selected, setSelected] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -16,18 +16,19 @@ function ProductAttibuteValueChip({ value }: ProductAttibuteValueChipProps) {
 
   return (
     <Chip
-      label={value.value}
+      label={value.name}
       avatar={
-        value.color || value.imageUrl
+        value.color || value.thumbnailPath
           ? <Avatar
             style={{ backgroundColor: value.color }}
-            {...(value.imageUrl && { alt: "product attribute", src: value.imageUrl })}
+            {...(value.thumbnailPath && { alt: value.name, src: value.thumbnailPath })}
           >
             {" "}
           </Avatar>
           : undefined
       }
       clickable
+      disabled={!value.quantity}
       variant={selected ? "filled" : "outlined"}
       color={selected ? "primary" : "default"}
       onClick={handleClick}
@@ -35,4 +36,4 @@ function ProductAttibuteValueChip({ value }: ProductAttibuteValueChipProps) {
   );
 }
 
-export default ProductAttibuteValueChip;
+export default ProductVariantChip;

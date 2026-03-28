@@ -1,4 +1,5 @@
 import { BreakpointsContext } from "@/contexts/breakpoints";
+import { ProductVariant } from "@/models/entities/Product";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,10 +11,11 @@ import Slide from "@mui/material/Slide";
 import { useTheme } from "@mui/material/styles";
 import { TransitionProps } from "@mui/material/transitions";
 import React, { useContext, useId } from "react";
-import ProductAttributeSelector from "./ProductAttributeSelector/ProductAttributeSelector";
+import ProductVariantSelector from "./ProductVariantSelector/ProductVariantSelector";
 
-type ProductAttributeSelectorDialogProps = {
+type ProductVariantSelectorDialogProps = {
   open: boolean;
+  variants: ProductVariant[];
   confirmButtonText?: string;
   onClose: () => void;
 };
@@ -25,11 +27,12 @@ const Transition = (props: TransitionProps & {
   return <Slide direction="up" {...props} />;
 };
 
-function ProductAttributeSelectorDialog({
+function ProductVariantSelectorDialog({
   open,
+  variants,
   confirmButtonText = "Confirm",
   onClose,
-}: ProductAttributeSelectorDialogProps) {
+}: ProductVariantSelectorDialogProps) {
   const dialogLabelId = useId();
   const theme = useTheme();
   const { smAndDown } = useContext(BreakpointsContext);
@@ -60,7 +63,7 @@ function ProductAttributeSelectorDialog({
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <ProductAttributeSelector />
+        <ProductVariantSelector variants={variants} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{confirmButtonText}</Button>
@@ -69,4 +72,4 @@ function ProductAttributeSelectorDialog({
   );
 }
 
-export default ProductAttributeSelectorDialog;
+export default ProductVariantSelectorDialog;

@@ -15,7 +15,7 @@ import { svgIconClasses } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useContext } from "react";
-import ProductAttributesEditButton from "./ProductAttributesEditButton";
+import ProductVariantsEditButton from "./ProductVariantsEditButton";
 
 const cartImageSize = 160;
 const cartImageSizeXs = 80;
@@ -100,7 +100,7 @@ function CartItem() {
             {smAndUp && TotalPriceText}
           </Box>
           <Typography variant="body2">{toVndCurrency(80000)}</Typography>
-          <ProductAttributesEditButton />
+          <ProductVariantsEditButton />
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <NumberSpinner
               defaultValue={1}
