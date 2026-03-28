@@ -1,17 +1,27 @@
+import CONFIG from "@/configs";
 import { BreakpointsContext, smMediaQuery } from "@/contexts/breakpoints";
+import { SimpleFileView } from "@/models/entities/StorageItem";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
+import ButtonBase from "@mui/material/ButtonBase";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
 import { useTheme } from "@mui/material/styles";
 import { useContext, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
-function ImageCarousel() {
+type ImageCarouselProps = {
+  defaultIndex?: number;
+  images: SimpleFileView[];
+};
+
+function ImageCarousel({ defaultIndex, images }: ImageCarouselProps) {
   const theme = useTheme();
   const { sm } = useContext(BreakpointsContext);
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
+  const [selectedImage, setSelectedImage] = useState<SimpleFileView | undefined>((defaultIndex !== undefined && defaultIndex >= 0 && images[defaultIndex]) || images[0]);
 
   const handlePrevThumbnail = () => {
     if (swiperRef) {
@@ -33,49 +43,84 @@ function ImageCarousel() {
       maxWidth: "100%",
       alignItems: "flex-start",
       ".swiper": {
+        width: "100%",
         maxWidth: "100%",
         height: "100%",
       },
       ".swiper-slide": {
         width: 96,
         height: 96,
+        [smMediaQuery(theme.breakpoints)]: {
+          width: "100%",
+          height: "initial",
+          aspectRatio: "1/1",
+        },
       },
       [smMediaQuery(theme.breakpoints)]: {
         flexDirection: "row",
         aspectRatio: "1/0.8",
       },
     }}>
-      <Box
-        component="img"
-        src="https://placehold.co/600x400"
-        alt="Product Image"
-        sx={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          aspectRatio: "1/1",
-          [smMediaQuery(theme.breakpoints)]: {
-            flex: 1,
-          },
-        }}
-      />
+      {
+        selectedImage
+          ? (
+            <Box
+              component="img"
+              src={CONFIG.FILE_URL + selectedImage.filePath}
+              alt={selectedImage.name}
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                aspectRatio: "1/1",
+                [smMediaQuery(theme.breakpoints)]: {
+                  flex: 1,
+                },
+              }}
+            />
+          )
+          : (
+            <Skeleton
+              sx={{
+                width: "100%",
+                height: "100%",
+                aspectRatio: "1/1",
+                [smMediaQuery(theme.breakpoints)]: {
+                  flex: 1,
+                },
+              }}
+            />
+          )
+      }
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
         direction={sm ? "vertical" : "horizontal"}
         onSwiper={setSwiperRef}
       >
-        {[...new Array(8)].map((_, index) => <SwiperSlide key={index}>
-          <Box
-            component="img"
-            src="https://placehold.co/600x400"
-            alt={`Thumbnail ${index + 1}`}
+        {images.map((image) => <SwiperSlide key={image.id}>
+          <ButtonBase
             sx={{
-              width: 96,
-              height: 96,
-              objectFit: "cover",
+              width: "100%",
+              height: "100%",
+              ...(selectedImage === image && {
+                outline: theme.shape.smallBorder,
+                outlineColor: theme.vars.palette.primary.main,
+                outlineOffset: -1,
+              }),
             }}
-          />
+            onClick={() => setSelectedImage(image)}>
+            <Box
+              component="img"
+              src={CONFIG.FILE_URL + image.filePath}
+              alt={image.name}
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </ButtonBase>
         </SwiperSlide>)}
         <IconButton
           sx={{

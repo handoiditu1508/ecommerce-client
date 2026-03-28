@@ -131,7 +131,7 @@ function ProductDetailPage() {
             </Stack>
           </Box>}
           {xsAndDown && <SocialSharingButtonGroup />}
-          <ImageCarousel />
+          <ImageCarousel defaultIndex={product.images.findIndex((i) => i.filePath === product.thumbnailPath)} images={product.images} />
           {smAndUp && <Box sx={{
             display: "flex",
             mt: 1,
