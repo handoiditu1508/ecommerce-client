@@ -3,6 +3,7 @@ import CustomLink from "@/components/CustomLink";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { useGetProductQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -10,7 +11,8 @@ import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import ProductAttributeSelector from "../../components/ProductAttributeSelector";
@@ -24,6 +26,9 @@ function ProductDetailPage() {
   const theme = useTheme();
   const { xsAndDown, smAndDown, sm, smAndUp, mdAndUp } = useContext(BreakpointsContext);
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
+  const params = useParams();
+  const productId = parseInt(params.id!);
+  const getProductResult = useGetProductQuery({ productId }, { skip: isNaN(productId) });
 
   const handleAddToCartButtonClick = () => {
     if (smAndDown) {
@@ -31,15 +36,27 @@ function ProductDetailPage() {
     }
   };
 
-  const ProductTitle = <Typography variant="h3">Product Title</Typography>;
+  useEffect(() => {
+    if (mdAndUp) {
+      setAttributeDialogOpen(false);
+    }
+  }, [mdAndUp]);
 
-  const ProductBrand = <Typography variant="subtitle1">Brand <CustomLink to="">Product Brand</CustomLink></Typography>;
+  if (!getProductResult.currentData) {
+    return (<div>todo: show loading skeleton here</div>);
+  }
+
+  const product = getProductResult.currentData;
+
+  const ProductTitle = <Typography variant="h3">{product.name}</Typography>;
+
+  const ProductBrand = product.brandId ? <CustomLink to={`/products?brand=${product.brandId}`} variant="subtitle1">Product Brand</CustomLink> : null;
 
   const ProductPrice = (
     <Box>
-      <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(80000)}</Typography>
-      <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(100000)}</Typography>
-      <Typography component="sup" color="error" variant="caption"> -20%</Typography>
+      <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(product.discountPrice)}</Typography>
+      <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(product.price)}</Typography>
+      <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
     </Box>
   );
 
@@ -66,7 +83,7 @@ function ProductDetailPage() {
 
   const QuantityInput = (
     <NumberSpinner
-      min={0}
+      min={1}
       defaultValue={1}
       size="small"
       sx={{

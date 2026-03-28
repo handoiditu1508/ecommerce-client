@@ -1,7 +1,8 @@
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
-import { ProductView } from "@/models/entities/Product";
-import { providesCountTag, providesListTags } from "../utils/rtkQueryTagUtils";
+import { GetProductQuery } from "@/models/apis/product/getProduct";
+import Product, { ProductView } from "@/models/entities/Product";
+import { providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 const productApi = appApi.injectEndpoints({
@@ -42,6 +43,18 @@ const productApi = appApi.injectEndpoints({
       query: () => "/products/count/discount",
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
+    getProduct: builder.query<Product, GetProductQuery>({
+      query: (arg) => {
+        let url = `/products/${arg.productId}`;
+
+        if (arg.loadDiscountPrice !== undefined) {
+          url += `?loadDiscountPrice=${arg.loadDiscountPrice}`;
+        }
+
+        return url;
+      },
+      providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
+    }),
   }),
 });
 
@@ -56,4 +69,6 @@ export const {
   useLazyGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
   useLazyCountDiscountedProductsQuery,
+  useGetProductQuery,
+  useLazyGetProductQuery,
 } = productApi;
