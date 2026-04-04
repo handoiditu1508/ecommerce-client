@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 
+declare module "*.css";
+declare module "swiper/css*";
+
 interface ImportMetaEnv {
   readonly VITE_IS_AWESOME: string;
   readonly VITE_API_URL: string;
