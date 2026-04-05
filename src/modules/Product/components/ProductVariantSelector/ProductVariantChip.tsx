@@ -1,19 +1,19 @@
 import { ProductVariant } from "@/models/entities/Product";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { useState } from "react";
+import { MouseEventHandler } from "react";
 
 type ProductVariantChipProps = {
   value: ProductVariant;
+  selected?: boolean;
+  onSelected?: MouseEventHandler<HTMLDivElement>;
 };
 
-function ProductVariantChip({ value }: ProductVariantChipProps) {
-  const [selected, setSelected] = useState<boolean>(false);
-
-  const handleClick = () => {
-    setSelected(!selected);
-  };
-
+function ProductVariantChip({
+  value,
+  selected,
+  onSelected,
+}: ProductVariantChipProps) {
   return (
     <Chip
       label={value.name}
@@ -31,7 +31,7 @@ function ProductVariantChip({ value }: ProductVariantChipProps) {
       disabled={!value.quantity}
       variant={selected ? "filled" : "outlined"}
       color={selected ? "primary" : "default"}
-      onClick={handleClick}
+      onClick={onSelected}
     />
   );
 }
