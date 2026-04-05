@@ -1,6 +1,5 @@
 import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcrumbs";
 import ProductCardList from "@/components/ProductCardList";
-import ProductCardListSkeleton from "@/components/ProductCardList/ProductCardListSkeleton";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { useCountAllProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
@@ -38,8 +37,7 @@ function NewProductsPage() {
       <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
         <DynamicBreadcrumbs items={breadcrumbsItems} />
       </LayoutContainer>
-      {(countAllProductsResult.isLoading || getNewProductsResult.isLoading) && <ProductCardListSkeleton quantity={12} />}
-      {getNewProductsResult.data && <ProductCardList products={getNewProductsResult.data} />}
+      <ProductCardList products={getNewProductsResult.data} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
@@ -49,6 +47,7 @@ function NewProductsPage() {
           hideNextButton={xsAndDown}
           showLastButton={!xsAndDown}
           page={page}
+          disabled={countAllProductsResult.isLoading}
           onChange={handlePageChange}
         />
       </Box>

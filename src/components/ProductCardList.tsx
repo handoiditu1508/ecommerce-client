@@ -1,14 +1,15 @@
+import CONFIG from "@/configs";
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import { ProductView } from "@/models/entities/Product";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import ProductCard from "../ProductCard";
+import ProductCard from "./ProductCard";
 
 type ProductCardListProps = {
-  products: ProductView[];
+  products?: ProductView[];
 };
 
-function ProductCardList({ products }: ProductCardListProps) {
+function ProductCardList({ products = CONFIG.EMPTY_ARRAY }: ProductCardListProps) {
   const theme = useTheme();
 
   return (
@@ -33,7 +34,9 @@ function ProductCardList({ products }: ProductCardListProps) {
         gap: 0.75,
       },
     }}>
-      {products.map((p) => <ProductCard key={p.id} product={p} />)}
+      {products.length
+        ? products.map((p) => <ProductCard key={p.id} product={p} />)
+        : [...new Array(12)].map((_, index) => <ProductCard key={index} />)}
     </Box>
   );
 }

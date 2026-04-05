@@ -1,14 +1,13 @@
+import ProductCard from "@/components/ProductCard";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-
-import ProductCardSkeleton from "@/components/ProductCard/ProductCardSkeleton";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 
 function RelatedProducts() {
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
@@ -50,8 +49,7 @@ function RelatedProducts() {
         onSwiper={setSwiperRef}
       >
         {[...new Array(8)].map((_, index) => <SwiperSlide key={index}>
-          {/* <ProductCard /> */}
-          <ProductCardSkeleton />
+          <ProductCard />
         </SwiperSlide>)}
         <IconButton
           sx={{

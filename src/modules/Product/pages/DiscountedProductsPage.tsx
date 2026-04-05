@@ -1,7 +1,6 @@
 import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcrumbs";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
 import ProductCardList from "@/components/ProductCardList";
-import ProductCardListSkeleton from "@/components/ProductCardList/ProductCardListSkeleton";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
@@ -39,8 +38,7 @@ function DiscountedProductsPage() {
       <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
         <DynamicBreadcrumbs items={breadcrumbsItems} />
       </LayoutContainer>
-      {(countDiscountedProductsResult.isLoading || getDiscountedProductsResult.isLoading) && <ProductCardListSkeleton quantity={12} />}
-      {getDiscountedProductsResult.data && <ProductCardList products={getDiscountedProductsResult.data} />}
+      <ProductCardList products={getDiscountedProductsResult.data} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
@@ -50,6 +48,7 @@ function DiscountedProductsPage() {
           hideNextButton={xsAndDown}
           showLastButton={!xsAndDown}
           page={page}
+          disabled={countDiscountedProductsResult.isLoading}
           onChange={handlePageChange}
         />
       </Box>
