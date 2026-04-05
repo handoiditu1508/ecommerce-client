@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import { ProductVariant } from "@/models/entities/Product";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
@@ -21,7 +22,8 @@ function ProductVariantChip({
         value.color || value.thumbnailPath
           ? <Avatar
             style={{ backgroundColor: value.color }}
-            {...(value.thumbnailPath && { alt: value.name, src: value.thumbnailPath })}
+            alt={value.name}
+            src={CONFIG.FILE_URL + value.thumbnailPath}
           >
             {" "}
           </Avatar>
