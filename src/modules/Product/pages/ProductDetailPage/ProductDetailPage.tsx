@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Rating from "@mui/material/Rating";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -42,57 +43,96 @@ function ProductDetailPage() {
     }
   }, [mdAndUp]);
 
-  if (!getProductResult.currentData) {
-    return (<div>todo: show loading skeleton here</div>);
-  }
-
   const product = getProductResult.currentData;
 
-  const ProductTitle = <Typography variant="h3">{product.name}</Typography>;
+  const ProductTitle = <Typography variant="h3">{product ? product.name : <Skeleton variant="text" width="80%" />}</Typography>;
 
-  const ProductBrand = product.brandId ? <CustomLink to={`/products?brand=${product.brandId}`} variant="subtitle1">Product Brand</CustomLink> : null;
+  const ProductBrand = product
+    ? (product.brandId ? <CustomLink to={`/products?brand=${product.brandId}`} variant="subtitle1">Product Brand</CustomLink> : null)
+    : <Typography variant="subtitle1"><Skeleton variant="text" width="40%" /></Typography>;
 
   const ProductPrice = (
     <Box>
-      <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(product.discountPrice)}</Typography>
-      <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(product.price)}</Typography>
-      <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
+      {product
+        ? <>
+          <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(product.discountPrice)}</Typography>
+          <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(product.price)}</Typography>
+          <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
+        </>
+        : <Typography variant="h5"><Skeleton variant="text" width={100} /></Typography>}
     </Box>
   );
 
   const ProductRating = (
     <Stack direction={{ xs: "row", md: "column" }} alignItems={{ xs: "center", md: "flex-end" }}>
-      <Rating defaultValue={3.3} readOnly />
-      <Typography variant="subtitle2" component="p" align="right">(3.3) 1k Reviews</Typography>
+      {product
+        ? <>
+          <Rating defaultValue={3.3} readOnly />
+          <Typography variant="subtitle2" component="p" align="right">(3.3) 1k Reviews</Typography>
+        </>
+        : <>
+          <Skeleton variant="rounded" width={120} height={24} />
+          <Typography variant="subtitle2" align="right"><Skeleton variant="text" width={100} /></Typography>
+        </>}
     </Stack>
   );
 
   const AddToCartButton = (
-    <Button
-      size="large"
-      sx={{
-        width: "100%",
-        maxWidth: 500,
-        mt: 4,
-        mx: "auto",
-      }}
-      onClick={handleAddToCartButtonClick}>
-      Add to cart
-    </Button>
+    product
+      ? (
+        <Button
+          size="large"
+          sx={{
+            width: "100%",
+            maxWidth: 500,
+            mt: 4,
+            mx: "auto",
+          }}
+          onClick={handleAddToCartButtonClick}>
+          Add to cart
+        </Button>
+      )
+      : (
+        <Skeleton
+          variant="rounded"
+          sx={{
+            width: "100%",
+            height: 42,
+            maxWidth: 500,
+            mt: 4,
+            mx: "auto",
+          }}
+        />
+      )
   );
 
   const QuantityInput = (
-    <NumberSpinner
-      min={1}
-      defaultValue={1}
-      size="small"
-      sx={{
-        maxWidth: 200,
-        width: "100%",
-        alignSelf: "flex-end",
-        mt: 4,
-      }}
-    />
+    product
+      ? (
+        <NumberSpinner
+          min={1}
+          defaultValue={1}
+          size="small"
+          sx={{
+            maxWidth: 200,
+            width: "100%",
+            alignSelf: "flex-end",
+            mt: 4,
+          }}
+        />
+      )
+      : (
+        <Skeleton
+          variant="rounded"
+          sx={{
+            maxWidth: 200,
+            width: "100%",
+            height: 40,
+            alignSelf: "flex-end",
+            mt: 4,
+          }}
+        />
+      )
   );
 
   return (
@@ -131,7 +171,11 @@ function ProductDetailPage() {
             </Stack>
           </Box>}
           {xsAndDown && <SocialSharingButtonGroup />}
-          <ImageCarousel defaultIndex={product.images.findIndex((i) => i.filePath === product.thumbnailPath)} images={product.images} />
+          <ImageCarousel {...(product && {
+            defaultIndex: product.images.findIndex((i) => i.filePath === product.thumbnailPath),
+            images: product.images,
+          })}
+          />
           {smAndUp && <Box sx={{
             display: "flex",
             mt: 1,
@@ -143,12 +187,12 @@ function ProductDetailPage() {
           {smAndDown && <>
             {QuantityInput}
             {AddToCartButton}
-            <ProductVariantSelectorDialog
+            {product && <ProductVariantSelectorDialog
               open={attributeDialogOpen}
               variants={product.productVariants}
               confirmButtonText="Add to cart"
               onClose={() => setAttributeDialogOpen(false)}
-            />
+            />}
           </>}
         </Box>
         {/* right */}
@@ -168,13 +212,13 @@ function ProductDetailPage() {
             {ProductRating}
           </Box>
           <Divider sx={{ my: 1 }} />
-          <ProductVariantSelector variants={product.productVariants} />
+          <ProductVariantSelector variants={product ? product.productVariants : undefined} />
           {QuantityInput}
           {AddToCartButton}
         </Box>}
       </Box>
       <RelatedProducts />
-      <ProductDescription />
+      <ProductDescription loading={!product} />
     </LayoutContainer>
   );
 }

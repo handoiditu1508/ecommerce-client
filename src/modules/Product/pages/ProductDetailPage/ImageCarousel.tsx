@@ -7,21 +7,28 @@ import ButtonBase from "@mui/material/ButtonBase";
 import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
 import { useTheme } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 type ImageCarouselProps = {
   defaultIndex?: number;
-  images: SimpleFileView[];
+  images?: SimpleFileView[];
 };
 
-function ImageCarousel({ defaultIndex, images }: ImageCarouselProps) {
+function ImageCarousel({ defaultIndex = 0, images = CONFIG.EMPTY_ARRAY }: ImageCarouselProps) {
   const theme = useTheme();
   const { sm } = useContext(BreakpointsContext);
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
-  const [selectedImage, setSelectedImage] = useState<SimpleFileView | undefined>((defaultIndex !== undefined && defaultIndex >= 0 && images[defaultIndex]) || images[0]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(defaultIndex > images.length || defaultIndex < 0 ? 0 : defaultIndex);
+  const selectedImage: SimpleFileView | undefined = images[selectedIndex];
+
+  useEffect(() => {
+    if (selectedIndex >= images.length) {
+      setSelectedIndex(0);
+    }
+  }, [selectedIndex, images.length]);
 
   const handlePrevThumbnail = () => {
     if (swiperRef) {
@@ -81,6 +88,7 @@ function ImageCarousel({ defaultIndex, images }: ImageCarouselProps) {
           )
           : (
             <Skeleton
+              variant="rectangular"
               sx={{
                 width: "100%",
                 height: "100%",
@@ -98,30 +106,45 @@ function ImageCarousel({ defaultIndex, images }: ImageCarouselProps) {
         direction={sm ? "vertical" : "horizontal"}
         onSwiper={setSwiperRef}
       >
-        {images.map((image) => <SwiperSlide key={image.id}>
-          <ButtonBase
-            sx={{
-              width: "100%",
-              height: "100%",
-              ...(selectedImage === image && {
-                outline: theme.shape.smallBorder,
-                outlineColor: theme.vars.palette.primary.main,
-                outlineOffset: -1,
-              }),
-            }}
-            onClick={() => setSelectedImage(image)}>
-            <Box
-              component="img"
-              src={CONFIG.FILE_URL + image.filePath}
-              alt={image.name}
+        {images.length
+          ? images.map((image, index) => <SwiperSlide key={image.id}>
+            <ButtonBase
               sx={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                ...(selectedIndex === index && {
+                  outline: theme.shape.smallBorder,
+                  outlineColor: theme.vars.palette.primary.main,
+                  outlineOffset: -1,
+                }),
+              }}
+              onClick={() => setSelectedIndex(index)}>
+              <Box
+                component="img"
+                src={CONFIG.FILE_URL + image.filePath}
+                alt={image.name}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </ButtonBase>
+          </SwiperSlide>)
+          : [...Array(5)].map((_, i) => <SwiperSlide key={i}>
+            <Skeleton
+              variant="rectangular"
+              sx={{
+                width: "100%",
+                height: "100%",
+                [smMediaQuery(theme.breakpoints)]: {
+                  width: "100%",
+                  height: "initial",
+                  aspectRatio: "1/1",
+                },
               }}
             />
-          </ButtonBase>
-        </SwiperSlide>)}
+          </SwiperSlide>)}
         <IconButton
           sx={{
             position: "absolute",
