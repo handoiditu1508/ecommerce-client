@@ -1,5 +1,7 @@
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
+import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { useGetDiscountedProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
@@ -9,10 +11,13 @@ import "swiper/css/navigation";
 import PromotionalProductList from "./PromotionalProductList";
 import TopBrandsCarousel from "./TopBrandsCarousel";
 
+const getNewProductsQuery: GetNewProductsQuery = { pageSize: 12 };
+const getDiscountedProductsQuery: GetDiscountedProductsQuery = { pageSize: 12 };
+
 function HomePage() {
   const theme = useTheme();
-  const getNewProductsResult = useGetNewProductsQuery({ pageSize: 12 });
-  const getDiscountedProductsResult = useGetDiscountedProductsQuery({ pageSize: 12 });
+  const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
+  const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
 
   return (
     <>

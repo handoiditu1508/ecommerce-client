@@ -3,11 +3,12 @@ import MdiSvgIcon from "@/components/MdiSvgIcon";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
 import { mdiSale } from "@mdi/js";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 
 const pageSize = 12;
 
@@ -26,7 +27,8 @@ function DiscountedProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
   const [page, setPage] = useState(1);
   const countDiscountedProductsResult = useCountDiscountedProductsQuery();
-  const getDiscountedProductsResult = useGetDiscountedProductsQuery({ page, pageSize });
+  const getDiscountedProductsQuery = useMemo<GetDiscountedProductsQuery>(() => ({ page, pageSize }), [page]);
+  const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
   const totalPage = countDiscountedProductsResult.data !== undefined ? Math.ceil(countDiscountedProductsResult.data / pageSize) : 1;
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {

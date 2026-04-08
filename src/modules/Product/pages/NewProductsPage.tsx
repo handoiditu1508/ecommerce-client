@@ -2,11 +2,12 @@ import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcr
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { useCountAllProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 const pageSize = 12;
 
@@ -25,7 +26,8 @@ function NewProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
   const [page, setPage] = useState(1);
   const countAllProductsResult = useCountAllProductsQuery();
-  const getNewProductsResult = useGetNewProductsQuery({ page, pageSize });
+  const getNewProductsQuery = useMemo<GetNewProductsQuery>(() => ({ page, pageSize }), [page]);
+  const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
   const totalPage = countAllProductsResult.data !== undefined ? Math.ceil(countAllProductsResult.data / pageSize) : 1;
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {

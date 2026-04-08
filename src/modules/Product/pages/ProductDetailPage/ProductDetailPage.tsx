@@ -3,6 +3,7 @@ import CustomLink from "@/components/CustomLink";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { useGetProductQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,7 +13,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -29,7 +30,8 @@ function ProductDetailPage() {
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
   const params = useParams();
   const productId = parseInt(params.id!);
-  const getProductResult = useGetProductQuery({ productId }, { skip: isNaN(productId) });
+  const getProductQuery = useMemo<GetProductQuery>(() => ({ productId }), [productId]);
+  const getProductResult = useGetProductQuery(getProductQuery, { skip: isNaN(productId) });
 
   const handleAddToCartButtonClick = () => {
     if (smAndDown) {
