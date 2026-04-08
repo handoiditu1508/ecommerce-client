@@ -4,6 +4,10 @@ import appApi from "./appApi";
 
 const brandApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllBrands: builder.query<Brand[], void>({
+      query: () => "/brands/all",
+      providesTags: (result, error) => providesListTags("Brand", result, error),
+    }),
     getTopBrands: builder.query<Brand[], void>({
       query: () => "/brands/top",
       providesTags: (result, error) => providesListTags("Brand", result, error),
@@ -14,5 +18,6 @@ const brandApi = appApi.injectEndpoints({
 export default brandApi;
 
 export const {
+  useGetAllBrandsQuery,
   useGetTopBrandsQuery,
 } = brandApi;
