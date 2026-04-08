@@ -62,13 +62,8 @@ export default productApi;
 
 export const {
   useGetNewProductsQuery,
-  useLazyGetNewProductsQuery,
   useCountAllProductsQuery,
-  useLazyCountAllProductsQuery,
   useGetDiscountedProductsQuery,
-  useLazyGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
-  useLazyCountDiscountedProductsQuery,
   useGetProductQuery,
-  useLazyGetProductQuery,
 } = productApi;

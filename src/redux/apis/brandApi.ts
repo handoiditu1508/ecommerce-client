@@ -15,5 +15,4 @@ export default brandApi;
 
 export const {
   useGetTopBrandsQuery,
-  useLazyGetTopBrandsQuery,
 } = brandApi;
