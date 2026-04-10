@@ -1,5 +1,4 @@
 import { toVndCurrency } from "@/common/formats";
-import CustomLink from "@/components/CustomLink";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
@@ -20,6 +19,7 @@ import "swiper/css/navigation";
 import ProductVariantSelector from "../../components/ProductVariantSelector";
 import ProductVariantSelectorDialog from "../../components/ProductVariantSelectorDialog";
 import ImageCarousel from "./ImageCarousel";
+import ProductBrandLink from "./ProductBrandLink";
 import ProductDescription from "./ProductDescription";
 import RelatedProducts from "./RelatedProducts";
 import SocialSharingButtonGroup from "./SocialSharingButtonGroup";
@@ -48,10 +48,6 @@ function ProductDetailPage() {
   const product = getProductResult.currentData;
 
   const ProductTitle = <Typography variant="h3">{product ? product.name : <Skeleton variant="text" width="80%" />}</Typography>;
-
-  const ProductBrand = product
-    ? (product.brandId ? <CustomLink to={`/products?brand=${product.brandId}`} variant="subtitle1">Product Brand</CustomLink> : null)
-    : <Typography variant="subtitle1"><Skeleton variant="text" width="40%" /></Typography>;
 
   const ProductPrice = (
     <Box>
@@ -165,7 +161,7 @@ function ProductDetailPage() {
             {ProductTitle}
             <Stack direction="row" alignItems={{ xs: "flex-end", sm: "center" }}>
               <Box>
-                {ProductBrand}
+                <ProductBrandLink brandId={product ? product.brandId : undefined} />
                 {xsAndDown && ProductPrice}
               </Box>
               <Box sx={{ flex: 1 }} />
@@ -204,7 +200,7 @@ function ProductDetailPage() {
           flexDirection: "column",
         }}>
           {ProductTitle}
-          {ProductBrand}
+          <ProductBrandLink brandId={product ? product.brandId : undefined} />
           <Box sx={{
             display: "flex",
             justifyContent: "space-between",

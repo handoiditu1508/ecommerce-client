@@ -20,6 +20,6 @@ export const {
 
 const brandsSelectors = brandsAdapter.getSelectors<RootState>((state) => state.brands);
 export const selectAllBrands = brandsSelectors.selectAll;
-export const selectBrandById = (id: number) => (state: RootState) => brandsSelectors.selectById(state, id);
+export const selectBrandById = (id: number) => (state: RootState): Brand | undefined => brandsSelectors.selectById(state, id);
 
 export default brandsSlice;
