@@ -1,27 +1,12 @@
-import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcrumbs";
-import MdiSvgIcon from "@/components/MdiSvgIcon";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
-import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
-import { mdiSale } from "@mdi/js";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import React, { useContext, useMemo, useState } from "react";
 
 const pageSize = 12;
-
-const breadcrumbsItems: BreadcrumbsItem[] = [
-  {
-    to: "/products",
-    label: "Products",
-  },
-  {
-    icon: <MdiSvgIcon path={mdiSale} />,
-    label: "Discount",
-  },
-];
 
 function DiscountedProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
@@ -37,9 +22,6 @@ function DiscountedProductsPage() {
 
   return (
     <>
-      <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
-        <DynamicBreadcrumbs items={breadcrumbsItems} />
-      </LayoutContainer>
       <ProductCardList products={getDiscountedProductsResult.data} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination

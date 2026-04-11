@@ -1,3 +1,4 @@
+import RouteBasedBreadcrumbs from "@/components/RouteBasedBreadcrumbs";
 import Suspense from "@/components/Suspense";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import HomeIcon from "@mui/icons-material/Home";
@@ -10,6 +11,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 import withHeaderProvider from "./Header/withHeaderProvider";
+import LayoutContainer from "./LayoutContainer";
 
 function InnerClientLayout() {
   const { xsAndDown } = useContext(BreakpointsContext);
@@ -39,6 +41,9 @@ function InnerClientLayout() {
           mt: "var(--header-client-height)",
           flex: 1,
         }}>
+        <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
+          <RouteBasedBreadcrumbs />
+        </LayoutContainer>
         <Suspense>
           <Outlet />
         </Suspense>

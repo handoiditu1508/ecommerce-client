@@ -1,26 +1,12 @@
-import DynamicBreadcrumbs, { BreadcrumbsItem } from "@/components/DynamicBreadcrumbs";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
-import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { useCountAllProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
-import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import { useContext, useMemo, useState } from "react";
 
 const pageSize = 12;
-
-const breadcrumbsItems: BreadcrumbsItem[] = [
-  {
-    to: "/products",
-    label: "Products",
-  },
-  {
-    icon: <NewReleasesIcon />,
-    label: "New Collection",
-  },
-];
 
 function NewProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
@@ -36,9 +22,6 @@ function NewProductsPage() {
 
   return (
     <>
-      <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
-        <DynamicBreadcrumbs items={breadcrumbsItems} />
-      </LayoutContainer>
       <ProductCardList products={getNewProductsResult.data} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination

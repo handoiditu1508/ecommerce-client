@@ -1,14 +1,16 @@
 import HomeIcon from "@mui/icons-material/Home";
 import React from "react";
-import { RouteObject } from "react-router-dom";
+import { Outlet, RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "./models";
+import productRoutes from "./productRoutes";
+import userRoutes from "./userRoutes";
 
-const MainModule = React.lazy(() => import("@/modules/Main"));
 const HomePage = React.lazy(() => import("@/modules/Main/pages/HomePage"));
+const PrivacyPage = React.lazy(() => import("@/modules/Main/pages/PrivacyPage"));
 
 const mainRoutes: RouteObject[] = [
   {
-    element: <MainModule />,
+    element: <Outlet />,
     handle: {
       crumb: {
         to: "/",
@@ -23,20 +25,19 @@ const mainRoutes: RouteObject[] = [
           hideBreadcrumbs: true,
         } as RouteHandleObject,
       },
-      // example of breadcrumb configuration for user detail page
-      // {
-      //   path: "users/:userId",
-      //   element: <UserDetailPage />,
-      //   loader: async (args) => ({
-      //     userId: args.params.userId,
-      //   }),
-      //   handle: {
-      //     crumb: (data) => ({
-      //       to: `users/${data.userId}`,
-      //       icon: <HomeIcon />,
-      //     }),
-      //   } as RouteHandleObject,
-      // },
+      {
+        path: "privacy",
+        element: <PrivacyPage />,
+        handle: {
+          crumb: {
+            to: "/privacy",
+            label: "Privacy Policy",
+          },
+          hideBreadcrumbs: false,
+        } as RouteHandleObject,
+      },
+      ...productRoutes,
+      ...userRoutes,
     ],
   },
 ];
