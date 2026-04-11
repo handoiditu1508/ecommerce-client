@@ -1,5 +1,6 @@
+import RouteBasedBreadcrumbs from "@/components/RouteBasedBreadcrumbs";
 import Suspense from "@/components/Suspense";
-import { BreakpointsContext } from "@/contexts/breakpoints";
+import { BreakpointsContext, lgAndUpMediaQuery, smMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
@@ -43,6 +44,21 @@ function InnerAdminLayout() {
             justifyContent: "flex-start",
             minHeight: "calc(100vh - var(--header-client-height))",
           }}>{/* spacing between sidebar & header */}
+          <LayoutContainer sx={{
+            [lgAndUpMediaQuery(theme.breakpoints)]: {
+              pt: 2,
+              mb: -2,
+            },
+            [smMediaQuery(theme.breakpoints)]: {
+              pl: 2,
+            },
+            [xsAndDownMediaQuery(theme.breakpoints)]: {
+              pl: 1,
+            },
+            zIndex: 1,
+          }}>{/* container for breadcrumb */}
+            <RouteBasedBreadcrumbs />
+          </LayoutContainer>
           <LayoutContainer sx={{
             paddingY: { lg: 4 },
             flexGrow: 1,
