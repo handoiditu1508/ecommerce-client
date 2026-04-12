@@ -4,20 +4,22 @@ import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { useCountAllProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const pageSize = 12;
 
 function NewProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page")!) || 1;
   const countAllProductsResult = useCountAllProductsQuery();
   const getNewProductsQuery = useMemo<GetNewProductsQuery>(() => ({ page, pageSize }), [page]);
   const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
   const totalPage = countAllProductsResult.data !== undefined ? Math.ceil(countAllProductsResult.data / pageSize) : 1;
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {
-    setPage(page);
+    setSearchParams({ page: page.toString() });
   };
 
   return (

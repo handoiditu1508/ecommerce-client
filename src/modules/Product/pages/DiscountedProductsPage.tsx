@@ -4,20 +4,22 @@ import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedP
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const pageSize = 12;
 
 function DiscountedProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page")!) || 1;
   const countDiscountedProductsResult = useCountDiscountedProductsQuery();
   const getDiscountedProductsQuery = useMemo<GetDiscountedProductsQuery>(() => ({ page, pageSize }), [page]);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
   const totalPage = countDiscountedProductsResult.data !== undefined ? Math.ceil(countDiscountedProductsResult.data / pageSize) : 1;
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {
-    setPage(page);
+    setSearchParams({ page: page.toString() });
   };
 
   return (
