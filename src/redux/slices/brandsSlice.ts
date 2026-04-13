@@ -6,9 +6,11 @@ const brandsAdapter = createEntityAdapter<Brand>({
   sortComparer: (brand1, brand2) => brand1.name.localeCompare(brand2.name),
 });
 
+const initialState = brandsAdapter.getInitialState();
+
 const brandsSlice = createSlice({
   name: "brands",
-  initialState: brandsAdapter.getInitialState(),
+  initialState,
   reducers: {
     setAllBrands: brandsAdapter.setAll,
   },

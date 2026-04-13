@@ -18,13 +18,13 @@ function ProductVariantsEditButton() {
     <>
       <ButtonBase
         sx={{
-          color: theme.vars.palette.text.secondary,
+          color: theme.vars.palette.primary.contrastText,
           display: "flex",
           alignItems: "center",
           width: "fit-content",
           maxWidth: "100%",
           borderRadius: 1,
-          backgroundColor: theme.vars.palette.grey[300],
+          backgroundColor: theme.vars.palette.primary.main,
           px: 0.5,
           gap: 0.5,
           [smAndUpMediaQuery(theme.breakpoints)]: {

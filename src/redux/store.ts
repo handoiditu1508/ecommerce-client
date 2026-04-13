@@ -3,8 +3,11 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import appApi from "./apis/appApi";
 import authSlice from "./slices/authSlice";
 import brandsSlice from "./slices/brandsSlice";
+import cartSlice from "./slices/cartSlice";
 import counterSlice from "./slices/counterSlice";
 import { notificationSlice } from "./slices/notificationSlice";
+import { getPreloadedCartState } from "./utils/cartUtils";
+import listenerMiddleware from "./utils/listenerMiddleware";
 import rtkQueryErrorLoggerMiddleware from "./utils/rtkQueryErrorLoggerMiddleware";
 
 // development environment only
@@ -15,15 +18,23 @@ const store = configureStore({
   reducer: {
     [authSlice.name]: authSlice.reducer,
     [brandsSlice.name]: brandsSlice.reducer,
+    [cartSlice.name]: cartSlice.reducer,
     [counterSlice.name]: counterSlice.reducer,
     [notificationSlice.name]: notificationSlice.reducer,
     [appApi.reducerPath]: appApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
-    appApi.middleware,
-    rtkQueryErrorLoggerMiddleware,
-    // logger,
-  ),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+    .concat(
+      appApi.middleware,
+      rtkQueryErrorLoggerMiddleware,
+      // logger,
+    )
+    .prepend(
+      listenerMiddleware.middleware,
+    ),
+  preloadedState: {
+    cart: getPreloadedCartState(),
+  },
 });
 
 setupListeners(store.dispatch);
