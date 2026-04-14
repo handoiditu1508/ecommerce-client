@@ -4,6 +4,7 @@ import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints"
 import { useAppDispatch } from "@/hooks";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
+import { ProductVariant } from "@/models/entities/Product";
 import { useGetProductQuery } from "@/redux/apis/productApi";
 import { addToCart } from "@/redux/slices/cartSlice";
 import Box from "@mui/material/Box";
@@ -35,8 +36,13 @@ function ProductDetailPage() {
   const productId = parseInt(params.id!);
   const getProductQuery = useMemo<GetProductQuery>(() => ({ productId }), [productId]);
   const getProductResult = useGetProductQuery(getProductQuery, { skip: isNaN(productId) });
+  const product = getProductResult.currentData;
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedVariantId, setSelectedVariantId] = useState<number>();
+  const selectedVariant = useMemo<ProductVariant | undefined>(
+    () => product && selectedVariantId ? product.productVariants.find((v) => v.id === selectedVariantId) : undefined,
+    [product, selectedVariantId]
+  );
 
   const handleAddToCartButtonClick = () => {
     if (smAndDown) {
@@ -58,8 +64,6 @@ function ProductDetailPage() {
     }
   }, [mdAndUp]);
 
-  const product = getProductResult.currentData;
-
   const ProductTitle = <Typography variant="h3">{product ? product.name : <Skeleton variant="text" width="80%" />}</Typography>;
 
   const ProductPrice = (
@@ -67,7 +71,7 @@ function ProductDetailPage() {
       {product
         ? <>
           <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(product.discountPrice)}</Typography>
-          <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(product.price)}</Typography>
+          <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency((selectedVariant && selectedVariant.price) || product.price)}</Typography>
           <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
         </>
         : <Typography variant="h5"><Skeleton variant="text" width={100} /></Typography>}

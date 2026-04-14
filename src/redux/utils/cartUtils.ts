@@ -107,7 +107,7 @@ export const generateCartProductVariantData = (product: Product, productVariantI
     productVariantName: productVariant.name,
     quantity,
     thumbnailPath: productVariant.thumbnailPath || product.thumbnailPath,
-    price: product.price,
+    price: productVariant.price || product.price,
     discountPrice: product.discountPrice,
     totalPrice: product.discountPrice * quantity,
   };
