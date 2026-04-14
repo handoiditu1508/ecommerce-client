@@ -1,9 +1,11 @@
 import { toVndCurrency } from "@/common/formats";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useAppDispatch } from "@/hooks";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { useGetProductQuery } from "@/redux/apis/productApi";
+import { addToCart } from "@/redux/slices/cartSlice";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -27,15 +29,26 @@ import SocialSharingButtonGroup from "./SocialSharingButtonGroup";
 function ProductDetailPage() {
   const theme = useTheme();
   const { xsAndDown, smAndDown, sm, smAndUp, mdAndUp } = useContext(BreakpointsContext);
+  const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
   const params = useParams();
   const productId = parseInt(params.id!);
   const getProductQuery = useMemo<GetProductQuery>(() => ({ productId }), [productId]);
   const getProductResult = useGetProductQuery(getProductQuery, { skip: isNaN(productId) });
+  const [quantity, setQuantity] = useState<number>(1);
+  const [selectedVariantId, setSelectedVariantId] = useState<number>();
 
   const handleAddToCartButtonClick = () => {
     if (smAndDown) {
       setAttributeDialogOpen(true);
+    } else {
+      if (product && selectedVariantId) {
+        dispatch(addToCart({
+          product,
+          productVariantId: selectedVariantId,
+          quantity,
+        }));
+      }
     }
   };
 
@@ -109,7 +122,7 @@ function ProductDetailPage() {
       ? (
         <NumberSpinner
           min={1}
-          defaultValue={1}
+          value={quantity}
           size="small"
           sx={{
             maxWidth: 200,
@@ -117,6 +130,7 @@ function ProductDetailPage() {
             alignSelf: "flex-end",
             mt: 4,
           }}
+          onValueChange={(value) => setQuantity(value || 1)}
         />
       )
       : (
@@ -189,6 +203,7 @@ function ProductDetailPage() {
               open={attributeDialogOpen}
               variants={product.productVariants}
               confirmButtonText="Add to cart"
+              onChange={setSelectedVariantId}
               onClose={() => setAttributeDialogOpen(false)}
             />}
           </>}
@@ -210,7 +225,7 @@ function ProductDetailPage() {
             {ProductRating}
           </Box>
           <Divider sx={{ my: 1 }} />
-          <ProductVariantSelector variants={product ? product.productVariants : undefined} />
+          <ProductVariantSelector variants={product ? product.productVariants : undefined} onChange={setSelectedVariantId} />
           {QuantityInput}
           {AddToCartButton}
         </Box>}

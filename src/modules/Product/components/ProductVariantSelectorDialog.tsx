@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { ProductVariant } from "@/models/entities/Product";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,13 +11,15 @@ import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { useTheme } from "@mui/material/styles";
 import { TransitionProps } from "@mui/material/transitions";
-import React, { useContext, useId } from "react";
+import React, { Dispatch, useContext, useId, useState } from "react";
 import ProductVariantSelector from "./ProductVariantSelector/ProductVariantSelector";
 
 type ProductVariantSelectorDialogProps = {
   open: boolean;
   variants: ProductVariant[];
   confirmButtonText?: string;
+  defaultVariantId?: number;
+  onChange?: Dispatch<number>;
   onClose: () => void;
 };
 
@@ -31,11 +34,21 @@ function ProductVariantSelectorDialog({
   open,
   variants,
   confirmButtonText = "Confirm",
+  defaultVariantId,
+  onChange = CONFIG.EMPTY_FUNCTION,
   onClose,
 }: ProductVariantSelectorDialogProps) {
   const dialogLabelId = useId();
   const theme = useTheme();
   const { smAndDown } = useContext(BreakpointsContext);
+  const [selectedVariantId, setSelectedVariantId] = useState<number | undefined>(defaultVariantId);
+
+  const handleConfirm = () => {
+    if (selectedVariantId) {
+      onChange(selectedVariantId);
+    }
+    onClose();
+  };
 
   return (
     <Dialog
@@ -63,10 +76,10 @@ function ProductVariantSelectorDialog({
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <ProductVariantSelector variants={variants} />
+        <ProductVariantSelector variants={variants} defaultVariantId={defaultVariantId} onChange={setSelectedVariantId} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{confirmButtonText}</Button>
+        <Button disabled={selectedVariantId === undefined} onClick={handleConfirm}>{confirmButtonText}</Button>
       </DialogActions>
     </Dialog>
   );

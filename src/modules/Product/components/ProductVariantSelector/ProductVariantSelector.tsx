@@ -2,15 +2,26 @@ import CONFIG from "@/configs";
 import { ProductVariant } from "@/models/entities/Product";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import ProductVariantChip from "./ProductVariantChip";
 
 type ProductVariantSelectorProps = {
   variants?: ProductVariant[];
+  defaultVariantId?: number;
+  onChange?: Dispatch<number>;
 };
 
-function ProductVariantSelector({ variants = CONFIG.EMPTY_ARRAY }: ProductVariantSelectorProps) {
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
+function ProductVariantSelector({
+  variants = CONFIG.EMPTY_ARRAY,
+  defaultVariantId,
+  onChange = CONFIG.EMPTY_FUNCTION,
+}: ProductVariantSelectorProps) {
+  const [selectedVariantId, setSelectedVariantId] = useState<number | undefined>(defaultVariantId);
+
+  const handleSelectVariant = (variantId: number) => {
+    setSelectedVariantId(variantId);
+    onChange(variantId);
+  };
 
   return (
     <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -18,8 +29,8 @@ function ProductVariantSelector({ variants = CONFIG.EMPTY_ARRAY }: ProductVarian
         ? variants.map((v) => <ProductVariantChip
           key={v.id}
           value={v}
-          selected={selectedVariant === v}
-          onSelected={() => setSelectedVariant(v)}
+          selected={selectedVariantId === v.id}
+          onSelected={() => handleSelectVariant(v.id)}
         />)
         : [...Array(5)].map((_, i) => <Skeleton
           key={i}
