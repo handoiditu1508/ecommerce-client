@@ -57,6 +57,29 @@ const cartSlice = createSlice({
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
       }
     },
+    removeFromCart: (state, action: PayloadAction<{ productId: number; productVariantId: number; }>) => {
+      const isHydrated = !isCartHydrated(state);
+      if (isHydrated) {
+        const [cartItemDatas, removedData] = removeFromHydratedDatas(
+          state.cartItemDatas,
+          action.payload.productId,
+          action.payload.productVariantId
+        );
+
+        state.cartItemDatas = cartItemDatas;
+        if (removedData) {
+          productsAdapter.removeOne(state, removedData.productId);
+        }
+      } else {
+        const [dehydratedCartItemDatas] = removeFromDehydratedDatas(
+          state.dehydratedCartItemDatas,
+          action.payload.productId,
+          action.payload.productVariantId
+        );
+
+        state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+      }
+    },
   },
 });
 
@@ -98,6 +121,32 @@ const addToDehydratedDatas = (
         [productVariantId]: quantity,
       },
     });
+  }
+
+  return [datas, removedData];
+};
+
+const removeFromDehydratedDatas = (
+  datas: DehydratedCartItemData[],
+  productId: number,
+  productVariantId: number
+): [DehydratedCartItemData[], DehydratedCartItemData | undefined] => {
+  let removedData: DehydratedCartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === productId);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    // remove variant data
+    delete data.productVariants[productVariantId];
+
+    // check over all quantity of data
+    const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
   }
 
   return [datas, removedData];
@@ -155,8 +204,38 @@ const addToHydratedDatas = (
   return [datas, removedData];
 };
 
+const removeFromHydratedDatas = (
+  datas: CartItemData[],
+  productId: number,
+  productVariantId: number
+): [CartItemData[], CartItemData | undefined] => {
+  let removedData: CartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === productId);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    // remove variant data
+    const variantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === productVariantId);
+    if (variantDataIndex !== -1) {
+      data.productVariants.splice(variantDataIndex, 1);
+    }
+
+    // check over all quantity of data
+    const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
+  }
+
+  return [datas, removedData];
+};
+
 export const {
   addToCart,
+  removeFromCart,
 } = cartSlice.actions;
 
 export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
