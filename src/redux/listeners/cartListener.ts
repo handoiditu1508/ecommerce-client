@@ -1,11 +1,11 @@
 import { isAnyOf, TypedStartListening } from "@reduxjs/toolkit";
-import { addToCart, removeFromCart, selectIsCartHydrated } from "../slices/cartSlice";
+import { addToCart, changeProductVariantInCart, removeFromCart, selectIsCartHydrated } from "../slices/cartSlice";
 import { AppDispatch, RootState } from "../store";
 import { cartStorageKey, dehydrateCartItemData, DehydratedCartItemData } from "../utils/cartUtils";
 
 const registerCartListener = (startAppListening: TypedStartListening<RootState, AppDispatch, unknown>) => {
   startAppListening({
-    matcher: isAnyOf(addToCart, removeFromCart),
+    matcher: isAnyOf(addToCart, removeFromCart, changeProductVariantInCart),
     effect: async (action, api) => {
       // cancel previous pending executions
       api.cancelActiveListeners();

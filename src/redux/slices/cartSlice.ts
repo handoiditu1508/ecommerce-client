@@ -80,6 +80,35 @@ const cartSlice = createSlice({
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
       }
     },
+    changeProductVariantInCart: (state, action: PayloadAction<{ product: Product; prevProductVariantId: number; nextProductVariantId: number; }>) => {
+      if (action.payload.prevProductVariantId === action.payload.nextProductVariantId) {
+        return;
+      }
+
+      const isHydrated = !isCartHydrated(state);
+      if (isHydrated) {
+        const [cartItemDatas, removedData] = changeHydratedProductVariantData(
+          state.cartItemDatas,
+          action.payload.product,
+          action.payload.prevProductVariantId,
+          action.payload.nextProductVariantId
+        );
+
+        state.cartItemDatas = cartItemDatas;
+        if (removedData) {
+          productsAdapter.removeOne(state, removedData.productId);
+        }
+      } else {
+        const [dehydratedCartItemDatas] = changeDehydratedProductVariantData(
+          state.dehydratedCartItemDatas,
+          action.payload.product.id,
+          action.payload.prevProductVariantId,
+          action.payload.nextProductVariantId
+        );
+
+        state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+      }
+    },
   },
 });
 
@@ -139,6 +168,41 @@ const removeFromDehydratedDatas = (
 
     // remove variant data
     delete data.productVariants[productVariantId];
+
+    // check over all quantity of data
+    const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
+  }
+
+  return [datas, removedData];
+};
+
+const changeDehydratedProductVariantData = (
+  datas: DehydratedCartItemData[],
+  productId: number,
+  prevProductVariantId: number,
+  nextProductVariantId: number,
+): [DehydratedCartItemData[], DehydratedCartItemData | undefined] => {
+  let removedData: DehydratedCartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === productId);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    // move quantity to the new variant data
+    data.productVariants[nextProductVariantId] = (data.productVariants[nextProductVariantId] || 0) + (data.productVariants[prevProductVariantId] || 0);
+
+    // remove variant data
+    delete data.productVariants[prevProductVariantId];
+
+    // check invalid variant data quantity
+    if (data.productVariants[nextProductVariantId] < 1) {
+      delete data.productVariants[nextProductVariantId];
+    }
 
     // check over all quantity of data
     const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
@@ -233,9 +297,62 @@ const removeFromHydratedDatas = (
   return [datas, removedData];
 };
 
+const changeHydratedProductVariantData = (
+  datas: CartItemData[],
+  product: Product,
+  prevProductVariantId: number,
+  nextProductVariantId: number
+): [CartItemData[], CartItemData | undefined] => {
+  let removedData: CartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === product.id);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    // move quantity to the new variant data
+    const prevVariantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === prevProductVariantId);
+    let nextVariantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === nextProductVariantId);
+    let nextVariantData: CartProductVariantData | undefined = undefined;
+    if (prevVariantDataIndex !== -1) {
+      const prevVariantData = data.productVariants[prevVariantDataIndex];
+      if (nextVariantDataIndex === -1) {
+        nextVariantData = generateCartProductVariantData(product, nextProductVariantId, prevVariantData.quantity);
+        if (!nextVariantData) {
+          return [datas, removedData];
+        }
+        nextVariantDataIndex = data.productVariants.length;
+        data.productVariants.push(nextVariantData);
+      } else {
+        nextVariantData = data.productVariants[nextVariantDataIndex];
+        nextVariantData.quantity += prevVariantData.quantity;
+      }
+
+      // remove variant data
+      data.productVariants.splice(prevVariantDataIndex, 1);
+      nextVariantDataIndex = nextVariantDataIndex < prevVariantDataIndex ? nextVariantDataIndex : nextVariantDataIndex - 1;
+
+      // check invalid variant data quantity
+      if (nextVariantData && nextVariantData.quantity < 1) {
+        data.productVariants.splice(nextVariantDataIndex, 1);
+      }
+    }
+
+    // check over all quantity of data
+    const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
+  }
+
+  return [datas, removedData];
+};
+
 export const {
   addToCart,
   removeFromCart,
+  changeProductVariantInCart,
 } = cartSlice.actions;
 
 export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
