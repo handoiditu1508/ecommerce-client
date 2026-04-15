@@ -3,6 +3,10 @@ import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@r
 import { RootState } from "../store";
 import { CartItemData, CartProductVariantData, DehydratedCartItemData, generateCartItemData, generateCartProductVariantData } from "../utils/cartUtils";
 
+/**
+ * Limit products stored in local storage
+ */
+const productLimit = 50;
 const productsAdapter = createEntityAdapter<Product>({
   sortComparer: (product1, product2) => product1.id - product2.id,
 });
@@ -120,6 +124,10 @@ const addToDehydratedDatas = (
   productVariantId: number,
   quantity: number
 ): [DehydratedCartItemData[], DehydratedCartItemData | undefined] => {
+  if (datas.length > productLimit) {
+    return [datas, undefined];
+  }
+
   let removedData: DehydratedCartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
@@ -222,6 +230,10 @@ const addToHydratedDatas = (
   productVariantId: number,
   quantity: number
 ): [CartItemData[], CartItemData | undefined] => {
+  if (datas.length > productLimit) {
+    return [datas, undefined];
+  }
+
   let removedData: CartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === product.id);
   if (dataIndex !== -1) {
