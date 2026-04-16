@@ -1,7 +1,8 @@
 import Product from "@/models/entities/Product";
-import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
+import productApi from "../apis/productApi";
 import { RootState } from "../store";
-import { CartItemData, CartProductVariantData, DehydratedCartItemData, generateCartItemData, generateCartProductVariantData } from "../utils/cartUtils";
+import { CartItemData, CartProductVariantData, DehydratedCartItemData, generateCartItemData, generateCartProductVariantData, hydrateCartItemData } from "../utils/cartUtils";
 
 /**
  * Limit products stored in local storage
@@ -17,14 +18,37 @@ type CartOwnState = {
    */
   dehydratedCartItemDatas: DehydratedCartItemData[];
   cartItemDatas: CartItemData[];
+  isRehydratingCart: boolean;
 };
 export type CartState = EntityState<Product, number> & CartOwnState;
 
 const initialState: CartState = productsAdapter.getInitialState<CartOwnState>({
   dehydratedCartItemDatas: [],
   cartItemDatas: [],
+  isRehydratingCart: false,
 });
 export const cartInitialState = initialState;
+
+export const rehydrateCartAsync = createAsyncThunk<Product[], void>(
+  "cart/rehydrateCartAsync",
+  async (_arg, thunkApi) => {
+    const { cart: cartState } = thunkApi.getState() as RootState;
+
+    if (isCartHydrated(cartState)) {
+      throw Error("cart already hydrated!");
+    }
+
+    const response = await thunkApi.dispatch(productApi.endpoints.getProductsToRehydrateCart.initiate({
+      productIds: cartState.dehydratedCartItemDatas.map((d) => d.productId).sort(),
+    }));
+
+    if (response.data !== undefined) {
+      return response.data as Product[];
+    }
+
+    throw Error("error rehydrating cart!");
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -35,7 +59,7 @@ const cartSlice = createSlice({
         return;
       }
 
-      const isHydrated = !isCartHydrated(state);
+      const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = addToHydratedDatas(
           state.cartItemDatas,
@@ -62,7 +86,7 @@ const cartSlice = createSlice({
       }
     },
     removeFromCart: (state, action: PayloadAction<{ productId: number; productVariantId: number; }>) => {
-      const isHydrated = !isCartHydrated(state);
+      const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = removeFromHydratedDatas(
           state.cartItemDatas,
@@ -89,7 +113,7 @@ const cartSlice = createSlice({
         return;
       }
 
-      const isHydrated = !isCartHydrated(state);
+      const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = changeHydratedProductVariantData(
           state.cartItemDatas,
@@ -118,7 +142,7 @@ const cartSlice = createSlice({
         return;
       }
 
-      const isHydrated = !isCartHydrated(state);
+      const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = setQuantityForHydratedDatas(
           state.cartItemDatas,
@@ -144,6 +168,23 @@ const cartSlice = createSlice({
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(rehydrateCartAsync.pending, (state) => {
+        state.isRehydratingCart = true;
+      })
+      .addCase(rehydrateCartAsync.fulfilled, (state, action) => {
+        state.isRehydratingCart = false;
+        productsAdapter.setMany(state, action.payload);
+        state.cartItemDatas = state.dehydratedCartItemDatas
+          .filter((dehydratedData) => dehydratedData.productId in state.entities)
+          .map((dehydratedData) => hydrateCartItemData(dehydratedData, state.entities[dehydratedData.productId]));
+        state.dehydratedCartItemDatas = [];
+      })
+      .addCase(rehydrateCartAsync.rejected, (state) => {
+        state.isRehydratingCart = false;
+      });
   },
 });
 

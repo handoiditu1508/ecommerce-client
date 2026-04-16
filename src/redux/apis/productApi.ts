@@ -1,6 +1,7 @@
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
+import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
 import Product, { ProductView } from "@/models/entities/Product";
 import { providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
@@ -55,6 +56,17 @@ const productApi = appApi.injectEndpoints({
       },
       providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
     }),
+    getProductsToRehydrateCart: builder.query<Product[], GetProductsToRehydrateCartQuery>({
+      query: (arg) => {
+        const searchParams = new URLSearchParams();
+        for (const id of arg.productIds) {
+          searchParams.append("ids", id.toString());
+        }
+
+        return "/products/rehydratecart?" + searchParams.toString();
+      },
+      providesTags: (result, error) => providesListTags("Product", result, error),
+    }),
   }),
 });
 
@@ -66,4 +78,5 @@ export const {
   useGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
   useGetProductQuery,
+  useGetProductsToRehydrateCartQuery,
 } = productApi;
