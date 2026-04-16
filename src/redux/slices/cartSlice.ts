@@ -113,6 +113,37 @@ const cartSlice = createSlice({
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
       }
     },
+    setQuantityForCart: (state, action: PayloadAction<{ product: Product; productVariantId: number; quantity: number; }>) => {
+      if (!action.payload.quantity) {
+        return;
+      }
+
+      const isHydrated = !isCartHydrated(state);
+      if (isHydrated) {
+        const [cartItemDatas, removedData] = setQuantityForHydratedDatas(
+          state.cartItemDatas,
+          action.payload.product,
+          action.payload.productVariantId,
+          action.payload.quantity
+        );
+
+        state.cartItemDatas = cartItemDatas;
+        if (removedData) {
+          productsAdapter.removeOne(state, removedData.productId);
+        } else {
+          productsAdapter.setOne(state, action.payload.product);
+        }
+      } else {
+        const [dehydratedCartItemDatas] = setQuantityForDehydratedDatas(
+          state.dehydratedCartItemDatas,
+          action.payload.product.id,
+          action.payload.productVariantId,
+          action.payload.quantity
+        );
+
+        state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+      }
+    },
   },
 });
 
@@ -219,6 +250,44 @@ const changeDehydratedProductVariantData = (
       datas.unshift(data);
       removedData = undefined;
     }
+  }
+
+  return [datas, removedData];
+};
+
+const setQuantityForDehydratedDatas = (
+  datas: DehydratedCartItemData[],
+  productId: number,
+  productVariantId: number,
+  quantity: number
+): [DehydratedCartItemData[], DehydratedCartItemData | undefined] => {
+  let removedData: DehydratedCartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === productId);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    if (quantity > 0) {
+      data.productVariants[productVariantId] = quantity;
+    } else {
+      delete data.productVariants[productVariantId];
+    }
+
+    // check over all quantity of data
+    const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
+  } else {
+    // add new data to top
+    datas.unshift({
+      productId: productId,
+      productVariants: {
+        [productVariantId]: quantity,
+      },
+    });
   }
 
   return [datas, removedData];
@@ -361,10 +430,65 @@ const changeHydratedProductVariantData = (
   return [datas, removedData];
 };
 
+const setQuantityForHydratedDatas = (
+  datas: CartItemData[],
+  product: Product,
+  productVariantId: number,
+  quantity: number
+): [CartItemData[], CartItemData | undefined] => {
+  if (datas.length > productLimit) {
+    return [datas, undefined];
+  }
+
+  let removedData: CartItemData | undefined = undefined;
+  const dataIndex = datas.findIndex((d) => d.productId === product.id);
+  if (dataIndex !== -1) {
+    const [data] = datas.splice(dataIndex, 1);
+    removedData = data;
+
+    // get variant data
+    let variantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === productVariantId);
+    let variantData: CartProductVariantData | undefined = undefined;
+    if (variantDataIndex === -1) {
+      variantData = generateCartProductVariantData(product, productVariantId, 0);
+      if (!variantData) {
+        return [datas, removedData];
+      }
+      variantDataIndex = data.productVariants.length;
+      data.productVariants.push(variantData);
+    } else {
+      variantData = data.productVariants[variantDataIndex];
+    }
+
+    if (quantity > 0) {
+      variantData.quantity = quantity;
+    } else {
+      data.productVariants.splice(variantDataIndex, 1);
+    }
+
+    // check over all quantity of data
+    const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
+    if (hasVariantData) {
+    // keep last modified data on top
+      datas.unshift(data);
+      removedData = undefined;
+    }
+  } else {
+    // add new data to top
+    const data = generateCartItemData(product, productVariantId, quantity);
+    if (data) {
+      datas.unshift(data);
+    }
+  }
+
+  return [datas, removedData];
+};
+
 export const {
   addToCart,
   removeFromCart,
   changeProductVariantInCart,
+  setQuantityForCart,
 } = cartSlice.actions;
 
 export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
