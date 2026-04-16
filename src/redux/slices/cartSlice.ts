@@ -2,7 +2,7 @@ import Product from "@/models/entities/Product";
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
 import productApi from "../apis/productApi";
 import { RootState } from "../store";
-import { CartItemData, CartProductVariantData, DehydratedCartItemData, generateCartItemData, generateCartProductVariantData, hydrateCartItemData } from "../utils/cartUtils";
+import { CartItemData, CartProductVariantData, DehydratedCartItemData, generateCartItemData, generateCartProductVariantData, hydrateCartItemData, refreshCartItemData } from "../utils/cartUtils";
 
 /**
  * Limit products stored in local storage
@@ -38,6 +38,7 @@ export const rehydrateCartAsync = createAsyncThunk<Product[], void>(
       throw Error("cart already hydrated!");
     }
 
+    // sort so that cache key serialization can generate the same key even array instances are different
     const response = await thunkApi.dispatch(productApi.endpoints.getProductsToRehydrateCart.initiate({
       productIds: cartState.dehydratedCartItemDatas.map((d) => d.productId).sort(),
     }));
@@ -47,6 +48,27 @@ export const rehydrateCartAsync = createAsyncThunk<Product[], void>(
     }
 
     throw Error("error rehydrating cart!");
+  }
+);
+
+export const refreshCartAsync = createAsyncThunk<Product[], void>(
+  "cart/refreshCartAsync",
+  async (_arg, thunkApi) => {
+    const { cart: cartState } = thunkApi.getState() as RootState;
+
+    if (!isCartHydrated(cartState)) {
+      throw Error("cart not hydrated");
+    }
+
+    const response = await thunkApi.dispatch(productApi.endpoints.getProductsToRehydrateCart.initiate({
+      productIds: cartState.ids,
+    }));
+
+    if (response.data !== undefined) {
+      return response.data as Product[];
+    }
+
+    throw Error("error refreshing cart!");
   }
 );
 
@@ -184,6 +206,14 @@ const cartSlice = createSlice({
       })
       .addCase(rehydrateCartAsync.rejected, (state) => {
         state.isRehydratingCart = false;
+      })
+      .addCase(refreshCartAsync.fulfilled, (state, action) => {
+        productsAdapter.setMany(state, action.payload);
+        for (const data of state.cartItemDatas) {
+          if (data.productId in state.entities) {
+            refreshCartItemData(state.entities[data.productId], data);
+          }
+        }
       });
   },
 });
@@ -533,5 +563,6 @@ export const {
 } = cartSlice.actions;
 
 export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
+export const selectCachedProductIdsFromCart = (state: RootState) => state.cart.ids;
 
 export default cartSlice;

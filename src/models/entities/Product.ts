@@ -29,6 +29,7 @@ export type ProductVariant = {
   color?: string;
   thumbnailPath?: string;
   price?: number;
+  discountPrice?: number;
 };
 
 export type ProductView = {

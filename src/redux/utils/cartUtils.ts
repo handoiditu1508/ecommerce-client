@@ -108,9 +108,10 @@ export const generateCartProductVariantData = (product: Product, productVariantI
     quantity,
     thumbnailPath: productVariant.thumbnailPath || product.thumbnailPath,
     price: productVariant.price || product.price,
-    discountPrice: product.discountPrice,
-    totalPrice: product.discountPrice * quantity,
+    discountPrice: productVariant.discountPrice || product.discountPrice,
+    totalPrice: 0,
   };
+  data.totalPrice = data.discountPrice * quantity;
 
   return data;
 };
@@ -129,4 +130,21 @@ export const generateCartItemData = (product: Product, productVariantId: number,
   }
 
   return undefined;
+};
+
+export const refreshCartItemData = (product: Product, data: CartItemData) => {
+  data.productName = product.name;
+  for (let i = data.productVariants.length - 1; i >= 0; i--) {
+    const variantData = data.productVariants[i];
+    const productVariant = product.productVariants.find((v) => v.id === variantData.productVariantId);
+    if (productVariant) {
+      variantData.productVariantName = productVariant.name;
+      variantData.thumbnailPath = productVariant.thumbnailPath || product.thumbnailPath;
+      variantData.price = productVariant.price || product.price;
+      variantData.discountPrice = productVariant.discountPrice || product.discountPrice;
+      variantData.totalPrice = variantData.discountPrice * variantData.quantity;
+    } else {
+      data.productVariants.splice(i, 1);
+    }
+  }
 };

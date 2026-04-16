@@ -1,6 +1,8 @@
 import { toVndCurrency } from "@/common/formats";
 import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
+import { refreshCartAsync, rehydrateCartAsync, selectCachedProductIdsFromCart, selectIsCartHydrated } from "@/redux/slices/cartSlice";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -11,11 +13,29 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { useEffect } from "react";
 import CartItem from "./CartItem";
 
 const cartSummaryWidth = 400;
 function CartPage() {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const isCartHydrated = useAppSelector(selectIsCartHydrated);
+  const cachedProductIds = useAppSelector(selectCachedProductIdsFromCart);
+
+  useEffect(() => {
+    if (!isCartHydrated) {
+      dispatch(rehydrateCartAsync());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCartHydrated]);
+
+  useEffect(() => {
+    if (cachedProductIds.length) {
+      dispatch(refreshCartAsync());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cachedProductIds]);
 
   return (
     <LayoutContainer

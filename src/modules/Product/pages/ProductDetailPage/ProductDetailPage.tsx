@@ -70,7 +70,7 @@ function ProductDetailPage() {
     <Box>
       {product
         ? <>
-          <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(product.discountPrice)}</Typography>
+          <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency((selectedVariant && selectedVariant.discountPrice) || product.discountPrice)}</Typography>
           <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency((selectedVariant && selectedVariant.price) || product.price)}</Typography>
           <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
         </>
