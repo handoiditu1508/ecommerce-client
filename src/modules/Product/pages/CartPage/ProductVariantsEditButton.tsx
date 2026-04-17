@@ -1,4 +1,7 @@
 import { smAndUpMediaQuery } from "@/contexts/breakpoints";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { changeProductVariantInCart, selectCachedProductFromCart } from "@/redux/slices/cartSlice";
+import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import EditIcon from "@mui/icons-material/Edit";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useTheme } from "@mui/material/styles";
@@ -6,9 +9,16 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import ProductVariantSelectorDialog from "../../components/ProductVariantSelectorDialog";
 
-function ProductVariantsEditButton() {
+export type ProductVariantsEditButtonProps = {
+  cartData: CartItemData;
+  variantData: CartProductVariantData;
+};
+
+function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEditButtonProps) {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
+  const product = useAppSelector(selectCachedProductFromCart(cartData.productId));
 
   const handleClickEditAttributes = () => {
     setAttributeDialogOpen(true);
@@ -38,11 +48,22 @@ function ProductVariantsEditButton() {
           whiteSpace="nowrap"
           overflow="hidden"
           textOverflow="ellipsis">
-          Red, M (50kg - 59kg), Vaporeon
+          {variantData.productVariantName}
         </Typography>
         <EditIcon color="inherit" fontSize="inherit" />
       </ButtonBase>
-      <ProductVariantSelectorDialog open={attributeDialogOpen} confirmButtonText="Save" variants={[]} onClose={() => setAttributeDialogOpen(false)} />
+      <ProductVariantSelectorDialog
+        open={attributeDialogOpen}
+        confirmButtonText="Save"
+        variants={product.productVariants}
+        defaultVariantId={variantData.productVariantId}
+        onChange={(nextProductVariantId) => dispatch(changeProductVariantInCart({
+          product,
+          prevProductVariantId: variantData.productVariantId,
+          nextProductVariantId,
+        }))}
+        onClose={() => setAttributeDialogOpen(false)}
+      />
     </>
   );
 }

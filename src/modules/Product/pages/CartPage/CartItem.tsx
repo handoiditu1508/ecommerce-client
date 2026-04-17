@@ -1,6 +1,8 @@
 import { toVndCurrency } from "@/common/formats";
 import NumberSpinner from "@/components/NumberSpinner";
+import CONFIG from "@/configs";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Button, { buttonClasses } from "@mui/material/Button";
@@ -21,13 +23,17 @@ const cartImageSize = 160;
 const cartImageSizeXs = 80;
 const checkboxSize = 38;
 
-function CartItem() {
+export type CartItemProps = {
+  cartData: CartItemData;
+  variantData: CartProductVariantData;
+};
+
+function CartItem({ cartData, variantData }: CartItemProps) {
   const theme = useTheme();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
-  const productTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id nisi facilisis, rhoncus ex quis, molestie orci. Sed ullamcorper porttitor magna, vulputate semper metus tincidunt porta.";
 
   const TotalPriceText = (
-    <Typography variant="body1" color="primary" fontWeight={500}>{toVndCurrency(160000)}</Typography>
+    <Typography variant="body1" color="primary" fontWeight={500}>{toVndCurrency(variantData.totalPrice)}</Typography>
   );
 
   const CartItemActions = (
@@ -62,7 +68,7 @@ function CartItem() {
         <Checkbox size="small" />
         <CardMedia
           component="img"
-          image="https://placehold.co/600x400"
+          image={CONFIG.FILE_URL + variantData.thumbnailPath}
           alt="Product image"
           sx={{
             width: "var(--cart-image-size)",
@@ -87,20 +93,20 @@ function CartItem() {
             justifyContent: "space-between",
             alignItems: "center",
           }}>
-            <Tooltip title={productTitle} arrow>
+            <Tooltip title={cartData.productName} arrow>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 whiteSpace="nowrap"
                 overflow="hidden"
                 textOverflow="ellipsis">
-                {productTitle}
+                {cartData.productName}
               </Typography>
             </Tooltip>
             {smAndUp && TotalPriceText}
           </Box>
-          <Typography variant="body2">{toVndCurrency(80000)}</Typography>
-          <ProductVariantsEditButton />
+          <Typography variant="body2">{toVndCurrency(variantData.discountPrice)}</Typography>
+          <ProductVariantsEditButton cartData={cartData} variantData={variantData} />
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <NumberSpinner
               defaultValue={1}
