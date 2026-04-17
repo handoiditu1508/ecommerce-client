@@ -31,11 +31,11 @@ function CartPage() {
   }, [isCartHydrated]);
 
   useEffect(() => {
-    if (cachedProductIds.length) {
+    if (isCartHydrated && cachedProductIds.length) {
       dispatch(refreshCartAsync());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cachedProductIds]);
+  }, [isCartHydrated, cachedProductIds]);
 
   return (
     <LayoutContainer

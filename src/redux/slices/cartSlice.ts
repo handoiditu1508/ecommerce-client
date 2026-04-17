@@ -81,6 +81,7 @@ const cartSlice = createSlice({
         return;
       }
 
+      let removedCartData: CartItemData | DehydratedCartItemData | undefined = undefined;
       const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = addToHydratedDatas(
@@ -91,13 +92,9 @@ const cartSlice = createSlice({
         );
 
         state.cartItemDatas = cartItemDatas;
-        if (removedData) {
-          productsAdapter.removeOne(state, removedData.productId);
-        } else {
-          productsAdapter.setOne(state, action.payload.product);
-        }
+        removedCartData = removedData;
       } else {
-        const [dehydratedCartItemDatas] = addToDehydratedDatas(
+        const [dehydratedCartItemDatas, removedData] = addToDehydratedDatas(
           state.dehydratedCartItemDatas,
           action.payload.product.id,
           action.payload.productVariantId,
@@ -105,9 +102,17 @@ const cartSlice = createSlice({
         );
 
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+        removedCartData = removedData;
+      }
+
+      if (removedCartData) {
+        productsAdapter.removeOne(state, removedCartData.productId);
+      } else {
+        productsAdapter.setOne(state, action.payload.product);
       }
     },
     removeFromCart: (state, action: PayloadAction<{ productId: number; productVariantId: number; }>) => {
+      let removedCartData: CartItemData | DehydratedCartItemData | undefined = undefined;
       const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = removeFromHydratedDatas(
@@ -117,17 +122,20 @@ const cartSlice = createSlice({
         );
 
         state.cartItemDatas = cartItemDatas;
-        if (removedData) {
-          productsAdapter.removeOne(state, removedData.productId);
-        }
+        removedCartData = removedData;
       } else {
-        const [dehydratedCartItemDatas] = removeFromDehydratedDatas(
+        const [dehydratedCartItemDatas, removedData] = removeFromDehydratedDatas(
           state.dehydratedCartItemDatas,
           action.payload.productId,
           action.payload.productVariantId
         );
 
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+        removedCartData = removedData;
+      }
+
+      if (removedCartData) {
+        productsAdapter.removeOne(state, removedCartData.productId);
       }
     },
     changeProductVariantInCart: (state, action: PayloadAction<{ product: Product; prevProductVariantId: number; nextProductVariantId: number; }>) => {
@@ -135,6 +143,7 @@ const cartSlice = createSlice({
         return;
       }
 
+      let removedCartData: CartItemData | DehydratedCartItemData | undefined = undefined;
       const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = changeHydratedProductVariantData(
@@ -145,11 +154,9 @@ const cartSlice = createSlice({
         );
 
         state.cartItemDatas = cartItemDatas;
-        if (removedData) {
-          productsAdapter.removeOne(state, removedData.productId);
-        }
+        removedCartData = removedData;
       } else {
-        const [dehydratedCartItemDatas] = changeDehydratedProductVariantData(
+        const [dehydratedCartItemDatas, removedData] = changeDehydratedProductVariantData(
           state.dehydratedCartItemDatas,
           action.payload.product.id,
           action.payload.prevProductVariantId,
@@ -157,6 +164,11 @@ const cartSlice = createSlice({
         );
 
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+        removedCartData = removedData;
+      }
+
+      if (removedCartData) {
+        productsAdapter.removeOne(state, removedCartData.productId);
       }
     },
     setQuantityForCart: (state, action: PayloadAction<{ product: Product; productVariantId: number; quantity: number; }>) => {
@@ -164,6 +176,7 @@ const cartSlice = createSlice({
         return;
       }
 
+      let removedCartData: CartItemData | DehydratedCartItemData | undefined = undefined;
       const isHydrated = isCartHydrated(state);
       if (isHydrated) {
         const [cartItemDatas, removedData] = setQuantityForHydratedDatas(
@@ -174,13 +187,9 @@ const cartSlice = createSlice({
         );
 
         state.cartItemDatas = cartItemDatas;
-        if (removedData) {
-          productsAdapter.removeOne(state, removedData.productId);
-        } else {
-          productsAdapter.setOne(state, action.payload.product);
-        }
+        removedCartData = removedData;
       } else {
-        const [dehydratedCartItemDatas] = setQuantityForDehydratedDatas(
+        const [dehydratedCartItemDatas, removedData] = setQuantityForDehydratedDatas(
           state.dehydratedCartItemDatas,
           action.payload.product.id,
           action.payload.productVariantId,
@@ -188,6 +197,13 @@ const cartSlice = createSlice({
         );
 
         state.dehydratedCartItemDatas = dehydratedCartItemDatas;
+        removedCartData = removedData;
+      }
+
+      if (removedCartData) {
+        productsAdapter.removeOne(state, removedCartData.productId);
+      } else {
+        productsAdapter.setOne(state, action.payload.product);
       }
     },
   },
@@ -198,17 +214,22 @@ const cartSlice = createSlice({
       })
       .addCase(rehydrateCartAsync.fulfilled, (state, action) => {
         state.isRehydratingCart = false;
-        productsAdapter.setMany(state, action.payload);
+        // only cache products that still in cart (in case cart data are removed when products returned)
+        const uniqueIdSet = new Set(state.dehydratedCartItemDatas.map((d) => d.productId));
+        productsAdapter.setMany(state, action.payload.filter((p) => uniqueIdSet.has(p.id)));
+        // update hydrated cart data
         state.cartItemDatas = state.dehydratedCartItemDatas
           .filter((dehydratedData) => dehydratedData.productId in state.entities)
           .map((dehydratedData) => hydrateCartItemData(dehydratedData, state.entities[dehydratedData.productId]));
+        // clear dehydrated cart data
         state.dehydratedCartItemDatas = [];
       })
       .addCase(rehydrateCartAsync.rejected, (state) => {
         state.isRehydratingCart = false;
       })
       .addCase(refreshCartAsync.fulfilled, (state, action) => {
-        productsAdapter.setMany(state, action.payload);
+        // use updateMany to update cache without adding anymore cache (in case cart data are removed when products returned)
+        productsAdapter.updateMany(state, action.payload.map((p) => ({ id: p.id, changes: p })));
         for (const data of state.cartItemDatas) {
           if (data.productId in state.entities) {
             refreshCartItemData(state.entities[data.productId], data);
