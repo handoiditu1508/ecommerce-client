@@ -44,7 +44,7 @@ export const rehydrateCartAsync = createAsyncThunk<Product[], void>(
     }));
 
     if (response.data !== undefined) {
-      return response.data as Product[];
+      return response.data;
     }
 
     throw Error("error rehydrating cart!");
@@ -65,7 +65,7 @@ export const refreshCartAsync = createAsyncThunk<Product[], void>(
     }));
 
     if (response.data !== undefined) {
-      return response.data as Product[];
+      return response.data;
     }
 
     throw Error("error refreshing cart!");
@@ -214,6 +214,11 @@ const cartSlice = createSlice({
       })
       .addCase(rehydrateCartAsync.fulfilled, (state, action) => {
         state.isRehydratingCart = false;
+
+        if (!state.dehydratedCartItemDatas.length) {
+          return;
+        }
+
         // only cache products that still in cart (in case cart data are removed when products returned)
         const uniqueIdSet = new Set(state.dehydratedCartItemDatas.map((d) => d.productId));
         productsAdapter.setMany(state, action.payload.filter((p) => uniqueIdSet.has(p.id)));
