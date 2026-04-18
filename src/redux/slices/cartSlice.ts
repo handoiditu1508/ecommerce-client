@@ -503,6 +503,7 @@ const changeHydratedProductVariantData = (
       } else {
         nextVariantData = data.productVariants[nextVariantDataIndex];
         nextVariantData.quantity += prevVariantData.quantity;
+        nextVariantData.totalPrice = nextVariantData.discountPrice * nextVariantData.quantity;
       }
 
       // remove variant data
@@ -559,6 +560,7 @@ const setQuantityForHydratedDatas = (
 
     if (quantity > 0) {
       variantData.quantity = quantity;
+      variantData.totalPrice = variantData.discountPrice * quantity;
     } else {
       data.productVariants.splice(variantDataIndex, 1);
     }
