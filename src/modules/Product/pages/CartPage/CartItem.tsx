@@ -2,6 +2,8 @@ import { toVndCurrency } from "@/common/formats";
 import NumberSpinner from "@/components/NumberSpinner";
 import CONFIG from "@/configs";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { removeFromCart, selectCachedProductFromCart, setQuantityForCart } from "@/redux/slices/cartSlice";
 import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
@@ -31,6 +33,8 @@ export type CartItemProps = {
 function CartItem({ cartData, variantData }: CartItemProps) {
   const theme = useTheme();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
+  const dispatch = useAppDispatch();
+  const product = useAppSelector(selectCachedProductFromCart(cartData.productId));
 
   const TotalPriceText = (
     <Typography variant="body1" color="primary" fontWeight={500}>{toVndCurrency(variantData.totalPrice)}</Typography>
@@ -48,7 +52,11 @@ function CartItem({ cartData, variantData }: CartItemProps) {
         size="small"
         sx={{
           color: theme.vars.palette.grey[500],
-        }}>
+        }}
+        onClick={() => dispatch(removeFromCart({
+          productId: cartData.productId,
+          productVariantId: variantData.productVariantId,
+        }))}>
         Remove
       </Button>
     </CardActions>
@@ -109,7 +117,7 @@ function CartItem({ cartData, variantData }: CartItemProps) {
           <ProductVariantsEditButton cartData={cartData} variantData={variantData} />
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <NumberSpinner
-              defaultValue={1}
+              value={variantData.quantity}
               min={0}
               sx={{
                 maxWidth: 100,
@@ -132,6 +140,11 @@ function CartItem({ cartData, variantData }: CartItemProps) {
                   },
                 },
               }}
+              onValueChange={(value) => dispatch(setQuantityForCart({
+                product,
+                productVariantId: variantData.productVariantId,
+                quantity: value || 0,
+              }))}
             />
             {xsAndDown && TotalPriceText}
           </Box>
