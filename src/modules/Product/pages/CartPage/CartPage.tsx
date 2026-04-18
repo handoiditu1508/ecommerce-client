@@ -3,6 +3,7 @@ import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/c
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { refreshCartAsync, rehydrateCartAsync, selectCachedProductIdsFromCart, selectCartItemDatas, selectIsCartHydrated } from "@/redux/slices/cartSlice";
+import { CartProductVariantData } from "@/redux/utils/cartUtils";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,7 +14,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CartItem from "./CartItem";
 
 const cartSummaryWidth = 400;
@@ -23,6 +24,15 @@ function CartPage() {
   const isCartHydrated = useAppSelector(selectIsCartHydrated);
   const cachedProductIds = useAppSelector(selectCachedProductIdsFromCart);
   const cartItemDatas = useAppSelector(selectCartItemDatas);
+  const totalVariantDatas = cartItemDatas.flatMap((d) => d.productVariants);
+  const [selectedVariantIds, setSelectedVariantIds] = useState<Record<number, boolean>>({});
+  const isAllSelected = totalVariantDatas.every((v) => selectedVariantIds[v.productVariantId]);
+  const subtotal = totalVariantDatas
+    .filter((v) => selectedVariantIds[v.productVariantId])
+    .reduce((sumVariantData: number, variantData: CartProductVariantData) => sumVariantData + variantData.totalPrice, 0);
+  const shippingFee = 10000;
+  const promoCodeDiscount = 0;
+  const total = subtotal + shippingFee + promoCodeDiscount;
 
   useEffect(() => {
     if (!isCartHydrated) {
@@ -37,6 +47,25 @@ function CartPage() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCartHydrated, cachedProductIds]);
+
+  const handleSelectCartItem = (productVariantId: number, checked: boolean) => {
+    if (!!selectedVariantIds[productVariantId] !== checked) {
+      setSelectedVariantIds({
+        ...selectedVariantIds,
+        [productVariantId]: checked,
+      });
+    }
+  };
+
+  const handleToggleSelectAll = (checked: boolean) => {
+    const result: Record<number, boolean> = {};
+    if (checked) {
+      for (const variantData of totalVariantDatas) {
+        result[variantData.productVariantId] = true;
+      }
+    }
+    setSelectedVariantIds(result);
+  };
 
   return (
     <LayoutContainer
@@ -72,6 +101,8 @@ function CartPage() {
                 "aria-label": "Select all",
               },
             }}
+            checked={isAllSelected}
+            onChange={(_event, checked) => handleToggleSelectAll(checked)}
           />
           <Box sx={{
             flex: 1,
@@ -84,7 +115,7 @@ function CartPage() {
             },
           }}>
             <Typography variant="h4">Shopping Cart</Typography>
-            <Typography variant="h5">3 Items</Typography>
+            <Typography variant="h5">{totalVariantDatas.length} Items</Typography>
           </Box>
         </Box>
         <Divider sx={{ mt: 2, mb: 1 }} />
@@ -93,6 +124,8 @@ function CartPage() {
             key={v.productVariantId}
             cartData={d}
             variantData={v}
+            checked={selectedVariantIds[v.productVariantId]}
+            onToggleSelect={(checked) => handleSelectCartItem(v.productVariantId, checked)}
           />)}
         </Fragment>)}
       </Box>
@@ -123,7 +156,7 @@ function CartPage() {
           justifyContent: "space-between",
         }}>
           <Typography variant="body1">Subtotal</Typography>
-          <Typography variant="body1">{toVndCurrency(480000)}</Typography>
+          <Typography variant="body1">{toVndCurrency(subtotal)}</Typography>
         </Box>
         <Box sx={{
           mt: 1,
@@ -147,7 +180,7 @@ function CartPage() {
           justifyContent: "space-between",
         }}>
           <Typography variant="body1">Total</Typography>
-          <Typography variant="body1">{toVndCurrency(490000)}</Typography>
+          <Typography variant="body1">{toVndCurrency(total)}</Typography>
         </Box>
         <Button color="primary" fullWidth sx={{ mt: 1 }}>Checkout</Button>
       </Paper>

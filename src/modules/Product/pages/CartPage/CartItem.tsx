@@ -18,7 +18,7 @@ import { useTheme } from "@mui/material/styles";
 import { svgIconClasses } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useContext } from "react";
+import { Dispatch, useContext } from "react";
 import ProductVariantsEditButton from "./ProductVariantsEditButton";
 
 const cartImageSize = 160;
@@ -28,9 +28,16 @@ const checkboxSize = 38;
 export type CartItemProps = {
   cartData: CartItemData;
   variantData: CartProductVariantData;
+  checked?: boolean;
+  onToggleSelect?: Dispatch<boolean>;
 };
 
-function CartItem({ cartData, variantData }: CartItemProps) {
+function CartItem({
+  cartData,
+  variantData,
+  checked = false,
+  onToggleSelect = CONFIG.EMPTY_FUNCTION,
+}: CartItemProps) {
   const theme = useTheme();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
@@ -73,7 +80,7 @@ function CartItem({ cartData, variantData }: CartItemProps) {
         },
       }}>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Checkbox size="small" />
+        <Checkbox size="small" checked={checked} onChange={(_event, checked) => onToggleSelect(checked)} />
         <CardMedia
           component="img"
           image={CONFIG.FILE_URL + variantData.thumbnailPath}
