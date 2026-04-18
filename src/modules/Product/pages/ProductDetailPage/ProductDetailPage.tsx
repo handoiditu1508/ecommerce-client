@@ -103,6 +103,7 @@ function ProductDetailPage() {
             mt: 4,
             mx: "auto",
           }}
+          disabled={selectedVariantId === undefined}
           onClick={handleAddToCartButtonClick}>
           Add to cart
         </Button>
