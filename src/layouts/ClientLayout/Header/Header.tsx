@@ -121,7 +121,7 @@ function Header() {
                 </Badge>
               </IconButton>
             </>}
-            {smAndUp && <IconButton component={Link} to="/" edge="end" sx={{ color: "inherit" }}>
+            {smAndUp && <IconButton component={Link} to="/cart" edge="end" sx={{ color: "inherit" }}>
               <ShoppingCartIcon />
             </IconButton>}
           </Stack>

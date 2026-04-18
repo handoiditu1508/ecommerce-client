@@ -7,7 +7,7 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
 import { useContext, useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 import withHeaderProvider from "./Header/withHeaderProvider";
@@ -59,8 +59,8 @@ function InnerClientLayout() {
             left: 0,
             right: 0,
           }}>
-          <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-          <BottomNavigationAction label="Cart" icon={<ShoppingCartIcon />} />
+          <BottomNavigationAction label="Home" icon={<HomeIcon />} component={Link} to="/" />
+          <BottomNavigationAction label="Cart" icon={<ShoppingCartIcon />} component={Link} to="/cart" />
         </BottomNavigation>
       </>}
     </Box>
