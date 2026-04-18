@@ -2,7 +2,7 @@ import { toVndCurrency } from "@/common/formats";
 import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
-import { refreshCartAsync, rehydrateCartAsync, selectCachedProductIdsFromCart, selectIsCartHydrated } from "@/redux/slices/cartSlice";
+import { refreshCartAsync, rehydrateCartAsync, selectCachedProductIdsFromCart, selectCartItemDatas, selectIsCartHydrated } from "@/redux/slices/cartSlice";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import CartItem from "./CartItem";
 
 const cartSummaryWidth = 400;
@@ -22,6 +22,7 @@ function CartPage() {
   const dispatch = useAppDispatch();
   const isCartHydrated = useAppSelector(selectIsCartHydrated);
   const cachedProductIds = useAppSelector(selectCachedProductIdsFromCart);
+  const cartItemDatas = useAppSelector(selectCartItemDatas);
 
   useEffect(() => {
     if (!isCartHydrated) {
@@ -87,7 +88,13 @@ function CartPage() {
           </Box>
         </Box>
         <Divider sx={{ mt: 2, mb: 1 }} />
-        <CartItem />
+        {cartItemDatas.map((d) => <Fragment key={d.productId}>
+          {d.productVariants.map((v) => <CartItem
+            key={v.productVariantId}
+            cartData={d}
+            variantData={v}
+          />)}
+        </Fragment>)}
       </Box>
       {/* right */}
       <Paper
