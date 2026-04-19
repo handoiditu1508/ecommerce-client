@@ -41,8 +41,8 @@ function InnerClientLayout() {
           mt: "var(--header-client-height)",
           flex: 1,
         }}>
-        <LayoutContainer disableGutters={false} sx={{ mt: 2 }}>
-          <RouteBasedBreadcrumbs />
+        <LayoutContainer disableGutters={false}>
+          <RouteBasedBreadcrumbs sx={{ mt: 2 }} />
         </LayoutContainer>
         <Suspense>
           <Outlet />
