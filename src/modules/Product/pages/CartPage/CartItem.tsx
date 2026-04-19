@@ -14,6 +14,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Checkbox from "@mui/material/Checkbox";
 import { inputBaseClasses } from "@mui/material/InputBase";
+import Skeleton from "@mui/material/Skeleton";
 import { useTheme } from "@mui/material/styles";
 import { svgIconClasses } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
@@ -26,8 +27,8 @@ const cartImageSizeXs = 80;
 const checkboxSize = 38;
 
 export type CartItemProps = {
-  cartData: CartItemData;
-  variantData: CartProductVariantData;
+  cartData?: CartItemData;
+  variantData?: CartProductVariantData;
   checked?: boolean;
   onToggleSelect?: Dispatch<boolean>;
 };
@@ -41,7 +42,21 @@ function CartItem({
   const theme = useTheme();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
-  const product = useAppSelector(selectCachedProductFromCart(cartData.productId));
+  const product = useAppSelector(selectCachedProductFromCart(cartData ? cartData.productId : 0));
+
+  if (!cartData || !variantData || !product) {
+    return (
+      <Skeleton
+        variant="rounded"
+        sx={{
+          height: 178,
+          [xsAndDownMediaQuery(theme.breakpoints)]: {
+            height: 136,
+          },
+        }}
+      />
+    );
+  }
 
   const TotalPriceText = (
     <Typography variant="body1" color="primary" fontWeight={500}>{toVndCurrency(variantData.totalPrice)}</Typography>

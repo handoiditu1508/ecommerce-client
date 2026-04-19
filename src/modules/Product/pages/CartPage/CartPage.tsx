@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { Fragment, useEffect, useState } from "react";
@@ -119,15 +120,23 @@ function CartPage() {
           </Box>
         </Box>
         <Divider sx={{ mt: 2, mb: 1 }} />
-        {cartItemDatas.map((d) => <Fragment key={d.productId}>
-          {d.productVariants.map((v) => <CartItem
-            key={v.productVariantId}
-            cartData={d}
-            variantData={v}
-            checked={selectedVariantIds[v.productVariantId]}
-            onToggleSelect={(checked) => handleSelectCartItem(v.productVariantId, checked)}
-          />)}
-        </Fragment>)}
+        <Stack gap={1}>
+          {isCartHydrated
+            ? (
+              cartItemDatas.map((d) => <Fragment key={d.productId}>
+                {d.productVariants.map((v) => <CartItem
+                  key={v.productVariantId}
+                  cartData={d}
+                  variantData={v}
+                  checked={selectedVariantIds[v.productVariantId]}
+                  onToggleSelect={(checked) => handleSelectCartItem(v.productVariantId, checked)}
+                />)}
+              </Fragment>)
+            )
+            : (
+              [...Array(3)].map((_, index) => <CartItem key={index} />)
+            )}
+        </Stack>
       </Box>
       {/* right */}
       <Paper
@@ -173,7 +182,7 @@ function CartPage() {
           <Typography variant="body2" component="label">Promo code</Typography>
           <OutlinedInput fullWidth size="small" placeholder="Enter your promocode" />
         </Box>
-        <Button color="secondary" sx={{ mt: 1 }}>Apply</Button>
+        <Button color="secondary" sx={{ mt: 1 }} disabled={!isCartHydrated}>Apply</Button>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Box sx={{
           display: "flex",
@@ -182,7 +191,7 @@ function CartPage() {
           <Typography variant="body1">Total</Typography>
           <Typography variant="body1">{toVndCurrency(total)}</Typography>
         </Box>
-        <Button color="primary" fullWidth sx={{ mt: 1 }}>Checkout</Button>
+        <Button color="primary" fullWidth sx={{ mt: 1 }} disabled={!isCartHydrated}>Checkout</Button>
       </Paper>
     </LayoutContainer>
   );

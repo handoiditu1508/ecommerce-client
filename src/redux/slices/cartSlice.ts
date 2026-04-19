@@ -594,6 +594,6 @@ const productsSelectors = productsAdapter.getSelectors<RootState>((state) => sta
 export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
 export const selectCachedProductIdsFromCart = (state: RootState) => state.cart.ids;
 export const selectCartItemDatas = (state: RootState) => state.cart.cartItemDatas;
-export const selectCachedProductFromCart = (id: number) => (state: RootState) => productsSelectors.selectById(state, id);
+export const selectCachedProductFromCart = (id: number) => (state: RootState): Product | undefined => productsSelectors.selectById(state, id);
 
 export default cartSlice;
