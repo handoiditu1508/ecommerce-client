@@ -133,10 +133,10 @@ function FilterCriteria() {
       <Box sx={{ flex: 1 }} />
       <Box sx={{
         display: "flex",
-        mt: 2,
         [smAndDownMediaQuery(theme.breakpoints)]: {
           justifyContent: "flex-end",
           gap: 1,
+          mt: 2,
           pr: 1,
         },
       }}>
