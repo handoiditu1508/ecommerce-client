@@ -24,7 +24,7 @@ function NewProductsPage() {
 
   return (
     <>
-      <ProductCardList products={getNewProductsResult.data} />
+      <ProductCardList products={getNewProductsResult.data} loading={getNewProductsResult.isFetching} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}

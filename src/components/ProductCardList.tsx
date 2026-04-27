@@ -7,9 +7,10 @@ import ProductCard from "./ProductCard";
 
 type ProductCardListProps = {
   products?: ProductView[];
+  loading?: boolean;
 };
 
-function ProductCardList({ products = CONFIG.EMPTY_ARRAY }: ProductCardListProps) {
+function ProductCardList({ products = CONFIG.EMPTY_ARRAY, loading }: ProductCardListProps) {
   const theme = useTheme();
 
   return (
@@ -34,7 +35,7 @@ function ProductCardList({ products = CONFIG.EMPTY_ARRAY }: ProductCardListProps
         gap: 0.75,
       },
     }}>
-      {products.length
+      {!loading
         ? products.map((p) => <ProductCard key={p.id} product={p} />)
         : [...new Array(12)].map((_, index) => <ProductCard key={index} />)}
     </Box>

@@ -31,7 +31,7 @@ function PromotionalProductList({
       <Container maxWidth="md" fixed>
         <Typography variant="h5">{title}</Typography>
       </Container>
-      {(loading || products.length) && <ProductCardList products={products} />}
+      {(loading || products.length) && <ProductCardList products={products} loading={loading} />}
       {!loading && products.length && viewAllUrlPath && <CustomButton
         to={viewAllUrlPath}
         variant="outlined"

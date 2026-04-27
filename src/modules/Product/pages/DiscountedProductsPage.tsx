@@ -24,7 +24,7 @@ function DiscountedProductsPage() {
 
   return (
     <>
-      <ProductCardList products={getDiscountedProductsResult.data} />
+      <ProductCardList products={getDiscountedProductsResult.data} loading={getDiscountedProductsResult.isFetching} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
