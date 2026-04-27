@@ -2,6 +2,7 @@ import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedP
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
+import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import Product, { ProductView } from "@/models/entities/Product";
 import { providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
@@ -36,6 +37,29 @@ const productApi = appApi.injectEndpoints({
       },
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
+    searchProducts: builder.query<ProductView[], SearchProductsQuery>({
+      query: (arg) => {
+        const searchParams = new URLSearchParams();
+        searchParams.set("searchText", arg.searchText);
+        if (arg.orderBy) {
+          searchParams.set("orderBy", arg.orderBy);
+          if (arg.orderByDescending) {
+            searchParams.set("orderByDescending", arg.orderByDescending.toString());
+          }
+        }
+        if (arg.page) {
+          searchParams.set("page", arg.page.toString());
+        }
+        if (arg.pageSize) {
+          searchParams.set("pageSize", arg.pageSize.toString());
+        }
+        if (arg.loadDiscountPrice) {
+          searchParams.set("loadDiscountPrice", arg.loadDiscountPrice.toString());
+        }
+
+        return "/products/search?" + searchParams.toString();
+      },
+    }),
     countAllProducts: builder.query<number, void>({
       query: () => "/products/count/all",
       providesTags: (_result, error) => providesCountTag("Product", error),
@@ -43,6 +67,14 @@ const productApi = appApi.injectEndpoints({
     countDiscountedProducts: builder.query<number, void>({
       query: () => "/products/count/discount",
       providesTags: (_result, error) => providesCountTag("Product", error),
+    }),
+    countSearchProducts: builder.query<number, CountSearchProductsQuery>({
+      query: (arg) => {
+        const searchParams = new URLSearchParams();
+        searchParams.set("searchText", arg.searchText);
+
+        return "/products/count/search?" + searchParams.toString();
+      },
     }),
     getProduct: builder.query<Product, GetProductQuery>({
       query: (arg) => {
@@ -77,6 +109,10 @@ export const {
   useCountAllProductsQuery,
   useGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
+  useSearchProductsQuery,
+  useLazySearchProductsQuery,
+  useCountSearchProductsQuery,
+  useLazyCountSearchProductsQuery,
   useGetProductQuery,
   useGetProductsToRehydrateCartQuery,
 } = productApi;
