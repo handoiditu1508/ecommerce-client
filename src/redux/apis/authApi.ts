@@ -5,8 +5,6 @@ import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/a
 import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
 import { SendEmailResponse } from "@/models/apis/common";
-import { FetchBaseQueryError, FetchBaseQueryMeta, QueryReturnValue } from "@reduxjs/toolkit/query";
-import { clearAuthState, setAuthState } from "../slices/authSlice";
 import appApi from "./appApi";
 
 const authApi = appApi.injectEndpoints({
@@ -17,30 +15,12 @@ const authApi = appApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
-        try {
-          const response = await queryFulfilled;
-          dispatch(setAuthState(response.data));
-        } catch {
-        }
-      },
     }),
     refreshToken: builder.mutation<LoginResponse, void>({
-      queryFn: async (arg, api, _extraOptions, baseQuery) => {
-        const res = await baseQuery({
-          url: "/auth/refreshToken",
-          method: "POST",
-          body: arg,
-        }) as QueryReturnValue<LoginResponse, FetchBaseQueryError, FetchBaseQueryMeta>;
-
-        if (res.data) {
-          api.dispatch(setAuthState(res.data));
-        } else if (res.error.status === 401) {
-          api.dispatch(clearAuthState());
-        }
-
-        return res;
-      },
+      query: () => ({
+        url: "/auth/refreshToken",
+        method: "POST",
+      }),
       invalidatesTags: (result) => (result ? ["UNAUTHORIZED"] : []),
     }),
     sendPreConfirmEmail: builder.mutation<SendEmailResponse, SendPreConfirmEmailCommand>({
@@ -56,13 +36,6 @@ const authApi = appApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
-        try {
-          const response = await queryFulfilled;
-          dispatch(setAuthState(response.data));
-        } catch {
-        }
-      },
     }),
     login2fa: builder.mutation<LoginResponse, Login2faCommand>({
       query: (body) => ({
@@ -70,13 +43,6 @@ const authApi = appApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
-        try {
-          const response = await queryFulfilled;
-          dispatch(setAuthState(response.data));
-        } catch {
-        }
-      },
     }),
     forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordCommand>({
       query: (body) => ({

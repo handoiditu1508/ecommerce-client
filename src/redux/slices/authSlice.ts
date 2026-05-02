@@ -50,26 +50,37 @@ export const loadAuthStateFromLocalAsync = createAsyncThunk(
   }
 );
 
+const applyLoginResponse = (state: AuthState, action: PayloadAction<LoginResponse>) => {
+  if (action.payload.expiration) {
+    state.expiration = action.payload.expiration;
+    localStorage.setItem(expirationStorageKey, state.expiration.toString());
+  }
+  if (action.payload.user) {
+    state.user = action.payload.user;
+  }
+  if (action.payload.refreshTokenExpiration) {
+    state.refreshTokenExpiration = action.payload.refreshTokenExpiration;
+    localStorage.setItem(refreshTokenExpirationStorageKey, state.refreshTokenExpiration.toString());
+  }
+};
+
+const updateAuthUser = (state: AuthState, action: PayloadAction<User>) => {
+  state.user = action.payload;
+};
+
+const logout = () => {
+  localStorage.removeItem(expirationStorageKey);
+  localStorage.removeItem(refreshTokenExpirationStorageKey);
+
+  return initialState;
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthState: (state, action: PayloadAction<LoginResponse>) => {
-      if (action.payload.expiration) {
-        state.expiration = action.payload.expiration;
-        localStorage.setItem(expirationStorageKey, state.expiration.toString());
-      }
-      if (action.payload.user) {
-        state.user = action.payload.user;
-      }
-      if (action.payload.refreshTokenExpiration) {
-        state.refreshTokenExpiration = action.payload.refreshTokenExpiration;
-        localStorage.setItem(refreshTokenExpirationStorageKey, state.refreshTokenExpiration.toString());
-      }
-    },
-    setAuthUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
-    },
+    setAuthState: applyLoginResponse,
+    setAuthUser: updateAuthUser,
     setAuthExpiration: (state, action: PayloadAction<number>) => {
       state.expiration = action.payload;
       localStorage.setItem(expirationStorageKey, state.expiration.toString());
@@ -79,12 +90,30 @@ const authSlice = createSlice({
       localStorage.setItem(refreshTokenExpirationStorageKey, state.refreshTokenExpiration.toString());
     },
     // use this to logout
-    clearAuthState: () => {
-      localStorage.removeItem(expirationStorageKey);
-      localStorage.removeItem(refreshTokenExpirationStorageKey);
-
-      return initialState;
-    },
+    clearAuthState: logout,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        (action: PayloadAction<LoginResponse>) =>
+          authApi.endpoints.login.matchFulfilled(action)
+          || authApi.endpoints.refreshToken.matchFulfilled(action)
+          || authApi.endpoints.registerConfirmedEmail.matchFulfilled(action)
+          || authApi.endpoints.login2fa.matchFulfilled(action),
+        applyLoginResponse
+      )
+      .addMatcher(
+        authApi.endpoints.refreshToken.matchRejected,
+        (state, action) => {
+          if (action.payload?.status === 401) {
+            logout();
+          }
+        }
+      )
+      .addMatcher(
+        userApi.endpoints.getSelf.matchFulfilled,
+        updateAuthUser
+      );
   },
 });
 

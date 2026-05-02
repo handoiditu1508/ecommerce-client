@@ -1,5 +1,6 @@
 import Brand from "@/models/entities/Brand";
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import brandApi from "../apis/brandApi";
 import { RootState } from "../store";
 
 const brandsAdapter = createEntityAdapter<Brand>({
@@ -13,6 +14,13 @@ const brandsSlice = createSlice({
   initialState,
   reducers: {
     setAllBrands: brandsAdapter.setAll,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        brandApi.endpoints.getAllBrands.matchFulfilled,
+        brandsAdapter.setAll
+      );
   },
 });
 
