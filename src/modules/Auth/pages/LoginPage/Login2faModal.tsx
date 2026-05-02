@@ -19,11 +19,6 @@ const formModel: DynamicFormModel<Login2faCommand> = {
   submitButtonText: "Sign in",
   inputs: [
     {
-      name: "username",
-      inputType: "hidden",
-      required: true,
-    },
-    {
       name: "token",
       inputType: "text",
       rules: {

@@ -7,8 +7,7 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
   | DynamicSelectInputModel<T, K>
   | DynamicAutoCompleteInputModel<T, K>
   | DynamicCheckboxInputModel<T, K>
-  | DynamicRadioInputModel<T, K>
-  | DynamicHiddenInputModel<T, K>;
+  | DynamicRadioInputModel<T, K>;
 
 type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
   name: K;
@@ -16,6 +15,7 @@ type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> =
   required?: boolean;
   readonly?: boolean;
   disabled?: boolean;
+  hidden?: boolean | ((data: T) => boolean);
   rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
   validateOnChange?: boolean;
 };
@@ -62,13 +62,6 @@ export type DynamicRadioInputModel<T extends Record<string, any>, K extends Path
   inputType: "radio";
   options: DynamicInputOption<T, K>[];
   row?: boolean;
-};
-
-export type DynamicHiddenInputModel<T extends Record<string, any>, K extends Path<T>> = {
-  name: K;
-  inputType: "hidden";
-  required?: boolean;
-  rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
 };
 
 export type DynamicFormModel<T extends Record<string, any>> = {

@@ -77,11 +77,6 @@ const formModel: DynamicFormModel<RegisterInput> = {
       validateOnChange: true,
     },
     {
-      name: "token",
-      inputType: "hidden",
-      required: true,
-    },
-    {
       name: "agreed",
       inputType: "checkbox",
       required: true,

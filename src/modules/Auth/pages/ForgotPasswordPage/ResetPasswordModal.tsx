@@ -23,16 +23,6 @@ const formModel: DynamicFormModel<ResetPasswordInput> = {
   submitButtonText: "Reset password",
   inputs: [
     {
-      name: "userId",
-      inputType: "hidden",
-      required: true,
-    },
-    {
-      name: "token",
-      inputType: "hidden",
-      required: true,
-    },
-    {
       name: "newPassword",
       inputType: "password",
       required: true,

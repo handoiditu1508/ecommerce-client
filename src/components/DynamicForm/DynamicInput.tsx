@@ -57,6 +57,10 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
+  const data = formContext.watch();
+
+  const hidden: boolean | undefined = typeof model.hidden === "function" ? model.hidden(data) : model.hidden;
+  if (hidden) return null;
 
   if (model.inputType === "text") {
     return (
@@ -523,12 +527,6 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           </FormControl>
         )}
       />
-    );
-  }
-
-  if (model.inputType === "hidden") {
-    return (
-      <input type="hidden" required={model.required} {...formContext.register(model.name, model.rules)} />
     );
   }
 }
