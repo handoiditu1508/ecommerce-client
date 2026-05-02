@@ -34,13 +34,6 @@ const productRoutes: RouteObject[] = [
         element: <ProductsPage />,
       },
       {
-        path: ":id",
-        element: <ProductDetailPage />,
-        handle: {
-          hideBreadcrumbs: true,
-        } as RouteHandleObject,
-      },
-      {
         path: "new",
         element: <NewProductsPage />,
         handle: {
@@ -60,6 +53,13 @@ const productRoutes: RouteObject[] = [
             label: "Discount",
             icon: <MdiSvgIcon path={mdiSale} />,
           },
+        } as RouteHandleObject,
+      },
+      {
+        path: ":id",
+        element: <ProductDetailPage />,
+        handle: {
+          hideBreadcrumbs: true,
         } as RouteHandleObject,
       },
     ],
