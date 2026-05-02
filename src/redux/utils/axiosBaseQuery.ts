@@ -29,6 +29,9 @@ const axiosBaseQuery = (
         params: arg.params,
         headers: arg.headers,
         withCredentials: true,
+        paramsSerializer: {
+          indexes: null,
+        },
       });
 
     return { data: result.data };

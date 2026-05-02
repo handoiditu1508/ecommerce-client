@@ -10,55 +10,27 @@ import appApi from "./appApi";
 const productApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     getNewProducts: builder.query<ProductView[], GetNewProductsQuery>({
-      query: (arg) => {
-        const searchParams = new URLSearchParams();
-        if (arg.page) {
-          searchParams.set("page", arg.page.toString());
-        }
-        if (arg.pageSize) {
-          searchParams.set("pageSize", arg.pageSize.toString());
-        }
-
-        return "/products/new?" + searchParams.toString();
-      },
+      query: (arg) => ({
+        url: "/products/new",
+        method: "GET",
+        params: arg,
+      }),
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
     getDiscountedProducts: builder.query<ProductView[], GetDiscountedProductsQuery>({
-      query: (arg) => {
-        const searchParams = new URLSearchParams();
-        if (arg.page) {
-          searchParams.set("page", arg.page.toString());
-        }
-        if (arg.pageSize) {
-          searchParams.set("pageSize", arg.pageSize.toString());
-        }
-
-        return "/products/discount?" + searchParams.toString();
-      },
+      query: (arg) => ({
+        url: "/products/discount",
+        method: "GET",
+        params: arg,
+      }),
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
     searchProducts: builder.query<ProductView[], SearchProductsQuery>({
-      query: (arg) => {
-        const searchParams = new URLSearchParams();
-        searchParams.set("searchText", arg.searchText);
-        if (arg.orderBy) {
-          searchParams.set("orderBy", arg.orderBy);
-          if (arg.orderByDescending) {
-            searchParams.set("orderByDescending", arg.orderByDescending.toString());
-          }
-        }
-        if (arg.page) {
-          searchParams.set("page", arg.page.toString());
-        }
-        if (arg.pageSize) {
-          searchParams.set("pageSize", arg.pageSize.toString());
-        }
-        if (arg.loadDiscountPrice) {
-          searchParams.set("loadDiscountPrice", arg.loadDiscountPrice.toString());
-        }
-
-        return "/products/search?" + searchParams.toString();
-      },
+      query: (arg) => ({
+        url: "/products/search",
+        method: "GET",
+        params: arg,
+      }),
     }),
     countAllProducts: builder.query<number, void>({
       query: () => "/products/count/all",
@@ -69,34 +41,30 @@ const productApi = appApi.injectEndpoints({
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
     countSearchProducts: builder.query<number, CountSearchProductsQuery>({
-      query: (arg) => {
-        const searchParams = new URLSearchParams();
-        searchParams.set("searchText", arg.searchText);
-
-        return "/products/count/search?" + searchParams.toString();
-      },
+      query: (arg) => ({
+        url: "/products/count/search",
+        method: "GET",
+        params: arg,
+      }),
     }),
     getProduct: builder.query<Product, GetProductQuery>({
-      query: (arg) => {
-        let url = `/products/${arg.productId}`;
-
-        if (arg.loadDiscountPrice !== undefined) {
-          url += `?loadDiscountPrice=${arg.loadDiscountPrice}`;
-        }
-
-        return url;
-      },
+      query: (arg) => ({
+        url: `/products/${arg.productId}`,
+        method: "GET",
+        params: {
+          loadDiscountPrice: arg.loadDiscountPrice,
+        },
+      }),
       providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
     }),
     getProductsToRehydrateCart: builder.query<Product[], GetProductsToRehydrateCartQuery>({
-      query: (arg) => {
-        const searchParams = new URLSearchParams();
-        for (const id of arg.productIds) {
-          searchParams.append("ids", id.toString());
-        }
-
-        return "/products/rehydratecart?" + searchParams.toString();
-      },
+      query: (arg) => ({
+        url: "/products/rehydratecart",
+        method: "GET",
+        params: {
+          ids: arg.productIds,
+        },
+      }),
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
   }),

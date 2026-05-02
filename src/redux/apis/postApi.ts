@@ -19,7 +19,14 @@ const postApi = appApi.injectEndpoints({
     }),
     // infinite scroll pagination
     getInfinitePosts: builder.infiniteQuery<Post[], { postTitle: string; }, { pageNumber: number; }>({
-      query: ({ queryArg, pageParam }) => `/posts?t=${queryArg.postTitle}&p=${pageParam.pageNumber}`,
+      query: ({ queryArg, pageParam }) => ({
+        url: "/posts",
+        method: "GET",
+        params: {
+          t: queryArg.postTitle,
+          p: pageParam.pageNumber,
+        },
+      }),
       infiniteQueryOptions: {
         initialPageParam: {
           pageNumber: 1,
