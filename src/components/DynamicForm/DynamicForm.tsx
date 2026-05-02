@@ -36,7 +36,7 @@ function DynamicForm<T extends Record<string, any>>({
   overwriteAutocompleteRenderOption = CONFIG.EMPTY_OBJECT,
   overwriteAutocompleteOnInputChange = CONFIG.EMPTY_OBJECT,
   overwriteLoading = CONFIG.EMPTY_OBJECT,
-  onSubmit = CONFIG.EMPTY_FUNCTION,
+  onSubmit,
   ...props
 }: DynamicFormProps<T>) {
   return (
