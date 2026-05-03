@@ -7,7 +7,8 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
   | DynamicSelectInputModel<T, K>
   | DynamicAutoCompleteInputModel<T, K>
   | DynamicCheckboxInputModel<T, K>
-  | DynamicRadioInputModel<T, K>;
+  | DynamicRadioInputModel<T, K>
+  | DynamicArrayInputModel<T, K>;
 
 type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
   name: K;
@@ -63,6 +64,26 @@ export type DynamicRadioInputModel<T extends Record<string, any>, K extends Path
   options: DynamicInputOption<T, K>[];
   row?: boolean;
 };
+
+export type DynamicArrayObjectInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "array";
+  itemInputs: DynamicInputModel<ArrayItemType<PathValue<T, K>>, Path<ArrayItemType<PathValue<T, K>>>>[];
+  addButtonText?: string;
+  removeButtonText?: string;
+  createDefaultValue: (data: T) => ArrayItemType<PathValue<T, K>>;
+};
+
+export type DynamicArrayPrimitiveInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+  inputType: "array";
+  itemInput: Omit<DynamicInputModel<ArrayItemType<PathValue<T, K>>, Path<ArrayItemType<PathValue<T, K>>>>, "name">;
+  addButtonText?: string;
+  removeButtonText?: string;
+  createDefaultValue: (data: T) => ArrayItemType<PathValue<T, K>>;
+};
+
+export type DynamicArrayInputModel<T extends Record<string, any>, K extends Path<T>> =
+  | DynamicArrayObjectInputModel<T, K>
+  | DynamicArrayPrimitiveInputModel<T, K>;
 
 export type DynamicFormModel<T extends Record<string, any>> = {
   inputs: {

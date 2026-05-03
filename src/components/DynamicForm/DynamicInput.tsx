@@ -24,6 +24,8 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
+import DynamicArrayInput from "./DynamicArrayInput";
+import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
 
 type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
@@ -39,6 +41,17 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   autocompleteRenderOption?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"];
   autocompleteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
   autocompleteLoading?: boolean;
+
+  // these props come from DynamicForm
+  startAdornmentMap?: DynamicFormProps<T>["startAdornmentMap"];
+  endAdornmentMap?: DynamicFormProps<T>["endAdornmentMap"];
+  labelMap?: DynamicFormProps<T>["labelMap"];
+  rulesMap?: DynamicFormProps<T>["rulesMap"];
+  optionsMap?: DynamicFormProps<T>["optionsMap"];
+  autocompleteRenderInputMap?: DynamicFormProps<T>["autocompleteRenderInputMap"];
+  autocompleteRenderOptionMap?: DynamicFormProps<T>["autocompleteRenderOptionMap"];
+  autocompleteOnInputChangeMap?: DynamicFormProps<T>["autocompleteOnInputChangeMap"];
+  autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
 };
 
 function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
@@ -54,6 +67,15 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteRenderOption,
   autocompleteOnInputChange,
   autocompleteLoading,
+  startAdornmentMap,
+  endAdornmentMap,
+  labelMap,
+  rulesMap,
+  optionsMap,
+  autocompleteRenderInputMap,
+  autocompleteRenderOptionMap,
+  autocompleteOnInputChangeMap,
+  autocompleteLoadingMap,
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
@@ -528,6 +550,26 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
           </FormControl>
         )}
+      />
+    );
+  }
+
+  if (model.inputType === "array") {
+    return (
+      <DynamicArrayInput
+        model={model}
+        formContext={formContext}
+        formLoading={formLoading}
+        label={label}
+        startAdornmentMap={startAdornmentMap}
+        endAdornmentMap={endAdornmentMap}
+        labelMap={labelMap}
+        rulesMap={rulesMap}
+        optionsMap={optionsMap}
+        autocompleteRenderInputMap={autocompleteRenderInputMap}
+        autocompleteRenderOptionMap={autocompleteRenderOptionMap}
+        autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
+        autocompleteLoadingMap={autocompleteLoadingMap}
       />
     );
   }

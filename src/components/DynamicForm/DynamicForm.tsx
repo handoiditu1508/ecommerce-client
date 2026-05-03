@@ -7,7 +7,7 @@ import { Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-
 import DynamicInput from "./DynamicInput";
 import { DynamicFormModel, DynamicInputOption } from "./models";
 
-type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
+export type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
   model: DynamicFormModel<T>;
   formContext: UseFormReturn<T>;
   loading?: boolean;
@@ -56,6 +56,15 @@ function DynamicForm<T extends Record<string, any>>({
           autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
           autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
           autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+          startAdornmentMap={startAdornmentMap}
+          endAdornmentMap={endAdornmentMap}
+          labelMap={labelMap}
+          rulesMap={rulesMap}
+          optionsMap={optionsMap}
+          autocompleteRenderInputMap={autocompleteRenderInputMap}
+          autocompleteRenderOptionMap={autocompleteRenderOptionMap}
+          autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
+          autocompleteLoadingMap={autocompleteLoadingMap}
         />
       ))}
       <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>
@@ -74,6 +83,15 @@ function DynamicForm<T extends Record<string, any>>({
           autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
           autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
           autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+          startAdornmentMap={startAdornmentMap}
+          endAdornmentMap={endAdornmentMap}
+          labelMap={labelMap}
+          rulesMap={rulesMap}
+          optionsMap={optionsMap}
+          autocompleteRenderInputMap={autocompleteRenderInputMap}
+          autocompleteRenderOptionMap={autocompleteRenderOptionMap}
+          autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
+          autocompleteLoadingMap={autocompleteLoadingMap}
         />
       ))}
     </Box>
