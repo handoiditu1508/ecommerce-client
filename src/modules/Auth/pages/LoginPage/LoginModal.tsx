@@ -128,7 +128,7 @@ function LoginModal({
         model={formModel}
         formContext={formContext}
         loading={result.isLoading}
-        overwriteLabel={{
+        labelMap={{
           isPersistent: (<Box sx={{ display: "flex" }}>
             Remember me
             <Box sx={{ flex: 1, cursor: "initial" }} onClick={preventDefault} />

@@ -92,7 +92,7 @@ function ResetPasswordModal({
         formContext={formContext}
         loading={result.isLoading}
         sx={{ mt: 10 }}
-        overwriteRules={{
+        rulesMap={{
           newPassword: {
             validate: (value) => {
               const validationResult = validatePassword(value);

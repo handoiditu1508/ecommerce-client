@@ -142,7 +142,7 @@ function RegisterModal({
         formContext={formContext}
         loading={result.isLoading}
         sx={{ mt: 10 }}
-        overwriteEndAdornment={{
+        endAdornmentMap={{
           email: (
             <IconButton
               aria-label="change email"
@@ -153,7 +153,7 @@ function RegisterModal({
             </IconButton>
           ),
         }}
-        overwriteRules={{
+        rulesMap={{
           password: {
             validate: (value) => {
               const validationResult = validatePassword(value);
@@ -164,7 +164,7 @@ function RegisterModal({
             },
           },
         }}
-        overwriteLabel={{
+        labelMap={{
           agreed: (<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>),
         }}
         onSubmit={handleSubmit}

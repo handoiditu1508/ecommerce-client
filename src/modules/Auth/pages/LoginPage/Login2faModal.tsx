@@ -133,7 +133,7 @@ function Login2faModal({
         formContext={formContext}
         loading={loading}
         sx={{ mt: 10 }}
-        overwriteLabel={{
+        labelMap={{
           isPersistent: (
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               Trusted device
