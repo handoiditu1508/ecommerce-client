@@ -12,12 +12,21 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Checkbox from "@mui/material/Checkbox";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { useContext } from "react";
+import { ActionDispatch, useContext } from "react";
 import BrandSelector from "./BrandSelector";
 import CategoryTree from "./CategoryTree";
 import PriceRangeSllider from "./PriceRangeSllider";
+import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
-function FilterCriteria() {
+export type FilterCriteriaProps = {
+  productsState: ProductsReducerState;
+  productsDispatch: ActionDispatch<[ProductsReducerAction]>;
+};
+
+function FilterCriteria({
+  productsState,
+  productsDispatch,
+}: FilterCriteriaProps) {
   const theme = useTheme();
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
 
@@ -68,7 +77,7 @@ function FilterCriteria() {
             maxHeight: 300,
           },
         }}>
-          <CategoryTree />
+          <CategoryTree productsState={productsState} productsDispatch={productsDispatch} />
         </AccordionDetails>
       </Accordion>
       <Accordion

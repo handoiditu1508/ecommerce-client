@@ -13,12 +13,22 @@ export type ProductsReducerAction = {
 } | {
   type: "SET_SEARCH_ORDERING";
   payload: SearchOrderingValue;
+} | {
+  type: "SET_CATEGORIES" | "SET_BRANDS";
+  payload: number[];
 };
 
 const initialState: ProductsReducerState = {
   searchOrdering: "createdDate-false",
   query: {
     searchText: "",
+    categoryIds: [],
+    includeSubCategories: false, // disabled since tree view will auto select all children
+    brandIds: [],
+    minPrice: 0,
+    maxPrice: 1000000,
+    orderBy: "createdDate",
+    orderByDescending: false,
   },
 };
 
@@ -32,6 +42,22 @@ const useProductsReducer = () =>
             query: {
               ...state.query,
               searchText: action.payload,
+            },
+          };
+        case "SET_CATEGORIES":
+          return {
+            ...state,
+            query: {
+              ...state.query,
+              categoryIds: action.payload,
+            },
+          };
+        case "SET_BRANDS":
+          return {
+            ...state,
+            query: {
+              ...state.query,
+              brandIds: action.payload,
             },
           };
         case "SET_SEARCH_ORDERING":

@@ -71,7 +71,7 @@ function ProductsPage() {
             </ButtonBase>
           </Divider>
           <Collapse in={isAdvancedSearchOpen}>
-            <FilterCriteria />
+            <FilterCriteria productsState={productsState} productsDispatch={productsDispatch} />
           </Collapse>
         </Box>
       )}

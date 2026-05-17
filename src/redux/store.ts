@@ -4,6 +4,7 @@ import appApi from "./apis/appApi";
 import authSlice from "./slices/authSlice";
 import brandSlice from "./slices/brandSlice";
 import cartSlice from "./slices/cartSlice";
+import categorySlice from "./slices/categorySlice";
 import counterSlice from "./slices/counterSlice";
 import { notificationSlice } from "./slices/notificationSlice";
 import { getPreloadedCartState } from "./utils/cartUtils";
@@ -19,6 +20,7 @@ const store = configureStore({
     [authSlice.name]: authSlice.reducer,
     [brandSlice.name]: brandSlice.reducer,
     [cartSlice.name]: cartSlice.reducer,
+    [categorySlice.name]: categorySlice.reducer,
     [counterSlice.name]: counterSlice.reducer,
     [notificationSlice.name]: notificationSlice.reducer,
     [appApi.reducerPath]: appApi.reducer,

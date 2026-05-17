@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import { EntityId } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
@@ -6,7 +7,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
  */
 export const defaultTags = ["UNAUTHORIZED", "UNKNOWN_ERROR"] as const;
 export type DefaultTags = typeof defaultTags[number];
-export const entityTags = ["Post", "User", "Product", "Brand"] as const;
+export const entityTags = ["Post", "User", "Product", "Brand", "Category"] as const;
 export type EntityTags = typeof entityTags[number];
 export const allTags = [
   ...defaultTags,
@@ -51,15 +52,21 @@ export type TagList<T extends EntityTags, ID extends EntityId> = (
 export function providesListTags<T extends EntityTags, R extends { id: EntityId; }>(
   tagType: T,
   resultsWithIds: R[] | undefined,
-  error: FetchBaseQueryError | undefined
+  error: FetchBaseQueryError | undefined,
+  childrenSelector: ((result: R) => R[]) = () => CONFIG.EMPTY_ARRAY,
 ): TagList<T, R["id"]> {
   const tags: TagList<T, R["id"]> = [{ type: tagType, id: "LIST" }];
 
   if (resultsWithIds) {
-    tags.push(...resultsWithIds.flatMap(({ id }) => [
-      { type: tagType, id },
-      { type: tagType, id: `LIST-${id}` },
-    ]));
+    const queue: R[] = [...resultsWithIds];
+    while (queue.length) {
+      const result = queue.shift()!;
+      tags.push(
+        { type: tagType, id: result.id },
+        { type: tagType, id: `LIST-${result.id}` },
+      );
+      queue.push(...childrenSelector(result));
+    }
   }
 
   if (error) {
