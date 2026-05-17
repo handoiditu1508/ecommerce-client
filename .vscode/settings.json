@@ -2,8 +2,7 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.indentSize": "tabSize",
-  "javascript.preferences.quoteStyle": "double",
-  "typescript.preferences.quoteStyle": "double",
+  "js/ts.preferences.quoteStyle": "double",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
@@ -38,7 +37,7 @@
     "typescriptreact"
   ],
   "files.eol": "\r\n",
-  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+  "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
     "^@mui/[^/]+$"
   ],
 }
