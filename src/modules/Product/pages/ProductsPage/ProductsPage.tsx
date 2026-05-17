@@ -1,5 +1,6 @@
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -10,13 +11,46 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useContext, useState } from "react";
 import FilterCriteria from "./FilterCriteria";
-import Searchbar from "./Searchbar";
+import Searchbar, { SearchbarProps } from "./Searchbar";
 import Sidebar from "./Sidebar";
 
 function ProductsPage() {
   const theme = useTheme();
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchOrdering, setSearchOrdering] = useState<Exclude<SearchbarProps["ordering"], undefined>>("createdDate-false");
+  const [seachProductsTrigger, searchProductsResult] = useLazySearchProductsQuery();
+  const [countSeachProductsTrigger, countSearchProductsResult] = useLazySearchProductsQuery();
+
+  const handleSearchValueChange: SearchbarProps["onChange"] = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleSearchOrderingChange: SearchbarProps["onChangeOrdering"] = (event) => {
+    setSearchOrdering(event.target.value);
+  };
+
+  const handleSearch = () => {
+    const [orderBy, orderByDescendingText] = searchOrdering.split("-");
+    seachProductsTrigger({
+      searchText: searchValue,
+      orderBy,
+      orderByDescending: orderByDescendingText === "true" ? true : false,
+      page: 1,
+    });
+  };
+
+  const SearchbarComponent = (
+    <Searchbar
+      value={searchValue}
+      ordering={searchOrdering}
+      loading={searchProductsResult.isFetching}
+      onChange={handleSearchValueChange}
+      onChangeOrdering={handleSearchOrderingChange}
+      onSubmit={handleSearch}
+    />
+  );
 
   return (
     <Box sx={{
@@ -33,7 +67,7 @@ function ProductsPage() {
           borderBottom: theme.vars.shape.smallBorder,
           pb: 2,
         }}>
-          <Searchbar />
+          {SearchbarComponent}
           <Divider sx={{ my: 2 }} variant="middle">
             <ButtonBase
               sx={{
@@ -66,7 +100,7 @@ function ProductsPage() {
       <Box sx={{
         flex: 1,
       }}>
-        {mdAndUp && <Searchbar />}
+        {mdAndUp && SearchbarComponent}
         <Box sx={{
           display: "flex",
           mt: 1,
@@ -93,7 +127,11 @@ function ProductsPage() {
           </Box>
           <Typography variant="caption" color="textDisabled">99 results found</Typography>
         </Box>
-        <ProductCardList products={[]} />
+        {
+          searchProductsResult.isUninitialized
+            ? <Typography color="textDisabled" variant="h6" textAlign="center">Enter information in the search box to start searching</Typography>
+            : <ProductCardList products={searchProductsResult.data} loading={searchProductsResult.isLoading} />
+        }
       </Box>
     </Box>
   );

@@ -1,14 +1,73 @@
+import { ArrayItemType } from "@/common/typeHelpers";
+import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
-import Select from "@mui/material/Select";
+import Select, { SelectProps } from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
+import { ChangeEventHandler, FormEventHandler } from "react";
 
-function Searchbar() {
+const orderingOptions = [
+  {
+    propertyName: "createdDate",
+    isDescending: true,
+    label: "Order by newest",
+  },
+  {
+    propertyName: "createdDate",
+    isDescending: false,
+    label: "Order by oldest",
+  },
+  {
+    propertyName: "discountPrice",
+    isDescending: false,
+    label: "Order by price ascending",
+  },
+  {
+    propertyName: "discountPrice",
+    isDescending: true,
+    label: "Order by price descending",
+  },
+  {
+    propertyName: "discountPercentage",
+    isDescending: false,
+    label: "Order by discount ascending",
+  },
+  {
+    propertyName: "discountPercentage",
+    isDescending: true,
+    label: "Order by discount descending",
+  },
+] as const;
+
+export type SearchbarProps = {
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  ordering?: `${ArrayItemType<typeof orderingOptions>["propertyName"]}-${ArrayItemType<typeof orderingOptions>["isDescending"]}`;
+  onChangeOrdering?: SelectProps<Exclude<SearchbarProps["ordering"], undefined>>["onChange"];
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  loading?: boolean;
+};
+
+function Searchbar({
+  value = "",
+  onChange,
+  ordering = "createdDate-false",
+  onChangeOrdering,
+  onSubmit = CONFIG.EMPTY_FUNCTION,
+  loading,
+}: SearchbarProps) {
   const theme = useTheme();
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    onSubmit(event);
+  };
 
   return (
     <Paper
@@ -27,10 +86,13 @@ function Searchbar() {
           border: "none",
           ml: 0,
         },
-      }}>
-      <IconButton sx={{
-        p: 1.5,
-      }}>
+      }}
+      onSubmit={handleSubmit}>
+      <IconButton
+        type="submit"
+        sx={{
+          p: 1.5,
+        }}>
         <SearchIcon />
       </IconButton>
       <InputBase
@@ -41,9 +103,18 @@ function Searchbar() {
         inputProps={{
           "aria-label": "search products",
         }}
+        value={value}
+        endAdornment={loading
+          ? (
+            <InputAdornment position="end">
+              <CircularProgress size={32} />
+            </InputAdornment>
+          )
+          : undefined}
+        onChange={onChange}
       />
       <Select
-        defaultValue={0}
+        value={ordering}
         sx={{
           width: "14%",
           maxWidth: 240,
@@ -62,9 +133,9 @@ function Searchbar() {
               },
             },
           },
-        }}>
-        <MenuItem value={0}>Order by price ascending</MenuItem>
-        <MenuItem value={1}>Order by price descending</MenuItem>
+        }}
+        onChange={onChangeOrdering}>
+        {orderingOptions.map((o) => <MenuItem key={o.propertyName + o.isDescending} value={`${o.propertyName}-${o.isDescending}`}>{o.label}</MenuItem>)}
       </Select>
     </Paper>
   );
