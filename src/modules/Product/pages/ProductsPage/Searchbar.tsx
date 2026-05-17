@@ -1,6 +1,6 @@
 import { ArrayItemType } from "@/common/typeHelpers";
-import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Select, { SelectProps } from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
-import { ChangeEventHandler, FormEventHandler } from "react";
+import { ActionDispatch, ChangeEventHandler, FormEventHandler } from "react";
+import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
 const orderingOptions = [
   {
@@ -45,28 +46,37 @@ const orderingOptions = [
   },
 ] as const;
 
+export type SearchOrderingValue = `${ArrayItemType<typeof orderingOptions>["propertyName"]}-${ArrayItemType<typeof orderingOptions>["isDescending"]}`;
+
 export type SearchbarProps = {
-  value?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  ordering?: `${ArrayItemType<typeof orderingOptions>["propertyName"]}-${ArrayItemType<typeof orderingOptions>["isDescending"]}`;
-  onChangeOrdering?: SelectProps<Exclude<SearchbarProps["ordering"], undefined>>["onChange"];
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  loading?: boolean;
+  productsState: ProductsReducerState;
+  productsDispatch: ActionDispatch<[ProductsReducerAction]>;
 };
 
 function Searchbar({
-  value = "",
-  onChange,
-  ordering = "createdDate-false",
-  onChangeOrdering,
-  onSubmit = CONFIG.EMPTY_FUNCTION,
-  loading,
+  productsState,
+  productsDispatch,
 }: SearchbarProps) {
   const theme = useTheme();
+  const [seachProductsTrigger, searchProductsResult] = useLazySearchProductsQuery();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    onSubmit(event);
+    seachProductsTrigger(productsState.query);
+  };
+
+  const handleSearchTextChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    productsDispatch({
+      type: "SET_SEARCH_TEXT",
+      payload: event.target.value,
+    });
+  };
+
+  const handleOrderingChange: SelectProps<SearchOrderingValue>["onChange"] = (event) => {
+    productsDispatch({
+      type: "SET_SEARCH_ORDERING",
+      payload: event.target.value,
+    });
   };
 
   return (
@@ -103,18 +113,18 @@ function Searchbar({
         inputProps={{
           "aria-label": "search products",
         }}
-        value={value}
-        endAdornment={loading
+        value={productsState.query.searchText}
+        endAdornment={searchProductsResult.isFetching
           ? (
             <InputAdornment position="end">
               <CircularProgress size={32} />
             </InputAdornment>
           )
           : undefined}
-        onChange={onChange}
+        onChange={handleSearchTextChange}
       />
       <Select
-        value={ordering}
+        value={productsState.searchOrdering}
         sx={{
           width: "14%",
           maxWidth: 240,
@@ -134,7 +144,7 @@ function Searchbar({
             },
           },
         }}
-        onChange={onChangeOrdering}>
+        onChange={handleOrderingChange}>
         {orderingOptions.map((o) => <MenuItem key={o.propertyName + o.isDescending} value={`${o.propertyName}-${o.isDescending}`}>{o.label}</MenuItem>)}
       </Select>
     </Paper>
