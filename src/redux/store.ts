@@ -2,7 +2,7 @@ import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import appApi from "./apis/appApi";
 import authSlice from "./slices/authSlice";
-import brandsSlice from "./slices/brandsSlice";
+import brandSlice from "./slices/brandSlice";
 import cartSlice from "./slices/cartSlice";
 import counterSlice from "./slices/counterSlice";
 import { notificationSlice } from "./slices/notificationSlice";
@@ -17,7 +17,7 @@ import rtkQueryErrorLoggerMiddleware from "./utils/rtkQueryErrorLoggerMiddleware
 const store = configureStore({
   reducer: {
     [authSlice.name]: authSlice.reducer,
-    [brandsSlice.name]: brandsSlice.reducer,
+    [brandSlice.name]: brandSlice.reducer,
     [cartSlice.name]: cartSlice.reducer,
     [counterSlice.name]: counterSlice.reducer,
     [notificationSlice.name]: notificationSlice.reducer,
