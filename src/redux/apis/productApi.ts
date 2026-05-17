@@ -51,9 +51,6 @@ const productApi = appApi.injectEndpoints({
       query: (arg) => ({
         url: `/products/${arg.productId}`,
         method: "GET",
-        params: {
-          loadDiscountPrice: arg.loadDiscountPrice,
-        },
       }),
       providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
     }),

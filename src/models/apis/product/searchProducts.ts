@@ -4,7 +4,6 @@ export type SearchProductsQuery = {
   orderByDescending?: boolean;
   page?: number;
   pageSize?: number;
-  loadDiscountPrice?: boolean;
 };
 
 export type CountSearchProductsQuery = {
