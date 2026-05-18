@@ -16,6 +16,9 @@ export type ProductsReducerAction = {
 } | {
   type: "SET_CATEGORIES" | "SET_BRANDS";
   payload: number[];
+} | {
+  type: "SET_PRICE_RANGE";
+  payload: [number, number];
 };
 
 const initialState: ProductsReducerState = {
@@ -70,6 +73,15 @@ const useProductsReducer = () =>
               ...state.query,
               orderBy,
               orderByDescending: orderByDescendingText === "true" ? true : false,
+            },
+          };
+        case "SET_PRICE_RANGE":
+          return {
+            ...state,
+            query: {
+              ...state.query,
+              minPrice: action.payload[0],
+              maxPrice: action.payload[1],
             },
           };
       }

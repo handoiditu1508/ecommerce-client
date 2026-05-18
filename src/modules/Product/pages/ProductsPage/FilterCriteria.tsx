@@ -1,5 +1,6 @@
 import { stopBubbling } from "@/common/eventHelpers";
 import { BreakpointsContext, mdAndUpMediaQuery, smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
@@ -29,6 +30,11 @@ function FilterCriteria({
 }: FilterCriteriaProps) {
   const theme = useTheme();
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
+  const [seachProductsTrigger, searchProductsResult] = useLazySearchProductsQuery();
+
+  const handleSearch = () => {
+    seachProductsTrigger(productsState.query);
+  };
 
   return (
     <>
@@ -103,7 +109,10 @@ function FilterCriteria({
           px: 0,
           overflow: "auto",
         }}>
-          <BrandSelector />
+          <BrandSelector
+            productsState={productsState}
+            productsDispatch={productsDispatch}
+          />
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -136,7 +145,10 @@ function FilterCriteria({
           px: 0,
           overflow: "visible",
         }}>
-          <PriceRangeSllider />
+          <PriceRangeSllider
+            productsState={productsState}
+            productsDispatch={productsDispatch}
+          />
         </AccordionDetails>
       </Accordion>
       <Box sx={{ flex: 1 }} />
@@ -153,11 +165,13 @@ function FilterCriteria({
           size="large"
           fullWidth={mdAndUp}
           startIcon={<FilterListIcon />}
+          disabled={searchProductsResult.isFetching}
           sx={{
             [mdAndUpMediaQuery(theme.breakpoints)]: {
               borderRadius: 0,
             },
-          }}>
+          }}
+          onClick={handleSearch}>
           Apply
         </Button>
         {smAndDown && <Button

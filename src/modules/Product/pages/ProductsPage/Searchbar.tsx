@@ -100,6 +100,7 @@ function Searchbar({
       onSubmit={handleSubmit}>
       <IconButton
         type="submit"
+        disabled={searchProductsResult.isFetching}
         sx={{
           p: 1.5,
         }}>

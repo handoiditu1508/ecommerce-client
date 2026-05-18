@@ -1,16 +1,42 @@
 import { toVndCurrency } from "@/common/formats";
 import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+import Slider, { SliderProps } from "@mui/material/Slider";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { ActionDispatch } from "react";
+import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
-function PriceRangeSllider() {
+export type PriceRangeSlliderProps = {
+  productsState: ProductsReducerState;
+  productsDispatch: ActionDispatch<[ProductsReducerAction]>;
+};
+
+const MIN_SLIDER_VALUE = 10000;
+const MAX_SLIDER_VALUE = 1000000;
+const marks: SliderProps["marks"] = [
+  { value: MIN_SLIDER_VALUE, label: "10k" },
+  { value: 250000, label: "250k" },
+  { value: 500000, label: "500k" },
+  { value: 750000, label: "750k" },
+  { value: MAX_SLIDER_VALUE, label: "1m" },
+];
+
+function PriceRangeSllider({
+  productsState,
+  productsDispatch,
+}: PriceRangeSlliderProps) {
   const theme = useTheme();
-  const [value, setValue] = useState<number[]>([250000, 750000]);
+  // const [value, setValue] = useState<number[]>([250000, 750000]);
+  const value: [number, number] = [
+    productsState.query.minPrice ?? MIN_SLIDER_VALUE,
+    productsState.query.maxPrice ?? MAX_SLIDER_VALUE,
+  ];
 
   const handleChange = (event: Event, value: number[], activeThumb: number) => {
-    setValue(value);
+    productsDispatch({
+      type: "SET_PRICE_RANGE",
+      payload: value as [number, number],
+    });
   };
 
   return (
@@ -18,17 +44,11 @@ function PriceRangeSllider() {
       <Slider
         value={value}
         aria-label="Price range"
-        min={10000}
-        max={1000000}
+        min={MIN_SLIDER_VALUE}
+        max={MAX_SLIDER_VALUE}
         step={10000}
         shiftStep={10000}
-        marks={[
-          { value: 10000, label: "10k" },
-          { value: 250000, label: "250k" },
-          { value: 500000, label: "500k" },
-          { value: 750000, label: "750k" },
-          { value: 1000000, label: "1m" },
-        ]}
+        marks={marks}
         valueLabelDisplay="auto"
         valueLabelFormat={toVndCurrency}
         onChange={handleChange}
