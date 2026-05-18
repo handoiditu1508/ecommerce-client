@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/hooks";
 import Category from "@/models/entities/Category";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
-import { selectCategoriesTree } from "@/redux/slices/categorySlice";
+import { categorySelectors } from "@/redux/slices/categorySlice";
 import { ButtonBaseProps } from "@mui/material/ButtonBase";
 import { CheckboxProps } from "@mui/material/Checkbox";
 import { useTheme } from "@mui/material/styles";
@@ -33,7 +33,7 @@ function CategoryTree({
   productsDispatch,
 }: CategoryTreeProps) {
   const theme = useTheme();
-  const categoriesTree = useAppSelector(selectCategoriesTree);
+  const categoriesTree = useAppSelector(categorySelectors.tree);
   const categoryTreeItems = useMemo<TreeViewBaseItem[]>(() => categoriesTree.map(categoryToTreeViewBaseItem), [categoriesTree]);
   const selectedItems: string[] = productsState.query.categoryIds.map((id) => id.toString());
   const initialSelectedItems = useApplyPropagationToSelectedItemsOnMount({

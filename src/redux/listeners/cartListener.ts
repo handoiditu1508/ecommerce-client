@@ -1,5 +1,5 @@
 import { isAnyOf, TypedStartListening } from "@reduxjs/toolkit";
-import { addToCart, changeProductVariantInCart, removeFromCart, selectIsCartHydrated, setQuantityForCart } from "../slices/cartSlice";
+import { addToCart, cartSelectors, changeProductVariantInCart, removeFromCart, setQuantityForCart } from "../slices/cartSlice";
 import { AppDispatch, RootState } from "../store";
 import { cartStorageKey, dehydrateCartItemData, DehydratedCartItemData } from "../utils/cartUtils";
 
@@ -19,7 +19,7 @@ const registerCartListener = (startAppListening: TypedStartListening<RootState, 
       await api.delay(1000);
 
       const state = api.getState();
-      const isCartHydrated = selectIsCartHydrated(state);
+      const isCartHydrated = cartSelectors.hydrated(state);
       const dehydratedCartItemDates: DehydratedCartItemData[] = isCartHydrated
         ? state.cart.cartItemDatas.map(dehydrateCartItemData)
         : state.cart.dehydratedCartItemDatas;

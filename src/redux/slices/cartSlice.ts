@@ -590,10 +590,12 @@ export const {
   setQuantityForCart,
 } = cartSlice.actions;
 
-const productsSelectors = productsAdapter.getSelectors<RootState>((state) => state.cart);
-export const selectIsCartHydrated = (state: RootState) => isCartHydrated(state.cart);
-export const selectCachedProductIdsFromCart = (state: RootState) => state.cart.ids;
-export const selectCartItemDatas = (state: RootState) => state.cart.cartItemDatas;
-export const selectCachedProductFromCart = (id: number) => (state: RootState): Product | undefined => productsSelectors.selectById(state, id);
+const productAdapterSelectors = productsAdapter.getSelectors<RootState>((state) => state.cart);
+export const cartSelectors = {
+  hydrated: (state: RootState) => isCartHydrated(state.cart),
+  cachedProductIds: (state: RootState) => state.cart.ids,
+  itemDatas: (state: RootState) => state.cart.cartItemDatas,
+  cachedProduct: (id: number) => (state: RootState): Product | undefined => productAdapterSelectors.selectById(state, id),
+};
 
 export default cartSlice;

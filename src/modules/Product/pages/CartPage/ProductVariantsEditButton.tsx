@@ -1,6 +1,6 @@
 import { smAndUpMediaQuery } from "@/contexts/breakpoints";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { changeProductVariantInCart, selectCachedProductFromCart } from "@/redux/slices/cartSlice";
+import { cartSelectors, changeProductVariantInCart } from "@/redux/slices/cartSlice";
 import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import EditIcon from "@mui/icons-material/Edit";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -18,10 +18,12 @@ function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEdi
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
-  const product = useAppSelector(selectCachedProductFromCart(cartData.productId));
+  const product = useAppSelector(cartSelectors.cachedProduct(cartData.productId));
 
   const handleClickEditAttributes = () => {
-    setAttributeDialogOpen(true);
+    if (product) {
+      setAttributeDialogOpen(true);
+    }
   };
 
   return (
@@ -52,7 +54,7 @@ function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEdi
         </Typography>
         <EditIcon color="inherit" fontSize="inherit" />
       </ButtonBase>
-      <ProductVariantSelectorDialog
+      {product && <ProductVariantSelectorDialog
         open={attributeDialogOpen}
         confirmButtonText="Save"
         variants={product.productVariants}
@@ -63,7 +65,7 @@ function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEdi
           nextProductVariantId,
         }))}
         onClose={() => setAttributeDialogOpen(false)}
-      />
+      />}
     </>
   );
 }

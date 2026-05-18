@@ -1,7 +1,7 @@
 import { LoginResponse } from "@/models/apis/auth/login";
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
-import { clearAuthState, selectRefreshTokenExpired, setAuthState } from "../slices/authSlice";
+import { authSelectors, clearAuthState, setAuthState } from "../slices/authSlice";
 import { RootState } from "../store";
 
 const mutex = new Mutex();
@@ -26,7 +26,7 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
 
     // check response is unauthorized
     // check refresh token exist and not expired
-    if (result.error && result.error.status === 401 && selectRefreshTokenExpired(state)) {
+    if (result.error && result.error.status === 401 && authSelectors.refreshTokenExpired(state)) {
       // checking whether the mutex is unlocked
       if (!mutex.isLocked()) {
         // lock other requests until refresh token api returned

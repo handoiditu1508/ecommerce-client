@@ -3,7 +3,7 @@ import NumberSpinner from "@/components/NumberSpinner";
 import CONFIG from "@/configs";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { removeFromCart, selectCachedProductFromCart, setQuantityForCart } from "@/redux/slices/cartSlice";
+import { cartSelectors, removeFromCart, setQuantityForCart } from "@/redux/slices/cartSlice";
 import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
@@ -42,7 +42,7 @@ function CartItem({
   const theme = useTheme();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
-  const product = useAppSelector(selectCachedProductFromCart(cartData ? cartData.productId : 0));
+  const product = useAppSelector(cartSelectors.cachedProduct(cartData ? cartData.productId : 0));
 
   if (!cartData || !variantData || !product) {
     return (

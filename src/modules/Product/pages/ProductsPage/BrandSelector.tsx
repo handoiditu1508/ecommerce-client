@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks";
-import { selectAllBrands } from "@/redux/slices/brandSlice";
+import { brandSelectors } from "@/redux/slices/brandSlice";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -15,7 +15,7 @@ function BrandSelector({
   productsState,
   productsDispatch,
 }: BrandSelectorProps) {
-  const brands = useAppSelector(selectAllBrands);
+  const brands = useAppSelector(brandSelectors.all);
   const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.query.brandIds), [productsState.query.brandIds]);
 
   const handleToggleBrand = (brandId: number, checked: boolean) => {

@@ -28,8 +28,10 @@ export const {
   setAllBrands,
 } = brandSlice.actions;
 
-const brandSelectors = brandAdapter.getSelectors<RootState>((state) => state.brand);
-export const selectAllBrands = brandSelectors.selectAll;
-export const selectBrandById = (id: number) => (state: RootState): Brand | undefined => brandSelectors.selectById(state, id);
+const brandAdapterSelectors = brandAdapter.getSelectors<RootState>((state) => state.brand);
+export const brandSelectors = {
+  all: brandAdapterSelectors.selectAll,
+  byId: (id: number) => (state: RootState): Brand | undefined => brandAdapterSelectors.selectById(state, id),
+};
 
 export default brandSlice;

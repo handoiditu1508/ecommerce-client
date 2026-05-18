@@ -46,8 +46,10 @@ export const {
   setCategoriesTree,
 } = categorySlice.actions;
 
-const categorySelectors = categoryAdapter.getSelectors<RootState>((state) => state.category);
-export const selectCategoryById = categorySelectors.selectById;
-export const selectCategoriesTree = (state: RootState) => state.category.tree;
+const categoryAdapterSelectors = categoryAdapter.getSelectors<RootState>((state) => state.category);
+export const categorySelectors = {
+  byId: categoryAdapterSelectors.selectById,
+  tree: (state: RootState) => state.category.tree,
+};
 
 export default categorySlice;
