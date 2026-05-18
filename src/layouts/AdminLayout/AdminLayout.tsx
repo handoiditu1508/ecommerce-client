@@ -46,7 +46,7 @@ function InnerAdminLayout() {
           }}>{/* spacing between sidebar & header */}
           <LayoutContainer sx={{
             [lgAndUpMediaQuery(theme.breakpoints)]: {
-              pt: 2,
+              mt: 2,
               mb: -2,
             },
             [smMediaQuery(theme.breakpoints)]: {

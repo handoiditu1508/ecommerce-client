@@ -1,6 +1,6 @@
 import CONFIG from "@/configs";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { nextNotification, selectNotifications, selectShouldSetTimeout, setShouldSetTimeout, setTimeoutId } from "@/redux/slices/notificationSlice";
+import { nextNotification, notificationSelectors, setShouldSetTimeout, setTimeoutId } from "@/redux/slices/notificationSlice";
 import { useEffect } from "react";
 
 /**
@@ -8,8 +8,8 @@ import { useEffect } from "react";
  */
 export default function useNotificationScheduler() {
   const dispatch = useAppDispatch();
-  const notifications = useAppSelector(selectNotifications);
-  const shouldSetTimeout = useAppSelector(selectShouldSetTimeout);
+  const notifications = useAppSelector(notificationSelectors.notifications);
+  const shouldSetTimeout = useAppSelector(notificationSelectors.shouldSetTimeout);
 
   // remove oldest notification after timeout
   useEffect(() => {

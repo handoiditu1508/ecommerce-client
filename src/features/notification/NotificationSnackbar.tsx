@@ -1,6 +1,6 @@
 import CONFIG from "@/configs";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { nextNotification, selectCurrentNotification } from "@/redux/slices/notificationSlice";
+import { nextNotification, notificationSelectors } from "@/redux/slices/notificationSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 
 function NotificationSnackbar() {
   const dispatch = useAppDispatch();
-  const currentNotification = useAppSelector(selectCurrentNotification);
+  const currentNotification = useAppSelector(notificationSelectors.currentNotification);
 
   const [open, setOpen] = useState<boolean>(false);
 

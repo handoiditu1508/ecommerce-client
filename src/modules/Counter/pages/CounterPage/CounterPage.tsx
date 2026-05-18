@@ -1,17 +1,17 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { useState } from "react";
 import {
+  counterSelectors,
   decrement,
   increment,
   incrementAsync,
   incrementByAmount,
   incrementIfOdd,
-  selectCount,
-} from "../../../../redux/slices/counterSlice";
+} from "@/redux/slices/counterSlice";
+import { useState } from "react";
 import styles from "./Counter.module.css";
 
 function CounterPage() {
-  const count = useAppSelector(selectCount);
+  const count = useAppSelector(counterSelectors.count);
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState("2");
 

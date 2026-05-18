@@ -43,7 +43,9 @@ export const {
   setShouldSetTimeout,
 } = notificationSlice.actions;
 
-export const selectNotifications = (state: RootState) => state.notification.notifications;
-export const selectCurrentNotification = (state: RootState) => state.notification.notifications[0];
-export const selectTimeoutId = (state: RootState) => state.notification.timeoutId;
-export const selectShouldSetTimeout = (state: RootState) => state.notification.shouldSetTimeout;
+export const notificationSelectors = {
+  notifications: (state: RootState) => state.notification.notifications,
+  currentNotification: (state: RootState) => state.notification.notifications[0],
+  timeoutId: (state: RootState) => state.notification.timeoutId,
+  shouldSetTimeout: (state: RootState) => state.notification.shouldSetTimeout,
+};

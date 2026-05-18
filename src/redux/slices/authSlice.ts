@@ -125,10 +125,12 @@ export const {
   clearAuthState,
 } = authSlice.actions;
 
-export const selectIsSignedIn = (state: RootState): boolean => !!state.auth.expiration;
-export const selectIsTokenExpired = (state: RootState): boolean => !!state.auth.expiration && state.auth.expiration <= Date.now();
-export const selectRefreshTokenExpired = (state: RootState) => !!state.auth.refreshTokenExpiration && state.auth.refreshTokenExpiration <= Date.now();
-export const selectAuthExpiration = (state: RootState) => state.auth.expiration;
-export const selectAuthUser = (state: RootState) => state.auth.user;
+export const authSelectors = {
+  signedIn: (state: RootState): boolean => !!state.auth.expiration,
+  tokenExpired: (state: RootState): boolean => !!state.auth.expiration && state.auth.expiration <= Date.now(),
+  refreshTokenExpired: (state: RootState) => !!state.auth.refreshTokenExpiration && state.auth.refreshTokenExpiration <= Date.now(),
+  expiration: (state: RootState) => state.auth.expiration,
+  user: (state: RootState) => state.auth.user,
+};
 
 export default authSlice;
