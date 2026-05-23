@@ -48,7 +48,7 @@ export const {
 
 const categoryAdapterSelectors = categoryAdapter.getSelectors<RootState>((state) => state.category);
 export const categorySelectors = {
-  byId: categoryAdapterSelectors.selectById,
+  byId: (id: number) => (state: RootState): Category | undefined => categoryAdapterSelectors.selectById(state, id),
   tree: (state: RootState) => state.category.tree,
 };
 
