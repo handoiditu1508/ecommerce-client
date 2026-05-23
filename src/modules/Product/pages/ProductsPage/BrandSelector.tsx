@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/hooks";
 import Brand from "@/models/entities/Brand";
-import { useGetAllBrandsQuery } from "@/redux/apis/brandApi";
+import { useGetBrandsHaveActiveProductQuery } from "@/redux/apis/brandApi";
 import { brandSelectors } from "@/redux/slices/brandSlice";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
@@ -57,7 +57,7 @@ function BrandSelector({
   productsState,
   productsDispatch,
 }: BrandSelectorProps) {
-  const brands = useAppSelector(brandSelectors.all);
+  const brands = useAppSelector(brandSelectors.haveActiveProducts);
   const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.brandIds), [productsState.brandIds]);
   const [searchText, setSearchText] = useState<string>("");
   const memorizedBrands = useMemo(
@@ -66,7 +66,7 @@ function BrandSelector({
   );
 
   // get brands if not already fetched
-  useGetAllBrandsQuery();
+  useGetBrandsHaveActiveProductQuery();
 
   const handleToggleBrand = (brandId: number, checked: boolean) => {
     const newBrandIds = checked

@@ -13,6 +13,11 @@ const brandApi = appApi.injectEndpoints({
       query: () => "/brands/top",
       providesTags: (result, error) => providesListTags("Brand", result, error),
     }),
+    getBrandsHaveActiveProduct: builder.query<Brand[], void>({
+      query: () => "/brands/activeproduct",
+      keepUnusedDataFor: 300,
+      providesTags: (result, error) => providesListTags("Brand", result, error),
+    }),
   }),
 });
 
@@ -21,4 +26,5 @@ export default brandApi;
 export const {
   useGetAllBrandsQuery,
   useGetTopBrandsQuery,
+  useGetBrandsHaveActiveProductQuery,
 } = brandApi;
