@@ -1,26 +1,24 @@
+import { currentUrlWithPage } from "@/common/url";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { useCountDiscountedProductsQuery, useGetDiscountedProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
-import React, { useContext, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import PaginationItem from "@mui/material/PaginationItem";
+import { useContext, useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
-const pageSize = 12;
+const PAGE_SIZE = 20;
 
 function DiscountedProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const page = parseInt(searchParams.get("page")!) || 1;
   const countDiscountedProductsResult = useCountDiscountedProductsQuery();
-  const getDiscountedProductsQuery = useMemo<GetDiscountedProductsQuery>(() => ({ page, pageSize }), [page]);
+  const getDiscountedProductsQuery = useMemo<GetDiscountedProductsQuery>(() => ({ page, pageSize: PAGE_SIZE }), [page]);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
-  const totalPage = countDiscountedProductsResult.data !== undefined ? Math.ceil(countDiscountedProductsResult.data / pageSize) : 1;
-
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {
-    setSearchParams({ page: page.toString() });
-  };
+  const totalPage = countDiscountedProductsResult.data !== undefined ? Math.ceil(countDiscountedProductsResult.data / PAGE_SIZE) : 1;
 
   return (
     <>
@@ -35,7 +33,13 @@ function DiscountedProductsPage() {
           showLastButton={!xsAndDown}
           page={page}
           disabled={countDiscountedProductsResult.isLoading}
-          onChange={handlePageChange}
+          renderItem={(item) => (
+            <PaginationItem
+              component={Link}
+              to={currentUrlWithPage(item.page)}
+              {...item}
+            />
+          )}
         />
       </Box>
     </>
