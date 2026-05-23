@@ -162,7 +162,7 @@ function ProductsPage() {
               onDelete={(e) => e.preventDefault()}
             />)}
           </Box>
-          <Typography variant="caption" color="textDisabled">99 results found</Typography>
+          {countProductsResult.data && <Typography variant="caption" color="textDisabled">{countProductsResult.data} results found</Typography>}
         </Box>
         {
           searchProductsResult.isUninitialized
