@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/hooks";
+import { useGetAllBrandsQuery } from "@/redux/apis/brandApi";
 import { brandSelectors } from "@/redux/slices/brandSlice";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,12 +17,15 @@ function BrandSelector({
   productsDispatch,
 }: BrandSelectorProps) {
   const brands = useAppSelector(brandSelectors.all);
-  const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.query.brandIds), [productsState.query.brandIds]);
+  const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.brandIds), [productsState.brandIds]);
+
+  // get brands if not already fetched
+  useGetAllBrandsQuery();
 
   const handleToggleBrand = (brandId: number, checked: boolean) => {
     const newBrandIds = checked
-      ? [...productsState.query.brandIds, brandId]
-      : productsState.query.brandIds.filter((id) => id !== brandId);
+      ? [...productsState.brandIds, brandId]
+      : productsState.brandIds.filter((id) => id !== brandId);
     productsDispatch({
       type: "SET_BRANDS",
       payload: newBrandIds,

@@ -13,7 +13,7 @@ export type PriceRangeSlliderProps = {
 
 const MIN_SLIDER_VALUE = 10000;
 const MAX_SLIDER_VALUE = 1000000;
-const marks: SliderProps["marks"] = [
+const MARKS: SliderProps["marks"] = [
   { value: MIN_SLIDER_VALUE, label: "10k" },
   { value: 250000, label: "250k" },
   { value: 500000, label: "500k" },
@@ -26,10 +26,9 @@ function PriceRangeSllider({
   productsDispatch,
 }: PriceRangeSlliderProps) {
   const theme = useTheme();
-  // const [value, setValue] = useState<number[]>([250000, 750000]);
   const value: [number, number] = [
-    productsState.query.minPrice ?? MIN_SLIDER_VALUE,
-    productsState.query.maxPrice ?? MAX_SLIDER_VALUE,
+    productsState.minPrice ?? MIN_SLIDER_VALUE,
+    productsState.maxPrice ?? MAX_SLIDER_VALUE,
   ];
 
   const handleChange = (event: Event, value: number[], activeThumb: number) => {
@@ -48,7 +47,7 @@ function PriceRangeSllider({
         max={MAX_SLIDER_VALUE}
         step={10000}
         shiftStep={10000}
-        marks={marks}
+        marks={MARKS}
         valueLabelDisplay="auto"
         valueLabelFormat={toVndCurrency}
         onChange={handleChange}

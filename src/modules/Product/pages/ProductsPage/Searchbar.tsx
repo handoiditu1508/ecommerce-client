@@ -1,6 +1,6 @@
 import { ArrayItemType } from "@/common/type";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
+import productApi from "@/redux/apis/productApi";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
@@ -11,7 +11,9 @@ import Paper from "@mui/material/Paper";
 import Select, { SelectProps } from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import { ActionDispatch, ChangeEventHandler, FormEventHandler } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
+import { generateSearchParams } from "./utils";
 
 const orderingOptions = [
   {
@@ -58,11 +60,12 @@ function Searchbar({
   productsDispatch,
 }: SearchbarProps) {
   const theme = useTheme();
-  const [seachProductsTrigger, searchProductsResult] = useLazySearchProductsQuery();
+  const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
+  const [, setSearchParams] = useSearchParams();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    seachProductsTrigger(productsState.query);
+    setSearchParams(generateSearchParams(productsState));
   };
 
   const handleSearchTextChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -114,7 +117,7 @@ function Searchbar({
         inputProps={{
           "aria-label": "search products",
         }}
-        value={productsState.query.searchText}
+        value={productsState.searchText}
         endAdornment={searchProductsResult.isFetching
           ? (
             <InputAdornment position="end">

@@ -1,8 +1,18 @@
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
+import { ActionDispatch } from "react";
 import FilterCriteria from "./FilterCriteria";
+import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
-function Sidebar() {
+export type SidebarProps = {
+  productsState: ProductsReducerState;
+  productsDispatch: ActionDispatch<[ProductsReducerAction]>;
+};
+
+function Sidebar({
+  productsState,
+  productsDispatch,
+}: SidebarProps) {
   const theme = useTheme();
 
   return (
@@ -39,7 +49,7 @@ function Sidebar() {
         overflowX: "hidden",
       }}
     >
-      <FilterCriteria />
+      <FilterCriteria productsState={productsState} productsDispatch={productsDispatch} />
     </Paper>
   );
 }

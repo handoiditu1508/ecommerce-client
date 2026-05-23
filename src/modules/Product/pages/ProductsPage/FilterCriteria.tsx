@@ -1,6 +1,6 @@
 import { stopBubbling } from "@/common/event";
 import { BreakpointsContext, mdAndUpMediaQuery, smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
+import productApi from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
@@ -14,10 +14,12 @@ import Checkbox from "@mui/material/Checkbox";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import BrandSelector from "./BrandSelector";
 import CategoryTree from "./CategoryTree";
 import PriceRangeSllider from "./PriceRangeSllider";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
+import { generateSearchParams } from "./utils";
 
 export type FilterCriteriaProps = {
   productsState: ProductsReducerState;
@@ -30,10 +32,11 @@ function FilterCriteria({
 }: FilterCriteriaProps) {
   const theme = useTheme();
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
-  const [seachProductsTrigger, searchProductsResult] = useLazySearchProductsQuery();
+  const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
+  const [, setSearchParams] = useSearchParams();
 
   const handleSearch = () => {
-    seachProductsTrigger(productsState.query);
+    setSearchParams(generateSearchParams(productsState));
   };
 
   return (

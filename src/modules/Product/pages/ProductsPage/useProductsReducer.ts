@@ -3,7 +3,12 @@ import { useReducer } from "react";
 import { SearchOrderingValue } from "./Searchbar";
 
 export type ProductsReducerState = {
+  searchText: string;
   searchOrdering: SearchOrderingValue;
+  categoryIds: number[];
+  brandIds: number[];
+  minPrice?: number;
+  maxPrice?: number;
   query: SearchProductsQuery;
 };
 
@@ -19,74 +24,49 @@ export type ProductsReducerAction = {
 } | {
   type: "SET_PRICE_RANGE";
   payload: [number, number];
+} | {
+  type: "SET_QUERY";
+  payload: SearchProductsQuery;
 };
 
-const initialState: ProductsReducerState = {
-  searchOrdering: "createdDate-false",
-  query: {
-    searchText: "",
-    categoryIds: [],
-    includeSubCategories: false, // disabled since tree view will auto select all children
-    brandIds: [],
-    minPrice: 0,
-    maxPrice: 1000000,
-    orderBy: "createdDate",
-    orderByDescending: false,
-  },
-};
-
-const useProductsReducer = () =>
+const useProductsReducer = (initialState: ProductsReducerState) =>
   useReducer<ProductsReducerState, [ProductsReducerAction]>(
     (state, action) => {
       switch (action.type) {
         case "SET_SEARCH_TEXT":
           return {
             ...state,
-            query: {
-              ...state.query,
-              searchText: action.payload,
-            },
+            searchText: action.payload,
           };
         case "SET_CATEGORIES":
           return {
             ...state,
-            query: {
-              ...state.query,
-              categoryIds: action.payload,
-            },
+            categoryIds: action.payload,
           };
         case "SET_BRANDS":
           return {
             ...state,
-            query: {
-              ...state.query,
-              brandIds: action.payload,
-            },
+            brandIds: action.payload,
           };
         case "SET_SEARCH_ORDERING":
-          const [orderBy, orderByDescendingText] = action.payload.split("-");
-
           return {
             ...state,
             searchOrdering: action.payload,
-            query: {
-              ...state.query,
-              orderBy,
-              orderByDescending: orderByDescendingText === "true" ? true : false,
-            },
           };
         case "SET_PRICE_RANGE":
           return {
             ...state,
-            query: {
-              ...state.query,
-              minPrice: action.payload[0],
-              maxPrice: action.payload[1],
-            },
+            minPrice: action.payload[0],
+            maxPrice: action.payload[1],
+          };
+        case "SET_QUERY":
+          return {
+            ...state,
+            query: action.payload,
           };
       }
     },
-    initialState
+    initialState,
   );
 
 export default useProductsReducer;

@@ -14,4 +14,10 @@ export type SearchProductsQuery = {
 
 export type CountSearchProductsQuery = {
   searchText: string;
+  isDeleted?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  categoryIds: number[];
+  includeSubCategories?: boolean;
+  brandIds: number[];
 };
