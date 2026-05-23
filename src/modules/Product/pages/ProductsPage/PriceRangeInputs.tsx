@@ -3,13 +3,32 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { ActionDispatch, ChangeEventHandler } from "react";
+import React, { ActionDispatch, ChangeEventHandler } from "react";
+import { IMaskInput } from "react-imask";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
 export type PriceRangeInputsProps = {
   productsState: ProductsReducerState;
   productsDispatch: ActionDispatch<[ProductsReducerAction]>;
 };
+
+type PriceMaskCustomProps = {
+  onChange: (event: { target: { value: string; }; }) => void;
+  ref?: React.Ref<HTMLInputElement>;
+};
+
+function PriceMaskCustom({ onChange, ref, ...props }: PriceMaskCustomProps) {
+  return (
+    <IMaskInput
+      {...props}
+      mask={Number}
+      thousandsSeparator="."
+      inputRef={ref}
+      overwrite
+      onAccept={(_value, mask) => onChange({ target: { value: mask.unmaskedValue } })}
+    />
+  );
+}
 
 function PriceRangeInputs({
   productsState,
@@ -70,6 +89,11 @@ function PriceRangeInputs({
           label="Min Price"
           size="small"
           value={productsState.minPrice?.toString() ?? ""}
+          slotProps={{
+            input: {
+              inputComponent: PriceMaskCustom as any,
+            },
+          }}
           onChange={handleMinPriceChange}
         />
         -
@@ -77,6 +101,11 @@ function PriceRangeInputs({
           label="Max Price"
           size="small"
           value={productsState.maxPrice?.toString() ?? ""}
+          slotProps={{
+            input: {
+              inputComponent: PriceMaskCustom as any,
+            },
+          }}
           onChange={handleMaxPriceChange}
         />
       </Box>
