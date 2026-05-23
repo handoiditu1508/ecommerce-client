@@ -25,6 +25,9 @@ export type ProductsReducerAction = {
   type: "SET_PRICE_RANGE";
   payload: [number, number];
 } | {
+  type: "SET_MIN_PRICE" | "SET_MAX_PRICE";
+  payload?: number;
+} | {
   type: "SET_QUERY";
   payload: SearchProductsQuery;
 };
@@ -58,6 +61,16 @@ const useProductsReducer = (initialState: ProductsReducerState) =>
             ...state,
             minPrice: action.payload[0],
             maxPrice: action.payload[1],
+          };
+        case "SET_MIN_PRICE":
+          return {
+            ...state,
+            minPrice: action.payload,
+          };
+        case "SET_MAX_PRICE":
+          return {
+            ...state,
+            maxPrice: action.payload,
           };
         case "SET_QUERY":
           return {

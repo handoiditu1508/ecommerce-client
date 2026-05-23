@@ -1,4 +1,3 @@
-import { stopBubbling } from "@/common/event";
 import { BreakpointsContext, mdAndUpMediaQuery, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import productApi from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -10,14 +9,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
-import Checkbox from "@mui/material/Checkbox";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import BrandSelector from "./BrandSelector";
 import CategoryTree from "./CategoryTree";
-import PriceRangeSllider from "./PriceRangeSllider";
+import PriceRangeInputs from "./PriceRangeInputs";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 import { generateSearchParams } from "./utils";
 
@@ -73,9 +71,6 @@ function FilterCriteria({
         }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-
         >
           <Typography>Categories</Typography>
         </AccordionSummary>
@@ -132,23 +127,14 @@ function FilterCriteria({
         }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          slotProps={{
-            content: {
-              sx: {
-                alignItems: "center",
-                gap: 0.5,
-              },
-            },
-          }}
         >
           <Typography>Price range</Typography>
-          <Checkbox size="small" sx={{ p: 0 }} onClick={stopBubbling} />
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
-          overflow: "visible",
+          overflow: "auto",
         }}>
-          <PriceRangeSllider
+          <PriceRangeInputs
             productsState={productsState}
             productsDispatch={productsDispatch}
           />
