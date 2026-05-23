@@ -1,4 +1,4 @@
-import { PasswordValidatonResult } from "@/common/rules";
+import { PasswordValidatonResult } from "@/common/rule";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import Box, { BoxProps } from "@mui/material/Box";

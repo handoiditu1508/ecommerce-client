@@ -1,4 +1,4 @@
-import { toVndCurrency } from "@/common/formats";
+import { toVndCurrency } from "@/common/format";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { useAppDispatch } from "@/hooks";

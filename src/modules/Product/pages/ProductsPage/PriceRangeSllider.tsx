@@ -1,4 +1,4 @@
-import { toVndCurrency } from "@/common/formats";
+import { toVndCurrency } from "@/common/format";
 import Box from "@mui/material/Box";
 import Slider, { SliderProps } from "@mui/material/Slider";
 import { useTheme } from "@mui/material/styles";

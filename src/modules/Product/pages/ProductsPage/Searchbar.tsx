@@ -1,4 +1,4 @@
-import { ArrayItemType } from "@/common/typeHelpers";
+import { ArrayItemType } from "@/common/type";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
 import SearchIcon from "@mui/icons-material/Search";

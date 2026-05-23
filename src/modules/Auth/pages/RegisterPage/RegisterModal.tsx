@@ -1,4 +1,4 @@
-import { PasswordValidatonResult, validatePassword } from "@/common/rules";
+import { PasswordValidatonResult, validatePassword } from "@/common/rule";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import PasswordValidatonDisplayer from "@/components/PasswordValidatonDisplayer";

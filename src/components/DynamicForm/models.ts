@@ -1,4 +1,4 @@
-import { ArrayItemType } from "@/common/typeHelpers";
+import { ArrayItemType } from "@/common/type";
 import { Property } from "csstype";
 import { Path, PathValue, RegisterOptions } from "react-hook-form";
 

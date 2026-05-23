@@ -1,4 +1,4 @@
-import { toVndCurrency } from "@/common/formats";
+import { toVndCurrency } from "@/common/format";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import { ProductView } from "@/models/entities/Product";

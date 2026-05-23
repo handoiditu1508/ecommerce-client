@@ -1,4 +1,4 @@
-import { stopBubbling } from "@/common/eventHelpers";
+import { stopBubbling } from "@/common/event";
 import { BreakpointsContext, mdAndUpMediaQuery, smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { useLazySearchProductsQuery } from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";

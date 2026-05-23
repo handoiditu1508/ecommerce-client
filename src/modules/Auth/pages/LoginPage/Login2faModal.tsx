@@ -1,4 +1,4 @@
-import { preventDefault } from "@/common/eventHelpers";
+import { preventDefault } from "@/common/event";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";

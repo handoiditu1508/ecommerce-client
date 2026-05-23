@@ -1,5 +1,5 @@
-import { preventDefault, stopBubbling } from "@/common/eventHelpers";
-import { loadFileFromUrl } from "@/common/fileHelpers";
+import { preventDefault, stopBubbling } from "@/common/event";
+import { loadFileFromUrl } from "@/common/file";
 import CONFIG from "@/configs";
 import ForwardIcon from "@mui/icons-material/Forward";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
