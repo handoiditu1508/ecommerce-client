@@ -40,6 +40,9 @@ export type CategoryTreeProps = {
   productsDispatch: ActionDispatch<[ProductsReducerAction]>;
 };
 
+// limit maximum selected items to avoid url length too long and increase api response time
+const MAX_SELECT = 20;
+
 function CategoryTree({
   productsState,
   productsDispatch,
@@ -68,6 +71,10 @@ function CategoryTree({
   }, []);
 
   const handleSelectedItemsChange: UseTreeViewSelectionParameters<true>["onSelectedItemsChange"] = (event, itemIds) => {
+    if (itemIds.length > MAX_SELECT) {
+      return;
+    }
+
     productsDispatch({
       type: "SET_CATEGORIES",
       payload: itemIds.map((id) => parseInt(id)),

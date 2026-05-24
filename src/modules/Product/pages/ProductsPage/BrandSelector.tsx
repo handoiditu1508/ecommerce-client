@@ -53,6 +53,9 @@ function RowComponent({
   );
 }
 
+// limit maximum selected items to avoid url length too long and increase api response time
+const MAX_SELECT = 20;
+
 function BrandSelector({
   productsState,
   productsDispatch,
@@ -69,6 +72,10 @@ function BrandSelector({
   useGetBrandsHaveActiveProductQuery();
 
   const handleToggleBrand = (brandId: number, checked: boolean) => {
+    if (checked && productsState.brandIds.length >= MAX_SELECT) {
+      return;
+    }
+
     const newBrandIds = checked
       ? [...productsState.brandIds, brandId]
       : productsState.brandIds.filter((id) => id !== brandId);
