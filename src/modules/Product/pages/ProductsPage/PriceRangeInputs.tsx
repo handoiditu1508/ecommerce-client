@@ -24,7 +24,6 @@ function PriceMaskCustom({ onChange, ref, ...props }: PriceMaskCustomProps) {
       mask={Number}
       thousandsSeparator="."
       inputRef={ref}
-      overwrite
       onAccept={(_value, mask) => onChange({ target: { value: mask.unmaskedValue } })}
     />
   );
