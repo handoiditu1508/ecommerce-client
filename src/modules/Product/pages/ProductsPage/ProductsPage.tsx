@@ -28,10 +28,10 @@ function ProductsPage() {
   const searchOrdering = (searchParams.get("order") as SearchOrderingValue | null) ?? "createdDate-true";
   const [orderBy, orderByDescendingText] = searchOrdering?.split("-", 2) ?? [];
   const searchText = searchParams.get("search") ?? "";
-  const categoryIdsStr = searchParams.get("category");
   const categoryIds = searchParams.getAll("category").map((id) => parseInt(id));
+  const categoryIdsStr = categoryIds.join(",");
   const brandIds = searchParams.getAll("brand").map((id) => parseInt(id));
-  const brandIdsStr = searchParams.get("brand");
+  const brandIdsStr = brandIds.join(",");
   const minPrice = parseInt(searchParams.get("min")!) || undefined;
   const maxPrice = parseInt(searchParams.get("max")!) || undefined;
   const page = parseInt(searchParams.get("page")!) || 1;
