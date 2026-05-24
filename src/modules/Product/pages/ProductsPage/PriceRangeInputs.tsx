@@ -109,6 +109,7 @@ function PriceRangeInputs({
         <TextField
           label="Max Price"
           size="small"
+          error={productsState.minPrice !== undefined && productsState.maxPrice !== undefined && productsState.maxPrice < productsState.minPrice}
           value={productsState.maxPrice?.toString() ?? ""}
           slotProps={{
             input: {
