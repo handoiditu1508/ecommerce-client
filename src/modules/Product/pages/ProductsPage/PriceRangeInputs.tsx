@@ -2,6 +2,7 @@ import { toVndCurrency } from "@/common/format";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import { InputBaseComponentProps } from "@mui/material/InputBase";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -98,7 +99,7 @@ function PriceRangeInputs({
           value={productsState.minPrice?.toString() ?? ""}
           slotProps={{
             input: {
-              inputComponent: PriceMaskCustom as any,
+              inputComponent: PriceMaskCustom as unknown as React.ElementType<InputBaseComponentProps>,
             },
           }}
           onChange={handleMinPriceChange}
@@ -113,7 +114,7 @@ function PriceRangeInputs({
           value={productsState.maxPrice?.toString() ?? ""}
           slotProps={{
             input: {
-              inputComponent: PriceMaskCustom as any,
+              inputComponent: PriceMaskCustom as unknown as React.ElementType<InputBaseComponentProps>,
             },
           }}
           onChange={handleMaxPriceChange}
