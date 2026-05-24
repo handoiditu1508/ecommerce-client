@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import { useAppSelector } from "@/hooks";
 import Brand from "@/models/entities/Brand";
 import { useGetBrandsHaveActiveProductQuery } from "@/redux/apis/brandApi";
@@ -77,7 +78,9 @@ function BrandSelector({
     }
 
     const newBrandIds = checked
-      ? [...productsState.brandIds, brandId]
+      ? productsState.brandIds.length === brands.length - 1
+        ? CONFIG.EMPTY_ARRAY// all brands are selected mean no specific brands needed to filter
+        : [...productsState.brandIds, brandId]
       : productsState.brandIds.filter((id) => id !== brandId);
     productsDispatch({
       type: "SET_BRANDS",

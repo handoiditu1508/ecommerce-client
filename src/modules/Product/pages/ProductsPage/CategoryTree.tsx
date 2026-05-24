@@ -1,4 +1,5 @@
 import { distinct } from "@/common/array";
+import CONFIG from "@/configs";
 import { useAppSelector } from "@/hooks";
 import Category from "@/models/entities/Category";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
@@ -72,6 +73,17 @@ function CategoryTree({
 
   const handleSelectedItemsChange: UseTreeViewSelectionParameters<true>["onSelectedItemsChange"] = (event, itemIds) => {
     if (itemIds.length > MAX_SELECT) {
+      return;
+    }
+
+    // all categories are selected mean no specific categories needed to filter
+    const isSelectAll = categoryTreeItems.every((item) => itemIds.includes(item.id));
+    if (isSelectAll) {
+      productsDispatch({
+        type: "SET_CATEGORIES",
+        payload: CONFIG.EMPTY_ARRAY,
+      });
+
       return;
     }
 
