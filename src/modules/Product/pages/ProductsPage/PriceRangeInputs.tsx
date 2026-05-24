@@ -1,5 +1,7 @@
 import { toVndCurrency } from "@/common/format";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -77,11 +79,17 @@ function PriceRangeInputs({
     });
   };
 
+  const handleSwapPrices: React.MouseEventHandler<HTMLButtonElement> = () => {
+    productsDispatch({
+      type: "SET_PRICE_RANGE",
+      payload: [productsState.maxPrice, productsState.minPrice],
+    });
+  };
+
   return (
     <Box sx={{ px: 1 }}>
       <Box sx={{
         display: "flex",
-        gap: 1,
         alignItems: "center",
       }}>
         <TextField
@@ -95,7 +103,9 @@ function PriceRangeInputs({
           }}
           onChange={handleMinPriceChange}
         />
-        -
+        <IconButton size="small" aria-label="swap price" onClick={handleSwapPrices}>
+          <SwapHorizIcon fontSize="inherit" />
+        </IconButton>
         <TextField
           label="Max Price"
           size="small"

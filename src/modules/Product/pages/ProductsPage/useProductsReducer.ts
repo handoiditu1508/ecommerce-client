@@ -24,7 +24,7 @@ export type ProductsReducerAction = {
   payload: number[];
 } | {
   type: "SET_PRICE_RANGE";
-  payload: [number, number];
+  payload: [number | undefined, number | undefined];
 } | {
   type: "SET_MIN_PRICE" | "SET_MAX_PRICE";
   payload?: number;
