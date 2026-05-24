@@ -37,6 +37,10 @@ function FilterCriteria({
     setSearchParams(generateSearchParams(productsState));
   };
 
+  const handleClearFilter = () => {
+    productsDispatch({ type: "CLEAR_FILTER" });
+  };
+
   return (
     <>
       {mdAndUp && <Box sx={{
@@ -46,12 +50,14 @@ function FilterCriteria({
         mx: 0.5,
       }}>
         <Typography variant="h6" color="primary">Shop by</Typography>
-        <ButtonBase sx={{
-          ...theme.typography.caption,
-          border: theme.vars.shape.smallBorder,
-          px: 0.5,
-          borderRadius: theme.vars.shape.borderRadius,
-        }}>
+        <ButtonBase
+          sx={{
+            ...theme.typography.caption,
+            border: theme.vars.shape.smallBorder,
+            px: 0.5,
+            borderRadius: theme.vars.shape.borderRadius,
+          }}
+          onClick={handleClearFilter}>
           Clear All
         </ButtonBase>
       </Box>}
@@ -167,7 +173,8 @@ function FilterCriteria({
           size="large"
           variant="outlined"
           endIcon={<FilterListOffIcon />}
-          color="inherit">
+          color="inherit"
+          onClick={handleClearFilter}>
           Clear
         </Button>}
       </Box>

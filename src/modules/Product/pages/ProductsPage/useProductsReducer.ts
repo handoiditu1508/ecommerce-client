@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import { SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { useReducer } from "react";
 import { SearchOrderingValue } from "./Searchbar";
@@ -27,6 +28,8 @@ export type ProductsReducerAction = {
 } | {
   type: "SET_MIN_PRICE" | "SET_MAX_PRICE";
   payload?: number;
+} | {
+  type: "CLEAR_FILTER";
 } | {
   type: "SET_QUERY";
   payload: SearchProductsQuery;
@@ -71,6 +74,14 @@ const useProductsReducer = (initialState: ProductsReducerState) =>
           return {
             ...state,
             maxPrice: action.payload,
+          };
+        case "CLEAR_FILTER":
+          return {
+            ...state,
+            categoryIds: CONFIG.EMPTY_ARRAY,
+            brandIds: CONFIG.EMPTY_ARRAY,
+            minPrice: undefined,
+            maxPrice: undefined,
           };
         case "SET_QUERY":
           return {
