@@ -6,7 +6,6 @@ import { useCountSearchProductsQuery, useSearchProductsQuery } from "@/redux/api
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
-import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import Pagination from "@mui/material/Pagination";
@@ -15,6 +14,7 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import FilterChips from "./FilterChips";
 import FilterCriteria from "./FilterCriteria";
 import Searchbar, { SearchOrderingValue } from "./Searchbar";
 import Sidebar from "./Sidebar";
@@ -145,23 +145,7 @@ function ProductsPage() {
           pr: 1,
           gap: 1,
         }}>
-          <Box sx={{
-            flex: 1,
-            display: "flex",
-            gap: 0.5,
-            flexWrap: "wrap",
-          }}>
-            {[...Array(10)].map((_, index) => <Chip
-              key={index}
-              label={`category ${index + 1}`}
-              size="small"
-              color="primary"
-              component="a"
-              href="#"
-              clickable
-              onDelete={(e) => e.preventDefault()}
-            />)}
-          </Box>
+          <FilterChips query={query} />
           {countProductsResult.data && <Typography variant="caption" color="textDisabled">{countProductsResult.data} results found</Typography>}
         </Box>
         {
