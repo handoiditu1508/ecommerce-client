@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Skeleton, { skeletonClasses } from "@mui/material/Skeleton";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 type ProductDescriptionProps = {
@@ -8,8 +7,6 @@ type ProductDescriptionProps = {
 };
 
 function ProductDescription({ loading }: ProductDescriptionProps) {
-  const theme = useTheme();
-
   return (
     <Box
       component="section"
