@@ -2,9 +2,9 @@ import React from "react";
 import { Outlet, RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "./models";
 
-const ChangeEmailPage = React.lazy(() => import("@/modules/User2/pages/ChangeEmailPage"));
-const ChangePasswordPage = React.lazy(() => import("@/modules/User2/pages/ChangePasswordPage"));
-const UserSettingPage = React.lazy(() => import("@/modules/User2/pages/UserSettingPage"));
+const ChangeEmailPage = React.lazy(() => import("@/modules/user/pages/ChangeEmailPage"));
+const ChangePasswordPage = React.lazy(() => import("@/modules/user/pages/ChangePasswordPage"));
+const UserSettingPage = React.lazy(() => import("@/modules/user/pages/UserSettingPage"));
 
 const userRoutes: RouteObject[] = [
   {

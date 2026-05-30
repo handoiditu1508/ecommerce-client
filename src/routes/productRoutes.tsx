@@ -5,11 +5,11 @@ import React from "react";
 import { Outlet, RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "./models";
 
-const CartPage = React.lazy(() => import("@/modules/Product2/pages/CartPage"));
-const ProductDetailPage = React.lazy(() => import("@/modules/Product2/pages/ProductDetailPage"));
-const ProductsPage = React.lazy(() => import("@/modules/Product2/pages/ProductsPage"));
-const NewProductsPage = React.lazy(() => import("@/modules/Product2/pages/NewProductsPage"));
-const DiscountedProductsPage = React.lazy(() => import("@/modules/Product2/pages/DiscountedProductsPage"));
+const CartPage = React.lazy(() => import("@/modules/product/pages/CartPage"));
+const ProductDetailPage = React.lazy(() => import("@/modules/product/pages/ProductDetailPage"));
+const ProductsPage = React.lazy(() => import("@/modules/product/pages/ProductsPage"));
+const NewProductsPage = React.lazy(() => import("@/modules/product/pages/NewProductsPage"));
+const DiscountedProductsPage = React.lazy(() => import("@/modules/product/pages/DiscountedProductsPage"));
 
 const productRoutes: RouteObject[] = [
   {
