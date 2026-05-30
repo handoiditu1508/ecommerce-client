@@ -2,7 +2,7 @@ import React from "react";
 import { RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "../models";
 
-const DashboardPage = React.lazy(() => import("@/modules/admin/Main/pages/DashboardPage"));
+const DashboardPage = React.lazy(() => import("@/modules/admin/Main2/pages/DashboardPage"));
 
 const mainRoutes: RouteObject[] = [
   {
