@@ -1,5 +1,5 @@
 import CustomLink from "@/components/CustomLink";
-import { useAppSelector } from "@/hooks";
+import useAppSelector from "@/hooks/useAppSelector";
 import { useGetAllBrandsQuery } from "@/redux/apis/brandApi";
 import { brandSelectors } from "@/redux/slices/brandSlice";
 import Skeleton from "@mui/material/Skeleton";

@@ -1,6 +1,7 @@
 import { toVndCurrency } from "@/common/format";
 import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import useAppSelector from "@/hooks/useAppSelector";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { cartSelectors, refreshCartAsync, rehydrateCartAsync } from "@/redux/slices/cartSlice";
 import { CartProductVariantData } from "@/redux/utils/cartUtils";

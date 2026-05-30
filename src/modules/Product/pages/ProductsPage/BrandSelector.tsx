@@ -1,5 +1,5 @@
 import CONFIG from "@/configs";
-import { useAppSelector } from "@/hooks";
+import useAppSelector from "@/hooks/useAppSelector";
 import Brand from "@/models/entities/Brand";
 import { useGetBrandsHaveActiveProductQuery } from "@/redux/apis/brandApi";
 import { brandSelectors } from "@/redux/slices/brandSlice";

@@ -1,7 +1,7 @@
 import { toVndCurrency } from "@/common/format";
 import NumberSpinner from "@/components/NumberSpinner";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { useAppDispatch } from "@/hooks";
+import useAppDispatch from "@/hooks/useAppDispatch";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { ProductVariant } from "@/models/entities/Product";

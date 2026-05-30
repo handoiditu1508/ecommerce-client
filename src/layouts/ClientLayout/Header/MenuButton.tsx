@@ -1,7 +1,7 @@
 import CustomLink from "@/components/CustomLink";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
-import { useAppDispatch } from "@/hooks";
+import useAppDispatch from "@/hooks/useAppDispatch";
 import UKRoundedFlagIcon from "@/icons/UKRoundedFlagIcon";
 import VNRoundedFlagIcon from "@/icons/VNRoundedFlagIcon";
 import { clearAuthState } from "@/redux/slices/authSlice";

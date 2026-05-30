@@ -1,5 +1,6 @@
 import { smAndUpMediaQuery } from "@/contexts/breakpoints";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import useAppSelector from "@/hooks/useAppSelector";
 import { cartSelectors, changeProductVariantInCart } from "@/redux/slices/cartSlice";
 import { CartItemData, CartProductVariantData } from "@/redux/utils/cartUtils";
 import EditIcon from "@mui/icons-material/Edit";

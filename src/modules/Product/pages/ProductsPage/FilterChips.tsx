@@ -1,5 +1,5 @@
 import { toVndCurrency } from "@/common/format";
-import { useAppSelector } from "@/hooks";
+import useAppSelector from "@/hooks/useAppSelector";
 import { SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { useGetBrandsHaveActiveProductQuery } from "@/redux/apis/brandApi";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";

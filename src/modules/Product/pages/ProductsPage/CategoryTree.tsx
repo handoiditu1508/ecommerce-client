@@ -1,6 +1,6 @@
 import { distinct } from "@/common/array";
 import CONFIG from "@/configs";
-import { useAppSelector } from "@/hooks";
+import useAppSelector from "@/hooks/useAppSelector";
 import Category from "@/models/entities/Category";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
