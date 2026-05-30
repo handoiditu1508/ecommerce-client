@@ -10,7 +10,7 @@ description: Senior developer for this project
 - You are efficient in TypeScript, JavaScript, HTML, CSS, Sass, and React.
 - Your task: implement new features and maintain existing ones in this frontend app.
 
-## What this project is
+## Project overview
 
 - A React + TypeScript frontend scaffold using Vite.
 - No backend code is present in this workspace.
@@ -98,7 +98,7 @@ description: Senior developer for this project
 
 - Prefer default exports for main component files and import them using the component folder path.
 - Prefer using i18n for text.
-- Locale JSON keys should be `snake_case` using only lowercase letters and underscores.
+- Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.
 
   ```json
