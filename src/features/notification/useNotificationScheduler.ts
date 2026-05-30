@@ -1,5 +1,6 @@
 import CONFIG from "@/configs";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import useAppSelector from "@/hooks/useAppSelector";
 import { nextNotification, notificationSelectors, setShouldSetTimeout, setTimeoutId } from "@/redux/slices/notificationSlice";
 import { useEffect } from "react";
 

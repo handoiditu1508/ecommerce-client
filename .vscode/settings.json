@@ -7,7 +7,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.sort.json": "explicit"
   },
   "explorer.compactFolders": false,
   "files.insertFinalNewline": true,
@@ -29,6 +30,11 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
+  "[jsonc]": {
+    "editor.codeActionsOnSave": {
+      "source.sort.json": "never"
+    }
+  },
   "eslint.format.enable": true,
   "prettier.disableLanguages": [
     "javascript",
@@ -37,6 +43,13 @@
     "typescriptreact"
   ],
   "files.eol": "\r\n",
+  "files.associations": {
+    ".vscode/**/*.json": "jsonc",
+    "package-lock.json": "jsonc",
+    "package.json": "jsonc",
+    "tsconfig.json": "jsonc",
+    "tsconfig.node.json": "jsonc"
+  },
   "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
     "^@mui/[^/]+$"
   ],

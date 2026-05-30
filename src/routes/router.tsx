@@ -8,6 +8,7 @@ import mainRoutes from "./mainRoutes";
 
 const ClientLayout = React.lazy(() => import("@/layouts/ClientLayout"));
 const AuthLayout = React.lazy(() => import("@/layouts/AuthLayout"));
+const NotFoundPage = React.lazy(() => import("./NotFoundPage"));
 
 const router = createBrowserRouter([
   {
@@ -24,11 +25,7 @@ const router = createBrowserRouter([
       ...adminRoutes,
       {
         path: "*",
-        element: (
-          <main style={{ padding: "1rem" }}>
-            <p>There's nothing here!</p>
-          </main>
-        ),
+        element: <NotFoundPage />,
       },
     ],
   },

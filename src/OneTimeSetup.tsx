@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { ConfirmationDialog } from "./features/confirmationDialog";
 import { NotificationSnackbar, useNotificationScheduler } from "./features/notification";
-import { useAppDispatch } from "./hooks";
+import useAppDispatch from "./hooks/useAppDispatch";
 import { loadAuthStateFromLocalAsync } from "./redux/slices/authSlice";
 
 function OneTimeSetup() {

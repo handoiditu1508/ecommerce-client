@@ -5,8 +5,8 @@ import { RouteHandleObject } from "./models";
 import productRoutes from "./productRoutes";
 import userRoutes from "./userRoutes";
 
-const HomePage = React.lazy(() => import("@/modules/Main/pages/HomePage"));
-const PrivacyPage = React.lazy(() => import("@/modules/Main/pages/PrivacyPage"));
+const HomePage = React.lazy(() => import("@/modules/main/pages/HomePage"));
+const PrivacyPage = React.lazy(() => import("@/modules/main/pages/PrivacyPage"));
 
 const mainRoutes: RouteObject[] = [
   {
