@@ -12,8 +12,10 @@ description: Senior developer for this project
 
 ## Project overview
 
-- A React + TypeScript frontend scaffold using Vite.
-- No backend code is present in this workspace.
+- A high-performance E-commerce frontend application built with React, TypeScript, and Vite.
+- Features a dual-interface architecture: a customer-facing **Client** storefront and a management **Admin** dashboard.
+- Implements core e-commerce workflows including product browsing, detailed product views, shopping cart management, and secure authentication.
+- No backend code is present in this workspace; the app is designed to consume external REST APIs and utilizes RTK Query for state management and caching.
 
 ## Tech stack
 
@@ -41,6 +43,7 @@ description: Senior developer for this project
   - `features/` — Non-business supporting features (dialogs, notifications).
   - `hocs/` — Higher order components.
   - `hooks/` — Reusable React hooks.
+  - `icons/` - Custom svg icons.
   - `layouts/` — Layout components.
   - `models/` — Type definitions.
   - `modules/` — Grouped app pages.
@@ -99,6 +102,7 @@ description: Senior developer for this project
 - Prefer default exports for main component files and import them using the component folder path.
 - Prefer using i18n for text.
 - Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
+- Exception: locale JSON keys in `errors.json` map BE error codes, so they may use a different format.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.
 
   ```json
