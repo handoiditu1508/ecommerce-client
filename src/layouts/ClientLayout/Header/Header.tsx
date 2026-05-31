@@ -4,7 +4,6 @@ import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { mdiSale } from "@mdi/js";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
-import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -25,6 +24,7 @@ import MoreOptionsButton from "./MoreOptionsButton";
 import NotificationButton from "./NotificationButton";
 import PaletteModeSelect from "./PaletteModeSelect";
 import Searchbar from "./Searchbar";
+import UserMenuButton from "./UserMenuButton";
 
 function Header() {
   const theme = useTheme();
@@ -73,9 +73,7 @@ function Header() {
           <Searchbar />
           <Stack direction="row">
             {mdAndUp && <>
-              <IconButton sx={{ color: "inherit" }}>
-                <PersonIcon />
-              </IconButton>
+              <UserMenuButton sx={{ color: "inherit" }} />
               <NotificationButton sx={{ color: "inherit" }} />
             </>}
             {smAndUp && <IconButton component={Link} to="/cart" edge="end" sx={{ color: "inherit" }}>
