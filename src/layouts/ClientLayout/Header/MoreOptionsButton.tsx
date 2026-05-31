@@ -1,3 +1,6 @@
+import useAppSelector from "@/hooks/useAppSelector";
+import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
+import { categorySelectors } from "@/redux/slices/categorySlice";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ButtonBase from "@mui/material/ButtonBase";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -10,15 +13,17 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import { useTheme } from "@mui/material/styles";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 function MoreOptionsButton() {
-  // const [moreOptionsAnchorEl, setMoreOptionsAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
+  const categoriesTree = useAppSelector(categorySelectors.tree);
   const anchorEl = useRef<HTMLButtonElement>({} as HTMLButtonElement);
   const [open, setOpen] = useState(false);
   const id = open ? "more-options-popper" : undefined;
+
+  useGetCategoryTreesQuery();
 
   const handleClick = () => {
     setOpen(!open);
@@ -55,50 +60,37 @@ function MoreOptionsButton() {
                 sx={{
                   display: "flex",
                 }}>
-                <List
-                  aria-labelledby="more-opt-1"
-                  dense
-                  subheader={<ListSubheader id="more-opt-1" disableSticky>Subheader 1</ListSubheader>}>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 1" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 2" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 3" />
-                  </ListItemButton>
-                </List>
-                <Divider orientation="vertical" flexItem />
-                <List
-                  aria-labelledby="more-opt-2"
-                  dense
-                  subheader={<ListSubheader id="more-opt-2" disableSticky>Subheader 2</ListSubheader>}>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 1" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 2" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 3" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 4" />
-                  </ListItemButton>
-                </List>
-                <Divider orientation="vertical" flexItem />
-                <List
-                  aria-labelledby="more-opt-3"
-                  dense
-                  subheader={<ListSubheader id="more-opt-3" disableSticky>Subheader 3</ListSubheader>}>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 1" />
-                  </ListItemButton>
-                  <ListItemButton component={Link} to="/">
-                    <ListItemText primary="Option 2" />
-                  </ListItemButton>
-                </List>
+                {categoriesTree.map((category, index) => (
+                  <Fragment key={category.id}>
+                    <List
+                      aria-labelledby={`more-opt-${category.id}`}
+                      dense
+                      subheader={
+                        <ListSubheader
+                          id={`more-opt-${category.id}`}
+                          disableSticky
+                          component={Link}
+                          to={`/products?category=${category.id}`}
+                          sx={{
+                            textDecoration: "none",
+                          }}
+                          onClick={() => setOpen(false)}>
+                          {category.name}
+                        </ListSubheader>
+                      }>
+                      {category.children.map((child) => (
+                        <ListItemButton
+                          key={child.id}
+                          component={Link}
+                          to={`/products?category=${child.id}`}
+                          onClick={() => setOpen(false)}>
+                          <ListItemText primary={child.name} />
+                        </ListItemButton>
+                      ))}
+                    </List>
+                    {index < categoriesTree.length - 1 && <Divider orientation="vertical" flexItem />}
+                  </Fragment>
+                ))}
               </Paper>
             </Fade>
           </ClickAwayListener>

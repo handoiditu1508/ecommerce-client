@@ -23,7 +23,6 @@ import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -175,7 +174,7 @@ function MenuButton() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products">
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>
@@ -183,13 +182,11 @@ function MenuButton() {
             </ListItemButton>
           </ListItem>
         </List>
-        <Divider />
-        <ToggleButtonGroup value={mode} color="primary" fullWidth aria-label="toggle button group" sx={{ my: 1 }}>
-          <ToggleButton value="light" onClick={() => setMode("light")}><LightModeIcon /></ToggleButton>
+        <ToggleButtonGroup value={mode} color="primary" fullWidth aria-label="toggle button group">
+          <ToggleButton value="light" sx={{ borderRadius: 0, borderLeft: "none" }} onClick={() => setMode("light")}><LightModeIcon /></ToggleButton>
           <ToggleButton value="system" onClick={() => setMode("system")}><SettingsBrightnessIcon /></ToggleButton>
-          <ToggleButton value="dark" onClick={() => setMode("dark")}><DarkModeIcon /></ToggleButton>
+          <ToggleButton value="dark" sx={{ borderRadius: 0, borderRight: "none" }} onClick={() => setMode("dark")}><DarkModeIcon /></ToggleButton>
         </ToggleButtonGroup>
-        <Divider />
         <List>
           <ListItem>
             <ListItemButton onClick={() => setLanguageOpen(!languageOpen)}>
