@@ -6,7 +6,6 @@ import { mdiSale } from "@mdi/js";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PersonIcon from "@mui/icons-material/Person";
-import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -14,8 +13,6 @@ import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import ButtonBase from "@mui/material/ButtonBase";
 import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import InputBase from "@mui/material/InputBase";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
@@ -28,6 +25,7 @@ import LanguageSelect from "./LanguageSelect";
 import MenuButton from "./MenuButton";
 import MoreOptionsButton from "./MoreOptionsButton";
 import PaletteModeSelect from "./PaletteModeSelect";
+import Searchbar from "./Searchbar";
 
 function Header() {
   const theme = useTheme();
@@ -73,37 +71,7 @@ function Header() {
             <img src={logo} alt="logo" width={30} height={30} style={{ marginRight: theme.spacing(1) }} />
             <Typography variant="h5">Logo</Typography>
           </CustomLink>}
-          <InputBase
-            fullWidth
-            placeholder="Search..."
-            size="small"
-            sx={{
-              px: 2,
-              py: 0.5,
-              borderRadius: 1,
-              color: "inherit",
-              backgroundColor: theme.alpha(theme.palette.common.white, 0.15),
-              "&:hover": {
-                backgroundColor: theme.alpha(theme.palette.common.white, 0.25),
-              },
-            }}
-            endAdornment={
-              <InputAdornment
-                position="end"
-                sx={{
-                  color: "inherit",
-                }}>
-                <IconButton
-                  aria-label="search"
-                  edge="end"
-                  sx={{
-                    color: "inherit",
-                  }}>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
+          <Searchbar />
           <Stack direction="row">
             {mdAndUp && <>
               <IconButton sx={{ color: "inherit" }}>
