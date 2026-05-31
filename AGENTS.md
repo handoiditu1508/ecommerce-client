@@ -74,6 +74,7 @@ description: Senior developer for this project
 
 - Prefer using existing code over creating new code when possible.
 - Prefer relative imports when they are shorter and simpler; use `@` imports when they make the path clearer or avoid deep relative navigation.
+- Prefer using `type` over `interface` when possible.
 - Long and complex components should be split into smaller components or files within the same folder.
 - When you split a component into smaller parts in the same folder, re-export the main component through `index.ts`.
 
