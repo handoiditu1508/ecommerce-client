@@ -15,7 +15,6 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -37,6 +36,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import { MouseEventHandler, useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import NotificationButton from "./NotificationButton";
 
 function MenuButton() {
   const theme = useTheme();
@@ -93,21 +93,13 @@ function MenuButton() {
             onClick={() => setOpen(false)}>
             <MenuOpenIcon />
           </IconButton>}
-          <IconButton sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-          }}>
-            <Badge
-              badgeContent={4}
-              color="error"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}>
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <NotificationButton
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+            }}
+          />
           <Avatar
             alt="avatar"
             sx={{
