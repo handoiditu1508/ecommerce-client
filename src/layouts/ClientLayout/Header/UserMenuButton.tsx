@@ -74,7 +74,7 @@ function UserMenuButton(props: UserMenuButtonProps) {
         {isLoggedIn
           ? (
             [
-              <MenuItem key="settings" component={Link} to="/" onClick={handleClose}>
+              <MenuItem key="settings" component={Link} to="/account" onClick={handleClose}>
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>

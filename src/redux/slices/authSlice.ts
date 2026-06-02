@@ -1,6 +1,6 @@
 import { LoginResponse } from "@/models/apis/auth/login";
 import User from "@/models/entities/User";
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";
 import userApi from "../apis/userApi";
 import { RootState } from "../store";
@@ -89,11 +89,12 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        (action: PayloadAction<LoginResponse>) =>
-          authApi.endpoints.login.matchFulfilled(action)
-          || authApi.endpoints.refreshToken.matchFulfilled(action)
-          || authApi.endpoints.registerConfirmedEmail.matchFulfilled(action)
-          || authApi.endpoints.login2fa.matchFulfilled(action),
+        isAnyOf(
+          authApi.endpoints.login.matchFulfilled,
+          authApi.endpoints.refreshToken.matchFulfilled,
+          authApi.endpoints.registerConfirmedEmail.matchFulfilled,
+          authApi.endpoints.login2fa.matchFulfilled
+        ),
         (state: AuthState, action: PayloadAction<LoginResponse>) => {
           const newAction = authSlice.actions.setAuthState(action.payload);
           authSlice.caseReducers.setAuthState(state, newAction);
@@ -108,7 +109,10 @@ const authSlice = createSlice({
         }
       )
       .addMatcher(
-        userApi.endpoints.getSelf.matchFulfilled,
+        isAnyOf(
+          userApi.endpoints.getSelf.matchFulfilled,
+          userApi.endpoints.updateSelf.matchFulfilled
+        ),
         (state: AuthState, action: PayloadAction<User>) => {
           const newAction = authSlice.actions.setAuthUser(action.payload);
           authSlice.caseReducers.setAuthUser(state, newAction);

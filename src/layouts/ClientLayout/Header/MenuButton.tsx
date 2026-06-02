@@ -128,8 +128,8 @@ function MenuButton() {
           }}>
             <Typography variant="h6">John Doe</Typography>
             <Box flexGrow={1} />
-            <CustomLink to="/" typography="caption">Setting</CustomLink>
-            <CustomLink to="/" typography="caption" onClick={logout}>Sign out</CustomLink>
+            <CustomLink to="/account" typography="caption">Setting</CustomLink>
+            <Typography variant="caption" onClick={logout}>Sign out</Typography>
           </Stack>
         </Box>
         <List>
