@@ -1,9 +1,9 @@
 import HomeIcon from "@mui/icons-material/Home";
 import React from "react";
 import { Outlet, RouteObject } from "react-router-dom";
+import accountRoutes from "./accountRoutes";
 import { RouteHandleObject } from "./models";
 import productRoutes from "./productRoutes";
-import userRoutes from "./userRoutes";
 
 const HomePage = React.lazy(() => import("@/modules/main/pages/HomePage"));
 const PrivacyPage = React.lazy(() => import("@/modules/main/pages/PrivacyPage"));
@@ -37,7 +37,7 @@ const mainRoutes: RouteObject[] = [
         } as RouteHandleObject,
       },
       ...productRoutes,
-      ...userRoutes,
+      ...accountRoutes,
     ],
   },
 ];

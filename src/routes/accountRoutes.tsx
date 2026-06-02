@@ -2,13 +2,13 @@ import React from "react";
 import { Outlet, RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "./models";
 
-const ChangeEmailPage = React.lazy(() => import("@/modules/user/pages/ChangeEmailPage"));
-const ChangePasswordPage = React.lazy(() => import("@/modules/user/pages/ChangePasswordPage"));
-const UserSettingPage = React.lazy(() => import("@/modules/user/pages/UserSettingPage"));
+const ChangeEmailPage = React.lazy(() => import("@/modules/account/pages/ChangeEmailPage"));
+const ChangePasswordPage = React.lazy(() => import("@/modules/account/pages/ChangePasswordPage"));
+const UserSettingPage = React.lazy(() => import("@/modules/account/pages/UserSettingPage"));
 
-const userRoutes: RouteObject[] = [
+const accountRoutes: RouteObject[] = [
   {
-    path: "user",
+    path: "account",
     element: <Outlet />,
     handle: {
       hideBreadcrumbs: true,
@@ -36,4 +36,4 @@ const userRoutes: RouteObject[] = [
   },
 ];
 
-export default userRoutes;
+export default accountRoutes;
