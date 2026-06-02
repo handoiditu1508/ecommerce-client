@@ -4,7 +4,7 @@ import { RouteHandleObject } from "./models";
 
 const ChangeEmailPage = React.lazy(() => import("@/modules/account/pages/ChangeEmailPage"));
 const ChangePasswordPage = React.lazy(() => import("@/modules/account/pages/ChangePasswordPage"));
-const UserSettingPage = React.lazy(() => import("@/modules/account/pages/UserSettingPage"));
+const ProfilePage = React.lazy(() => import("@/modules/account/pages/ProfilePage"));
 
 const accountRoutes: RouteObject[] = [
   {
@@ -16,7 +16,7 @@ const accountRoutes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <UserSettingPage />,
+        element: <ProfilePage />,
       },
       {
         path: "change-email",
