@@ -1,35 +1,34 @@
+import useRouteMatch from "@/hooks/useRouteMatch";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-enum TabOption {
-  Profile,
-  ChangeEmail,
-  ChangePassword,
-}
-
 function SettingLayout() {
-  const [value, setValue] = useState<TabOption>(TabOption.Profile);
-
-  const handleChange = (event: React.SyntheticEvent, value: TabOption) => {
-    setValue(value);
-  };
+  const routeMatch = useRouteMatch(["/account/change-password", "/account/change-email", "/account"]);
+  const currentTab = routeMatch?.pattern?.path ?? "/account";
 
   return (
-    <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex", height: 224 }}>
+    <Box sx={{
+      display: "flex",
+    }}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
-        value={value}
-        onChange={handleChange}
+        value={currentTab}
+        sx={{
+          borderRight: 1,
+          borderColor: "divider",
+        }}
       >
-        <Tab label="Profile" value={TabOption.Profile} to="/account" component={Link} />
-        <Tab label="Change Email" value={TabOption.ChangeEmail} to="/account/change-email" component={Link} />
-        <Tab label="Change Password" value={TabOption.ChangePassword} to="/account/change-password" component={Link} />
+        <Tab label="Profile" value="/account" to="/account" component={Link} />
+        <Tab label="Change Email" value="/account/change-email" to="/account/change-email" component={Link} />
+        <Tab label="Change Password" value="/account/change-password" to="/account/change-password" component={Link} />
       </Tabs>
-      <Box>
+      <Box sx={{
+        flex: 1,
+        px: 2,
+      }}>
         <Outlet />
       </Box>
     </Box>

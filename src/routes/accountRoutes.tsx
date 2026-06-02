@@ -1,3 +1,4 @@
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import React from "react";
 import { RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "./models";
@@ -11,26 +12,38 @@ const accountRoutes: RouteObject[] = [
   {
     path: "account",
     element: <SettingLayout />,
-    handle: {
-      hideBreadcrumbs: true,
-    } as RouteHandleObject,
     children: [
       {
         index: true,
         element: <ProfilePage />,
+        handle: {
+          crumb: {
+            icon: <ManageAccountsIcon />,
+            to: "/account",
+            label: "Profile",
+          },
+        } as RouteHandleObject,
       },
       {
         path: "change-email",
         element: <ChangeEmailPage />,
         handle: {
-          hideBreadcrumbs: true,
+          crumb: {
+            icon: <ManageAccountsIcon />,
+            to: "/account/change-email",
+            label: "Change Email",
+          },
         } as RouteHandleObject,
       },
       {
         path: "change-password",
         element: <ChangePasswordPage />,
         handle: {
-          hideBreadcrumbs: true,
+          crumb: {
+            icon: <ManageAccountsIcon />,
+            to: "/account/change-password",
+            label: "Change Password",
+          },
         } as RouteHandleObject,
       },
     ],

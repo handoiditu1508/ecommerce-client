@@ -1,10 +1,12 @@
 import CustomLink from "@/components/CustomLink";
+import LetterAvatar from "@/components/LetterAvatar";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import useAppDispatch from "@/hooks/useAppDispatch";
+import useAppSelector from "@/hooks/useAppSelector";
 import UKRoundedFlagIcon from "@/icons/UKRoundedFlagIcon";
 import VNRoundedFlagIcon from "@/icons/VNRoundedFlagIcon";
-import { clearAuthState } from "@/redux/slices/authSlice";
+import { authSelectors, clearAuthState } from "@/redux/slices/authSlice";
 import { mdiSale } from "@mdi/js";
 import CategoryIcon from "@mui/icons-material/Category";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -18,7 +20,6 @@ import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -40,6 +41,7 @@ import NotificationButton from "./NotificationButton";
 
 function MenuButton() {
   const theme = useTheme();
+  const authUser = useAppSelector(authSelectors.user);
   const [open, setOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const { xsAndDown } = useContext(BreakpointsContext);
@@ -100,25 +102,23 @@ function MenuButton() {
               right: 0,
             }}
           />
-          <Avatar
+          <LetterAvatar
             alt="avatar"
             sx={{
               color: "inherit",
               width: 80,
               height: 80,
+              fontSize: 60,
               [xsAndDownMediaQuery(theme.breakpoints)]: {
                 width: 120,
                 height: 120,
-              },
-            }}>
-            <Face2Icon sx={{
-              fontSize: 60,
-              [xsAndDownMediaQuery(theme.breakpoints)]: {
                 fontSize: 90,
               },
-            }}
-            />
-          </Avatar>
+            }}>
+            {authUser
+              ? `${authUser.firstName} ${authUser.lastName}`
+              : <Face2Icon fontSize="inherit" />}
+          </LetterAvatar>
           <Stack sx={{
             height: 80,
             ml: 1,
@@ -126,10 +126,19 @@ function MenuButton() {
               alignItems: "center",
             },
           }}>
-            <Typography variant="h6">John Doe</Typography>
-            <Box flexGrow={1} />
-            <CustomLink to="/account" typography="caption">Setting</CustomLink>
-            <Typography variant="caption" onClick={logout}>Sign out</Typography>
+            {authUser
+              ? <>
+                <Typography variant="h6">{authUser.firstName} {authUser.lastName}</Typography>
+                <Box flexGrow={1} />
+                <CustomLink to="/account" typography="caption">Setting</CustomLink>
+                <CustomLink to="/" typography="caption" onClick={logout}>Sign out</CustomLink>
+              </>
+              : <>
+                <Box flexGrow={1} />
+                <CustomLink to="/login" typography="caption">Login</CustomLink>
+                <CustomLink to="/register" typography="caption" onClick={logout}>Register</CustomLink>
+                <Box flexGrow={1} />
+              </>}
           </Stack>
         </Box>
         <List>
