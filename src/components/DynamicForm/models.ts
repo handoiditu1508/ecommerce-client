@@ -89,7 +89,7 @@ export type DynamicFormModel<T extends Record<string, any>> = {
   inputs: {
     [K in Path<T>]: DynamicInputModel<T, K>
   }[Path<T>][];
-  submitButtonText: string;
+  submitButtonText?: string;
   postActionInputs?: {
     [K in Path<T>]: DynamicInputModel<T, K>
   }[Path<T>][];

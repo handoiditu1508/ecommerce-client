@@ -67,7 +67,7 @@ function DynamicForm<T extends Record<string, any>>({
           autocompleteLoadingMap={autocompleteLoadingMap}
         />
       ))}
-      <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>
+      {model.submitButtonText && <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>}
       {model.postActionInputs && model.postActionInputs.map((inputModel) => (
         <DynamicInput
           key={inputModel.name}
