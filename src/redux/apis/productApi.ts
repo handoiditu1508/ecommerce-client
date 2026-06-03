@@ -46,6 +46,7 @@ const productApi = appApi.injectEndpoints({
         method: "GET",
         params: arg,
       }),
+      providesTags: (_result, error) => providesCountTag("Product", error),
     }),
     getProduct: builder.query<Product, GetProductQuery>({
       query: (arg) => ({

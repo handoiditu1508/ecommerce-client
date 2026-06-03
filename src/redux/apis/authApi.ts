@@ -1,10 +1,15 @@
+import { ChangeEmailCommand } from "@/models/apis/auth/changeEmail";
+import { ChangePasswordCommand } from "@/models/apis/auth/changePassword";
+import { ConfirmChangeEmailCommand } from "@/models/apis/auth/confirmChangeEmail";
 import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/auth/forgotPassword";
 import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
 import { Login2faCommand } from "@/models/apis/auth/login2fa";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/auth/registerConfirmedEmail";
 import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
+import { Set2faCommand } from "@/models/apis/auth/set2fa";
 import { SendEmailResponse } from "@/models/apis/common";
+import User from "@/models/entities/User";
 import appApi from "./appApi";
 
 const authApi = appApi.injectEndpoints({
@@ -58,6 +63,34 @@ const authApi = appApi.injectEndpoints({
         body,
       }),
     }),
+    changeEmail: builder.mutation<SendEmailResponse, ChangeEmailCommand>({
+      query: (body) => ({
+        url: "/auth/changeEmail",
+        method: "PUT",
+        body,
+      }),
+    }),
+    confirmChangeEmail: builder.mutation<void, ConfirmChangeEmailCommand>({
+      query: (body) => ({
+        url: `/auth/${body.userId}/confirmChangeEmail`,
+        method: "PUT",
+        body,
+      }),
+    }),
+    changePassword: builder.mutation<User, ChangePasswordCommand>({
+      query: (body) => ({
+        url: "/auth/changePassword",
+        method: "PUT",
+        body,
+      }),
+    }),
+    set2Fa: builder.mutation<User, Set2faCommand>({
+      query: (body) => ({
+        url: "/auth/2fa",
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -71,4 +104,8 @@ export const {
   useLogin2faMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useChangeEmailMutation,
+  useConfirmChangeEmailMutation,
+  useChangePasswordMutation,
+  useSet2FaMutation,
 } = authApi;

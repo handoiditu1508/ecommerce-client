@@ -111,7 +111,9 @@ const authSlice = createSlice({
       .addMatcher(
         isAnyOf(
           userApi.endpoints.getSelf.matchFulfilled,
-          userApi.endpoints.updateSelf.matchFulfilled
+          userApi.endpoints.updateSelf.matchFulfilled,
+          authApi.endpoints.changePassword.matchFulfilled,
+          authApi.endpoints.set2Fa.matchFulfilled
         ),
         (state: AuthState, action: PayloadAction<User>) => {
           const newAction = authSlice.actions.setAuthUser(action.payload);
