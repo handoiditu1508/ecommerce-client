@@ -41,8 +41,9 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   autocompleteRenderOption?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"];
   autocompleteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
   autocompleteLoading?: boolean;
+  hidden?: boolean | ((data: T) => boolean);
 
-  // these props come from DynamicForm
+  // these props come from DynamicForm and is used for DynamicArrayInput
   startAdornmentMap?: DynamicFormProps<T>["startAdornmentMap"];
   endAdornmentMap?: DynamicFormProps<T>["endAdornmentMap"];
   labelMap?: DynamicFormProps<T>["labelMap"];
@@ -52,6 +53,7 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   autocompleteRenderOptionMap?: DynamicFormProps<T>["autocompleteRenderOptionMap"];
   autocompleteOnInputChangeMap?: DynamicFormProps<T>["autocompleteOnInputChangeMap"];
   autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
+  hiddenMap?: DynamicFormProps<T>["hiddenMap"];
 };
 
 function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
@@ -67,6 +69,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteRenderOption,
   autocompleteOnInputChange,
   autocompleteLoading,
+  hidden,
   startAdornmentMap,
   endAdornmentMap,
   labelMap,
@@ -76,13 +79,15 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteRenderOptionMap,
   autocompleteOnInputChangeMap,
   autocompleteLoadingMap,
+  hiddenMap,
 }: DynamicInputProps<T, K>) {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const data = formContext.watch();
 
-  const hidden: boolean | undefined = typeof model.hidden === "function" ? model.hidden(data) : model.hidden;
-  if (hidden) return null;
+  const hiddenProp = hidden ?? model.hidden;
+  let finalHidden: boolean | undefined = typeof hiddenProp === "function" ? hiddenProp(data) : hiddenProp;
+  if (finalHidden) return null;
 
   const finalLabel = label || model.label;
 

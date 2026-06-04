@@ -28,6 +28,7 @@ export type DynamicArrayInputProps<T extends Record<string, any>, K extends Path
   autocompleteRenderOptionMap?: DynamicFormProps<T>["autocompleteRenderOptionMap"];
   autocompleteOnInputChangeMap?: DynamicFormProps<T>["autocompleteOnInputChangeMap"];
   autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
+  hiddenMap?: DynamicFormProps<T>["hiddenMap"];
 };
 
 /**
@@ -74,6 +75,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteRenderOptionMap = CONFIG.EMPTY_OBJECT,
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
+  hiddenMap = CONFIG.EMPTY_OBJECT,
 }: DynamicArrayInputProps<T, K>) {
   const theme = useTheme();
   const { fields, append, remove } = useFieldArray<T, ArrayPath<T>>({
@@ -149,6 +151,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                   autocompleteRenderOption={getFinalValue(autocompleteRenderOptionMap as Partial<Record<Path<T>, any>>, pathName)}
                   autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
                   autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
+                  hidden={getFinalValue(hiddenMap, pathName)}
                 />
               );
             })}
@@ -173,6 +176,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                   autocompleteRenderOption={getFinalValue(autocompleteRenderOptionMap as Partial<Record<Path<T>, any>>, pathName)}
                   autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
                   autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
+                  hidden={getFinalValue(hiddenMap, pathName)}
                 />
               );
             })()}

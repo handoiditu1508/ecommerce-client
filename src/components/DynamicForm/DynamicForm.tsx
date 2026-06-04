@@ -20,6 +20,7 @@ export type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"for
   autocompleteRenderOptionMap?: { [K in Path<T>]?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"] };
   autocompleteOnInputChangeMap?: Partial<Record<Path<T>, (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void>>;
   autocompleteLoadingMap?: Partial<Record<Path<T>, boolean>>;
+  hiddenMap?: Partial<Record<Path<T>, boolean | ((data: T) => boolean)>>;
   onSubmit: SubmitHandler<T>;
 };
 
@@ -36,6 +37,7 @@ function DynamicForm<T extends Record<string, any>>({
   autocompleteRenderOptionMap = CONFIG.EMPTY_OBJECT,
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
+  hiddenMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
   ...props
 }: DynamicFormProps<T>) {
@@ -56,6 +58,7 @@ function DynamicForm<T extends Record<string, any>>({
           autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
           autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
           autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+          hiddenMap={hiddenMap}
           startAdornmentMap={startAdornmentMap}
           endAdornmentMap={endAdornmentMap}
           labelMap={labelMap}
@@ -83,6 +86,7 @@ function DynamicForm<T extends Record<string, any>>({
           autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
           autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
           autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+          hiddenMap={hiddenMap}
           startAdornmentMap={startAdornmentMap}
           endAdornmentMap={endAdornmentMap}
           labelMap={labelMap}
