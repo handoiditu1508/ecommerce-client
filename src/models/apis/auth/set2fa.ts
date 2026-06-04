@@ -1,4 +1,4 @@
 export type Set2faCommand = {
-  password?: string;
+  password: string;
   enabled: boolean;
 };
