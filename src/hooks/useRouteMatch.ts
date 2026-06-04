@@ -1,22 +1,5 @@
-import { matchPath, useLocation } from "react-router-dom";
-
-/**
- * Finds a match for a pathname against multiple route patterns.
- * @param patterns An array of route patterns to match against.
- * @param pathname The pathname to check.
- * @returns The first match result found, or null if no patterns match.
- */
-export function getRouteMatch(patterns: readonly string[], pathname: string) {
-  for (let i = 0; i < patterns.length; i += 1) {
-    const pattern = patterns[i];
-    const possibleMatch = matchPath(pattern, pathname);
-    if (possibleMatch !== null) {
-      return possibleMatch;
-    }
-  }
-
-  return null;
-}
+import { useMemo } from "react";
+import { matchPath, PathMatch, useLocation } from "react-router-dom";
 
 /**
  * Hook that checks the current location's pathname against a set of patterns.
@@ -31,6 +14,17 @@ export function getRouteMatch(patterns: readonly string[], pathname: string) {
  */
 export default function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
+  const value = useMemo<PathMatch<string> | null>(() => {
+    for (let i = 0; i < patterns.length; i += 1) {
+      const pattern = patterns[i];
+      const possibleMatch = matchPath(pattern, pathname);
+      if (possibleMatch !== null) {
+        return possibleMatch;
+      }
+    }
 
-  return getRouteMatch(patterns, pathname);
+    return null;
+  }, [pathname, patterns]);
+
+  return value;
 }
