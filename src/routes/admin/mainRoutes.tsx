@@ -1,3 +1,4 @@
+import Policy from "@/models/Policy";
 import React from "react";
 import { RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "../models";
@@ -10,6 +11,9 @@ const mainRoutes: RouteObject[] = [
     element: <DashboardPage />,
     handle: {
       hideBreadcrumbs: true,
+      policies: [
+        Policy.Admin,
+      ],
     } as RouteHandleObject,
   },
 ];

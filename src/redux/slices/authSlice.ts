@@ -1,5 +1,7 @@
+import CONFIG from "@/configs";
 import { LoginResponse } from "@/models/apis/auth/login";
 import User from "@/models/entities/User";
+import Policy from "@/models/Policy";
 import { PayloadAction, createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";
 import userApi from "../apis/userApi";
@@ -9,6 +11,7 @@ export type AuthState = {
   expiration: number | null;// miliseconds
   user: User | null;
   refreshTokenExpiration: number | null;// miliseconds
+  loading: boolean;
 };
 
 export const expirationStorageKey = "expiration";
@@ -18,6 +21,7 @@ const initialState: AuthState = {
   expiration: null,
   user: null,
   refreshTokenExpiration: null,
+  loading: true, // init as true to prevent premature redirect when auth state is not yet loaded from local
 };
 
 export const loadAuthStateFromLocalAsync = createAsyncThunk(
@@ -88,6 +92,18 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(loadAuthStateFromLocalAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addMatcher(
+        isAnyOf(
+          loadAuthStateFromLocalAsync.fulfilled,
+          loadAuthStateFromLocalAsync.rejected
+        ),
+        (state) => {
+          state.loading = false;
+        }
+      )
       .addMatcher(
         isAnyOf(
           authApi.endpoints.login.matchFulfilled,
@@ -137,6 +153,9 @@ export const authSelectors = {
   refreshTokenExpired: (state: RootState) => !!state.auth.refreshTokenExpiration && state.auth.refreshTokenExpiration <= Date.now(),
   expiration: (state: RootState) => state.auth.expiration,
   user: (state: RootState) => state.auth.user,
+  policies: (state: RootState) => state.auth.user?.policies ?? CONFIG.EMPTY_ARRAY,
+  loading: (state: RootState) => state.auth.loading,
+  authorizedFor: (...policies: Policy[]) => (state: RootState) => (state.auth.user ? policies.every((policy) => state.auth.user!.policies.includes(policy)) : false),
 };
 
 export default authSlice;

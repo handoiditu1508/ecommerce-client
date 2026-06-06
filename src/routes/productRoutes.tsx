@@ -17,6 +17,7 @@ const productRoutes: RouteObject[] = [
     element: <CartPage />,
     handle: {
       hideBreadcrumbs: true,
+      requireAuth: true,
     } as RouteHandleObject,
   },
   {

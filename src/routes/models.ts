@@ -1,3 +1,4 @@
+import Policy from "@/models/Policy";
 import { ReactNode } from "react";
 import { To } from "react-router-dom";
 
@@ -10,4 +11,12 @@ export type CrumbData = {
 export type RouteHandleObject = {
   crumb?: CrumbData | ((data: any) => CrumbData);
   hideBreadcrumbs?: boolean;
+  /**
+   * Policies which page is protected with.
+   */
+  policies?: Policy[];
+  /**
+   * Page require authentication.
+   */
+  requireAuth?: boolean;
 };

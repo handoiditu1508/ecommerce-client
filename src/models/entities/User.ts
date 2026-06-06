@@ -1,3 +1,4 @@
+import Policy from "../Policy";
 import { RoleView } from "./Role";
 
 type User = {
@@ -13,7 +14,7 @@ type User = {
   accessFailedCount: number;
   status: UserStatus;
   roles: RoleView[];
-  policies: string[];
+  policies: Policy[];
   emailConfirmed: boolean;
   redirectEmailEnabled: boolean;
   twoFactorEnabled: boolean;

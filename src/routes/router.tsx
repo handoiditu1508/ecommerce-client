@@ -8,6 +8,7 @@ import mainRoutes from "./mainRoutes";
 
 const ClientLayout = React.lazy(() => import("@/layouts/ClientLayout"));
 const AuthLayout = React.lazy(() => import("@/layouts/AuthLayout"));
+const ForbiddenPage = React.lazy(() => import("./ForbiddenPage"));
 const NotFoundPage = React.lazy(() => import("./NotFoundPage"));
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
         children: mainRoutes,
       },
       ...adminRoutes,
+      {
+        path: "403",
+        element: <ForbiddenPage />,
+      },
       {
         path: "*",
         element: <NotFoundPage />,

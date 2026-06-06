@@ -1,3 +1,4 @@
+import Policy from "@/models/Policy";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SecurityIcon from "@mui/icons-material/Security";
 import React from "react";
@@ -22,6 +23,9 @@ const accountRoutes: RouteObject[] = [
             to: "/account",
             label: "Profile",
           },
+          policies: [
+            Policy.UpdateSelf,
+          ],
         } as RouteHandleObject,
       },
       {
@@ -33,6 +37,9 @@ const accountRoutes: RouteObject[] = [
             to: "/account/security",
             label: "Security",
           },
+          policies: [
+            Policy.UpdateSelf,
+          ],
         } as RouteHandleObject,
       },
     ],
