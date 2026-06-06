@@ -1,6 +1,7 @@
 import { currentUrlWithPage } from "@/common/url";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { SortDirection } from "@/models/apis/common";
 import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { useCountSearchProductsQuery, useSearchProductsQuery } from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -25,8 +26,8 @@ const PAGE_SIZE = 20;
 function ProductsPage() {
   // get url search params
   const [searchParams] = useSearchParams();
-  const searchOrdering = (searchParams.get("order") as SearchOrderingValue | null) ?? "createdDate-true";
-  const [orderBy, orderByDescendingText] = searchOrdering?.split("-", 2) ?? [];
+  const searchOrdering = (searchParams.get("sort") as SearchOrderingValue | null) ?? "createdDate-desc";
+  const [sortBy, SortOrder] = searchOrdering?.split("-", 2) ?? [];
   const searchText = searchParams.get("search") ?? "";
   const categoryIds = searchParams.getAll("category").map((id) => parseInt(id));
   const categoryIdsStr = categoryIds.join(",");
@@ -42,12 +43,12 @@ function ProductsPage() {
     includeSubCategories: false, // disabled since tree view will auto select all children
     minPrice,
     maxPrice,
-    orderBy,
-    orderByDescending: orderByDescendingText === "true" ? true : false,
+    sortBy,
+    sortOrder: SortOrder.toLowerCase() === "desc" ? SortDirection.Desc : SortDirection.Asc,
     page,
     pageSize: PAGE_SIZE,
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [brandIdsStr, categoryIdsStr, maxPrice, minPrice, orderBy, orderByDescendingText, page, searchText]);
+  }), [brandIdsStr, categoryIdsStr, maxPrice, minPrice, sortBy, SortOrder, page, searchText]);
   const countQuery = useMemo<CountSearchProductsQuery>(() => ({
     searchText,
     categoryIds,

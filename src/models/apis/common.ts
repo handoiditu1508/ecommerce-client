@@ -42,3 +42,8 @@ export type SendEmailResponse = {
   sentTime: string;
   cooldown: number;
 };
+
+export enum SortDirection {
+  Asc = "asc",
+  Desc = "desc",
+}

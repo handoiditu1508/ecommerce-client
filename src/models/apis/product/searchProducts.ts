@@ -1,3 +1,5 @@
+import { SortDirection } from "../common";
+
 export type SearchProductsQuery = {
   searchText: string;
   isDeleted?: boolean;
@@ -6,8 +8,8 @@ export type SearchProductsQuery = {
   categoryIds: number[];
   includeSubCategories?: boolean;
   brandIds: number[];
-  orderBy?: string;
-  orderByDescending?: boolean;
+  sortBy?: string;
+  sortOrder?: SortDirection;
   page?: number;
   pageSize?: number;
 };

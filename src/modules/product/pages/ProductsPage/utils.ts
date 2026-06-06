@@ -6,7 +6,7 @@ export const generateSearchParams = (state: ProductsReducerState): Record<string
     params.search = state.searchText;
   }
   if (state.searchOrdering) {
-    params.order = state.searchOrdering;
+    params.sort = state.searchOrdering;
   }
   if (state.categoryIds.length) {
     params.category = state.categoryIds.map((id) => id.toString());

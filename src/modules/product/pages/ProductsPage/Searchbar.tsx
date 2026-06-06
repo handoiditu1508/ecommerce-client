@@ -1,65 +1,70 @@
 import { ArrayItemType } from "@/common/type";
-import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { BreakpointsContext, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { SortDirection } from "@/models/apis/common";
 import productApi from "@/redux/apis/productApi";
 import SearchIcon from "@mui/icons-material/Search";
+import SortIcon from "@mui/icons-material/Sort";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
-import Select, { SelectProps } from "@mui/material/Select";
+import Select, { selectClasses, SelectProps } from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
-import { ActionDispatch, ChangeEventHandler, FormEventHandler } from "react";
+import { ActionDispatch, ChangeEventHandler, FormEventHandler, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 import { generateSearchParams } from "./utils";
 
-const orderingOptions = [
+const sortOptions = [
   {
-    propertyName: "createdDate",
-    isDescending: true,
+    sortBy: "createdDate",
+    sortOrder: SortDirection.Desc,
     label: "Order by newest",
   },
   {
-    propertyName: "createdDate",
-    isDescending: false,
+    sortBy: "createdDate",
+    sortOrder: SortDirection.Asc,
     label: "Order by oldest",
   },
   {
-    propertyName: "discountPrice",
-    isDescending: false,
+    sortBy: "discountPrice",
+    sortOrder: SortDirection.Asc,
     label: "Order by price ascending",
   },
   {
-    propertyName: "discountPrice",
-    isDescending: true,
+    sortBy: "discountPrice",
+    sortOrder: SortDirection.Desc,
     label: "Order by price descending",
   },
   {
-    propertyName: "discountPercentage",
-    isDescending: false,
+    sortBy: "discountPercentage",
+    sortOrder: SortDirection.Asc,
     label: "Order by discount ascending",
   },
   {
-    propertyName: "discountPercentage",
-    isDescending: true,
+    sortBy: "discountPercentage",
+    sortOrder: SortDirection.Desc,
     label: "Order by discount descending",
   },
 ] as const;
 
-export type SearchOrderingValue = `${ArrayItemType<typeof orderingOptions>["propertyName"]}-${ArrayItemType<typeof orderingOptions>["isDescending"]}`;
+export type SearchOrderingValue = `${ArrayItemType<typeof sortOptions>["sortBy"]}-${ArrayItemType<typeof sortOptions>["sortOrder"]}`;
 
 export type SearchbarProps = {
   productsState: ProductsReducerState;
   productsDispatch: ActionDispatch<[ProductsReducerAction]>;
 };
 
+const NULL_FUNCTION = () => null;
+
 function Searchbar({
   productsState,
   productsDispatch,
 }: SearchbarProps) {
   const theme = useTheme();
+  const { xsAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
   const [, setSearchParams] = useSearchParams();
 
@@ -129,10 +134,18 @@ function Searchbar({
       />
       <Select
         value={productsState.searchOrdering}
+        renderValue={xsAndDown ? NULL_FUNCTION : undefined}
         sx={{
           width: "14%",
           maxWidth: 240,
           minWidth: 100,
+          [xsAndDownMediaQuery(theme.breakpoints)]: {
+            width: "initial",
+            minWidth: "initial",
+          },
+          [`.${selectClasses.iconOpen}`]: {
+            transform: "none",
+          },
         }}
         slotProps={{
           notchedOutline: {
@@ -148,8 +161,9 @@ function Searchbar({
             },
           },
         }}
+        IconComponent={SortIcon}
         onChange={handleOrderingChange}>
-        {orderingOptions.map((o) => <MenuItem key={o.propertyName + o.isDescending} value={`${o.propertyName}-${o.isDescending}`}>{o.label}</MenuItem>)}
+        {sortOptions.map((o) => <MenuItem key={o.sortBy + o.sortOrder} value={`${o.sortBy}-${o.sortOrder}`}>{o.label}</MenuItem>)}
       </Select>
     </Paper>
   );
