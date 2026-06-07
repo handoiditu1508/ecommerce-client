@@ -114,7 +114,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || formLoading,
+                readOnly: model.readOnly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -177,7 +177,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || formLoading,
+                readOnly: model.readOnly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -235,7 +235,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             disabled={model.disabled}
             slotProps={{
               input: {
-                readOnly: model.readonly || formLoading,
+                readOnly: model.readOnly || formLoading,
                 sx: {
                   textAlign: model.textAlign,
                 },
@@ -306,7 +306,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             <InputLabel>{finalLabel}</InputLabel>
             <Select
               label={finalLabel}
-              readOnly={model.readonly || formLoading}
+              readOnly={model.readOnly || formLoading}
               multiple={model.multiple}
               displayEmpty={!!model.placeholder && !finalLabel}
               startAdornment={startAdornment && (
@@ -387,7 +387,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             isOptionEqualToValue={(option, value) => option.key === value.key}
             getOptionKey={(option) => (typeof option === "string" ? "" : option.key)}
             disabled={model.disabled}
-            readOnly={model.readonly || formLoading}
+            readOnly={model.readOnly || formLoading}
             multiple={model.multiple}
             freeSolo={model.freeSolo}
             filterOptions={model.searchAsYouType ? (options) => options : undefined}
@@ -492,7 +492,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               }}
               control={<Checkbox
                 {...field}
-                readOnly={model.readonly || formLoading}
+                readOnly={model.readOnly || formLoading}
                 onChange={
                   model.validateOnChange
                     ? (event) => {
@@ -548,7 +548,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 <FormControlLabel
                   key={option.key}
                   value={option.value}
-                  control={<Radio readOnly={model.readonly || formLoading} />}
+                  control={<Radio readOnly={model.readOnly || formLoading} />}
                   label={option.label}
                 />
               ))}
@@ -577,7 +577,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
         <FormLabel>{finalLabel}</FormLabel>
         <FileInput
           disabled={model.disabled}
-          readonly={model.readonly || formLoading}
+          readonly={model.readOnly || formLoading}
           inputProps={{
             ...formRegisterReturn,
             multiple: model.multiple,

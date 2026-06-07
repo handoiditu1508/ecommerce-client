@@ -114,7 +114,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                 size="small"
                 color="error"
                 startIcon={<DeleteIcon />}
-                disabled={model.disabled || model.readonly || formLoading}
+                disabled={model.disabled || model.readOnly || formLoading}
                 onClick={() => remove(index)}>{model.removeButtonText || "Remove"} #{index + 1}
               </Button>
             </Divider>}
@@ -125,7 +125,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                 size="small"
                 color="error"
                 startIcon={<DeleteIcon />}
-                disabled={model.disabled || model.readonly || formLoading}
+                disabled={model.disabled || model.readOnly || formLoading}
                 onClick={() => remove(index)}>{model.removeButtonText || "Remove"} #{index + 1}
               </Button>
             </Divider>}
@@ -185,7 +185,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
       </FormGroup>
       <Button
         variant="outlined"
-        disabled={model.disabled || model.readonly || formLoading}
+        disabled={model.disabled || model.readOnly || formLoading}
         sx={{ mt: 2 }}
         onClick={addItem}
       >

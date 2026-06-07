@@ -15,7 +15,7 @@ type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> =
   name: K;
   label?: string;
   required?: boolean;
-  readonly?: boolean;
+  readOnly?: boolean;
   disabled?: boolean;
   hidden?: boolean | ((data: T) => boolean);
   rules?: Omit<RegisterOptions<T, K>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;

@@ -23,7 +23,7 @@ const formModel: DynamicFormModel<RegisterInput> = {
       label: "Email",
       inputType: "email",
       required: true,
-      readonly: true,
+      readOnly: true,
     },
     {
       name: "username",
