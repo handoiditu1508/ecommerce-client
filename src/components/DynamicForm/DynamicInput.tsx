@@ -24,6 +24,7 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
+import FileInput from "../FileInput";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -556,6 +557,43 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           </FormControl>
         )}
       />
+    );
+  }
+
+  if (model.inputType === "file") {
+    const formRegisterReturn = formContext.register(model.name, {
+      ...model.rules,
+      ...rules,
+    });
+
+    return (
+      <FormControl
+        fullWidth
+        required={model.required}
+        margin="normal"
+        error={model.name in formContext.formState.errors}
+        disabled={model.disabled}
+      >
+        <FormLabel>{finalLabel}</FormLabel>
+        <FileInput
+          disabled={model.disabled}
+          readonly={model.readonly || formLoading}
+          inputProps={{
+            ...formRegisterReturn,
+            multiple: model.multiple,
+            required: model.required,
+            accept: model.accept,
+            onChange: model.validateOnChange
+              ? (event) => {
+                formRegisterReturn.onChange(event);
+                // trigger validation
+                formContext.trigger(model.name);
+              }
+              : formRegisterReturn.onChange,
+          }}
+          error={formContext.formState.errors[model.name]?.message as string}
+        />
+      </FormControl>
     );
   }
 

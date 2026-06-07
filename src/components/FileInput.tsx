@@ -12,25 +12,42 @@ import Stack, { StackProps } from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { v1 as uuidv1 } from "uuid";
 
-const StyledStack = styled(Stack, { shouldForwardProp: (prop) => !(["status", "error"] as PropertyKey[]).includes(prop) })<{
-  status?: FileInputStatus;
-  error?: boolean;
-}>(({ theme, status, error }) => ({
+const StyledStack = styled(Stack)(({ theme }) => ({
   minHeight: 100,
-  border: theme.vars.shape.largeBorder,
-  borderColor: error ? theme.vars.palette.error.main : theme.vars.palette.primary.main,
-  borderStyle: "dashed",
-  borderRadius: 2,
+  border: theme.vars.shape.smallBorder,
+  borderColor: theme.vars.palette.action.active,
+  borderRadius: theme.shape.borderRadius,
   padding: theme.spacing(1),
   display: "inline-flex",
   position: "relative",
   boxSizing: "border-box",
-  ...(status === "dragover" && {
-    borderStyle: undefined,
-  }),
+  "&:not(.disabled):not(.readonly):focus-within": {
+    borderColor: theme.vars.palette.primary.main,
+  },
+  "&.error": {
+    borderColor: theme.vars.palette.error.main,
+  },
+  "&.disabled": {
+    borderColor: theme.vars.palette.action.disabled,
+    backgroundColor: theme.vars.palette.action.disabledBackground,
+    cursor: "not-allowed",
+    ".dropzone": {
+      color: theme.vars.palette.text.disabled,
+      cursor: "not-allowed",
+    },
+  },
+  "&.readonly": {
+    borderColor: theme.vars.palette.divider,
+    backgroundColor: theme.vars.palette.action.hover,
+    ".dropzone": {
+      cursor: "default",
+      color: theme.vars.palette.text.secondary,
+    },
+  },
   ".dropzone": {
     cursor: "pointer",
     color: theme.vars.palette.grey[500],
@@ -57,45 +74,62 @@ const StyledStack = styled(Stack, { shouldForwardProp: (prop) => !(["status", "e
     gap: theme.spacing(1),
   },
   ".drop-overlay": {
-    ...(status === "dragover" && {
-      display: "flex",
-    }),
     "&>*": {
       pointerEvents: "none",
     },
   },
   ".result-overlay": {
     flexDirection: "column",
-    ...(status === "uploaded" && {
-      display: "flex",
-    }),
   },
-  ".loading-overlay": {
-    ...(status === "loading" && {
+  "&.dragover": {
+    borderColor: theme.vars.palette.primary.main,
+    ".drop-overlay": {
       display: "flex",
-    }),
+    },
   },
-  ...(["dragover", "loading", "uploaded"].includes(status!) && {
+  "&.uploaded .result-overlay": {
+    display: "flex",
+  },
+  "&.loading .loading-overlay": {
+    display: "flex",
+  },
+  "&.dragover, &.loading, &.uploaded": {
     ">*:not(.drop-overlay):not(.result-overlay):not(.loading-overlay)": {
       opacity: 0,
     },
-  }),
+  },
 }));
 
 type FileInputStatus = "idle" | "dragover" | "loading" | "uploaded";
 
 type OwnProps = {
+  /**
+   * set `undefined` for uncontrolled input.
+   */
   files?: File[];
-  inputProps?: Omit<React.ComponentProps<"input">, "type" | "hidden">;
+  inputProps?: Omit<React.ComponentProps<"input">, "type" | "hidden" | "style">;
   dropzonePlaceholder?: string;
   inputPlaceholder?: string;
   error?: string;
+  disabled?: boolean;
+  readonly?: boolean;
   onFilesChange?: (files: File[], source: "browse" | "drop" | "url" | "clipboard" | "reset") => void;
   onChangeInput?: () => void;
 };
 export type FileInputProps = OwnProps & Omit<StackProps, keyof OwnProps>;
 
-function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, error, onFilesChange = CONFIG.EMPTY_FUNCTION, onChangeInput = CONFIG.EMPTY_FUNCTION, ...props }: FileInputProps) {
+function FileInput({
+  files,
+  inputProps,
+  dropzonePlaceholder,
+  inputPlaceholder,
+  error,
+  disabled,
+  readonly: readOnly,
+  onFilesChange = CONFIG.EMPTY_FUNCTION,
+  onChangeInput = CONFIG.EMPTY_FUNCTION,
+  ...props
+}: FileInputProps) {
   const [status, setStatus] = useState<FileInputStatus>();
   const [inputValue, setInputValue] = useState<string>("");
   const dragInnerCounter = useRef<number>(0);
@@ -108,12 +142,14 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
   }, [files]);
 
   const startDrag: React.DragEventHandler<HTMLDivElement> = (event) => {
+    if (disabled || readOnly) return;
     event.preventDefault();
     dragInnerCounter.current++;
     setStatus("dragover");
   };
 
   const endDrag: React.DragEventHandler<HTMLDivElement> = (event) => {
+    if (disabled || readOnly) return;
     dragInnerCounter.current--;
     if (dragInnerCounter.current === 0) {
       setStatus("idle");
@@ -121,6 +157,7 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
   };
 
   const dropFile: React.DragEventHandler<HTMLDivElement> = (event) => {
+    if (disabled || readOnly) return;
     event.preventDefault();
     setStatus("idle");
     dragInnerCounter.current--;
@@ -128,9 +165,15 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
       setFileListToInput(event.dataTransfer.files);
     }
     onFilesChange(Array.from(event.dataTransfer.files), "drop");
+    if (inputProps && inputProps.onChange) {
+      inputProps.onChange({
+        target: hiddenFileInputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
   };
 
   const openFileSelectWindow = () => {
+    if (disabled || readOnly) return;
     hiddenFileInputRef.current.click();
   };
 
@@ -138,16 +181,29 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
     if (element) {
       hiddenFileInputRef.current = element;
       if (inputProps && inputProps.ref) {
-        (inputProps.ref as React.RefObject<HTMLInputElement>).current = element;
+        if (typeof inputProps.ref === "function") {
+          inputProps.ref(element);
+        } else {
+          inputProps.ref.current = element;
+        }
       }
     }
   };
 
-  const reset = () => {
+  const reset = (event?: React.FormEvent<HTMLInputElement>) => {
+    if (disabled || readOnly) return;
     if (!files) {
       setFileListToInput(CONFIG.EMPTY_ARRAY);
     }
     onFilesChange(CONFIG.EMPTY_ARRAY, "reset");
+    if (inputProps && inputProps.onReset) {
+      inputProps.onReset(event ?? ({ target: hiddenFileInputRef.current } as unknown as React.FormEvent<HTMLInputElement>));
+    }
+    if (inputProps && inputProps.onChange) {
+      inputProps.onChange({
+        target: hiddenFileInputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
   };
 
   const uploadFile: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -155,10 +211,14 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
       setStatus("uploaded");
     }
     onFilesChange(Array.from(event.currentTarget.files || CONFIG.EMPTY_ARRAY), "browse");
+    if (inputProps && inputProps.onChange) {
+      inputProps.onChange(event);
+    }
   };
 
   const loadFileFromInputValue = async () => {
     try {
+      if (disabled || readOnly) return;
       setStatus("loading");
       const file = await loadFileFromUrl(inputValue, uuidv1());
       const fileArray = [file];
@@ -167,6 +227,11 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
         setFileListToInput(fileArray);
       }
       onFilesChange(fileArray, "url");
+      if (inputProps && inputProps.onChange) {
+        inputProps.onChange({
+          target: hiddenFileInputRef.current,
+        } as React.ChangeEvent<HTMLInputElement>);
+      }
     } catch (error) {
       setStatus("idle");
       console.error(error);
@@ -174,10 +239,19 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
   };
 
   const pasteFromClipboard: React.ClipboardEventHandler<HTMLInputElement> = (event) => {
+    if (disabled || readOnly) return;
+    if (!event.clipboardData.files.length) {
+      return;
+    }
     if (!files) {
       setFileListToInput(event.clipboardData.files);
     }
     onFilesChange(Array.from(event.clipboardData.files), "clipboard");
+    if (inputProps && inputProps.onChange) {
+      inputProps.onChange({
+        target: hiddenFileInputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
   };
 
   const setFileListToInput = (fileList: FileList | File[]) => {
@@ -214,7 +288,7 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
   };
 
   return (
-    <StyledStack status={status} error={!!error} {...props}>
+    <StyledStack {...props} className={classNames(status, { error: !!error, disabled, readOnly }, props.className)}>
       <Box className="dropzone" onClick={openFileSelectWindow} onDragEnter={startDrag}>{dropzonePlaceholder ?? "Drop file here or click to upload"}</Box>
       <TextField
         placeholder={inputPlaceholder ?? "Paste file or file url"}
@@ -225,10 +299,18 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
         value={inputValue}
         error={!!error}
         helperText={error}
+        disabled={disabled}
         slotProps={{
           input: {
+            readOnly,
             endAdornment: (<InputAdornment position="end">
-              <IconButton size="small" edge="end" onClick={loadFileFromInputValue}><ForwardIcon /></IconButton>
+              <IconButton
+                size="small"
+                edge="end"
+                disabled={disabled || readOnly}
+                onClick={loadFileFromInputValue}>
+                <ForwardIcon />
+              </IconButton>
             </InputAdornment>),
           },
         }}
@@ -249,12 +331,28 @@ function FileInput({ files, inputProps, dropzonePlaceholder, inputPlaceholder, e
       </Box>
       <Box className="result-overlay">
         <Typography variant="subtitle1" noWrap maxWidth="100%">{hiddenFileInputRef.current.files?.item(0)?.name}</Typography>
-        <Button size="small" onClick={reset}>Retry</Button>
+        <Button size="small" disabled={disabled || readOnly} onClick={() => reset()}>Retry</Button>
       </Box>
       <Box className="loading-overlay">
         <CircularProgress />
       </Box>
-      <input type="file" hidden onChange={uploadFile} {...inputProps} ref={assignRef} onReset={reset} />
+      <input
+        type="file"
+        style={{
+          position: "absolute", // for input's `required` native property to work properly
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+          opacity: 0, // hide input using hidden will cause unfocusable issue
+        }}
+        {...inputProps}
+        ref={assignRef}
+        disabled={disabled || readOnly || inputProps?.disabled}
+        onChange={uploadFile}
+        onReset={reset}
+      />
     </StyledStack>
   );
 }

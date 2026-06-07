@@ -8,6 +8,7 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
   | DynamicAutoCompleteInputModel<T, K>
   | DynamicCheckboxInputModel<T, K>
   | DynamicRadioInputModel<T, K>
+  | DynamicFileInputModel<T, K>
   | DynamicArrayInputModel<T, K>;
 
 type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
@@ -64,6 +65,17 @@ export type DynamicRadioInputModel<T extends Record<string, any>, K extends Path
   options: DynamicInputOption<T, K>[];
   row?: boolean;
 };
+
+export type DynamicFileInputModel<T extends Record<string, any>, K extends Path<T>> =
+  PathValue<T, K> extends FileList | null | undefined
+    ? (
+      DynamicCommonInputModel<T, K> & {
+        inputType: "file";
+        multiple?: boolean;
+        accept?: string;
+      }
+    )
+    : never;
 
 export type DynamicArrayObjectInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "array";
