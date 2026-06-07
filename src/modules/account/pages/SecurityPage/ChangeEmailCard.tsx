@@ -7,38 +7,41 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
-
-const changeEmailModel: DynamicFormModel<ChangeEmailCommand> = {
-  inputs: [
-    {
-      name: "newEmail",
-      inputType: "text",
-      label: "New Email",
-      required: true,
-      rules: { required: "Email is required" },
-    },
-    {
-      name: "password",
-      inputType: "password",
-      label: "Password",
-      required: true,
-      rules: { required: "Password is required" },
-    },
-  ],
-};
+import { useTranslation } from "react-i18next";
 
 function ChangeEmailCard() {
+  const { t } = useTranslation();
+  const { t: tAccount } = useTranslation("account");
   const changeEmailForm = useForm<ChangeEmailCommand>({ defaultValues: { newEmail: "", password: "" } });
   const [changeEmail, changeEmailResult] = useChangeEmailMutation();
+
+  const changeEmailModel: DynamicFormModel<ChangeEmailCommand> = {
+    inputs: [
+      {
+        name: "newEmail",
+        inputType: "text",
+        label: tAccount("new_email"),
+        required: true,
+        rules: { required: t("this_field_is_required") },
+      },
+      {
+        name: "password",
+        inputType: "password",
+        label: tAccount("password"),
+        required: true,
+        rules: { required: t("this_field_is_required") },
+      },
+    ],
+  };
 
   return (
     <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
       <CardContent>
-        <Typography variant="h5" sx={{ mb: 2 }}>Change Email</Typography>
+        <Typography variant="h5" sx={{ mb: 2 }}>{tAccount("change_email")}</Typography>
         <DynamicForm id="change-email-form" formContext={changeEmailForm} model={changeEmailModel} loading={changeEmailResult.isLoading} onSubmit={changeEmail} />
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>
-        <Button type="submit" form="change-email-form" variant="text" loading={changeEmailResult.isLoading}>Change Email</Button>
+        <Button type="submit" form="change-email-form" variant="text" loading={changeEmailResult.isLoading}>{tAccount("change_email")}</Button>
       </CardActions>
     </Card>
   );

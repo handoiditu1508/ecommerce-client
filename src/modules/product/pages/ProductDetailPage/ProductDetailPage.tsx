@@ -16,6 +16,7 @@ import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -29,6 +30,7 @@ import SocialSharingButtonGroup from "./SocialSharingButtonGroup";
 
 function ProductDetailPage() {
   const theme = useTheme();
+  const { t: tProduct } = useTranslation("product");
   const { xsAndDown, smAndDown, sm, smAndUp, mdAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
@@ -83,7 +85,7 @@ function ProductDetailPage() {
       {product
         ? <>
           <Rating defaultValue={3.3} readOnly />
-          <Typography variant="subtitle2" component="p" align="right">(3.3) 1k Reviews</Typography>
+          <Typography variant="subtitle2" component="p" align="right">{tProduct("reviews_count", "", { rating: 3.3, total: "1k" })}</Typography>
         </>
         : <>
           <Skeleton variant="rounded" width={120} height={24} />
@@ -105,7 +107,7 @@ function ProductDetailPage() {
           }}
           disabled={selectedVariantId === undefined}
           onClick={handleAddToCartButtonClick}>
-          Add to cart
+          {tProduct("add_to_cart")}
         </Button>
       )
       : (
@@ -207,7 +209,7 @@ function ProductDetailPage() {
             {product && <ProductVariantSelectorDialog
               open={attributeDialogOpen}
               variants={product.productVariants}
-              confirmButtonText="Add to cart"
+              confirmButtonText={tProduct("add_to_cart")}
               onChange={setSelectedVariantId}
               onClose={() => setAttributeDialogOpen(false)}
             />}

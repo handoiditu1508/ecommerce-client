@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, MouseEventHandler, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ForgotPasswordReducerAction, ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
 type VerifyTokenModalProps = {
@@ -23,6 +24,7 @@ function VerifyTokenModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: VerifyTokenModalProps) {
   const theme = useTheme();
+  const { t: tAuth } = useTranslation("auth");
   const [resendToken, result] = useForgotPasswordMutation();
 
   useEffect(() => {
@@ -77,11 +79,11 @@ function VerifyTokenModal({
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Create Account</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>A confirmation email has been sent to your email address at e****le@gmail.com</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("verify_email")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("verify_email_subtitle", { email: forgotPasswordState.maskedEmail })}</Typography>
       {forgotPasswordState.emailCountdown > 0
         ? (
-          <Typography align="right">Resend email in {forgotPasswordState.emailCountdown} seconds</Typography>
+          <Typography align="right">{tAuth("resend_email_countdown", { seconds: forgotPasswordState.emailCountdown })}</Typography>
         )
         : (
           <Box sx={{
@@ -89,18 +91,18 @@ function VerifyTokenModal({
             alignItems: "center",
             justifyContent: "flex-end",
           }}>
-            <Typography>Didn't receive email?</Typography>
+            <Typography>{tAuth("did_not_receive_email")}</Typography>
             <Button
               variant="text"
               disabled={result.isLoading}
               sx={{ textTransform: "initial", ...theme.typography.body1 }}
               onClick={handleResendEmail}>
-              Resend email
+              {tAuth("resend_email")}
             </Button>
           </Box>
         )}
       <Box sx={{ flex: 1 }} />
-      <CustomLink to="" align="center" onClick={onChangeEmail}>Use different email</CustomLink>
+      <CustomLink to="" align="center" onClick={onChangeEmail}>{tAuth("use_different_email")}</CustomLink>
     </Box>
   );
 }

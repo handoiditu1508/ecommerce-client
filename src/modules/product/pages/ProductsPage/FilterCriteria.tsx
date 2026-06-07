@@ -12,6 +12,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import BrandSelector from "./BrandSelector";
 import CategoryTree from "./CategoryTree";
@@ -29,6 +30,8 @@ function FilterCriteria({
   productsDispatch,
 }: FilterCriteriaProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tProduct } = useTranslation("product");
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
   const [, setSearchParams] = useSearchParams();
@@ -49,7 +52,7 @@ function FilterCriteria({
         alignItems: "center",
         mx: 0.5,
       }}>
-        <Typography variant="h6" color="primary">Shop by</Typography>
+        <Typography variant="h6" color="primary">{tProduct("shop_by")}</Typography>
         <ButtonBase
           sx={{
             ...theme.typography.caption,
@@ -58,7 +61,7 @@ function FilterCriteria({
             borderRadius: theme.vars.shape.borderRadius,
           }}
           onClick={handleClearFilter}>
-          Clear All
+          {tProduct("clear_all")}
         </ButtonBase>
       </Box>}
       <Accordion
@@ -78,7 +81,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>Categories</Typography>
+          <Typography>{tProduct("categories")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -107,7 +110,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>Brands</Typography>
+          <Typography>{t("brands")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -134,7 +137,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>Price range</Typography>
+          <Typography>{tProduct("price_range")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -167,7 +170,7 @@ function FilterCriteria({
             },
           }}
           onClick={handleSearch}>
-          Apply
+          {tProduct("apply")}
         </Button>
         {smAndDown && <Button
           size="large"
@@ -175,7 +178,7 @@ function FilterCriteria({
           endIcon={<FilterListOffIcon />}
           color="inherit"
           onClick={handleClearFilter}>
-          Clear
+          {tProduct("clear")}
         </Button>}
       </Box>
     </>

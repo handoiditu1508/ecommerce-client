@@ -1,0 +1,23 @@
+{
+  "cancel": "Cancel",
+  "change_email": "Change Email",
+  "change_password": "Change Password",
+  "confirm_email_first": "Please confirm your email before enabling 2FA.",
+  "current_password": "Current Password",
+  "disable": "Disable",
+  "enable": "Enable",
+  "enable_2fa": "Enable 2FA",
+  "first_name": "First Name",
+  "invalid_name": "Invalid name.",
+  "last_name": "Last Name",
+  "middle_name": "Middle Name",
+  "new_email": "New Email",
+  "new_password": "New Password",
+  "password": "Password",
+  "password_must_be_different": "Current password must be different from new password.",
+  "profile": "Profile",
+  "profile_information": "Profile Information",
+  "save_changes": "Save Changes",
+  "security": "Security",
+  "two_factor_authentication": "Two-Factor Authentication"
+}

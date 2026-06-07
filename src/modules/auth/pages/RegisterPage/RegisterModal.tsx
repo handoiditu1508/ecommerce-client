@@ -13,76 +13,8 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { MouseEventHandler, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { RegisterReducerState } from "./useRegisterReducer";
-
-const formModel: DynamicFormModel<RegisterInput> = {
-  submitButtonText: "Sign up",
-  inputs: [
-    {
-      name: "email",
-      label: "Email",
-      inputType: "email",
-      required: true,
-      readOnly: true,
-    },
-    {
-      name: "username",
-      label: "Username",
-      inputType: "text",
-      required: true,
-    },
-    {
-      name: "firstName",
-      label: "First Name",
-      inputType: "text",
-      required: true,
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: {
-        pattern: {
-          value: /^[A-Za-z]+$/,
-          message: "Invalid name",
-        },
-      },
-    },
-    {
-      name: "middleName",
-      label: "Middle Name",
-      inputType: "text",
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: {
-        pattern: {
-          value: /^[A-Za-z]+$/,
-          message: "Invalid name",
-        },
-      },
-    },
-    {
-      name: "lastName",
-      label: "Last Name",
-      inputType: "text",
-      required: true,
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: {
-        pattern: {
-          value: /^[A-Za-z]+$/,
-          message: "Invalid name",
-        },
-      },
-    },
-    {
-      name: "password",
-      label: "Password",
-      inputType: "password",
-      required: true,
-      validateOnChange: true,
-    },
-    {
-      name: "agreed",
-      inputType: "checkbox",
-      required: true,
-    },
-  ],
-};
 
 type RegisterInput = RegisterConfirmedEmailCommand & {
   agreed: boolean;
@@ -100,6 +32,7 @@ function RegisterModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: RegisterModalProps) {
   const theme = useTheme();
+  const { t: tAuth } = useTranslation("auth");
   const [registerConfirmedEmail, result] = useRegisterConfirmedEmailMutation();
   const formContext = useForm<RegisterInput>({
     defaultValues: {
@@ -116,6 +49,74 @@ function RegisterModal({
   const { watch } = formContext;
   const password = watch("password");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
+  const formModel: DynamicFormModel<RegisterInput> = {
+    submitButtonText: tAuth("sign_up"),
+    inputs: [
+      {
+        name: "email",
+        label: tAuth("email"),
+        inputType: "email",
+        required: true,
+        readOnly: true,
+      },
+      {
+        name: "username",
+        label: tAuth("username"),
+        inputType: "text",
+        required: true,
+      },
+      {
+        name: "firstName",
+        label: tAuth("first_name"),
+        inputType: "text",
+        required: true,
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        rules: {
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAuth("invalid_name"),
+          },
+        },
+      },
+      {
+        name: "middleName",
+        label: tAuth("middle_name"),
+        inputType: "text",
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        rules: {
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAuth("invalid_name"),
+          },
+        },
+      },
+      {
+        name: "lastName",
+        label: tAuth("last_name"),
+        inputType: "text",
+        required: true,
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        rules: {
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAuth("invalid_name"),
+          },
+        },
+      },
+      {
+        name: "password",
+        label: tAuth("password"),
+        inputType: "password",
+        required: true,
+        validateOnChange: true,
+      },
+      {
+        name: "agreed",
+        inputType: "checkbox",
+        required: true,
+      },
+    ],
+  };
 
   const handleSubmit: SubmitHandler<RegisterInput> = async (data) => {
     const response = await registerConfirmedEmail(data);
@@ -135,8 +136,8 @@ function RegisterModal({
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Create Account</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>Finish your registration</Typography>
+      <Typography variant="h4" align="center">{tAuth("create_account")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("finish_registration_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -165,7 +166,7 @@ function RegisterModal({
           },
         }}
         labelMap={{
-          agreed: (<>I've read and agree to the <CustomLink to="/terms-and-conditions" target="_blank">Terms & Conditions</CustomLink></>),
+          agreed: (<>{tAuth("agree_to_terms_prefix")} <CustomLink to="/terms-and-conditions" target="_blank">{tAuth("terms_and_conditions")}</CustomLink></>),
         }}
         onSubmit={handleSubmit}
       />

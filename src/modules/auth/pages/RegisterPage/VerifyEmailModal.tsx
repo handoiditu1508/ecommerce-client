@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, MouseEventHandler, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
 
 type VerifyEmailModalProps = {
@@ -22,6 +23,7 @@ function VerifyEmailModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: VerifyEmailModalProps) {
   const theme = useTheme();
+  const { t: tAuth } = useTranslation("auth");
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
 
   useEffect(() => {
@@ -70,28 +72,28 @@ function VerifyEmailModal({
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Verify Email</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>A confirmation email has been sent to your email address at e****le@gmail.com</Typography>
+      <Typography variant="h4" align="center">{tAuth("verify_email")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("verify_email_subtitle", { email: registerState.email })}</Typography>
       {registerState.emailCountdown > 0
-        ? <Typography align="right">Resend email in {registerState.emailCooldown} seconds</Typography>
+        ? <Typography align="right">{tAuth("resend_email_countdown", { seconds: registerState.emailCooldown })}</Typography>
         : (
           <Box sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
           }}>
-            <Typography>Didn't receive email?</Typography>
+            <Typography>{tAuth("did_not_receive_email")}</Typography>
             <Button
               variant="text"
               disabled={result.isLoading}
               sx={{ textTransform: "initial", ...theme.typography.body1 }}
               onClick={handleResendEmail}>
-              Resend email
+              {tAuth("resend_email")}
             </Button>
           </Box>
         )}
       <Box sx={{ flex: 1 }} />
-      <CustomLink to="" align="center" onClick={onChangeEmail}>Use different email</CustomLink>
+      <CustomLink to="" align="center" onClick={onChangeEmail}>{tAuth("use_different_email")}</CustomLink>
     </Box>
   );
 }

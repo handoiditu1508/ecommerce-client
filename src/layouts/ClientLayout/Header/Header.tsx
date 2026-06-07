@@ -1,6 +1,7 @@
 import logo from "@/assets/logo.svg";
 import CustomLink from "@/components/CustomLink";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
+import CONFIG from "@/configs";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { mdiSale } from "@mdi/js";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
@@ -16,6 +17,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import LayoutContainer from "../LayoutContainer";
 import LanguageSelect from "./LanguageSelect";
@@ -30,6 +32,7 @@ function Header() {
   const theme = useTheme();
   const shadowHeaderTrigger = useScrollTrigger({ threshold: 0, disableHysteresis: true });
   const { smAndUp, mdAndUp } = useContext(BreakpointsContext);
+  const { t: tMain } = useTranslation("main");
 
   return (
     <AppBar
@@ -68,7 +71,7 @@ function Header() {
               color: "inherit",
             }}>
             <img src={logo} alt="logo" width={30} height={30} style={{ marginRight: theme.spacing(1) }} />
-            <Typography variant="h5">Logo</Typography>
+            <Typography variant="h5">{CONFIG.APP_NAME}</Typography>
           </CustomLink>}
           <Searchbar />
           <Stack direction="row">
@@ -100,7 +103,7 @@ function Header() {
               ml: -1.5,
             }}>
             <NewReleasesIcon />
-            <Typography variant="h6">New Collection</Typography>
+            <Typography variant="h6">{tMain("new_collection")}</Typography>
           </ButtonBase>
           <ButtonBase sx={{
             display: "flex",
@@ -110,7 +113,7 @@ function Header() {
             px: 1.5,
           }}>
             <TrendingUpIcon />
-            <Typography variant="h6">Popular</Typography>
+            <Typography variant="h6">{tMain("popular")}</Typography>
           </ButtonBase>
           <ButtonBase sx={{
             display: "flex",
@@ -120,7 +123,7 @@ function Header() {
             px: 1.5,
           }}>
             <ThumbUpIcon />
-            <Typography variant="h6">Best Rated</Typography>
+            <Typography variant="h6">{tMain("best_rated")}</Typography>
           </ButtonBase>
           <ButtonBase
             component={Link}
@@ -133,7 +136,7 @@ function Header() {
               px: 1.5,
             }}>
             <MdiSvgIcon path={mdiSale} />
-            <Typography variant="h6">Discount</Typography>
+            <Typography variant="h6">{tMain("discount")}</Typography>
           </ButtonBase>
           <MoreOptionsButton />
         </LayoutContainer>

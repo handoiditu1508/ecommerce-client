@@ -7,17 +7,17 @@ import TopHeaderSelect, { TopHeaderSelectItem } from "./TopHeaderSelect";
 
 const items: TopHeaderSelectItem[] = [
   {
-    title: "Light",
+    title: "light",
     value: "light",
     icon: <LightModeIcon fontSize="small" />,
   },
   {
-    title: "System",
+    title: "system",
     value: "system",
     icon: <SettingsBrightnessIcon fontSize="small" />,
   },
   {
-    title: "Dark",
+    title: "dark",
     value: "dark",
     icon: <DarkModeIcon fontSize="small" />,
   },

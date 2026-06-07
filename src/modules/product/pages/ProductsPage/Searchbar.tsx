@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import Select, { selectClasses, SelectProps } from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import { ActionDispatch, ChangeEventHandler, FormEventHandler, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 import { generateSearchParams } from "./utils";
@@ -21,32 +22,32 @@ const sortOptions = [
   {
     sortBy: "createdDate",
     sortOrder: SortDirection.Desc,
-    label: "Order by newest",
+    labelKey: "order_by_newest",
   },
   {
     sortBy: "createdDate",
     sortOrder: SortDirection.Asc,
-    label: "Order by oldest",
+    labelKey: "order_by_oldest",
   },
   {
     sortBy: "discountPrice",
     sortOrder: SortDirection.Asc,
-    label: "Order by price ascending",
+    labelKey: "order_by_price_ascending",
   },
   {
     sortBy: "discountPrice",
     sortOrder: SortDirection.Desc,
-    label: "Order by price descending",
+    labelKey: "order_by_price_descending",
   },
   {
     sortBy: "discountPercentage",
     sortOrder: SortDirection.Asc,
-    label: "Order by discount ascending",
+    labelKey: "order_by_discount_ascending",
   },
   {
     sortBy: "discountPercentage",
     sortOrder: SortDirection.Desc,
-    label: "Order by discount descending",
+    labelKey: "order_by_discount_descending",
   },
 ] as const;
 
@@ -64,6 +65,7 @@ function Searchbar({
   productsDispatch,
 }: SearchbarProps) {
   const theme = useTheme();
+  const { t: tProduct } = useTranslation("product");
   const { xsAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
   const [, setSearchParams] = useSearchParams();
@@ -118,7 +120,7 @@ function Searchbar({
         sx={{
           flex: 1,
         }}
-        placeholder="black trench coat..."
+        placeholder={tProduct("search_placeholder")}
         inputProps={{
           "aria-label": "search products",
         }}
@@ -163,7 +165,11 @@ function Searchbar({
         }}
         IconComponent={SortIcon}
         onChange={handleOrderingChange}>
-        {sortOptions.map((o) => <MenuItem key={o.sortBy + o.sortOrder} value={`${o.sortBy}-${o.sortOrder}`}>{o.label}</MenuItem>)}
+        {sortOptions.map((o) => (
+          <MenuItem key={o.sortBy + o.sortOrder} value={`${o.sortBy}-${o.sortOrder}`}>
+            {tProduct(o.labelKey)}
+          </MenuItem>
+        ))}
       </Select>
     </Paper>
   );

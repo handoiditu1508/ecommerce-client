@@ -13,31 +13,11 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { ForgotPasswordReducerState } from "./useForgotPasswordReducer";
 
 type ResetPasswordInput = ResetPasswordCommand & {
   repassword: string;
-};
-
-const formModel: DynamicFormModel<ResetPasswordInput> = {
-  submitButtonText: "Reset password",
-  inputs: [
-    {
-      name: "newPassword",
-      inputType: "password",
-      required: true,
-      label: "New password",
-    },
-    {
-      name: "repassword",
-      inputType: "password",
-      required: true,
-      label: "Confirm password",
-      rules: {
-        validate: (value, formValues) => value === formValues.newPassword || "Password not match.",
-      },
-    },
-  ],
 };
 
 type ResetPasswordModalProps = {
@@ -50,6 +30,29 @@ function ResetPasswordModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: ResetPasswordModalProps) {
   const theme = useTheme();
+  const { t: tAuth } = useTranslation("auth");
+
+  const formModel: DynamicFormModel<ResetPasswordInput> = {
+    submitButtonText: tAuth("reset_password"),
+    inputs: [
+      {
+        name: "newPassword",
+        inputType: "password",
+        required: true,
+        label: tAuth("new_password"),
+      },
+      {
+        name: "repassword",
+        inputType: "password",
+        required: true,
+        label: tAuth("confirm_password"),
+        rules: {
+          validate: (value, formValues) => value === formValues.newPassword || tAuth("password_not_match"),
+        },
+      },
+    ],
+  };
+
   const [resetPassword, result] = useResetPasswordMutation();
   const formContext = useForm<ResetPasswordInput>({
     defaultValues: {
@@ -86,7 +89,7 @@ function ResetPasswordModal({
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Reset Password</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("reset_password")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -115,7 +118,7 @@ function ResetPasswordModal({
           width: "fit-content",
           mx: "auto",
         }}>
-        <NavigateBeforeIcon fontSize="inherit" /> Return to login
+        <NavigateBeforeIcon fontSize="inherit" /> {tAuth("return_to_login")}
       </CustomLink>
     </Box>
   );

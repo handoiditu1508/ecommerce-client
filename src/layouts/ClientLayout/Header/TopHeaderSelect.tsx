@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { svgIconClasses } from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 import React, { ReactElement, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export type TopHeaderSelectItem = {
   title: string;
@@ -21,6 +22,7 @@ export type TopHeaderSelectProps = {
 };
 
 function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps) {
+  const { t: tMain } = useTranslation("main");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const menuAnchorId = useId();
@@ -61,7 +63,7 @@ function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps
             {selectedItem.title && <Typography
               variant="caption"
               sx={{ ml: 1 }}>
-              {selectedItem.title}
+              {tMain(selectedItem.title)}
             </Typography>}
           </>
         }
@@ -88,7 +90,7 @@ function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps
             <ListItemIcon>
               {item.icon}
             </ListItemIcon>
-            <ListItemText>{item.title}</ListItemText>
+            <ListItemText>{tMain(item.title)}</ListItemText>
           </MenuItem>
         ))}
       </Menu>

@@ -17,12 +17,14 @@ import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import CartItem from "./CartItem";
 
 const cartSummaryWidth = 400;
 function CartPage() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { t: tProduct } = useTranslation("product");
   const isCartHydrated = useAppSelector(cartSelectors.hydrated);
   const cachedProductIds = useAppSelector(cartSelectors.cachedProductIds);
   const cartItemDatas = useAppSelector(cartSelectors.itemDatas);
@@ -100,7 +102,7 @@ function CartPage() {
             size="small"
             slotProps={{
               input: {
-                "aria-label": "Select all",
+                "aria-label": tProduct("select_all"),
               },
             }}
             checked={isAllSelected}
@@ -116,8 +118,8 @@ function CartPage() {
               alignItems: "flex-start",
             },
           }}>
-            <Typography variant="h4">Shopping Cart</Typography>
-            <Typography variant="h5">{totalVariantDatas.length} Items</Typography>
+            <Typography variant="h4">{tProduct("shopping_cart")}</Typography>
+            <Typography variant="h5">{tProduct("items_count", { count: totalVariantDatas.length })}</Typography>
           </Box>
         </Box>
         <Divider sx={{ mt: 2, mb: 1 }} />
@@ -159,40 +161,40 @@ function CartPage() {
             width: "100%",
           },
         }}>
-        <Typography variant="h4">Summary</Typography>
+        <Typography variant="h4">{tProduct("summary")}</Typography>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Box sx={{
           display: "flex",
           justifyContent: "space-between",
         }}>
-          <Typography variant="body1">Subtotal</Typography>
+          <Typography variant="body1">{tProduct("subtotal")}</Typography>
           <Typography variant="body1">{toVndCurrency(subtotal)}</Typography>
         </Box>
         <Box sx={{
           mt: 1,
         }}>
-          <Typography variant="body2" component="label">Shipping</Typography>
+          <Typography variant="body2" component="label">{tProduct("shipping")}</Typography>
           <Select fullWidth size="small" defaultValue={1}>
-            <MenuItem value={1}>Standard - {toVndCurrency(10000)}</MenuItem>
-            <MenuItem value={2}>Express - {toVndCurrency(20000)}</MenuItem>
+            <MenuItem value={1}>{tProduct("standard")} - {toVndCurrency(10000)}</MenuItem>
+            <MenuItem value={2}>{tProduct("express")} - {toVndCurrency(20000)}</MenuItem>
           </Select>
         </Box>
         <Box sx={{
           mt: 1,
         }}>
-          <Typography variant="body2" component="label">Promo code</Typography>
-          <OutlinedInput fullWidth size="small" placeholder="Enter your promocode" />
+          <Typography variant="body2" component="label">{tProduct("promo_code")}</Typography>
+          <OutlinedInput fullWidth size="small" placeholder={tProduct("enter_promo_code")} />
         </Box>
-        <Button color="secondary" sx={{ mt: 1 }} disabled={!isCartHydrated}>Apply</Button>
+        <Button color="secondary" sx={{ mt: 1 }} disabled={!isCartHydrated}>{tProduct("apply")}</Button>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Box sx={{
           display: "flex",
           justifyContent: "space-between",
         }}>
-          <Typography variant="body1">Total</Typography>
+          <Typography variant="body1">{tProduct("total")}</Typography>
           <Typography variant="body1">{toVndCurrency(total)}</Typography>
         </Box>
-        <Button color="primary" fullWidth sx={{ mt: 1 }} disabled={!isCartHydrated}>Checkout</Button>
+        <Button color="primary" fullWidth sx={{ mt: 1 }} disabled={!isCartHydrated}>{tProduct("checkout")}</Button>
       </Paper>
     </LayoutContainer>
   );

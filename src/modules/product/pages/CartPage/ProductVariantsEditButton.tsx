@@ -8,6 +8,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ProductVariantSelectorDialog from "../../components/ProductVariantSelectorDialog";
 
 export type ProductVariantsEditButtonProps = {
@@ -17,6 +18,7 @@ export type ProductVariantsEditButtonProps = {
 
 function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEditButtonProps) {
   const theme = useTheme();
+  const { t: tProduct } = useTranslation("product");
   const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
   const product = useAppSelector(cartSelectors.cachedProduct(cartData.productId));
@@ -57,7 +59,7 @@ function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEdi
       </ButtonBase>
       {product && <ProductVariantSelectorDialog
         open={attributeDialogOpen}
-        confirmButtonText="Save"
+        confirmButtonText={tProduct("save")}
         variants={product.productVariants}
         defaultVariantId={variantData.productVariantId}
         onChange={(nextProductVariantId) => dispatch(changeProductVariantInCart({

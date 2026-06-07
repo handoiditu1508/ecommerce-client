@@ -5,11 +5,13 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 function RelatedProducts() {
+  const { t: tProduct } = useTranslation("product");
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
 
   const handlePrevThumbnail = () => {
@@ -38,8 +40,8 @@ function RelatedProducts() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <Typography variant="h5">Related Products</Typography>
-        <Button size="small" variant="text">View all</Button>
+        <Typography variant="h5">{tProduct("related_products")}</Typography>
+        <Button size="small" variant="text">{tProduct("view_all")}</Button>
       </Box>
 
       <Swiper

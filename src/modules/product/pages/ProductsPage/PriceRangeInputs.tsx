@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { ActionDispatch, ChangeEventHandler } from "react";
+import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
@@ -37,6 +38,7 @@ function PriceRangeInputs({
   productsDispatch,
 }: PriceRangeInputsProps) {
   const theme = useTheme();
+  const { t: tProduct } = useTranslation("product");
 
   const handleMinPriceChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.value === "") {
@@ -94,7 +96,7 @@ function PriceRangeInputs({
         alignItems: "center",
       }}>
         <TextField
-          label="Min Price"
+          label={tProduct("min_price")}
           size="small"
           value={productsState.minPrice?.toString() ?? ""}
           slotProps={{
@@ -108,7 +110,7 @@ function PriceRangeInputs({
           <SwapHorizIcon fontSize="inherit" />
         </IconButton>
         <TextField
-          label="Max Price"
+          label={tProduct("max_price")}
           size="small"
           error={productsState.minPrice !== undefined && productsState.maxPrice !== undefined && productsState.maxPrice < productsState.minPrice}
           value={productsState.maxPrice?.toString() ?? ""}
@@ -121,16 +123,16 @@ function PriceRangeInputs({
         />
       </Box>
       <Typography variant="body2" sx={{ mt: 1 }}>
-        {productsState.minPrice === undefined && productsState.maxPrice === undefined && "Any price"}
+        {productsState.minPrice === undefined && productsState.maxPrice === undefined && tProduct("any_price")}
         {productsState.minPrice === undefined && productsState.maxPrice !== undefined && <>
-          No greater than <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.maxPrice)}</span>
+          {tProduct("no_greater_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.maxPrice)}</span>
         </>}
         {productsState.minPrice !== undefined && productsState.maxPrice === undefined && <>
-          No lesser than <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
+          {tProduct("no_lesser_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
         </>}
         {productsState.minPrice !== undefined && productsState.maxPrice !== undefined && <>
-          From <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
-          {" "}to <span style={{
+          {tProduct("from")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
+          {" "}{tProduct("to")} <span style={{
             color: productsState.maxPrice < productsState.minPrice ? theme.vars.palette.error.main : theme.vars.palette.primary.main,
           }}>
             {toVndCurrency(productsState.maxPrice)}

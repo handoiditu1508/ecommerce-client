@@ -7,6 +7,7 @@ import Skeleton, { skeletonClasses } from "@mui/material/Skeleton";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -17,6 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 function TopBrandsCarousel() {
   const { mdAndUp, xsAndDown } = useContext(BreakpointsContext);
   const theme = useTheme();
+  const { t: tMain } = useTranslation("main");
   const getTopBrandsResult = useGetTopBrandsQuery();
   const isHiddden = !getTopBrandsResult.isFetching && !getTopBrandsResult.data;
   const slidesPerView = mdAndUp ? 4 : (xsAndDown ? 2 : 3);
@@ -55,7 +57,7 @@ function TopBrandsCarousel() {
           },
         },
       }}>
-      <Typography variant="h5" textAlign="center">Top Brands</Typography>
+      <Typography variant="h5" textAlign="center">{tMain("top_brands")}</Typography>
       <Swiper
         slidesPerView={slidesPerView}
         loop

@@ -9,6 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import InputBase from "@mui/material/InputBase";
 import { ActionDispatch, ChangeEventHandler, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { List, RowComponentProps } from "react-window";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
@@ -61,6 +62,7 @@ function BrandSelector({
   productsState,
   productsDispatch,
 }: BrandSelectorProps) {
+  const { t: tProduct } = useTranslation("product");
   const brands = useAppSelector(brandSelectors.haveActiveProducts);
   const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.brandIds), [productsState.brandIds]);
   const [searchText, setSearchText] = useState<string>("");
@@ -103,7 +105,7 @@ function BrandSelector({
         <SearchIcon />
         <InputBase
           value={searchText}
-          placeholder="search here..."
+          placeholder={tProduct("search_brands")}
           inputProps={{
             "aria-label": "search brands",
           }}

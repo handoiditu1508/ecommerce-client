@@ -2,11 +2,13 @@ import useRouteMatch from "@/hooks/useRouteMatch";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import { useTranslation } from "react-i18next";
 import { Link, Outlet } from "react-router-dom";
 
 const routePatterns: string[] = ["/account/security", "/account/change-password", "/account/change-email", "/account"];
 
 function SettingLayout() {
+  const { t: tAccount } = useTranslation("account");
   const routeMatch = useRouteMatch(routePatterns);
   const currentTab = routeMatch?.pattern?.path ?? "/account";
 
@@ -23,10 +25,8 @@ function SettingLayout() {
           borderColor: "divider",
         }}
       >
-        <Tab label="Profile" value="/account" to="/account" component={Link} />
-        <Tab label="Change Email" value="/account/change-email" to="/account/change-email" component={Link} />
-        <Tab label="Change Password" value="/account/change-password" to="/account/change-password" component={Link} />
-        <Tab label="Security" value="/account/security" to="/account/security" component={Link} />
+        <Tab label={tAccount("profile")} value="/account" to="/account" component={Link} />
+        <Tab label={tAccount("security")} value="/account/security" to="/account/security" component={Link} />
       </Tabs>
       <Box sx={{
         flex: 1,

@@ -8,6 +8,7 @@ export type ForgotPasswordReducerState = {
   emailCooldown: number;
   emailCountdown: number;
   resetPasswordCommand: ResetPasswordCommand;
+  maskedEmail: string;
 };
 
 export type ForgotPasswordReducerAction = {
@@ -21,6 +22,9 @@ export type ForgotPasswordReducerAction = {
 } | {
   type: "SET_RESET_PASSWORD_COMMAND";
   payload: ResetPasswordCommand;
+} | {
+  type: "SET_MASKED_EMAIL";
+  payload: string;
 };
 
 const initialState: ForgotPasswordReducerState = {
@@ -35,6 +39,7 @@ const initialState: ForgotPasswordReducerState = {
     token: "",
     newPassword: "",
   },
+  maskedEmail: "",
 };
 
 const useForgotPasswordReducer = () =>
@@ -80,6 +85,11 @@ const useForgotPasswordReducer = () =>
           return {
             ...state,
             resetPasswordCommand: action.payload,
+          };
+        case "SET_MASKED_EMAIL":
+          return {
+            ...state,
+            maskedEmail: action.payload,
           };
       }
     },

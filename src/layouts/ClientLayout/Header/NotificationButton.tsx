@@ -17,6 +17,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { TransitionProps } from "@mui/material/transitions";
 import Typography from "@mui/material/Typography";
 import React, { MouseEvent, useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { List, RowComponentProps } from "react-window";
 
 type Notification = {
@@ -83,6 +84,7 @@ function NotificationButton(props: NotificationButtonProps) {
   const { smAndDown, mdAndUp } = useContext(BreakpointsContext);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
+  const { t: tMain } = useTranslation("main");
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -152,7 +154,7 @@ function NotificationButton(props: NotificationButtonProps) {
                   <ArrowBackIcon />
                 </IconButton>
                 <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                  Notifications
+                  {tMain("notifications")}
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -176,7 +178,7 @@ function NotificationButton(props: NotificationButtonProps) {
           >
             <Box sx={{ width: 360, bgcolor: "background.paper" }}>
               <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-                <Typography variant="h6">Notifications</Typography>
+                <Typography variant="h6">{tMain("notifications")}</Typography>
               </Box>
               {listContent}
             </Box>

@@ -10,40 +10,58 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
-
-const formModel: DynamicFormModel<UpdateSelfCommand> = {
-  inputs: [
-    {
-      name: "firstName",
-      inputType: "text",
-      label: "First Name",
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-      required: true,
-      rules: {
-        required: "First name is required",
-      },
-    },
-    {
-      name: "middleName",
-      inputType: "text",
-      label: "Middle Name",
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-    },
-    {
-      name: "lastName",
-      inputType: "text",
-      label: "Last Name",
-      maxLength: CONFIG.NAME_MAX_LENGTH,
-      required: true,
-      rules: {
-        required: "Last name is required",
-      },
-    },
-  ],
-};
+import { useTranslation } from "react-i18next";
 
 function ProfilePage() {
+  const { t } = useTranslation();
+  const { t: tAccount } = useTranslation("account");
   const authUser = useAppSelector(authSelectors.user);
+
+  const formModel: DynamicFormModel<UpdateSelfCommand> = {
+    inputs: [
+      {
+        name: "firstName",
+        inputType: "text",
+        label: tAccount("first_name"),
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        required: true,
+        rules: {
+          required: t("this_field_is_required"),
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAccount("invalid_name"),
+          },
+        },
+      },
+      {
+        name: "middleName",
+        inputType: "text",
+        label: tAccount("middle_name"),
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        rules: {
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAccount("invalid_name"),
+          },
+        },
+      },
+      {
+        name: "lastName",
+        inputType: "text",
+        label: tAccount("last_name"),
+        maxLength: CONFIG.NAME_MAX_LENGTH,
+        required: true,
+        rules: {
+          required: t("this_field_is_required"),
+          pattern: {
+            value: /^[A-Za-z]+$/,
+            message: tAccount("invalid_name"),
+          },
+        },
+      },
+    ],
+  };
+
   const formContext = useForm<UpdateSelfCommand>({
     defaultValues: {
       firstName: authUser?.firstName ?? "",
@@ -57,7 +75,7 @@ function ProfilePage() {
   return (
     <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
       <CardContent>
-        <Typography variant="h5" sx={{ mb: 4 }}>Profile Information</Typography>
+        <Typography variant="h5" sx={{ mb: 4 }}>{tAccount("profile_information")}</Typography>
         <DynamicForm
           id="profile-form"
           formContext={formContext}
@@ -72,7 +90,7 @@ function ProfilePage() {
           form="profile-form"
           variant="text"
           loading={updateSelfResult.isLoading}>
-          Save Changes
+          {tAccount("save_changes")}
         </Button>
       </CardActions>
     </Card>

@@ -4,8 +4,11 @@ import XIcon from "@mui/icons-material/X";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 
 function SocialSharingButtonGroup() {
+  const { t } = useTranslation("ProductDetailPage");
+
   return (
     <Box sx={{
       display: "flex",
@@ -13,7 +16,7 @@ function SocialSharingButtonGroup() {
       alignItems: "center",
       height: "min-content",
     }}>
-      <Typography variant="subtitle2">SHARE</Typography>
+      <Typography variant="subtitle2" sx={{ textTransform: "uppercase" }}>{t("share")}</Typography>
       <IconButton sx={{ color: "#1877f2" }}>
         <FacebookIcon />
       </IconButton>

@@ -14,8 +14,10 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function TwoFaCard() {
+  const { t: tAccount } = useTranslation("account");
   const authUser = useAppSelector(authSelectors.user);
   const [set2fa, set2faResult] = useSet2FaMutation();
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,32 +50,34 @@ function TwoFaCard() {
     <>
       <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
         <CardContent>
-          <Typography variant="h5" sx={{ mb: 2 }}>Two-Factor Authentication (2FA)</Typography>
+          <Typography variant="h5" sx={{ mb: 2 }}>{tAccount("two_factor_authentication")} (2FA)</Typography>
           <FormControlLabel
             control={<Switch checked={authUser.twoFactorEnabled} onChange={handleToggle2fa} />}
             disabled={(!authUser.twoFactorEnabled && !authUser.emailConfirmed) || set2faResult.isLoading}
-            label="Enable 2FA"
+            label={tAccount("enable_2fa")}
           />
           {!authUser.twoFactorEnabled && !authUser.emailConfirmed && (
             <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-              Please confirm your email before enabling 2FA.
+              {tAccount("confirm_email_first")}
             </Typography>
           )}
         </CardContent>
       </Card>
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{targetEnabled ? "Enable" : "Disable"} 2FA</DialogTitle>
+        <DialogTitle>{targetEnabled ? tAccount("enable") : tAccount("disable")} 2FA</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            To {targetEnabled ? "enable" : "disable"} two-factor authentication, please enter your password to confirm.
+            {targetEnabled
+              ? `To ${tAccount("enable").toLowerCase()} two-factor authentication, please enter your password to confirm.`
+              : `To ${tAccount("disable").toLowerCase()} two-factor authentication, please enter your password to confirm.`}
           </DialogContentText>
-          <TextField autoFocus fullWidth label="Password" type="password" variant="outlined" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          <TextField autoFocus fullWidth label={tAccount("password")} type="password" variant="outlined" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseDialog}>{tAccount("cancel")}</Button>
           <Button color={targetEnabled ? "primary" : "error"} disabled={!confirmPassword} loading={set2faResult.isLoading} onClick={handleConfirmToggle}>
-            {targetEnabled ? "Enable" : "Disable"}
+            {targetEnabled ? tAccount("enable") : tAccount("disable")}
           </Button>
         </DialogActions>
       </Dialog>

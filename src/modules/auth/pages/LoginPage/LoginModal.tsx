@@ -14,34 +14,8 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { LoginReducerAction, LoginReducerState } from "./useLoginReducer";
-
-const formModel: DynamicFormModel<LoginCommand> = {
-  submitButtonText: "Sign in",
-  inputs: [
-    {
-      name: "username",
-      inputType: "text",
-      label: "Email or Username",
-      rules: {
-        required: "This field is required",
-      },
-    },
-    {
-      name: "password",
-      inputType: "password",
-      label: "Password",
-      rules: {
-        required: "This field is required",
-      },
-    },
-    {
-      name: "isPersistent",
-      inputType: "checkbox",
-      label: "Remember me",
-    },
-  ],
-};
 
 type LoginModalProps = {
   loginState: LoginReducerState;
@@ -57,6 +31,36 @@ function LoginModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: LoginModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tAuth } = useTranslation("auth");
+
+  const formModel: DynamicFormModel<LoginCommand> = {
+    submitButtonText: tAuth("sign_in"),
+    inputs: [
+      {
+        name: "username",
+        inputType: "text",
+        label: tAuth("email_or_username"),
+        rules: {
+          required: t("this_field_is_required"),
+        },
+      },
+      {
+        name: "password",
+        inputType: "password",
+        label: tAuth("password"),
+        rules: {
+          required: t("this_field_is_required"),
+        },
+      },
+      {
+        name: "isPersistent",
+        inputType: "checkbox",
+        label: tAuth("remember_me"),
+      },
+    ],
+  };
+
   const [login, result] = useLoginMutation();
   const formContext = useForm<LoginCommand>({
     defaultValues: {
@@ -123,21 +127,21 @@ function LoginModal({
       },
     }}>
       <Box component="img" src={logo} alt="logo" width={100} height={100} sx={{ mx: "auto", display: "block" }} />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Welcome to {CONFIG.APP_NAME}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("welcome_to_app", { appName: CONFIG.APP_NAME })}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
         loading={result.isLoading}
         labelMap={{
           isPersistent: (<Box sx={{ display: "flex" }}>
-            Remember me
+            {tAuth("remember_me")}
             <Box sx={{ flex: 1, cursor: "initial" }} onClick={preventDefault} />
-            <CustomLink to="/forgot-password">Forgot Password?</CustomLink>
+            <CustomLink to="/forgot-password">{tAuth("forgot_password")}</CustomLink>
           </Box>),
         }}
         onSubmit={handleSubmit}
       />
-      <Divider sx={{ my: 2 }}>Or sign in with</Divider>
+      <Divider sx={{ my: 2 }}>{tAuth("or_sign_in_with")}</Divider>
       <Box sx={{
         display: "flex",
         justifyContent: "space-between",
@@ -148,7 +152,7 @@ function LoginModal({
         <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
-      <Typography align="center">Don't have an account? <CustomLink to="/register">Sign up</CustomLink></Typography>
+      <Typography align="center">{tAuth("dont_have_an_account")} <CustomLink to="/register">{tAuth("sign_up")}</CustomLink></Typography>
     </Box>
   );
 }

@@ -24,6 +24,7 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import FileInput from "../FileInput";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
@@ -82,6 +83,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteLoadingMap,
   hiddenMap,
 }: DynamicInputProps<T, K>) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const data = formContext.watch();
@@ -159,7 +161,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           pattern: {
             ignoreCase: true,
             value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            message: "Invalid email address",
+            message: t("invalid_email_address"),
           },
           ...model.rules,
           ...rules,
@@ -393,7 +395,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             filterOptions={model.searchAsYouType ? (options) => options : undefined}
             autoComplete={model.searchAsYouType}
             includeInputInList={model.searchAsYouType}
-            noOptionsText="Empty"
+            noOptionsText={t("empty")}
             onInputChange={autocompleteOnInputChange}
             {...field}
             renderOption={autocompleteRenderOption}

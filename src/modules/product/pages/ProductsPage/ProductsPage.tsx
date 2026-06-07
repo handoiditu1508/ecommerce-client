@@ -14,6 +14,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import FilterChips from "./FilterChips";
 import FilterCriteria from "./FilterCriteria";
@@ -26,6 +27,7 @@ const PAGE_SIZE = 20;
 function ProductsPage() {
   // get url search params
   const [searchParams] = useSearchParams();
+  const { t: tProduct } = useTranslation("product");
   const searchOrdering = (searchParams.get("sort") as SearchOrderingValue | null) ?? "createdDate-desc";
   const [sortBy, SortOrder] = searchOrdering?.split("-", 2) ?? [];
   const searchText = searchParams.get("search") ?? "";
@@ -117,7 +119,7 @@ function ProductsPage() {
                 color: theme.vars.palette.primary.main,
               }}
               onClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}>
-              Advanced search
+              {tProduct("advanced_search")}
               <ExpandMoreIcon
                 fontSize="small"
                 sx={{
@@ -147,11 +149,11 @@ function ProductsPage() {
           gap: 1,
         }}>
           <FilterChips query={query} />
-          {countProductsResult.data && <Typography variant="caption" color="textDisabled">{countProductsResult.data} results found</Typography>}
+          {countProductsResult.data && <Typography variant="caption" color="textDisabled">{tProduct("results_found", { count: countProductsResult.data })}</Typography>}
         </Box>
         {
           searchProductsResult.isUninitialized
-            ? <Typography color="textDisabled" variant="h6" textAlign="center">Enter information in the search box to start searching</Typography>
+            ? <Typography color="textDisabled" variant="h6" textAlign="center">{tProduct("search_placeholder_hint")}</Typography>
             : <>
               <ProductCardList products={searchProductsResult.data} loading={searchProductsResult.isLoading} />
               <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>

@@ -5,10 +5,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import InputBase from "@mui/material/InputBase";
 import { useTheme } from "@mui/material/styles";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 function Searchbar() {
   const theme = useTheme();
+  const { t: tMain } = useTranslation("main");
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
 
@@ -44,7 +46,7 @@ function Searchbar() {
     >
       <InputBase
         fullWidth
-        placeholder="Search..."
+        placeholder={tMain("search")}
         size="small"
         value={searchText}
         sx={{

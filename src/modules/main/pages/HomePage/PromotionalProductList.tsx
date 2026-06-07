@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 import { To } from "react-router-dom";
 
 type PromotionalProductListProps = {
@@ -26,6 +27,8 @@ function PromotionalProductList({
   viewAllUrlPath,
   onRefresh = CONFIG.EMPTY_FUNCTION,
 }: PromotionalProductListProps) {
+  const { t: tMain } = useTranslation("main");
+
   return (
     <Box sx={{ mt: 4 }}>
       <Container maxWidth="md" fixed>
@@ -42,11 +45,11 @@ function PromotionalProductList({
           mt: 2,
           width: "fit-content",
         }}>
-        View All
+        {tMain("view_all")}
       </CustomButton>}
       {!loading && !products.length && <Stack alignItems="center">
         <WarningIcon fontSize="large" />
-        <Typography variant="body2">Error loading products!</Typography>
+        <Typography variant="body2">{tMain("error_loading_products")}</Typography>
         <Button
           variant="text"
           disabled={loading}
@@ -55,7 +58,7 @@ function PromotionalProductList({
             mt: 2,
           }}
           onClick={onRefresh}>
-          Refresh
+          {tMain("refresh")}
         </Button>
       </Stack>}
     </Box>

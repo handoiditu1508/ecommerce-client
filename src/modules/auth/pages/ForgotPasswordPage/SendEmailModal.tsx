@@ -12,22 +12,8 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { ForgotPasswordReducerAction, ForgotPasswordReducerState } from "./useForgotPasswordReducer";
-
-const formModel: DynamicFormModel<ForgotPasswordCommand> = {
-  submitButtonText: "Send OTP",
-  inputs: [
-    {
-      name: "username",
-      inputType: "text",
-      rules: {
-        required: "This field is required",
-      },
-      placeholder: "Username or email address",
-      textAlign: "center",
-    },
-  ],
-};
 
 type SendEmailModalProps = {
   forgotPasswordState: ForgotPasswordReducerState;
@@ -41,6 +27,24 @@ function SendEmailModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: SendEmailModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tAuth } = useTranslation("auth");
+
+  const formModel: DynamicFormModel<ForgotPasswordCommand> = {
+    submitButtonText: tAuth("send_otp"),
+    inputs: [
+      {
+        name: "username",
+        inputType: "text",
+        rules: {
+          required: t("this_field_is_required"),
+        },
+        placeholder: tAuth("username_or_email"),
+        textAlign: "center",
+      },
+    ],
+  };
+
   const [forgotPassword, result] = useForgotPasswordMutation();
   const formContext = useForm<ForgotPasswordCommand>({
     defaultValues: {
@@ -59,6 +63,10 @@ function SendEmailModal({
       forgotPasswordDispatch({
         type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
         payload: response.data,
+      });
+      forgotPasswordDispatch({
+        type: "SET_MASKED_EMAIL",
+        payload: response.data.maskedEmail,
       });
       onSuccess();
     } else if (response.error.code === "Identity-005") {
@@ -108,8 +116,8 @@ function SendEmailModal({
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Forgot Password</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("forgot_password")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("send_otp_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -125,7 +133,7 @@ function SendEmailModal({
           width: "fit-content",
           mx: "auto",
         }}>
-        <NavigateBeforeIcon fontSize="inherit" /> Return to login
+        <NavigateBeforeIcon fontSize="inherit" /> {tAuth("return_to_login")}
       </CustomLink>
     </Box>
   );

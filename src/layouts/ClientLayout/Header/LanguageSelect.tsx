@@ -5,12 +5,12 @@ import TopHeaderSelect, { TopHeaderSelectItem } from "./TopHeaderSelect";
 
 const items: TopHeaderSelectItem[] = [
   {
-    title: "Tiếng Việt",
+    title: "vietnamese",
     value: "vi-VN",
     icon: <VNRoundedFlagIcon fontSize="small" />,
   },
   {
-    title: "English",
+    title: "english",
     value: "en-US",
     icon: <UKRoundedFlagIcon fontSize="small" />,
   },

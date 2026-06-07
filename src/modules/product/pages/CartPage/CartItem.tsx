@@ -21,6 +21,7 @@ import { svgIconClasses } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { Dispatch, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import ProductVariantsEditButton from "./ProductVariantsEditButton";
 
 const cartImageSize = 160;
@@ -41,6 +42,7 @@ function CartItem({
   onToggleSelect = CONFIG.EMPTY_FUNCTION,
 }: CartItemProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { xsAndDown, smAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
   const product = useAppSelector(cartSelectors.cachedProduct(cartData ? cartData.productId : 0));
@@ -80,7 +82,7 @@ function CartItem({
           productId: cartData.productId,
           productVariantId: variantData.productVariantId,
         }))}>
-        Remove
+        {t("remove")}
       </Button>
     </CardActions>
   );
@@ -100,7 +102,7 @@ function CartItem({
         <CardMedia
           component="img"
           image={CONFIG.FILE_URL + variantData.thumbnailPath}
-          alt="Product image"
+          alt="product image"
           sx={{
             width: "var(--cart-image-size)",
             height: "var(--cart-image-size)",

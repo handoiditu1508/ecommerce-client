@@ -13,29 +13,8 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { ActionDispatch, MouseEventHandler, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { LoginReducerAction, LoginReducerState } from "./useLoginReducer";
-
-const formModel: DynamicFormModel<Login2faCommand> = {
-  submitButtonText: "Sign in",
-  inputs: [
-    {
-      name: "token",
-      inputType: "text",
-      rules: {
-        required: "This field is required",
-      },
-      placeholder: "Enter OTP",
-      textAlign: "center",
-    },
-  ],
-  postActionInputs: [
-    {
-      name: "isPersistent",
-      inputType: "checkbox",
-      label: "Trusted device",
-    },
-  ],
-};
 
 type Login2faModalProps = {
   loginState: LoginReducerState;
@@ -51,6 +30,31 @@ function Login2faModal({
   onReturnToLogin = CONFIG.EMPTY_FUNCTION,
 }: Login2faModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tAuth } = useTranslation("auth");
+
+  const formModel: DynamicFormModel<Login2faCommand> = {
+    submitButtonText: tAuth("sign_in"),
+    inputs: [
+      {
+        name: "token",
+        inputType: "text",
+        rules: {
+          required: t("this_field_is_required"),
+        },
+        placeholder: tAuth("enter_otp"),
+        textAlign: "center",
+      },
+    ],
+    postActionInputs: [
+      {
+        name: "isPersistent",
+        inputType: "checkbox",
+        label: tAuth("trusted_device"),
+      },
+    ],
+  };
+
   const [login2fa, result] = useLogin2faMutation();
   const [resendOtp, resendOtpResult] = useLoginMutation();
   const loading = result.isLoading || resendOtpResult.isLoading;
@@ -126,8 +130,8 @@ function Login2faModal({
         mx: "auto",
       }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>Two-Factor Authentication</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>Check you inbox at e****le@gmail.com for your 2FA code</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("two_factor_authentication")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("check_inbox_otp_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -136,16 +140,16 @@ function Login2faModal({
         labelMap={{
           isPersistent: (
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              Trusted device
+              {tAuth("trusted_device")}
               {loginState.emailCountdown > 0
                 ? (
                   <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>
-                    Resend OTP in {loginState.emailCountdown} seconds
+                    {tAuth("resend_otp_countdown", { seconds: loginState.emailCountdown })}
                   </Typography>
                 )
                 : (<>
-                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>Didn't receive OTP?</Typography>
-                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>Resend OTP</Button>
+                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{tAuth("did_not_receive_otp")}</Typography>
+                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>{tAuth("resend_otp")}</Button>
                 </>)}
             </Box>
           ),
@@ -153,7 +157,7 @@ function Login2faModal({
         onSubmit={handleSubmit}
       />
       <Box sx={{ flex: 1 }} />
-      <CustomLink to="/login" align="center" onClick={onReturnToLogin}>Return to login</CustomLink>
+      <CustomLink to="/login" align="center" onClick={onReturnToLogin}>{tAuth("return_to_login")}</CustomLink>
     </Box>
   );
 }

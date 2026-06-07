@@ -15,22 +15,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
 
-const formModel: DynamicFormModel<SendPreConfirmEmailCommand> = {
-  submitButtonText: "Sign up",
-  inputs: [
-    {
-      name: "email",
-      inputType: "email",
-      required: true,
-      placeholder: "Email address",
-      rules: {
-        required: "This field is required",
-      },
-      textAlign: "center",
-    },
-  ],
-};
-
 type SendPreConfirmEmailModalProps = {
   registerState: RegisterReducerState;
   registerDispatch: ActionDispatch<[RegisterReducerAction]>;
@@ -43,6 +27,8 @@ function SendPreConfirmEmailModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: SendPreConfirmEmailModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tAuth } = useTranslation("auth");
   const { t: tError } = useTranslation("errors");
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
   const formContext = useForm<SendPreConfirmEmailCommand>({
@@ -52,6 +38,21 @@ function SendPreConfirmEmailModal({
     mode: "onSubmit",
   });
   const { setError } = formContext;
+  const formModel: DynamicFormModel<SendPreConfirmEmailCommand> = {
+    submitButtonText: tAuth("sign_up"),
+    inputs: [
+      {
+        name: "email",
+        inputType: "email",
+        required: true,
+        placeholder: tAuth("email"),
+        rules: {
+          required: t("this_field_is_required"),
+        },
+        textAlign: "center",
+      },
+    ],
+  };
 
   const handleSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
     const response = await sendPreconfirmEmail(data);
@@ -106,8 +107,8 @@ function SendPreConfirmEmailModal({
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">Create Account</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>We will send an OTP to your email</Typography>
+      <Typography variant="h4" align="center">{tAuth("create_account")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("send_otp_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -115,7 +116,7 @@ function SendPreConfirmEmailModal({
         sx={{ mt: 10 }}
         onSubmit={handleSubmit}
       />
-      <Divider sx={{ my: 2 }}>Or sign in with</Divider>
+      <Divider sx={{ my: 2 }}>{tAuth("or_sign_in_with")}</Divider>
       <Box sx={{
         display: "flex",
         justifyContent: "space-between",
@@ -126,7 +127,7 @@ function SendPreConfirmEmailModal({
         <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
-      <Typography align="center">Already have an account? <CustomLink to="/login">Sign in</CustomLink></Typography>
+      <Typography align="center">{tAuth("already_have_an_account")} <CustomLink to="/login">{tAuth("sign_in")}</CustomLink></Typography>
     </Box>
   );
 }

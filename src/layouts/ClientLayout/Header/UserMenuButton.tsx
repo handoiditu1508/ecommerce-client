@@ -14,6 +14,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { MouseEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export type UserMenuButtonProps = IconButtonProps;
@@ -23,6 +24,7 @@ function UserMenuButton(props: UserMenuButtonProps) {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(authSelectors.signedIn);
   const authUser = useAppSelector(authSelectors.user);
+  const { t: tMain } = useTranslation("main");
 
   const open = Boolean(anchorEl);
 
@@ -78,19 +80,19 @@ function UserMenuButton(props: UserMenuButtonProps) {
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
+                <ListItemText>{tMain("setting")}</ListItemText>
               </MenuItem>,
               <MenuItem key="history" component={Link} to="/" onClick={handleClose}>
                 <ListItemIcon>
                   <HistoryIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Order History</ListItemText>
+                <ListItemText>{tMain("order_history")}</ListItemText>
               </MenuItem>,
               <MenuItem key="logout" onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
+                <ListItemText>{tMain("logout")}</ListItemText>
               </MenuItem>,
             ]
           )
@@ -100,13 +102,13 @@ function UserMenuButton(props: UserMenuButtonProps) {
                 <ListItemIcon>
                   <LoginIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Login</ListItemText>
+                <ListItemText>{tMain("login")}</ListItemText>
               </MenuItem>,
               <MenuItem key="register" component={Link} to="/register" onClick={handleClose}>
                 <ListItemIcon>
                   <PersonAddIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Register</ListItemText>
+                <ListItemText>{tMain("register")}</ListItemText>
               </MenuItem>,
             ]
           )}

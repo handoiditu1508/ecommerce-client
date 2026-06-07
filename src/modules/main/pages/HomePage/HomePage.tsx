@@ -5,6 +5,7 @@ import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { useGetDiscountedProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -16,6 +17,7 @@ const getDiscountedProductsQuery: GetDiscountedProductsQuery = { pageSize: 12 };
 
 function HomePage() {
   const theme = useTheme();
+  const { t: tMain } = useTranslation("main");
   const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
 
@@ -70,19 +72,19 @@ function HomePage() {
         </Box>
       </LayoutContainer>
       <PromotionalProductList
-        title="New Collection"
+        title={tMain("new_collection")}
         products={getNewProductsResult.data}
         loading={getNewProductsResult.isLoading}
         viewAllUrlPath="/products/new"
         onRefresh={getNewProductsResult.refetch}
       />
       <PromotionalProductList
-        title="Popular Products"
+        title={tMain("popular_products")}
         loading={true}
         viewAllUrlPath="products/popular"
       />
       <PromotionalProductList
-        title="Discount"
+        title={tMain("discount")}
         products={getDiscountedProductsResult.data}
         loading={getDiscountedProductsResult.isLoading}
         viewAllUrlPath="/products/discount"

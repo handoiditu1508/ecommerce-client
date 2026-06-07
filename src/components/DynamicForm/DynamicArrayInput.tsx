@@ -8,6 +8,7 @@ import FormLabel from "@mui/material/FormLabel";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { ArrayPath, Path, UseFormReturn, useFieldArray } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { DynamicFormProps } from "./DynamicForm";
 import DynamicInput from "./DynamicInput";
 import { DynamicArrayInputModel, DynamicInputModel } from "./models";
@@ -77,6 +78,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
 }: DynamicArrayInputProps<T, K>) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { fields, append, remove } = useFieldArray<T, ArrayPath<T>>({
     control: formContext.control,
@@ -115,7 +117,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                 color="error"
                 startIcon={<DeleteIcon />}
                 disabled={model.disabled || model.readOnly || formLoading}
-                onClick={() => remove(index)}>{model.removeButtonText || "Remove"} #{index + 1}
+                onClick={() => remove(index)}>{model.removeButtonText || t("remove")} #{index + 1}
               </Button>
             </Divider>}
 
@@ -126,12 +128,12 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                 color="error"
                 startIcon={<DeleteIcon />}
                 disabled={model.disabled || model.readOnly || formLoading}
-                onClick={() => remove(index)}>{model.removeButtonText || "Remove"} #{index + 1}
+                onClick={() => remove(index)}>{model.removeButtonText || t("remove")} #{index + 1}
               </Button>
             </Divider>}
 
             {"itemInputs" in model && model.itemInputs.map((itemInput) => {
-              const pathName = `${model.name}.${index}.${itemInput.name}` as Path<T>;
+              const pathName = `${model.name}.${index}.${itemInput.name}` as K;
 
               return (
                 <DynamicInput
@@ -157,7 +159,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
             })}
 
             {"itemInput" in model && (() => {
-              const pathName = `${model.name}.${index}` as Path<T>;
+              const pathName = `${model.name}.${index}` as K;
 
               return (
                 <DynamicInput
@@ -189,7 +191,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
         sx={{ mt: 2 }}
         onClick={addItem}
       >
-        {model.addButtonText || "Add"}
+        {model.addButtonText || t("add")}
       </Button>
     </FormControl>
   );
