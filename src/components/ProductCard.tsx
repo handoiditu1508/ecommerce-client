@@ -18,8 +18,19 @@ type ProductCardProps = {
   product?: ProductView;
 };
 
+const getDiscountRibbonText = (product?: ProductView): string => {
+  if (!product) return "";
+
+  if (product.discountPercentage) return `-${product.discountPercentage}%`;
+
+  if (product.price !== product.discountPrice) return toVndCurrency(product.discountPrice - product.price);
+
+  return "";
+};
+
 function ProductCard({ product }: ProductCardProps) {
   const theme = useTheme();
+  const discountRibbonText = getDiscountRibbonText(product);
 
   return (
     <Card sx={{
@@ -38,15 +49,15 @@ function ProductCard({ product }: ProductCardProps) {
           component: Link,
           to: `/products/${product.id}`,
           style: {
-            "--sale-off-percentage": `'-${product.discountPercentage}%'`,
+            "--discount-ribbon-text": `'${discountRibbonText}'`,
           } as CSSProperties,
-          sx: product.discountPercentage
+          sx: discountRibbonText
             ? {
               position: "relative",
               "&::before": {
-                content: "var(--sale-off-percentage)",
-                backgroundColor: theme.vars.palette.error.main,
-                color: theme.vars.palette.error.contrastText,
+                content: "var(--discount-ribbon-text)",
+                backgroundColor: product.discountPercentage ? theme.vars.palette.error.main : theme.vars.palette.info.main,
+                color: product.discountPercentage ? theme.vars.palette.error.contrastText : theme.vars.palette.info.contrastText,
                 textAlign: "center",
                 position: "absolute",
                 top: 10,
@@ -87,12 +98,12 @@ function ProductCard({ product }: ProductCardProps) {
         }}>
           {product
             ? <>
-              <Tooltip title="Product name zxc sdfd asdas" placement="top">
+              <Tooltip title={product.name} placement="top">
                 <Typography variant="body1" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{product.name}</Typography>
               </Tooltip>
               <Typography variant="body2" color="textSecondary" sx={{ marginTop: "auto" }}>
                 {toVndCurrency(product.discountPrice)}
-                {!!product.discountPercentage && <>
+                {product.price !== product.discountPrice && <>
               &nbsp;<Box component="sup" sx={{ color: theme.vars.palette.text.disabled, textDecorationLine: "line-through" }}>{toVndCurrency(product.price)}</Box>
                 </>}
               </Typography>

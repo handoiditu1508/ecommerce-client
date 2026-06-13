@@ -4,7 +4,7 @@ import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints"
 import useAppDispatch from "@/hooks/useAppDispatch";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
-import { ProductVariant } from "@/models/entities/Product";
+import Product, { ProductVariant } from "@/models/entities/Product";
 import { useGetProductQuery } from "@/redux/apis/productApi";
 import { addToCart } from "@/redux/slices/cartSlice";
 import Box from "@mui/material/Box";
@@ -27,6 +27,14 @@ import ProductBrandLink from "./ProductBrandLink";
 import ProductDescription from "./ProductDescription";
 import RelatedProducts from "./RelatedProducts";
 import SocialSharingButtonGroup from "./SocialSharingButtonGroup";
+
+const getDiscountValueText = (product: Product): string => {
+  if (product.discountPercentage) return `-${product.discountPercentage}%`;
+
+  if (product.price !== product.discountPrice) return toVndCurrency(product.discountPrice - product.price);
+
+  return "";
+};
 
 function ProductDetailPage() {
   const theme = useTheme();
@@ -68,13 +76,17 @@ function ProductDetailPage() {
 
   const ProductTitle = <Typography variant="h3">{product ? product.name : <Skeleton variant="text" width="80%" />}</Typography>;
 
+  const currentPrice = (selectedVariant && selectedVariant.discountPrice) || (product?.discountPrice ?? 0);
+  const originalPrice = (selectedVariant && selectedVariant.price) || (product?.price ?? 0);
   const ProductPrice = (
     <Box>
       {product
         ? <>
-          <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency((selectedVariant && selectedVariant.discountPrice) || product.discountPrice)}</Typography>
-          <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency((selectedVariant && selectedVariant.price) || product.price)}</Typography>
-          <Typography component="sup" color="error" variant="caption"> -{product.discountPercentage}%</Typography>
+          <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(currentPrice)}</Typography>
+          {currentPrice !== originalPrice && <>
+            <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(originalPrice)}</Typography>
+            <Typography component="sup" color="error" variant="caption"> {getDiscountValueText(product)}</Typography>
+          </>}
         </>
         : <Typography variant="h5"><Skeleton variant="text" width={100} /></Typography>}
     </Box>

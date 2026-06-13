@@ -19,5 +19,10 @@
   "profile_information": "Thông Tin Cá Nhân",
   "save_changes": "Lưu Thay Đổi",
   "security": "Bảo Mật",
-  "two_factor_authentication": "Xác Thực Hai Yếu Tố"
+  "two_factor_authentication": "Xác Thực Hai Yếu Tố",
+  "email_must_be_different": "Email mới phải khác với email hiện tại.",
+  "verification_email_sent": "Một email xác thực đã được gửi đến hộp thư của bạn.",
+  "email_confirm_success_message": "Email của bạn đã đươc cập nhật.",
+  "back_to_security": "Quay lại Trang Bảo Mật",
+  "email_confirm_failed_message": "Cập nhật email thất bại."
 }

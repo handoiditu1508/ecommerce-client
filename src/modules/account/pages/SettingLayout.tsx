@@ -1,4 +1,5 @@
 import useRouteMatch from "@/hooks/useRouteMatch";
+import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -13,28 +14,30 @@ function SettingLayout() {
   const currentTab = routeMatch?.pattern?.path ?? "/account";
 
   return (
-    <Box sx={{
-      display: "flex",
-    }}>
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={currentTab}
-        sx={{
-          borderRight: 1,
-          borderColor: "divider",
-        }}
-      >
-        <Tab label={tAccount("profile")} value="/account" to="/account" component={Link} />
-        <Tab label={tAccount("security")} value="/account/security" to="/account/security" component={Link} />
-      </Tabs>
+    <LayoutContainer>
       <Box sx={{
-        flex: 1,
-        px: 2,
+        display: "flex",
       }}>
-        <Outlet />
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={currentTab}
+          sx={{
+            borderRight: 1,
+            borderColor: "divider",
+          }}
+        >
+          <Tab label={tAccount("profile")} value="/account" to="/account" component={Link} preventScrollReset />
+          <Tab label={tAccount("security")} value="/account/security" to="/account/security" component={Link} preventScrollReset />
+        </Tabs>
+        <Box sx={{
+          flex: 1,
+          px: 2,
+        }}>
+          <Outlet />
+        </Box>
       </Box>
-    </Box>
+    </LayoutContainer>
   );
 }
 

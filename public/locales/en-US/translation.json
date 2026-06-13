@@ -29,5 +29,7 @@
   "shadow": "Shadow",
   "this_field_is_required": "This field is required.",
   "water": "Water",
-  "wild": "Wild"
+  "wild": "Wild",
+  "update_success": "Update {{name}} success.",
+  "error": "Error"
 }

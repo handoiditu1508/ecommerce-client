@@ -5,12 +5,10 @@ import CONFIG from "@/configs";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { mdiSale } from "@mdi/js";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import AppBar from "@mui/material/AppBar";
 import ButtonBase from "@mui/material/ButtonBase";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,6 +18,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import LayoutContainer from "../LayoutContainer";
+import CartButton from "./CartButton";
 import LanguageSelect from "./LanguageSelect";
 import MenuButton from "./MenuButton";
 import MoreOptionsButton from "./MoreOptionsButton";
@@ -79,9 +78,7 @@ function Header() {
               <UserMenuButton sx={{ color: "inherit" }} />
               <NotificationButton sx={{ color: "inherit" }} />
             </>}
-            {smAndUp && <IconButton component={Link} to="/cart" edge="end" sx={{ color: "inherit" }}>
-              <ShoppingCartIcon />
-            </IconButton>}
+            {smAndUp && <CartButton edge="end" sx={{ color: "inherit" }} />}
           </Stack>
         </LayoutContainer>
       </Toolbar>

@@ -75,7 +75,7 @@ function VerifyEmailModal({
       <Typography variant="h4" align="center">{tAuth("verify_email")}</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("verify_email_subtitle", { email: registerState.email })}</Typography>
       {registerState.emailCountdown > 0
-        ? <Typography align="right">{tAuth("resend_email_countdown", { seconds: registerState.emailCooldown })}</Typography>
+        ? <Typography align="right">{tAuth("resend_email_countdown", { seconds: registerState.emailCountdown })}</Typography>
         : (
           <Box sx={{
             display: "flex",

@@ -1,6 +1,8 @@
+import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { useSet2FaMutation } from "@/redux/apis/authApi";
 import { authSelectors } from "@/redux/slices/authSlice";
+import { pushNotification } from "@/redux/slices/notificationSlice";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -17,6 +19,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function TwoFaCard() {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { t: tAccount } = useTranslation("account");
   const authUser = useAppSelector(authSelectors.user);
   const [set2fa, set2faResult] = useSet2FaMutation();
@@ -36,14 +40,20 @@ function TwoFaCard() {
   };
 
   const handleConfirmToggle = async () => {
-    if (targetEnabled === null) return;
-
-    await set2fa({
-      enabled: targetEnabled,
-      password: confirmPassword,
-    }).unwrap();
-
-    handleCloseDialog();
+    try {
+      if (targetEnabled === null) return;
+      await set2fa({
+        enabled: targetEnabled,
+        password: confirmPassword,
+      }).unwrap();
+      dispatch(pushNotification({
+        text: t("update_success", { name: "2FA" }),
+        severity: "success",
+      }));
+    } catch {
+    } finally {
+      handleCloseDialog();
+    }
   };
 
   return authUser && (
@@ -75,7 +85,7 @@ function TwoFaCard() {
           <TextField autoFocus fullWidth label={tAccount("password")} type="password" variant="outlined" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>{tAccount("cancel")}</Button>
+          <Button variant="outlined" onClick={handleCloseDialog}>{tAccount("cancel")}</Button>
           <Button color={targetEnabled ? "primary" : "error"} disabled={!confirmPassword} loading={set2faResult.isLoading} onClick={handleConfirmToggle}>
             {targetEnabled ? tAccount("enable") : tAccount("disable")}
           </Button>

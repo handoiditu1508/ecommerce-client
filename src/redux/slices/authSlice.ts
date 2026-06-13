@@ -30,9 +30,9 @@ export const loadAuthStateFromLocalAsync = createAsyncThunk(
     const { auth: state } = thunkApi.getState() as RootState;
 
     const expiration = Number(localStorage.getItem(expirationStorageKey));
-    const isAccessTokenValid = !!expiration && expiration <= Date.now();
+    const isAccessTokenValid = !!expiration && expiration > Date.now();
     const refreshTokenExpiration = Number(localStorage.getItem(refreshTokenExpirationStorageKey));
-    const isRefreshTokenValid = !!refreshTokenExpiration && refreshTokenExpiration <= Date.now();
+    const isRefreshTokenValid = !!refreshTokenExpiration && refreshTokenExpiration > Date.now();
 
     if (isRefreshTokenValid) {
       thunkApi.dispatch(setRefreshTokenExpiration(refreshTokenExpiration));
@@ -87,7 +87,16 @@ const authSlice = createSlice({
       localStorage.removeItem(expirationStorageKey);
       localStorage.removeItem(refreshTokenExpirationStorageKey);
 
-      return initialState;
+      return {
+        ...initialState,
+        loading: false,
+
+      };
+    },
+    updateAuthUserEmail: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.email = action.payload;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -135,7 +144,12 @@ const authSlice = createSlice({
           const newAction = authSlice.actions.setAuthUser(action.payload);
           authSlice.caseReducers.setAuthUser(state, newAction);
         }
-      );
+      )
+      .addMatcher(authApi.endpoints.confirmChangeEmail.matchFulfilled, (state, action) => {
+        if (state.user && state.user.id === action.meta.arg.originalArgs.userId) {
+          state.user.email = action.meta.arg.originalArgs.newEmail;
+        }
+      });
   },
 });
 
@@ -145,6 +159,7 @@ export const {
   setAuthExpiration,
   setRefreshTokenExpiration,
   clearAuthState,
+  updateAuthUserEmail,
 } = authSlice.actions;
 
 export const authSelectors = {

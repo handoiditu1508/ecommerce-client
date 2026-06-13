@@ -22,7 +22,7 @@ function NewProductsPage() {
 
   return (
     <>
-      <ProductCardList products={getNewProductsResult.data} loading={getNewProductsResult.isFetching} />
+      <ProductCardList products={getNewProductsResult.data} loading={getNewProductsResult.isLoading} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
@@ -36,7 +36,8 @@ function NewProductsPage() {
           renderItem={(item) => (
             <PaginationItem
               component={Link}
-              to={currentUrlWithPage(item.page)}
+              to={currentUrlWithPage(item.page).toString()}
+              preventScrollReset
               {...item}
             />
           )}

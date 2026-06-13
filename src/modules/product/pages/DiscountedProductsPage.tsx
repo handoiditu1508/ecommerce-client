@@ -22,7 +22,7 @@ function DiscountedProductsPage() {
 
   return (
     <>
-      <ProductCardList products={getDiscountedProductsResult.data} loading={getDiscountedProductsResult.isFetching} />
+      <ProductCardList products={getDiscountedProductsResult.data} loading={getDiscountedProductsResult.isLoading} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
@@ -36,7 +36,8 @@ function DiscountedProductsPage() {
           renderItem={(item) => (
             <PaginationItem
               component={Link}
-              to={currentUrlWithPage(item.page)}
+              to={currentUrlWithPage(item.page).toString()}
+              preventScrollReset
               {...item}
             />
           )}

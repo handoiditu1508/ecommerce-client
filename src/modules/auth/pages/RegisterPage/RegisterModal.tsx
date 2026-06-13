@@ -32,6 +32,7 @@ function RegisterModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: RegisterModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { t: tAuth } = useTranslation("auth");
   const [registerConfirmedEmail, result] = useRegisterConfirmedEmailMutation();
   const formContext = useForm<RegisterInput>({
@@ -114,6 +115,9 @@ function RegisterModal({
         name: "agreed",
         inputType: "checkbox",
         required: true,
+        rules: {
+          required: t("this_field_is_required"),
+        },
       },
     ],
   };

@@ -1,9 +1,11 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import CONFIG from "@/configs";
+import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { UpdateSelfCommand } from "@/models/apis/user/updateSeft";
 import { useUpdateSelfMutation } from "@/redux/apis/userApi";
 import { authSelectors } from "@/redux/slices/authSlice";
+import { pushNotification } from "@/redux/slices/notificationSlice";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -13,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 function ProfilePage() {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { t: tAccount } = useTranslation("account");
   const authUser = useAppSelector(authSelectors.user);
@@ -67,10 +70,19 @@ function ProfilePage() {
       firstName: authUser?.firstName ?? "",
       middleName: authUser?.middleName ?? "",
       lastName: authUser?.lastName ?? "",
-      phoneNumber: authUser?.phoneNumber ?? undefined,
+      phoneNumber: authUser?.phoneNumber ?? "",
     },
   });
   const [updateSelf, updateSelfResult] = useUpdateSelfMutation();
+  const handleSaveProfile = async (data: UpdateSelfCommand) => {
+    try {
+      await updateSelf(data).unwrap();
+      dispatch(pushNotification({
+        text: t("update_success", { name: "profile" }),
+        severity: "success",
+      }));
+    } catch {}
+  };
 
   return (
     <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
@@ -81,7 +93,7 @@ function ProfilePage() {
           formContext={formContext}
           model={formModel}
           loading={updateSelfResult.isLoading}
-          onSubmit={updateSelf}
+          onSubmit={handleSaveProfile}
         />
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>

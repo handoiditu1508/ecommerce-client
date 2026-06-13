@@ -169,7 +169,8 @@ function ProductsPage() {
                   renderItem={(item) => (
                     <PaginationItem
                       component={Link}
-                      to={currentUrlWithPage(item.page)}
+                      to={currentUrlWithPage(item.page).toString()}
+                      preventScrollReset
                       {...item}
                     />
                   )}

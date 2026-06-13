@@ -19,5 +19,10 @@
   "profile_information": "Profile Information",
   "save_changes": "Save Changes",
   "security": "Security",
-  "two_factor_authentication": "Two-Factor Authentication"
+  "two_factor_authentication": "Two-Factor Authentication",
+  "email_must_be_different": "The new email must be different from the current email.",
+  "verification_email_sent": "A verification email has been sent to your inbox.",
+  "email_confirm_success_message": "Your email has been updated.",
+  "back_to_security": "Back To Security Page",
+  "email_confirm_failed_message": "Email update failed."
 }

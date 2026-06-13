@@ -3,7 +3,7 @@ import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/c
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
-import { cartSelectors, refreshCartAsync, rehydrateCartAsync } from "@/redux/slices/cartSlice";
+import { cartSelectors, refreshCartAsync, rehydrateCartAsync, toggleAllCartDataVariantIds, toggleCartDataVariantId } from "@/redux/slices/cartSlice";
 import { CartProductVariantData } from "@/redux/utils/cartUtils";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import CartItem from "./CartItem";
 
@@ -28,9 +28,9 @@ function CartPage() {
   const isCartHydrated = useAppSelector(cartSelectors.hydrated);
   const cachedProductIds = useAppSelector(cartSelectors.cachedProductIds);
   const cartItemDatas = useAppSelector(cartSelectors.itemDatas);
-  const totalVariantDatas = cartItemDatas.flatMap((d) => d.productVariants);
-  const [selectedVariantIds, setSelectedVariantIds] = useState<Record<number, boolean>>({});
-  const isAllSelected = totalVariantDatas.every((v) => selectedVariantIds[v.productVariantId]);
+  const totalVariantDatas = useAppSelector(cartSelectors.variantDatas);
+  const selectedVariantIds = useAppSelector(cartSelectors.selectedVariantIds);
+  const isAllSelected = useAppSelector(cartSelectors.allSelected);
   const subtotal = totalVariantDatas
     .filter((v) => selectedVariantIds[v.productVariantId])
     .reduce((sumVariantData: number, variantData: CartProductVariantData) => sumVariantData + variantData.totalPrice, 0);
@@ -54,21 +54,15 @@ function CartPage() {
 
   const handleSelectCartItem = (productVariantId: number, checked: boolean) => {
     if (!!selectedVariantIds[productVariantId] !== checked) {
-      setSelectedVariantIds({
-        ...selectedVariantIds,
-        [productVariantId]: checked,
-      });
+      dispatch(toggleCartDataVariantId({
+        variantId: productVariantId,
+        selected: checked,
+      }));
     }
   };
 
   const handleToggleSelectAll = (checked: boolean) => {
-    const result: Record<number, boolean> = {};
-    if (checked) {
-      for (const variantData of totalVariantDatas) {
-        result[variantData.productVariantId] = true;
-      }
-    }
-    setSelectedVariantIds(result);
+    dispatch(toggleAllCartDataVariantIds(checked));
   };
 
   return (

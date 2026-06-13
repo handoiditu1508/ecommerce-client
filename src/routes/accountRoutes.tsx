@@ -8,6 +8,7 @@ import { RouteHandleObject } from "./models";
 const SettingLayout = React.lazy(() => import("@/modules/account/pages/SettingLayout"));
 const ProfilePage = React.lazy(() => import("@/modules/account/pages/ProfilePage"));
 const SecurityPage = React.lazy(() => import("@/modules/account/pages/SecurityPage"));
+const ConfirmChangeEmailPage = React.lazy(() => import("@/modules/account/pages/ConfirmChangeEmailPage"));
 
 const accountRoutes: RouteObject[] = [
   {
@@ -43,6 +44,10 @@ const accountRoutes: RouteObject[] = [
         } as RouteHandleObject,
       },
     ],
+  },
+  {
+    path: "confirm-change-email/:userId",
+    element: <ConfirmChangeEmailPage />,
   },
 ];
 

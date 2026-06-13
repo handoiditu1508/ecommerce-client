@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ScrollRestoration } from "react-router-dom";
 import { ConfirmationDialog } from "./features/confirmationDialog";
 import { NotificationSnackbar, useNotificationScheduler } from "./features/notification";
 import useAppDispatch from "./hooks/useAppDispatch";
@@ -18,6 +19,7 @@ function OneTimeSetup() {
     <>
       <NotificationSnackbar />
       <ConfirmationDialog />
+      <ScrollRestoration />
     </>
   );
 }

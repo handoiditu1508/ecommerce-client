@@ -19,6 +19,7 @@ type CartOwnState = {
   dehydratedCartItemDatas: DehydratedCartItemData[];
   cartItemDatas: CartItemData[];
   isRehydratingCart: boolean;
+  selectedVariantIds: Record<number, boolean>;
 };
 export type CartState = EntityState<Product, number> & CartOwnState;
 
@@ -26,6 +27,7 @@ const initialState: CartState = productsAdapter.getInitialState<CartOwnState>({
   dehydratedCartItemDatas: [],
   cartItemDatas: [],
   isRehydratingCart: false,
+  selectedVariantIds: {},
 });
 export const cartInitialState = initialState;
 
@@ -110,6 +112,14 @@ const cartSlice = createSlice({
       } else {
         productsAdapter.setOne(state, action.payload.product);
       }
+
+      if (removedCartData
+        || (!state.cartItemDatas
+          .find((d) => d.productId === action.payload.product.id)
+          ?.productVariants.some((v) => v.productVariantId === action.payload.productVariantId))
+      ) {
+        delete state.selectedVariantIds[action.payload.productVariantId];
+      }
     },
     removeFromCart: (state, action: PayloadAction<{ productId: number; productVariantId: number; }>) => {
       let removedCartData: CartItemData | DehydratedCartItemData | undefined = undefined;
@@ -136,6 +146,14 @@ const cartSlice = createSlice({
 
       if (removedCartData) {
         productsAdapter.removeOne(state, removedCartData.productId);
+      }
+
+      if (removedCartData
+        || (!state.cartItemDatas
+          .find((d) => d.productId === action.payload.productId)
+          ?.productVariants.some((v) => v.productVariantId === action.payload.productVariantId))
+      ) {
+        delete state.selectedVariantIds[action.payload.productVariantId];
       }
     },
     changeProductVariantInCart: (state, action: PayloadAction<{ product: Product; prevProductVariantId: number; nextProductVariantId: number; }>) => {
@@ -169,6 +187,20 @@ const cartSlice = createSlice({
 
       if (removedCartData) {
         productsAdapter.removeOne(state, removedCartData.productId);
+      }
+
+      const data = state.cartItemDatas.find((d) => d.productId === action.payload.product.id);
+      if (data) {
+        // transfer selected state from prev variant to next variant
+        if (state.selectedVariantIds[action.payload.prevProductVariantId]
+          && data.productVariants.some((v) => v.productVariantId === action.payload.nextProductVariantId)
+        ) {
+          state.selectedVariantIds[action.payload.nextProductVariantId] = true;
+        }
+        // remove prev variant
+        if (!data.productVariants.some((v) => v.productVariantId === action.payload.prevProductVariantId)) {
+          delete state.selectedVariantIds[action.payload.prevProductVariantId];
+        }
       }
     },
     setQuantityForCart: (state, action: PayloadAction<{ product: Product; productVariantId: number; quantity: number; }>) => {
@@ -204,6 +236,25 @@ const cartSlice = createSlice({
         productsAdapter.removeOne(state, removedCartData.productId);
       } else {
         productsAdapter.setOne(state, action.payload.product);
+      }
+
+      if (removedCartData
+        || (!state.cartItemDatas
+          .find((d) => d.productId === action.payload.product.id)
+          ?.productVariants.some((v) => v.productVariantId === action.payload.productVariantId))
+      ) {
+        delete state.selectedVariantIds[action.payload.productVariantId];
+      }
+    },
+    toggleCartDataVariantId: (state, action: PayloadAction<{ variantId: number; selected: boolean; }>) => {
+      state.selectedVariantIds[action.payload.variantId] = action.payload.selected;
+    },
+    toggleAllCartDataVariantIds: (state, action: PayloadAction<boolean>) => {
+      state.selectedVariantIds = {};
+      if (action.payload) {
+        for (const variantData of state.cartItemDatas.flatMap((d) => d.productVariants)) {
+          state.selectedVariantIds[variantData.productVariantId] = true;
+        }
       }
     },
   },
@@ -259,8 +310,7 @@ const addToDehydratedDatas = (
   let removedData: DehydratedCartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // update quantity
     data.productVariants[productVariantId] = data.productVariants[productVariantId] || 0;
@@ -274,9 +324,8 @@ const addToDehydratedDatas = (
     // check over all quantity of data
     const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
     if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   } else {
     // add new data to top
@@ -299,18 +348,16 @@ const removeFromDehydratedDatas = (
   let removedData: DehydratedCartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // remove variant data
     delete data.productVariants[productVariantId];
 
     // check over all quantity of data
     const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   }
 
@@ -326,8 +373,7 @@ const changeDehydratedProductVariantData = (
   let removedData: DehydratedCartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // move quantity to the new variant data
     data.productVariants[nextProductVariantId] = (data.productVariants[nextProductVariantId] || 0) + (data.productVariants[prevProductVariantId] || 0);
@@ -342,10 +388,9 @@ const changeDehydratedProductVariantData = (
 
     // check over all quantity of data
     const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   }
 
@@ -361,8 +406,7 @@ const setQuantityForDehydratedDatas = (
   let removedData: DehydratedCartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     if (quantity > 0) {
       data.productVariants[productVariantId] = quantity;
@@ -372,10 +416,9 @@ const setQuantityForDehydratedDatas = (
 
     // check over all quantity of data
     const hasVariantData = Object.values(data.productVariants).some((quantity) => quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   } else {
     // add new data to top
@@ -403,8 +446,7 @@ const addToHydratedDatas = (
   let removedData: CartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === product.id);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // get variant data
     let variantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === productVariantId);
@@ -430,10 +472,9 @@ const addToHydratedDatas = (
 
     // check over all quantity of data
     const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   } else {
     // add new data to top
@@ -454,8 +495,7 @@ const removeFromHydratedDatas = (
   let removedData: CartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === productId);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // remove variant data
     const variantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === productVariantId);
@@ -465,10 +505,9 @@ const removeFromHydratedDatas = (
 
     // check over all quantity of data
     const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   }
 
@@ -484,8 +523,7 @@ const changeHydratedProductVariantData = (
   let removedData: CartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === product.id);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // move quantity to the new variant data
     const prevVariantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === prevProductVariantId);
@@ -518,10 +556,9 @@ const changeHydratedProductVariantData = (
 
     // check over all quantity of data
     const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   }
 
@@ -541,8 +578,7 @@ const setQuantityForHydratedDatas = (
   let removedData: CartItemData | undefined = undefined;
   const dataIndex = datas.findIndex((d) => d.productId === product.id);
   if (dataIndex !== -1) {
-    const [data] = datas.splice(dataIndex, 1);
-    removedData = data;
+    const data = datas[dataIndex];
 
     // get variant data
     let variantDataIndex = data.productVariants.findIndex((v) => v.productVariantId === productVariantId);
@@ -567,10 +603,9 @@ const setQuantityForHydratedDatas = (
 
     // check over all quantity of data
     const hasVariantData = data.productVariants.some((v) => v.quantity > 0);
-    if (hasVariantData) {
-    // keep last modified data on top
-      datas.unshift(data);
-      removedData = undefined;
+    if (!hasVariantData) {
+      datas.splice(dataIndex, 1);
+      removedData = data;
     }
   } else {
     // add new data to top
@@ -588,6 +623,8 @@ export const {
   removeFromCart,
   changeProductVariantInCart,
   setQuantityForCart,
+  toggleCartDataVariantId,
+  toggleAllCartDataVariantIds,
 } = cartSlice.actions;
 
 const productAdapterSelectors = productsAdapter.getSelectors<RootState>((state) => state.cart);
@@ -596,6 +633,16 @@ export const cartSelectors = {
   cachedProductIds: (state: RootState) => state.cart.ids,
   itemDatas: (state: RootState) => state.cart.cartItemDatas,
   cachedProduct: (id: number) => (state: RootState): Product | undefined => productAdapterSelectors.selectById(state, id),
+  selectedVariantIds: (state: RootState) => state.cart.selectedVariantIds,
+  allSelected: (state: RootState) => !!state.cart.cartItemDatas.length && state.cart.cartItemDatas.every((d) => d.productVariants.every((v) => state.cart.selectedVariantIds[v.productVariantId])),
+  variantDatas: (state: RootState) => state.cart.cartItemDatas.flatMap((d) => d.productVariants),
+  totalItems: (state: RootState): number => (state.cart.dehydratedCartItemDatas.length
+    ? state.cart.dehydratedCartItemDatas.reduce<number>((total, data) => {
+      const sumOfVariant = Object.values(data.productVariants).reduce((sum, quantity) => sum + quantity, 0);
+
+      return total + sumOfVariant;
+    }, 0)
+    : state.cart.cartItemDatas.flatMap((d) => d.productVariants).reduce((total, data) => total + data.quantity, 0)),
 };
 
 export default cartSlice;

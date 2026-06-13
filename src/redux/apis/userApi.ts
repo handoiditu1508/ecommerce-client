@@ -11,7 +11,7 @@ const userApi = appApi.injectEndpoints({
     }),
     updateSelf: builder.mutation<User, UpdateSelfCommand>({
       query: (body) => ({
-        url: "/users/self",
+        url: "/users",
         method: "PUT",
         body,
       }),
