@@ -15,16 +15,19 @@ export default tseslint.config(
       "vite.config.js",
     ],
   },
+  // eslint.configs.recommended,
+  // ...tseslint.configs.recommended,
   {
-    // "extends": [
-    //   eslint.configs.recommended,
-    //   ...tseslint.configs.recommended,
-    // ],
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
       parser: tseslint.parser,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
     plugins: {
       "react-hooks": reactHooks,
@@ -38,10 +41,49 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
+      // ...importPlugin.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
         {
           allowConstantExport: true,
+        },
+      ],
+      "no-console": [
+        "warn",
+        {
+          allow: ["warn", "error"],
+        },
+      ],
+      "no-debugger": "warn",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "off",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "off",
+      "import/no-unresolved": "off",
+      "import/named": "off",
+      "import/order": [
+        "off",
+        {
+          groups: [
+            [
+              "builtin",
+              "external",
+              "internal",
+              "unknown",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type",
+            ],
+          ],
+          "newlines-between": "ignore",
         },
       ],
       "react-hooks/exhaustive-deps": [
