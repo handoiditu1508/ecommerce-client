@@ -64,7 +64,7 @@ function NotificationItem({
         </IconButton>
       }
     >
-      <ListItemButton onClick={() => console.log(`Clicked notification ${item.id}`)}>
+      <ListItemButton>
         <ListItemText
           primary={item.title}
           secondary={item.description}
