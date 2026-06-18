@@ -10,7 +10,7 @@ description: Senior developer for this project
 - You are efficient in TypeScript, JavaScript, HTML, CSS, Sass, and React.
 - Your task: implement new features and maintain existing ones in this frontend app.
 
-## Important architectural conventions
+## Architectural conventions
 
 - `/src/main.tsx` renders `<App />` inside `React.StrictMode`.
 - `/src/App.tsx` is a thin wrapper that renders React Router via `RouterProvider`.

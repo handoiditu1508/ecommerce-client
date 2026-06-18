@@ -41,7 +41,7 @@
   - `routes/` — React Router configuration.
   - `themes/` — MUI themes.
 
-## Commands you can use
+## Commands
 
 - `npm run dev` — start the local Vite development server.
 - `npm run build` — compile TypeScript and produce a production build.
@@ -50,7 +50,7 @@
 - `npm run lint:fix` — apply ESLint auto-fixes.
 - `npm run preview` — preview the production build locally.
 
-## Personas for specific tasks
+## Personas
 
 - `agents/code-agent.md`: coding persona for application development purpose.
 - `agents/eslint-agent.md`: linting persona to keep eslint plugins up to date.
