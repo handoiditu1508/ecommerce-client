@@ -1,0 +1,135 @@
+import CustomLink from "@/components/CustomLink";
+import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import CONFIG from "@/configs";
+import { smAndDownMediaQuery } from "@/contexts/breakpoints";
+import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
+import { Problem } from "@/models/apis/common";
+import { useSendPreConfirmEmailMutation } from "@/redux/apis/authApi";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import { ActionDispatch } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { RegisterReducerAction, RegisterReducerState } from "./useRegisterReducer";
+
+type SendPreConfirmEmailModalProps = {
+  registerState: RegisterReducerState;
+  registerDispatch: ActionDispatch<[RegisterReducerAction]>;
+  onSuccess?: () => void;
+};
+
+function SendPreConfirmEmailModal({
+  registerState,
+  registerDispatch,
+  onSuccess = CONFIG.EMPTY_FUNCTION,
+}: SendPreConfirmEmailModalProps) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const { t: tAuth } = useTranslation("auth");
+  const { t: tError } = useTranslation("errors");
+  const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
+  const formContext = useForm<SendPreConfirmEmailCommand>({
+    defaultValues: {
+      email: registerState.email,
+    },
+    mode: "onSubmit",
+  });
+  const { setError } = formContext;
+  const formModel: DynamicFormModel<SendPreConfirmEmailCommand> = {
+    submitButtonText: tAuth("sign_up"),
+    inputs: [
+      {
+        name: "email",
+        inputType: "email",
+        required: true,
+        placeholder: tAuth("email"),
+        rules: {
+          required: t("this_field_is_required"),
+        },
+        textAlign: "center",
+      },
+    ],
+  };
+
+  const handleSubmit: SubmitHandler<SendPreConfirmEmailCommand> = async (data) => {
+    const response = await sendPreconfirmEmail(data);
+    if (response.data) {
+      registerDispatch({ type: "SET_EMAIL", payload: data.email });
+      registerDispatch({
+        type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+        payload: response.data,
+      });
+      onSuccess();
+    } else if (response.error.code === "Identity-005") {
+      // email already sent and need to wait before can send more => to verify otp step
+
+      registerDispatch({ type: "SET_EMAIL", payload: data.email });
+
+      // in case count down still keep the state before go back to send email step
+      registerDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      if ("data" in response.error) {
+        const problem = response.error.data as Problem;
+        if ("sentTime" in problem.data && "cooldown" in problem.data) {
+          registerDispatch({
+            type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+            payload: {
+              sentTime: problem.data["sentTime"] as string,
+              cooldown: problem.data["cooldown"] as number,
+            },
+          });
+        }
+      }
+
+      onSuccess();
+    } else if (response.error.code) {
+      setError(
+        "email",
+        { message: tError(response.error.code) },
+        { shouldFocus: true }
+      );
+    }
+  };
+
+  return (
+    <Box sx={{
+      display: "flex",
+      flexDirection: "column",
+      minHeight: "100%",
+      py: 4,
+      boxSizing: "border-box",
+      [smAndDownMediaQuery(theme.breakpoints)]: {
+        px: 4,
+      },
+    }}>
+      <Typography variant="h4" align="center">{tAuth("create_account")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("send_otp_subtitle")}</Typography>
+      <DynamicForm
+        model={formModel}
+        formContext={formContext}
+        loading={result.isLoading}
+        sx={{ mt: 10 }}
+        onSubmit={handleSubmit}
+      />
+      <Divider sx={{ my: 2 }}>{tAuth("or_sign_in_with")}</Divider>
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 2,
+      }}>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Google</Button>
+        <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
+      </Box>
+      <Box sx={{ flex: 1 }} />
+      <Typography align="center">{tAuth("already_have_an_account")} <CustomLink to="/login">{tAuth("sign_in")}</CustomLink></Typography>
+    </Box>
+  );
+}
+
+export default SendPreConfirmEmailModal;

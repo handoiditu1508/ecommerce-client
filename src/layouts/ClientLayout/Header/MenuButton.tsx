@@ -1,8 +1,12 @@
 import CustomLink from "@/components/CustomLink";
+import LetterAvatar from "@/components/LetterAvatar";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import useAppSelector from "@/hooks/useAppSelector";
 import UKRoundedFlagIcon from "@/icons/UKRoundedFlagIcon";
 import VNRoundedFlagIcon from "@/icons/VNRoundedFlagIcon";
+import { authSelectors, clearAuthState } from "@/redux/slices/authSlice";
 import { mdiSale } from "@mdi/js";
 import CategoryIcon from "@mui/icons-material/Category";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -13,15 +17,12 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -34,14 +35,25 @@ import { useColorScheme, useTheme } from "@mui/material/styles";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
+import { MouseEventHandler, useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import NotificationButton from "./NotificationButton";
 
 function MenuButton() {
   const theme = useTheme();
+  const authUser = useAppSelector(authSelectors.user);
   const [open, setOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const { xsAndDown } = useContext(BreakpointsContext);
   const { mode, setMode } = useColorScheme();
+  const dispatch = useAppDispatch();
+  const { t: tMain } = useTranslation("main");
+
+  const logout: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault();
+    dispatch(clearAuthState());
+  };
 
   return (
     <>
@@ -85,40 +97,30 @@ function MenuButton() {
             onClick={() => setOpen(false)}>
             <MenuOpenIcon />
           </IconButton>}
-          <IconButton sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-          }}>
-            <Badge
-              badgeContent={4}
-              color="error"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}>
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <Avatar
+          <NotificationButton
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+            }}
+          />
+          <LetterAvatar
             alt="avatar"
             sx={{
               color: "inherit",
               width: 80,
               height: 80,
+              fontSize: 60,
               [xsAndDownMediaQuery(theme.breakpoints)]: {
                 width: 120,
                 height: 120,
-              },
-            }}>
-            <Face2Icon sx={{
-              fontSize: 60,
-              [xsAndDownMediaQuery(theme.breakpoints)]: {
                 fontSize: 90,
               },
-            }}
-            />
-          </Avatar>
+            }}>
+            {authUser
+              ? `${authUser.firstName} ${authUser.lastName}`
+              : <Face2Icon fontSize="inherit" />}
+          </LetterAvatar>
           <Stack sx={{
             height: 80,
             ml: 1,
@@ -126,19 +128,28 @@ function MenuButton() {
               alignItems: "center",
             },
           }}>
-            <Typography variant="h6">John Doe</Typography>
-            <Box flexGrow={1} />
-            <CustomLink to="/" typography="caption">Setting</CustomLink>
-            <CustomLink to="/" typography="caption">Sign out</CustomLink>
+            {authUser
+              ? <>
+                <Typography variant="h6">{authUser.firstName} {authUser.lastName}</Typography>
+                <Box flexGrow={1} />
+                <CustomLink to="/account" typography="caption">{tMain("setting")}</CustomLink>
+                <CustomLink to="/" typography="caption" onClick={logout}>{tMain("sign_out")}</CustomLink>
+              </>
+              : <>
+                <Box flexGrow={1} />
+                <CustomLink to="/login" typography="caption">{tMain("login")}</CustomLink>
+                <CustomLink to="/register" typography="caption" onClick={logout}>{tMain("register")}</CustomLink>
+                <Box flexGrow={1} />
+              </>}
           </Stack>
         </Box>
         <List>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products/new">
               <ListItemIcon>
                 <NewReleasesIcon />
               </ListItemIcon>
-              <ListItemText primary="New Collection" />
+              <ListItemText primary={tMain("new_collection")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -146,7 +157,7 @@ function MenuButton() {
               <ListItemIcon>
                 <TrendingUpIcon />
               </ListItemIcon>
-              <ListItemText primary="Popular" />
+              <ListItemText primary={tMain("popular")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -154,40 +165,38 @@ function MenuButton() {
               <ListItemIcon>
                 <ThumbUpIcon />
               </ListItemIcon>
-              <ListItemText primary="Best Rated" />
+              <ListItemText primary={tMain("best_rated")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products/discount">
               <ListItemIcon>
                 <MdiSvgIcon path={mdiSale} />
               </ListItemIcon>
-              <ListItemText primary="Sale Off" />
+              <ListItemText primary={tMain("discount")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/products">
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>
-              <ListItemText primary="All Categories" />
+              <ListItemText primary={tMain("all_categories")} />
             </ListItemButton>
           </ListItem>
         </List>
-        <Divider />
-        <ToggleButtonGroup value={mode} color="primary" fullWidth aria-label="toggle button group" sx={{ my: 1 }}>
-          <ToggleButton value="light" onClick={() => setMode("light")}><LightModeIcon /></ToggleButton>
+        <ToggleButtonGroup value={mode} color="primary" fullWidth aria-label="toggle button group">
+          <ToggleButton value="light" sx={{ borderRadius: 0, borderLeft: "none" }} onClick={() => setMode("light")}><LightModeIcon /></ToggleButton>
           <ToggleButton value="system" onClick={() => setMode("system")}><SettingsBrightnessIcon /></ToggleButton>
-          <ToggleButton value="dark" onClick={() => setMode("dark")}><DarkModeIcon /></ToggleButton>
+          <ToggleButton value="dark" sx={{ borderRadius: 0, borderRight: "none" }} onClick={() => setMode("dark")}><DarkModeIcon /></ToggleButton>
         </ToggleButtonGroup>
-        <Divider />
         <List>
           <ListItem>
             <ListItemButton onClick={() => setLanguageOpen(!languageOpen)}>
               <ListItemIcon>
                 <LanguageIcon />
               </ListItemIcon>
-              <ListItemText primary="Language" />
+              <ListItemText primary={tMain("language")} />
               <ExpandMoreIcon
                 style={{
                   ...(languageOpen && {
@@ -207,7 +216,7 @@ function MenuButton() {
                   <ListItemIcon>
                     <VNRoundedFlagIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Vietnamese" />
+                  <ListItemText primary={tMain("vietnamese")} />
                 </ListItemButton>
               </ListItem>
               <ListItem>
@@ -215,7 +224,7 @@ function MenuButton() {
                   <ListItemIcon>
                     <UKRoundedFlagIcon />
                   </ListItemIcon>
-                  <ListItemText primary="English" />
+                  <ListItemText primary={tMain("english")} />
                 </ListItemButton>
               </ListItem>
             </List>

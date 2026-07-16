@@ -1,7 +1,8 @@
-import SignInResponse from "@/models/apis/responses/SignInResponse";
+import { LoginResponse } from "@/models/apis/auth/login";
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
-import { clearAuthState, expirationTimeStorageKey, setAuthState } from "../slices/authSlice";
+import { authSelectors, clearAuthState, setAuthState } from "../slices/authSlice";
+import { RootState } from "../store";
 
 const mutex = new Mutex();
 
@@ -21,8 +22,11 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
 
     let result = await baseQuery(args, api, extraOptions);
 
+    const state = api.getState() as RootState;
+
     // check response is unauthorized
-    if (result.error && result.error.status === 401 && localStorage.getItem(expirationTimeStorageKey)) {
+    // check refresh token exist and not expired
+    if (result.error && result.error.status === 401 && authSelectors.refreshTokenExpired(state)) {
       // checking whether the mutex is unlocked
       if (!mutex.isLocked()) {
         // lock other requests until refresh token api returned
@@ -32,12 +36,10 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
 
         if (refreshResult.data) {
           // store the new token info into store and local storage
-          api.dispatch(setAuthState(refreshResult.data as SignInResponse));
+          api.dispatch(setAuthState(refreshResult.data as LoginResponse));
 
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
-        } else {
-          api.dispatch(clearAuthState());
         }
 
         // release must be called once the mutex should be released again.
@@ -49,11 +51,15 @@ const reauthBaseQueryWrapper = <F extends BaseQueryFn<
         await mutex.waitForUnlock();
 
         // check expiration time to know if user token is stored in cookie or not
-        if (localStorage.getItem(expirationTimeStorageKey)) {
+        if (state.auth.expiration) {
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
         }
       }
+    }
+
+    if (result.error && result.error.status === 401) {
+      api.dispatch(clearAuthState());
     }
 
     return result;

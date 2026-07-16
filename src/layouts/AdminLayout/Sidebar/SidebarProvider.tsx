@@ -48,88 +48,88 @@ function convertTemporaryToSidebarTab(temporary: TemporarySidebarTab, index: num
 const temporarySidebarTabs: TemporarySidebarTab[][] = [
   [
     {
-      title: "Nature",
+      title: "nature",
       to: "/nature",
       icon: <GrassIcon />,
       children: [
         {
-          title: "Lone Ranger",
+          title: "lone_ranger",
           to: "/nature/solo",
           icon: <ParkIcon />,
         },
         {
-          title: "Guild",
+          title: "guild",
           to: "/nature/guild",
           icon: <ForestIcon />,
         },
         {
-          title: "Wild",
+          title: "wild",
           to: "/wild",
           icon: <PetsIcon />,
         },
       ],
     },
     {
-      title: "Fire",
+      title: "fire",
       to: "/fire",
       icon: <LocalFireDepartmentIcon />,
     },
     {
-      title: "Water",
+      title: "water",
       to: "/water",
       icon: <WaterDropIcon />,
       children: [
         {
-          title: "Ice",
+          title: "ice",
           to: "/ice",
           icon: <AcUnitIcon />,
         },
       ],
     },
     {
-      title: "Electricity",
+      title: "electricity",
       to: "/electricity",
       icon: <ElectricBoltIcon />,
     },
     {
-      title: "Air",
+      title: "air",
       to: "/air",
       icon: <AirIcon />,
     },
     {
-      title: "Earth",
+      title: "earth",
       to: "/earth",
       icon: <LandscapeIcon />,
     },
     {
-      title: "Light",
+      title: "light",
       to: "/light",
       icon: <FlareIcon />,
     },
     {
-      title: "Shadow",
+      title: "shadow",
       to: "/shadow",
       icon: <DarkModeIcon />,
     },
     {
-      title: "Magic",
+      title: "magic",
       to: "/magic",
       icon: <AutoFixHighIcon />,
       children: [
         {
-          title: "Necromancy",
+          title: "necromancy",
           to: "/magic/necromancy",
           icon: <FaSvgIcon icon={faSkull} />,
         },
       ],
     },
     {
-      title: "Physical",
+      title: "physical",
       to: "/physical",
       icon: <FaSvgIcon icon={faHandFist} />,
       children: [
         {
-          title: "Knight",
+          title: "knight",
           to: "/physics/knight",
           icon: <MdiSvgIcon path={mdiShieldSword} />,
         },
@@ -138,7 +138,7 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
   ],
   [
     {
-      title: "Privacy Policy",
+      title: "privacy_policy",
       to: "/privacy-policy",
     },
   ],

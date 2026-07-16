@@ -90,7 +90,7 @@ export default defineConfig({
 
 ### Config router
 
-in `src/main.tsx`, replaces `BrowserRouter` with `HashRouter`.
+in `src/routes/router.tsx`, replaces `createBrowserRouter` with `createHashRouter`.
 
 ### Config i18n
 

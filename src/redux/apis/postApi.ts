@@ -1,6 +1,6 @@
 import Post from "@/models/entities/Post";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import { invalidatesIdTag, invalidatesListTag, invalidatesOptimisticPessimisticIdTag, providesIdTag, providesListTags } from "../utils/rtkQueryCacheUtils";
+import { invalidatesIdTag, invalidatesListTag, invalidatesOptimisticPessimisticIdTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 let postsAdapter = createEntityAdapter<Post>();
@@ -9,25 +9,34 @@ const postApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     getPost: builder.query<Post, number>({
       query: (id) => ({
-        url: `posts/${id}`,
+        url: `/posts/${id}`,
       }),
       providesTags: (_result, error, id) => providesIdTag("Post", id, error),
     }),
     getPosts: builder.query<Post[], void>({
-      query: () => "posts",
+      query: () => "/posts",
       providesTags: (result, error) => providesListTags("Post", result, error),
     }),
     // infinite scroll pagination
     getInfinitePosts: builder.infiniteQuery<Post[], { postTitle: string; }, { pageNumber: number; }>({
-      query: ({ queryArg, pageParam }) => `posts?t=${queryArg.postTitle}&p=${pageParam.pageNumber}`,
+      query: ({ queryArg, pageParam }) => ({
+        url: "/posts",
+        method: "GET",
+        params: {
+          t: queryArg.postTitle,
+          p: pageParam.pageNumber,
+        },
+      }),
       infiniteQueryOptions: {
         initialPageParam: {
           pageNumber: 1,
         },
         maxPages: 3,
-        getNextPageParam: (currentPage, allPages, currentPageParam, allPageParams) => ({
-          pageNumber: currentPageParam.pageNumber + 1,
-        }),
+        getNextPageParam: (currentPage, allPages, currentPageParam, allPageParams) => currentPage.length
+          ? {
+            pageNumber: currentPageParam.pageNumber + 1,
+          }
+          : undefined,
         getPreviousPageParam: (currentPage, allPages, currentPageParam, allPageParams) => currentPageParam.pageNumber > 1
           ? ({
             pageNumber: currentPageParam.pageNumber - 1,
@@ -37,7 +46,7 @@ const postApi = appApi.injectEndpoints({
     }),
     // streaming update through websocket
     getWsPosts: builder.query<EntityState<Post, number>, void>({
-      query: () => "posts",
+      query: () => "/posts",
       transformResponse: (posts: Post[]) => {
         return postsAdapter.addMany(postsAdapter.getInitialState(), posts);
       },
@@ -67,7 +76,7 @@ const postApi = appApi.injectEndpoints({
     }),
     addPost: builder.mutation<Post, Partial<Post>>({
       query: (body) => ({
-        url: "posts",
+        url: "/posts",
         method: "POST",
         body,
       }),
@@ -84,7 +93,7 @@ const postApi = appApi.injectEndpoints({
     }),
     updatePost: builder.mutation<Post, Partial<Post> & Pick<Post, "id">>({
       query: (body) => ({
-        url: `posts/${body.id}`,
+        url: `/posts/${body.id}`,
         method: "PUT",
         body,
       }),
@@ -108,7 +117,7 @@ const postApi = appApi.injectEndpoints({
     }),
     deletePost: builder.mutation<{ success: boolean; id: number; }, number>({
       query: (id) => ({
-        url: `posts/${id}`,
+        url: `/posts/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (_result, error, id) => invalidatesIdTag("Post", id, error),

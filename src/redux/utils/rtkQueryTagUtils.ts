@@ -1,0 +1,219 @@
+import CONFIG from "@/configs";
+import { EntityId } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
+/**
+ * Default tags used by the tag helpers
+ */
+export const defaultTags = ["UNAUTHORIZED", "UNKNOWN_ERROR"] as const;
+export type DefaultTags = typeof defaultTags[number];
+export const entityTags = ["Post", "User", "Product", "Brand", "Category"] as const;
+export type EntityTags = typeof entityTags[number];
+export const allTags = [
+  ...defaultTags,
+  ...entityTags,
+] as const;
+
+/**
+ * An individual tag item
+ */
+export type TagItem<T extends EntityTags, ID extends EntityId> = {
+  type: T;
+  id: ID;
+};
+
+/**
+ * A list of tag items, including a LIST entity tag
+ */
+export type TagList<T extends EntityTags, ID extends EntityId> = (
+  | TagItem<T, "LIST">
+  | TagItem<T, `LIST-${ID}`>// invalidate only lists that contain specific id without invalidate getById
+  | TagItem<T, ID>
+  | TagItem<T, "COUNT">// invalidate when add new entity or delete entity
+  | DefaultTags
+)[];
+
+/**
+ * ```
+ * providesListTags("Post", [{ id: 2 }, { id: 5 }], error);
+ * ```
+ * @param tagType Tag type.
+ * @param resultsWithIds Array of entities.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: "LIST" }, { type: "Post", id: 2 }, { type: "Post", id: "LIST-2" }, { type: "Post", id: 5 }, { type: "Post", id: "LIST-5" }
+ * // or
+ * [{ type: "Post", id: "LIST" }, "UNAUTHORIZED"]
+ * // or
+ * [{ type: "Post", id: "LIST" }, "UNKNOWN_ERROR"]
+ * ```
+ */
+export function providesListTags<T extends EntityTags, R extends { id: EntityId; }>(
+  tagType: T,
+  resultsWithIds: R[] | undefined,
+  error: FetchBaseQueryError | undefined,
+  childrenSelector: ((result: R) => R[]) = () => CONFIG.EMPTY_ARRAY,
+): TagList<T, R["id"]> {
+  const tags: TagList<T, R["id"]> = [{ type: tagType, id: "LIST" }];
+
+  if (resultsWithIds) {
+    const queue: R[] = [...resultsWithIds];
+    while (queue.length) {
+      const result = queue.shift()!;
+      tags.push(
+        { type: tagType, id: result.id },
+        { type: tagType, id: `LIST-${result.id}` },
+      );
+      queue.push(...childrenSelector(result));
+    }
+  }
+
+  if (error) {
+    tags.push(error.status === 401 ? "UNAUTHORIZED" : "UNKNOWN_ERROR");
+  }
+
+  return tags;
+}
+
+/**
+ * ```
+ * providesIdTag("Post", 2, error);
+ * ```
+ * @param tagType Tag type.
+ * @param id Entity id.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: 2 }]
+ * // or
+ * [{ type: "Post", id: 2 }, "UNAUTHORIZED"]
+ * // or
+ * [{ type: "Post", id: 2 }, "UNKNOWN_ERROR"]
+ * ```
+ */
+export function providesIdTag<T extends EntityTags, ID extends EntityId>(
+  tagType: T,
+  id: ID,
+  error: FetchBaseQueryError | undefined
+): TagList<T, ID> {
+  const tags: TagList<T, ID> = [{ type: tagType, id }];
+
+  if (error) {
+    tags.push(error.status === 401 ? "UNAUTHORIZED" : "UNKNOWN_ERROR");
+  }
+
+  return tags;
+}
+
+/**
+ * ```
+ * providesCountTag("Post", error);
+ * ```
+ * @param tagType Tag type.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: "COUNT" }]
+ * // or
+ * [{ type: "Post", id: "COUNT" }, "UNAUTHORIZED"]
+ * // or
+ * [{ type: "Post", id: "COUNT" }, "UNKNOWN_ERROR"]
+ * ```
+ */
+export function providesCountTag<T extends EntityTags>(
+  tagType: T,
+  error: FetchBaseQueryError | undefined
+): TagList<T, EntityId> {
+  const tags: TagList<T, EntityId> = [{ type: tagType, id: "COUNT" }];
+
+  if (error) {
+    tags.push(error.status === 401 ? "UNAUTHORIZED" : "UNKNOWN_ERROR");
+  }
+
+  return tags;
+}
+
+/**
+ * ```
+ * invalidatesListTag("Post", error);
+ * ```
+ * @param tagType Tag type.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: "List" }]
+ * // or
+ * []
+ * ```
+ */
+export function invalidatesListTag<T extends EntityTags>(
+  tagType: T,
+  error: FetchBaseQueryError | undefined
+): TagList<T, "LIST"> {
+  return error ? [] : [{ type: tagType, id: "LIST" }];
+}
+
+/**
+ * ```
+ * invalidatesIdTag("Post", 2, error);
+ * ```
+ * @param tagType Tag type.
+ * @param id Entity id.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: 2 }]
+ * // or
+ * []
+ * ```
+ */
+export function invalidatesIdTag<T extends EntityTags, ID extends EntityId>(
+  tagType: T,
+  id: ID,
+  error: FetchBaseQueryError | undefined
+): TagList<T, ID> {
+  return error ? [] : [{ type: tagType, id: id }];
+}
+
+/**
+ * ```
+ * invalidatesOptimisticPessimisticIdTag("Post", 2, error);
+ * ```
+ * @param tagType Tag type.
+ * @param id Entity id.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: 2 }]
+ * // or
+ * [{ type: "Post", id: "LIST-2" }]
+ * ```
+ */
+export function invalidatesOptimisticPessimisticIdTag<T extends EntityTags, ID extends EntityId>(
+  tagType: T,
+  id: ID,
+  error: FetchBaseQueryError | undefined
+): TagList<T, ID> {
+  return error ? [{ type: tagType, id }] : [{ type: tagType, id: `LIST-${id}` }];
+}
+
+/**
+ * ```
+ * invalidatesCountTag("Post", error);
+ * ```
+ * @param tagType Tag type.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: "COUNT" }]
+ * // or
+ * []
+ * ```
+ */
+export function invalidatesCountTag<T extends EntityTags>(
+  tagType: T,
+  error: FetchBaseQueryError | undefined
+): TagList<T, EntityId> {
+  return error ? [] : [{ type: tagType, id: "COUNT" }];
+}

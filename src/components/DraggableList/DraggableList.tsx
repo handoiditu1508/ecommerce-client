@@ -1,5 +1,5 @@
 import CONFIG from "@/configs";
-import { useDragListItem } from "@/hooks";
+import useDragListItem from "@/hooks/useDragListItem";
 import Collapse from "@mui/material/Collapse";
 import List, { ListProps } from "@mui/material/List";
 import { styled } from "@mui/material/styles";

@@ -1,5 +1,13 @@
 type ConfigType = {
   APP_NAME: string;
+  /**
+   * API base URL without slash suffix.
+   */
+  API_URL: string;
+  /**
+   * File base URL without slash suffix.
+   */
+  FILE_URL: string;
   IS_AWESOME: boolean;
   /**
    * theme.spacing(CONFIG.LAYOUT_PADDING)

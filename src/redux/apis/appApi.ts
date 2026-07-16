@@ -1,11 +1,12 @@
+import CONFIG from "@/configs";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../utils/axiosBaseQuery";
 import reauthBaseQueryWrapper from "../utils/reauthBaseQueryWrapper";
-import { allTags } from "../utils/rtkQueryCacheUtils";
+import { allTags } from "../utils/rtkQueryTagUtils";
 
 const appApi = createApi({
   reducerPath: "appApi",
-  baseQuery: reauthBaseQueryWrapper(axiosBaseQuery({ baseUrl: "/api/" })),
+  baseQuery: reauthBaseQueryWrapper(axiosBaseQuery({ baseUrl: CONFIG.API_URL })),
   tagTypes: allTags,
   endpoints: (builder) => ({
     refetchErrorQueries: builder.mutation<null, void>({
