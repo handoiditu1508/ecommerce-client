@@ -75,7 +75,7 @@ function HomePage() {
         title={tMain("new_collection")}
         products={getNewProductsResult.data}
         loading={getNewProductsResult.isLoading}
-        viewAllUrlPath="/products/new"
+        viewAllUrlPath="/products/latest"
         onRefresh={getNewProductsResult.refetch}
       />
       <PromotionalProductList

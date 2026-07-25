@@ -90,7 +90,7 @@ function Header() {
           }}>
           <ButtonBase
             component={Link}
-            to="/products/new"
+            to="/products/latest"
             sx={{
               display: "flex",
               gap: 0.5,

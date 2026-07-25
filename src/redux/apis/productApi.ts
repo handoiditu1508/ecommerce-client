@@ -11,7 +11,7 @@ const productApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
     getNewProducts: builder.query<ProductView[], GetNewProductsQuery>({
       query: (arg) => ({
-        url: "/products/new",
+        url: "/products/latest",
         method: "GET",
         params: arg,
       }),

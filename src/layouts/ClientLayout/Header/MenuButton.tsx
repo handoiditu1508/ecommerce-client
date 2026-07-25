@@ -145,7 +145,7 @@ function MenuButton() {
         </Box>
         <List>
           <ListItem>
-            <ListItemButton component={Link} to="/products/new">
+            <ListItemButton component={Link} to="/products/latest">
               <ListItemIcon>
                 <NewReleasesIcon />
               </ListItemIcon>

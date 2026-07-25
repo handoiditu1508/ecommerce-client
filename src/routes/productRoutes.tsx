@@ -8,7 +8,7 @@ import { RouteHandleObject } from "./models";
 const CartPage = React.lazy(() => import("@/modules/product/pages/CartPage"));
 const ProductDetailPage = React.lazy(() => import("@/modules/product/pages/ProductDetailPage"));
 const ProductsPage = React.lazy(() => import("@/modules/product/pages/ProductsPage"));
-const NewProductsPage = React.lazy(() => import("@/modules/product/pages/NewProductsPage"));
+const LatestProductsPage = React.lazy(() => import("@/modules/product/pages/LatestProductsPage"));
 const DiscountedProductsPage = React.lazy(() => import("@/modules/product/pages/DiscountedProductsPage"));
 
 const productRoutes: RouteObject[] = [
@@ -34,11 +34,11 @@ const productRoutes: RouteObject[] = [
         element: <ProductsPage />,
       },
       {
-        path: "new",
-        element: <NewProductsPage />,
+        path: "latest",
+        element: <LatestProductsPage />,
         handle: {
           crumb: {
-            to: "/products/new",
+            to: "/products/latest",
             label: "New Collection",
             icon: <NewReleasesIcon />,
           },

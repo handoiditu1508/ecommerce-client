@@ -11,7 +11,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 const PAGE_SIZE = 20;
 
-function NewProductsPage() {
+function LatestProductsPage() {
   const { xsAndDown } = useContext(BreakpointsContext);
   const [searchParams] = useSearchParams();
   const page = parseInt(searchParams.get("page")!) || 1;
@@ -47,4 +47,4 @@ function NewProductsPage() {
   );
 }
 
-export default NewProductsPage;
+export default LatestProductsPage;
