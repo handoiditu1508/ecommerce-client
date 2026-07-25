@@ -606,6 +606,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
         formContext={formContext}
         formLoading={formLoading}
         label={label}
+        hiddenMap={hiddenMap}
         startAdornmentMap={startAdornmentMap}
         endAdornmentMap={endAdornmentMap}
         labelMap={labelMap}

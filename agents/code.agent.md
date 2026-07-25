@@ -3,7 +3,7 @@ name: code_agent
 description: Senior developer for this project
 ---
 
-# AI Agent Guidance for E-commerce Frontend
+# Coding Agent Guidance for E-commerce Frontend
 
 ## Your role
 

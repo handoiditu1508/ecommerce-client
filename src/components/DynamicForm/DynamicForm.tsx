@@ -41,63 +41,40 @@ function DynamicForm<T extends Record<string, any>>({
   onSubmit,
   ...props
 }: DynamicFormProps<T>) {
+  const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => (
+    <DynamicInput
+      key={inputModel.name}
+      model={inputModel}
+      formContext={formContext}
+      formLoading={loading}
+      hidden={hiddenMap[inputModel.name]}
+      startAdornment={startAdornmentMap[inputModel.name]}
+      endAdornment={endAdornmentMap[inputModel.name]}
+      label={labelMap[inputModel.name]}
+      rules={rulesMap[inputModel.name]}
+      options={optionsMap[inputModel.name]}
+      autocompleteRenderInput={autocompleteRenderInputMap[inputModel.name]}
+      autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
+      autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
+      autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+      hiddenMap={hiddenMap}
+      startAdornmentMap={startAdornmentMap}
+      endAdornmentMap={endAdornmentMap}
+      labelMap={labelMap}
+      rulesMap={rulesMap}
+      optionsMap={optionsMap}
+      autocompleteRenderInputMap={autocompleteRenderInputMap}
+      autocompleteRenderOptionMap={autocompleteRenderOptionMap}
+      autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
+      autocompleteLoadingMap={autocompleteLoadingMap}
+    />
+  ));
+
   return (
     <Box component="form" onSubmit={formContext.handleSubmit(onSubmit)} {...props}>
-      {model.inputs.map((inputModel) => (
-        <DynamicInput
-          key={inputModel.name}
-          model={inputModel}
-          formContext={formContext}
-          formLoading={loading}
-          startAdornment={startAdornmentMap[inputModel.name]}
-          endAdornment={endAdornmentMap[inputModel.name]}
-          label={labelMap[inputModel.name]}
-          rules={rulesMap[inputModel.name]}
-          options={optionsMap[inputModel.name]}
-          autocompleteRenderInput={autocompleteRenderInputMap[inputModel.name]}
-          autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
-          autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
-          autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
-          hiddenMap={hiddenMap}
-          startAdornmentMap={startAdornmentMap}
-          endAdornmentMap={endAdornmentMap}
-          labelMap={labelMap}
-          rulesMap={rulesMap}
-          optionsMap={optionsMap}
-          autocompleteRenderInputMap={autocompleteRenderInputMap}
-          autocompleteRenderOptionMap={autocompleteRenderOptionMap}
-          autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
-          autocompleteLoadingMap={autocompleteLoadingMap}
-        />
-      ))}
+      {renderInputs(model.inputs)}
       {model.submitButtonText && <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>}
-      {model.postActionInputs && model.postActionInputs.map((inputModel) => (
-        <DynamicInput
-          key={inputModel.name}
-          model={inputModel}
-          formContext={formContext}
-          formLoading={loading}
-          startAdornment={startAdornmentMap[inputModel.name]}
-          endAdornment={endAdornmentMap[inputModel.name]}
-          label={labelMap[inputModel.name]}
-          rules={rulesMap[inputModel.name]}
-          options={optionsMap[inputModel.name]}
-          autocompleteRenderInput={autocompleteRenderInputMap[inputModel.name]}
-          autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
-          autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
-          autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
-          hiddenMap={hiddenMap}
-          startAdornmentMap={startAdornmentMap}
-          endAdornmentMap={endAdornmentMap}
-          labelMap={labelMap}
-          rulesMap={rulesMap}
-          optionsMap={optionsMap}
-          autocompleteRenderInputMap={autocompleteRenderInputMap}
-          autocompleteRenderOptionMap={autocompleteRenderOptionMap}
-          autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
-          autocompleteLoadingMap={autocompleteLoadingMap}
-        />
-      ))}
+      {model.postActionInputs && renderInputs(model.postActionInputs)}
     </Box>
   );
 }

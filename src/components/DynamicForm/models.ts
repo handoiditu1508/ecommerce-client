@@ -1,4 +1,5 @@
 import { ArrayItemType } from "@/common/type";
+import { GridProps } from "@mui/material/Grid";
 import { Property } from "csstype";
 import { Path, PathValue, RegisterOptions } from "react-hook-form";
 
@@ -13,6 +14,7 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
 
 type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
   name: K;
+  size?: GridProps["size"];
   label?: string;
   required?: boolean;
   readOnly?: boolean;
