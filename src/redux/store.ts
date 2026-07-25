@@ -7,6 +7,7 @@ import cartSlice from "./slices/cartSlice";
 import categorySlice from "./slices/categorySlice";
 import counterSlice from "./slices/counterSlice";
 import { notificationSlice } from "./slices/notificationSlice";
+import roleSlice from "./slices/roleSlice";
 import { getPreloadedCartState } from "./utils/cartUtils";
 import listenerMiddleware from "./utils/listenerMiddleware";
 import rtkQueryErrorLoggerMiddleware from "./utils/rtkQueryErrorLoggerMiddleware";
@@ -23,6 +24,7 @@ const store = configureStore({
     [categorySlice.name]: categorySlice.reducer,
     [counterSlice.name]: counterSlice.reducer,
     [notificationSlice.name]: notificationSlice.reducer,
+    [roleSlice.name]: roleSlice.reducer,
     [appApi.reducerPath]: appApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()

@@ -1,4 +1,3 @@
-export type GetNewProductsQuery = {
-  page?: number;
-  pageSize?: number;
-};
+import { PageFilter } from "../common";
+
+export type GetNewProductsQuery = PageFilter;

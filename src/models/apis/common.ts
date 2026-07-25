@@ -43,6 +43,20 @@ export type SendEmailResponse = {
   cooldown: number;
 };
 
+export type SortFilter<T = unknown> = {
+  sortBy?: keyof T | string;
+  sortOrder?: SortDirection;
+};
+
+export type PageFilter = {
+  page?: number;
+  pageSize?: number;
+};
+
+export type AllPagesFilter = PageFilter & {
+  allPages?: boolean;
+};
+
 export enum SortDirection {
   Asc = "asc",
   Desc = "desc",

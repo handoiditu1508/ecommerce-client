@@ -1,18 +1,7 @@
-import { SortDirection } from "../common";
+import Product from "@/models/entities/Product";
+import { PageFilter, SortFilter } from "../common";
 
-export type SearchProductsQuery = {
-  searchText: string;
-  isDeleted?: boolean;
-  minPrice?: number;
-  maxPrice?: number;
-  categoryIds: number[];
-  includeSubCategories?: boolean;
-  brandIds: number[];
-  sortBy?: string;
-  sortOrder?: SortDirection;
-  page?: number;
-  pageSize?: number;
-};
+export type SearchProductsQuery = PageFilter & SortFilter<Product> & CountSearchProductsQuery;
 
 export type CountSearchProductsQuery = {
   searchText: string;
