@@ -9,45 +9,49 @@ import { Navigate, Outlet, UIMatch, useLocation, useMatches } from "react-router
 import { RouteHandleObject } from "./models";
 
 function AuthorizationLayout() {
-  const matches = useMatches() as UIMatch<any, RouteHandleObject | undefined>[];
+  const matches = useMatches() as UIMatch<unknown, RouteHandleObject | undefined>[];
   const location = useLocation();
   const requiredPolicies: Policy[] = distinct(matches.flatMap((match) => match.handle?.policies ?? CONFIG.EMPTY_ARRAY));
   const isLoginRequired = matches.some((match) => match.handle?.requireAuth);
-  const isLogin = useAppSelector(authSelectors.signedIn);
+  const isProtectedRoute = isLoginRequired || requiredPolicies.length > 0;
+  const isSignedIn = useAppSelector(authSelectors.signedIn);
   const userPolicies = useAppSelector(authSelectors.policies);
   const loading = useAppSelector(authSelectors.loading);
 
   // public page
-  if (!isLoginRequired && !requiredPolicies.length) {
+  if (!isProtectedRoute) {
     return <Outlet />;
   }
 
   // auth state is loading
   if (loading) {
     return (
-      <Box sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   // page require login
-  if ((isLoginRequired || requiredPolicies.length) && !isLogin) {
+  if (!isSignedIn) {
     const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
 
     return <Navigate to={`/login?returnUrl=${returnUrl}`} state={{ from: location }} replace />;
   }
 
   // page require specific permission
-  const arePagePoliciesHaveAdminPolicyExclusion = ADMIN_POLICY_EXCLUSION.some((policy) => requiredPolicies.includes(policy));
-  const canAdminPocilyCoverPagePolices: boolean = !arePagePoliciesHaveAdminPolicyExclusion && userPolicies.includes(Policy.Admin);
-  const allowed = canAdminPocilyCoverPagePolices || requiredPolicies.every((policy) => userPolicies.includes(policy));
-  if (!allowed) {
+  const hasAdminPolicyExclusion = ADMIN_POLICY_EXCLUSION.some((policy) => requiredPolicies.includes(policy));
+  const isCoveredByAdminPolicy = !hasAdminPolicyExclusion && userPolicies.includes(Policy.Admin);
+  const hasRequiredPolicies = requiredPolicies.every((policy) => userPolicies.includes(policy));
+
+  if (!isCoveredByAdminPolicy && !hasRequiredPolicies) {
     return <Navigate to="/403" replace />;
   }
 
