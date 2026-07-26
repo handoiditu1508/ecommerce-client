@@ -22,6 +22,20 @@ type User = {
   deletedDate?: string;
 };
 
+export type UserView = {
+  id: number;
+  username: string;
+  email?: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  status: UserStatus;
+  createdDate: Date;
+  modifiedDate: Date;
+  isDeleted: boolean;
+  roles: RoleView[];
+};
+
 export enum UserStatus {
   Active,
   Locked,
