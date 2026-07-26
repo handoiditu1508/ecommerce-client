@@ -1,4 +1,4 @@
-import { DynamicGridForm, DynamicFormModel } from "@/components/DynamicForm";
+import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CountUsersQuery } from "@/models/apis/user/getUsers";
@@ -8,22 +8,24 @@ import { useGetRolesQuery } from "@/redux/apis/roleApi";
 import { useCountUsersQuery, useGetUsersQuery } from "@/redux/apis/userApi";
 import { roleSelectors } from "@/redux/slices/roleSlice";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
-import { GridColDef, GridPaginationModel, GridRenderCellParams } from "@mui/x-data-grid/models";
+import { GridColDef, GridPaginationModel, GridRenderCellParams, GridSortModel } from "@mui/x-data-grid/models";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-type UserFilters = Pick<CountUsersQuery, "username" | "email" | "name" | "statuses" | "roles">;
-const filterModel: DynamicFormModel<UserFilters> = {
+const filterModel: DynamicFormModel<CountUsersQuery> = {
   inputs: [
     { name: "username", inputType: "text", label: "Username", size: { sm: 4, md: 3 } },
-    { name: "email", inputType: "email", label: "Email", size: { sm: 4, md: 3 } },
+    { name: "email", inputType: "text", label: "Email", size: { sm: 4, md: 3 } },
     { name: "name", inputType: "text", label: "Name", size: { sm: 4, md: 3 } },
     { name: "statuses",
       inputType: "select",
@@ -33,12 +35,12 @@ const filterModel: DynamicFormModel<UserFilters> = {
       options: Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
         .map((value) => ({ key: value, label: UserStatus[value], value })),
       size: { sm: 6, md: 3 } },
-    { name: "roles", inputType: "select", label: "Roles", multiple: true, showCheckbox: true, options: [], size: { sm: 6, md: 3 } },
+    { name: "roles", inputType: "select", label: "Roles", multiple: true, showCheckbox: true, showSelectedAsChips: true, options: [], size: { sm: 6, md: 3 } },
   ],
   submitButtonText: "Apply filters",
 };
 
-const columns: GridColDef<UserView>[] = [
+const userColumns: GridColDef<UserView>[] = [
   { field: "username", headerName: "Username", flex: 1, minWidth: 150 },
   { field: "email", headerName: "Email", flex: 1, minWidth: 190 },
   { field: "name", headerName: "Name", flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
@@ -51,16 +53,44 @@ function UsersPage() {
   const navigate = useNavigate();
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
-  const roleOptions = useMemo<DynamicInputOption<UserFilters, "roles">[]>(() => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })), [roles]);
-  const [filters, setFilters] = useState<UserFilters>({ statuses: [], roles: [] });
+  const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(() => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })), [roles]);
+  const [filters, setFilters] = useState<CountUsersQuery>({ statuses: [], roles: [] });
   const [pagination, setPagination] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
-  const formContext = useForm<UserFilters>({ defaultValues: filters });
-  const query = { ...filters, page: pagination.page + 1, pageSize: pagination.pageSize };
-  const usersResult = useGetUsersQuery(query);
+  const [sortModel, setSortModel] = useState<GridSortModel>([]);
+  const formContext = useForm<CountUsersQuery>({ defaultValues: filters });
+  const activeSort = sortModel[0];
+  const usersResult = useGetUsersQuery({
+    ...filters,
+    page: pagination.page + 1,
+    pageSize: pagination.pageSize,
+    sortBy: activeSort?.field,
+    sortOrder: activeSort?.sort,
+  });
   const countResult = useCountUsersQuery(filters);
+  const columns = useMemo<GridColDef<UserView>[]>(() => [
+    ...userColumns.map((column) => ({ ...column, filterable: false, hideable: false })),
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 80,
+      align: "center",
+      headerAlign: "center",
+      sortable: false,
+      filterable: false,
+      hideable: false,
+      disableColumnMenu: true,
+      renderCell: ({ id }) => (
+        <Tooltip title="Edit user">
+          <IconButton aria-label="Edit user" size="small" onClick={() => navigate(`/admin/users/${id}`)}>
+            <EditIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      ),
+    },
+  ], [navigate]);
 
-  const handleFilter = (data: UserFilters) => {
-    setFilters({ ...data, username: data.username || undefined, email: data.email || undefined, name: data.name || undefined });
+  const handleFilter = (data: CountUsersQuery) => {
+    setFilters(data);
     setPagination((current) => ({ ...current, page: 0 }));
   };
 
@@ -71,21 +101,29 @@ function UsersPage() {
         <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>Create user</Button>
       </Box>
       <DynamicGridForm formContext={formContext} model={filterModel} optionsMap={{ roles: roleOptions }} gridProps={{ spacing: 2 }} sx={{ mb: 3 }} onSubmit={handleFilter} />
-      <DataGrid
-        autoHeight
-        rows={usersResult.data ?? []}
-        columns={columns}
-        rowCount={countResult.data ?? 0}
-        loading={usersResult.isLoading || countResult.isLoading}
-        paginationMode="server"
-        paginationModel={pagination}
-        pageSizeOptions={[10, 25, 50]}
-        getRowHeight={() => "auto"}
-        onPaginationModelChange={setPagination}
-        onRowDoubleClick={({ id }) => {
-          navigate(`/admin/users/${id}`);
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          rows={usersResult.data ?? []}
+          columns={columns}
+          rowCount={countResult.data ?? 0}
+          loading={usersResult.isFetching || countResult.isFetching}
+          paginationMode="server"
+          sortingMode="server"
+          paginationModel={pagination}
+          sortModel={sortModel}
+          pageSizeOptions={[10, 25, 50]}
+          disableColumnFilter
+          disableColumnSelector
+          onPaginationModelChange={setPagination}
+          onSortModelChange={(model) => {
+            setSortModel(model);
+            setPagination((current) => ({ ...current, page: 0 }));
+          }}
+          onRowDoubleClick={({ id }) => {
+            navigate(`/admin/users/${id}`);
+          }}
+        />
+      </div>
     </Paper>
   );
 }

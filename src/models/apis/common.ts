@@ -1,3 +1,5 @@
+import type { GridSortDirection } from "@mui/x-data-grid/models";
+
 export type KnownApiError = ValidationProblemDetails | Problem;
 
 /**
@@ -45,7 +47,7 @@ export type SendEmailResponse = {
 
 export type SortFilter<T = unknown> = {
   sortBy?: keyof T | string;
-  sortOrder?: SortDirection;
+  sortOrder?: GridSortDirection;
 };
 
 export type PageFilter = {
@@ -56,8 +58,3 @@ export type PageFilter = {
 export type AllPagesFilter = PageFilter & {
   allPages?: boolean;
 };
-
-export enum SortDirection {
-  Asc = "asc",
-  Desc = "desc",
-}

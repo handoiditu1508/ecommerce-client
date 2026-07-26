@@ -1,7 +1,6 @@
 import { currentUrlWithPage } from "@/common/url";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext, smAndDownMediaQuery } from "@/contexts/breakpoints";
-import { SortDirection } from "@/models/apis/common";
 import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { useCountSearchProductsQuery, useSearchProductsQuery } from "@/redux/apis/productApi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -46,7 +45,7 @@ function ProductsPage() {
     minPrice,
     maxPrice,
     sortBy,
-    sortOrder: SortOrder.toLowerCase() === "desc" ? SortDirection.Desc : SortDirection.Asc,
+    sortOrder: SortOrder.toLowerCase() === "desc" ? "desc" : "asc",
     page,
     pageSize: PAGE_SIZE,
   // eslint-disable-next-line react-hooks/exhaustive-deps

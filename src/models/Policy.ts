@@ -67,4 +67,6 @@ enum Policy {
   DeleteBrand = "Delete Brand",
 }
 
+export const ADMIN_POLICY_EXCLUSION: Policy[] = [Policy.ModifyAdmin];
+
 export default Policy;

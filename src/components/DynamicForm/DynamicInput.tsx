@@ -22,7 +22,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import FileInput from "../FileInput";
@@ -86,6 +86,11 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   const { t } = useTranslation();
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
+  const selectOptions = model.inputType === "select" ? options || model.options : undefined;
+  const selectOptionLabels = useMemo<Map<unknown, string>>(
+    () => new Map(selectOptions?.map((option) => [option.value, option.label] as const) ?? []),
+    [selectOptions],
+  );
   const data = formContext.watch();
 
   const hiddenProp = hidden ?? model.hidden;
@@ -287,7 +292,8 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   }
 
   if (model.inputType === "select") {
-    const finalOptions = options || model.options;
+    const finalOptions = selectOptions || model.options;
+    const getOptionLabel = (value: unknown) => selectOptionLabels.get(value) ?? String(value);
 
     return (
       <Controller
@@ -326,13 +332,15 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   return (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                       {Array.isArray(selected)
-                        ? (selected as any[]).map((value) => <Chip key={value} label={value} size="small" />)
-                        : <Chip label={selected} size="small" />}
+                        ? selected.map((value: unknown) => <Chip key={String(value)} label={getOptionLabel(value)} size="small" />)
+                        : <Chip label={getOptionLabel(selected)} size="small" />}
                     </Box>
                   );
                 }
 
-                return Array.isArray(selected) ? (selected as any[]).join(", ") : selected;
+                return Array.isArray(selected)
+                  ? selected.map(getOptionLabel).join(", ")
+                  : getOptionLabel(selected);
               }}
               {...field}
               onChange={
@@ -347,7 +355,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             >
               {model.showCheckbox
                 ? finalOptions.map((option) => {
-                  const selected = model.multiple && Array.isArray(field.value) ? field.value.includes(option.value) : field.value === option.value;
+                  const selected: boolean = model.multiple && Array.isArray(field.value) ? field.value.includes(option.value) : field.value === option.value;
                   const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
 
                   return (

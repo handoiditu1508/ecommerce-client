@@ -1,6 +1,5 @@
 import { ArrayItemType } from "@/common/type";
 import { BreakpointsContext, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
-import { SortDirection } from "@/models/apis/common";
 import productApi from "@/redux/apis/productApi";
 import SearchIcon from "@mui/icons-material/Search";
 import SortIcon from "@mui/icons-material/Sort";
@@ -21,32 +20,32 @@ import { generateSearchParams } from "./utils";
 const sortOptions = [
   {
     sortBy: "createdDate",
-    sortOrder: SortDirection.Desc,
+    sortOrder: "desc",
     labelKey: "order_by_newest",
   },
   {
     sortBy: "createdDate",
-    sortOrder: SortDirection.Asc,
+    sortOrder: "asc",
     labelKey: "order_by_oldest",
   },
   {
     sortBy: "discountPrice",
-    sortOrder: SortDirection.Asc,
+    sortOrder: "asc",
     labelKey: "order_by_price_ascending",
   },
   {
     sortBy: "discountPrice",
-    sortOrder: SortDirection.Desc,
+    sortOrder: "desc",
     labelKey: "order_by_price_descending",
   },
   {
     sortBy: "discountPercentage",
-    sortOrder: SortDirection.Asc,
+    sortOrder: "asc",
     labelKey: "order_by_discount_ascending",
   },
   {
     sortBy: "discountPercentage",
-    sortOrder: SortDirection.Desc,
+    sortOrder: "desc",
     labelKey: "order_by_discount_descending",
   },
 ] as const;

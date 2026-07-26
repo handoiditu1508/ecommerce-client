@@ -1,6 +1,7 @@
+import { distinct } from "@/common/array";
 import CONFIG from "@/configs";
 import useAppSelector from "@/hooks/useAppSelector";
-import Policy from "@/models/Policy";
+import Policy, { ADMIN_POLICY_EXCLUSION } from "@/models/Policy";
 import { authSelectors } from "@/redux/slices/authSlice";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -10,7 +11,7 @@ import { RouteHandleObject } from "./models";
 function AuthorizationLayout() {
   const matches = useMatches() as UIMatch<any, RouteHandleObject | undefined>[];
   const location = useLocation();
-  const requiredPolicies: Policy[] = matches.flatMap((match) => match.handle?.policies ?? CONFIG.EMPTY_ARRAY);
+  const requiredPolicies: Policy[] = distinct(matches.flatMap((match) => match.handle?.policies ?? CONFIG.EMPTY_ARRAY));
   const isLoginRequired = matches.some((match) => match.handle?.requireAuth);
   const isLogin = useAppSelector(authSelectors.signedIn);
   const userPolicies = useAppSelector(authSelectors.policies);
@@ -43,7 +44,9 @@ function AuthorizationLayout() {
   }
 
   // page require specific permission
-  const allowed = requiredPolicies.every((policy) => userPolicies.includes(policy));
+  const arePagePoliciesHaveAdminPolicyExclusion = ADMIN_POLICY_EXCLUSION.some((policy) => requiredPolicies.includes(policy));
+  const canAdminPocilyCoverPagePolices: boolean = !arePagePoliciesHaveAdminPolicyExclusion && userPolicies.includes(Policy.Admin);
+  const allowed = canAdminPocilyCoverPagePolices || requiredPolicies.every((policy) => userPolicies.includes(policy));
   if (!allowed) {
     return <Navigate to="/403" replace />;
   }
