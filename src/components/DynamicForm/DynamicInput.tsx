@@ -142,6 +142,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               },
             }}
             {...field}
+            value={field.value ?? ""}
             onChange={
               model.validateOnChange
                 ? (event) => {
@@ -205,6 +206,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               },
             }}
             {...field}
+            value={field.value ?? ""}
             onChange={
               model.validateOnChange
                 ? (event) => {
@@ -276,6 +278,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               },
             }}
             {...field}
+            value={field.value ?? ""}
             onChange={
               model.validateOnChange
                 ? (event) => {
@@ -343,6 +346,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   : getOptionLabel(selected);
               }}
               {...field}
+              value={field.value ?? (model.multiple ? [] : "")}
               onChange={
                 model.validateOnChange
                   ? (event) => {
@@ -452,7 +456,9 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               />
             ))}
             // Convert valueType -> optionType for Autocomplete
-            value={finalOptions.find((option) => option.value === field.value) || null}
+            value={model.multiple && Array.isArray(field.value)
+              ? finalOptions.filter((option) => field.value.includes(option.value))
+              : finalOptions.find((option) => option.value === field.value) || null}
             // Convert optionType -> valueType for React Hook Form
             onChange={
               (event, value, _reason, _details) => {
@@ -502,6 +508,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               }}
               control={<Checkbox
                 {...field}
+                checked={!!field.value}
                 readOnly={model.readOnly || formLoading}
                 onChange={
                   model.validateOnChange
@@ -543,6 +550,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             <FormLabel>{finalLabel}</FormLabel>
             <RadioGroup
               {...field}
+              value={field.value ?? ""}
               row={model.row}
               onChange={
                 model.validateOnChange

@@ -1,4 +1,4 @@
-import { DynamicGridForm, DynamicFormModel } from "@/components/DynamicForm";
+import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { UpdateUserCommand } from "@/models/apis/user/updateUser";
 import User, { UserStatus } from "@/models/entities/User";
@@ -10,7 +10,7 @@ import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -46,10 +46,10 @@ function UpdateUserPage() {
   const navigate = useNavigate();
   const userResult = useGetUserQuery(id, { skip: !Number.isInteger(id) });
   const [updateUser, updateResult] = useUpdateUserMutation();
-  const formContext = useForm<UpdateUserForm>();
-  useEffect(() => {
-    if (userResult.data) formContext.reset(userResult.data);
-  }, [formContext, userResult.data]);
+  const formValues = useMemo<UpdateUserForm | undefined>(() => userResult.data
+    ? { ...userResult.data, email: userResult.data.email ?? "" }
+    : undefined, [userResult.data]);
+  const formContext = useForm<UpdateUserForm>({ values: formValues });
 
   if (!Number.isInteger(id)) return <Alert severity="error">Invalid user ID.</Alert>;
   if (userResult.isLoading) return <CircularProgress />;
