@@ -1,23 +1,7 @@
-import FaSvgIcon from "@/components/FaSvgIcon";
-import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { BreakpointsContext } from "@/contexts/breakpoints";
 import { InfoContext } from "@/contexts/info";
-import { faHandFist } from "@fortawesome/free-solid-svg-icons/faHandFist";
-import { faSkull } from "@fortawesome/free-solid-svg-icons/faSkull";
-import { mdiShieldSword } from "@mdi/js";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-import AirIcon from "@mui/icons-material/Air";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import FlareIcon from "@mui/icons-material/Flare";
-import ForestIcon from "@mui/icons-material/Forest";
-import GrassIcon from "@mui/icons-material/Grass";
-import LandscapeIcon from "@mui/icons-material/Landscape";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import ParkIcon from "@mui/icons-material/Park";
-import PetsIcon from "@mui/icons-material/Pets";
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import PeopleIcon from "@mui/icons-material/People";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useTheme } from "@mui/material/styles";
 import { SwipeableDrawerProps } from "@mui/material/SwipeableDrawer";
 import { ProviderProps, useContext, useEffect, useState } from "react";
@@ -48,98 +32,16 @@ function convertTemporaryToSidebarTab(temporary: TemporarySidebarTab, index: num
 const temporarySidebarTabs: TemporarySidebarTab[][] = [
   [
     {
-      title: "nature",
-      to: "/nature",
-      icon: <GrassIcon />,
+      title: "users",
+      to: "/admin/users",
+      icon: <PeopleIcon />,
       children: [
         {
-          title: "lone_ranger",
-          to: "/nature/solo",
-          icon: <ParkIcon />,
-        },
-        {
-          title: "guild",
-          to: "/nature/guild",
-          icon: <ForestIcon />,
-        },
-        {
-          title: "wild",
-          to: "/wild",
-          icon: <PetsIcon />,
+          title: "create_user",
+          to: "/admin/users/new",
+          icon: <PersonAddIcon />,
         },
       ],
-    },
-    {
-      title: "fire",
-      to: "/fire",
-      icon: <LocalFireDepartmentIcon />,
-    },
-    {
-      title: "water",
-      to: "/water",
-      icon: <WaterDropIcon />,
-      children: [
-        {
-          title: "ice",
-          to: "/ice",
-          icon: <AcUnitIcon />,
-        },
-      ],
-    },
-    {
-      title: "electricity",
-      to: "/electricity",
-      icon: <ElectricBoltIcon />,
-    },
-    {
-      title: "air",
-      to: "/air",
-      icon: <AirIcon />,
-    },
-    {
-      title: "earth",
-      to: "/earth",
-      icon: <LandscapeIcon />,
-    },
-    {
-      title: "light",
-      to: "/light",
-      icon: <FlareIcon />,
-    },
-    {
-      title: "shadow",
-      to: "/shadow",
-      icon: <DarkModeIcon />,
-    },
-    {
-      title: "magic",
-      to: "/magic",
-      icon: <AutoFixHighIcon />,
-      children: [
-        {
-          title: "necromancy",
-          to: "/magic/necromancy",
-          icon: <FaSvgIcon icon={faSkull} />,
-        },
-      ],
-    },
-    {
-      title: "physical",
-      to: "/physical",
-      icon: <FaSvgIcon icon={faHandFist} />,
-      children: [
-        {
-          title: "knight",
-          to: "/physics/knight",
-          icon: <MdiSvgIcon path={mdiShieldSword} />,
-        },
-      ],
-    },
-  ],
-  [
-    {
-      title: "privacy_policy",
-      to: "/privacy-policy",
     },
   ],
 ];
@@ -187,7 +89,8 @@ function SidebarProvider(props: SidebarProviderProps) {
   }, [displayAsDesktop]);
 
   useEffect(() => {
-    const sidebarTab = flatSidebarTabs.find((sidebarTab) => sidebarTab.to === location.pathname);
+    const sidebarTab = flatSidebarTabs.find((sidebarTab) => sidebarTab.to === location.pathname)
+      ?? flatSidebarTabs.find((sidebarTab) => typeof sidebarTab.to === "string" && location.pathname.startsWith(`${sidebarTab.to}/`));
     setCurrentSidebarTab(sidebarTab);
   }, [location]);
 
