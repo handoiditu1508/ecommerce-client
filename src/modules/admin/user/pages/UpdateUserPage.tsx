@@ -12,48 +12,49 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 
 type UpdateUserForm = UpdateUserCommand & Omit<User, keyof UpdateUserCommand> & { username: string; };
-
-const statusOptions = Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
-  .map((value) => ({ key: value, label: UserStatus[value], value }));
-const formModel: DynamicFormModel<UpdateUserForm> = {
-  inputs: [
-    { name: "username", inputType: "text", label: "Username", readOnly: true, size: { sm: 6 } },
-    { name: "email", inputType: "email", label: "Email", required: true, size: { sm: 6 } },
-    { name: "emailConfirmed", inputType: "checkbox", label: "Email confirmed", size: { sm: 4 } },
-    { name: "lockoutEnabled", inputType: "checkbox", label: "Lockout enabled", size: { sm: 4 } },
-    { name: "redirectEmailEnabled", inputType: "checkbox", label: "Redirect email enabled", size: { sm: 4 } },
-    { name: "lockoutEnd", inputType: "text", label: "Lockout end", size: { sm: 6 } },
-    { name: "status", inputType: "select", label: "Status", options: statusOptions, size: { sm: 6 } },
-    { name: "firstName", inputType: "text", label: "First name", required: true, size: { sm: 4 } },
-    { name: "middleName", inputType: "text", label: "Middle name (optional)", size: { sm: 4 } },
-    { name: "lastName", inputType: "text", label: "Last name", required: true, size: { sm: 4 } },
-    { name: "id", inputType: "text", label: "ID", readOnly: true, size: { sm: 4 } },
-    { name: "phoneNumber", inputType: "text", label: "Phone number", readOnly: true, size: { sm: 4 } },
-    { name: "accessFailedCount", inputType: "text", label: "Access failed count", readOnly: true, size: { sm: 4 } },
-    { name: "twoFactorEnabled", inputType: "checkbox", label: "Two-factor enabled", readOnly: true, size: { sm: 4 } },
-    { name: "isDeleted", inputType: "checkbox", label: "Deleted", readOnly: true, size: { sm: 4 } },
-    { name: "deletedDate", inputType: "text", label: "Deleted date", readOnly: true, size: { sm: 4 } },
-  ],
-  submitButtonText: "Update user",
-};
 
 function UpdateUserPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const userResult = useGetUserQuery(id, { skip: !Number.isInteger(id) });
   const [updateUser, updateResult] = useUpdateUserMutation();
   const formValues = useMemo<UpdateUserForm | undefined>(() => userResult.data
     ? { ...userResult.data, email: userResult.data.email ?? "" }
     : undefined, [userResult.data]);
   const formContext = useForm<UpdateUserForm>({ values: formValues });
+  const statusOptions = Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
+    .map((value) => ({ key: value, label: t(value === UserStatus.Active ? "active" : "locked"), value }));
+  const formModel: DynamicFormModel<UpdateUserForm> = {
+    inputs: [
+      { name: "username", inputType: "text", label: t("username"), readOnly: true, size: { sm: 6 } },
+      { name: "email", inputType: "email", label: t("email"), required: true, size: { sm: 6 } },
+      { name: "emailConfirmed", inputType: "checkbox", label: t("email_confirmed"), size: { sm: 4 } },
+      { name: "lockoutEnabled", inputType: "checkbox", label: t("lockout_enabled"), size: { sm: 4 } },
+      { name: "redirectEmailEnabled", inputType: "checkbox", label: t("redirect_email_enabled"), size: { sm: 4 } },
+      { name: "lockoutEnd", inputType: "text", label: t("lockout_end"), size: { sm: 6 } },
+      { name: "status", inputType: "select", label: t("status"), options: statusOptions, size: { sm: 6 } },
+      { name: "firstName", inputType: "text", label: t("first_name"), required: true, size: { sm: 4 } },
+      { name: "middleName", inputType: "text", label: t("middle_name_optional"), size: { sm: 4 } },
+      { name: "lastName", inputType: "text", label: t("last_name"), required: true, size: { sm: 4 } },
+      { name: "id", inputType: "text", label: t("id"), readOnly: true, size: { sm: 4 } },
+      { name: "phoneNumber", inputType: "text", label: t("phone_number"), readOnly: true, size: { sm: 4 } },
+      { name: "accessFailedCount", inputType: "text", label: t("access_failed_count"), readOnly: true, size: { sm: 4 } },
+      { name: "twoFactorEnabled", inputType: "checkbox", label: t("two_factor_enabled"), readOnly: true, size: { sm: 4 } },
+      { name: "isDeleted", inputType: "checkbox", label: t("deleted"), readOnly: true, size: { sm: 4 } },
+      { name: "deletedDate", inputType: "text", label: t("deleted_date"), readOnly: true, size: { sm: 4 } },
+    ],
+    submitButtonText: t("update_user"),
+  };
 
-  if (!Number.isInteger(id)) return <Alert severity="error">Invalid user ID.</Alert>;
+  if (!Number.isInteger(id)) return <Alert severity="error">{t("invalid_user_id")}</Alert>;
   if (userResult.isLoading) return <CircularProgress />;
-  if (!userResult.data) return <Alert severity="error">Unable to load user.</Alert>;
+  if (!userResult.data) return <Alert severity="error">{t("unable_to_load_user")}</Alert>;
 
   const handleSubmit = async (data: UpdateUserForm) => {
     const command: UpdateUserCommand = {
@@ -71,27 +72,27 @@ function UpdateUserPage() {
     };
     try {
       await updateUser(command).unwrap();
-      dispatch(pushNotification({ text: "User updated successfully.", severity: "success" }));
+      dispatch(pushNotification({ text: t("user_updated_successfully"), severity: "success" }));
       navigate("/admin/users");
     } catch {}
   };
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>Update user</Typography>
+      <Typography variant="h5" sx={{ mb: 2 }}>{t("update_user")}</Typography>
       <DynamicGridForm formContext={formContext} model={formModel} loading={updateResult.isLoading} gridProps={{ spacing: 2 }} onSubmit={handleSubmit} />
       <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle2" gutterBottom>Roles (readonly)</Typography>
+        <Typography variant="subtitle2" gutterBottom>{t("roles_readonly")}</Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
           {userResult.data.roles.length
             ? userResult.data.roles.map((role) => <Chip key={role.id} label={role.name} size="small" />)
-            : <Typography color="text.secondary">None</Typography>}
+            : <Typography color="text.secondary">{t("none")}</Typography>}
         </Box>
-        <Typography variant="subtitle2" gutterBottom>Policies (readonly)</Typography>
+        <Typography variant="subtitle2" gutterBottom>{t("policies_readonly")}</Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           {userResult.data.policies.length
             ? userResult.data.policies.map((policy) => <Chip key={policy} label={policy} size="small" variant="outlined" />)
-            : <Typography color="text.secondary">None</Typography>}
+            : <Typography color="text.secondary">{t("none")}</Typography>}
         </Box>
       </Box>
     </Paper>

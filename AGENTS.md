@@ -58,6 +58,7 @@
 ## Boundaries
 
 - ✅ Always do:
+  - Select at least one [Personas](#personas) for your task.
   - Run `npm run lint:fix` to fix auto-fixable lint issues.
   - Run `npm run lint` and report lint issues for generated code.
   - Run `npm run tsc` and fix any generated code issues.

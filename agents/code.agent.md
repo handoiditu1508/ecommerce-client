@@ -51,7 +51,7 @@ ComplexFilter/
 ```
 
 - Prefer default exports for main component files and import them using the component folder path.
-- Prefer using i18n for text.
+- Use i18n for text wherever possible.
 - Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
 - Exception: locale JSON keys in `errors.json` map BE error codes, so they may use a different format.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.

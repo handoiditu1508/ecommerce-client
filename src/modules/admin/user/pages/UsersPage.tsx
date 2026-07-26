@@ -20,37 +20,12 @@ import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { GridColDef, GridPaginationModel, GridRenderCellParams, GridSortModel } from "@mui/x-data-grid/models";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-
-const filterModel: DynamicFormModel<CountUsersQuery> = {
-  inputs: [
-    { name: "username", inputType: "text", label: "Username", size: { sm: 4, md: 3 } },
-    { name: "email", inputType: "text", label: "Email", size: { sm: 4, md: 3 } },
-    { name: "name", inputType: "text", label: "Name", size: { sm: 4, md: 3 } },
-    { name: "statuses",
-      inputType: "select",
-      label: "Statuses",
-      multiple: true,
-      showCheckbox: true,
-      options: Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
-        .map((value) => ({ key: value, label: UserStatus[value], value })),
-      size: { sm: 6, md: 3 } },
-    { name: "roles", inputType: "select", label: "Roles", multiple: true, showCheckbox: true, showSelectedAsChips: true, options: [], size: { sm: 6, md: 3 } },
-  ],
-  submitButtonText: "Apply filters",
-};
-
-const userColumns: GridColDef<UserView>[] = [
-  { field: "username", headerName: "Username", flex: 1, minWidth: 150 },
-  { field: "email", headerName: "Email", flex: 1, minWidth: 190 },
-  { field: "name", headerName: "Name", flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
-  { field: "status", headerName: "Status", width: 120, renderCell: ({ value }) => <Chip size="small" label={UserStatus[value]} color={value === UserStatus.Active ? "success" : "warning"} /> },
-  { field: "modifiedDate", headerName: "Modified date", width: 180, valueFormatter: (value) => (value ? new Date(value).toLocaleString() : "") },
-  { field: "roles", headerName: "Roles", flex: 1, minWidth: 200, sortable: false, renderCell: ({ value }: GridRenderCellParams<UserView, RoleView[]>) => <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", py: 1 }}>{(value ?? []).map((role, index) => <Chip key={role.id} size="small" label={role.name} color={(["primary", "secondary", "info", "success"] as const)[index % 4]} />)}</Box> },
-];
 
 function UsersPage() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
   const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(() => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })), [roles]);
@@ -67,11 +42,36 @@ function UsersPage() {
     sortOrder: activeSort?.sort,
   });
   const countResult = useCountUsersQuery(filters);
+  const filterModel: DynamicFormModel<CountUsersQuery> = {
+    inputs: [
+      { name: "username", inputType: "text", label: t("username"), size: { sm: 4, md: 3 } },
+      { name: "email", inputType: "text", label: t("email"), size: { sm: 4, md: 3 } },
+      { name: "name", inputType: "text", label: t("name"), size: { sm: 4, md: 3 } },
+      { name: "statuses",
+        inputType: "select",
+        label: t("statuses"),
+        multiple: true,
+        showCheckbox: true,
+        options: Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
+          .map((value) => ({ key: value, label: t(value === UserStatus.Active ? "active" : "locked"), value })),
+        size: { sm: 6, md: 3 } },
+      { name: "roles", inputType: "select", label: t("roles"), multiple: true, showCheckbox: true, showSelectedAsChips: true, options: [], size: { sm: 6, md: 3 } },
+    ],
+    submitButtonText: t("apply_filters"),
+  };
+  const userColumns = useMemo<GridColDef<UserView>[]>(() => [
+    { field: "username", headerName: t("username"), flex: 1, minWidth: 150 },
+    { field: "email", headerName: t("email"), flex: 1, minWidth: 190 },
+    { field: "name", headerName: t("name"), flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
+    { field: "status", headerName: t("status"), width: 120, renderCell: ({ value }) => <Chip size="small" label={t(value === UserStatus.Active ? "active" : "locked")} color={value === UserStatus.Active ? "success" : "warning"} /> },
+    { field: "modifiedDate", headerName: t("modified_date"), width: 180, valueFormatter: (value) => (value ? new Date(value).toLocaleString(i18n.resolvedLanguage) : "") },
+    { field: "roles", headerName: t("roles"), flex: 1, minWidth: 200, sortable: false, renderCell: ({ value }: GridRenderCellParams<UserView, RoleView[]>) => <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", py: 1 }}>{(value ?? []).map((role, index) => <Chip key={role.id} size="small" label={role.name} color={(["primary", "secondary", "info", "success"] as const)[index % 4]} />)}</Box> },
+  ], [i18n.resolvedLanguage, t]);
   const columns = useMemo<GridColDef<UserView>[]>(() => [
     ...userColumns.map((column) => ({ ...column, filterable: false, hideable: false })),
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("actions"),
       width: 80,
       align: "center",
       headerAlign: "center",
@@ -80,14 +80,14 @@ function UsersPage() {
       hideable: false,
       disableColumnMenu: true,
       renderCell: ({ id }) => (
-        <Tooltip title="Edit user">
-          <IconButton aria-label="Edit user" size="small" onClick={() => navigate(`/admin/users/${id}`)}>
+        <Tooltip title={t("edit_user")}>
+          <IconButton aria-label={t("edit_user")} size="small" onClick={() => navigate(`/admin/users/${id}`)}>
             <EditIcon fontSize="small" />
           </IconButton>
         </Tooltip>
       ),
     },
-  ], [navigate]);
+  ], [navigate, t, userColumns]);
 
   const handleFilter = (data: CountUsersQuery) => {
     setFilters(data);
@@ -97,8 +97,8 @@ function UsersPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">Users</Typography>
-        <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>Create user</Button>
+        <Typography variant="h5">{t("users")}</Typography>
+        <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>{t("create_user")}</Button>
       </Box>
       <DynamicGridForm formContext={formContext} model={filterModel} optionsMap={{ roles: roleOptions }} gridProps={{ spacing: 2 }} sx={{ mb: 3 }} onSubmit={handleFilter} />
       <div style={{ display: "flex", flexDirection: "column" }}>

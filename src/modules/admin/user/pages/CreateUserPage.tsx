@@ -8,24 +8,25 @@ import { pushNotification } from "@/redux/slices/notificationSlice";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-const formModel: DynamicFormModel<CreateUserCommand> = {
-  inputs: [
-    { name: "username", inputType: "text", label: "Username", required: true, rules: { required: "This field is required." }, size: { sm: 6 } },
-    { name: "email", inputType: "email", label: "Email", required: true, rules: { required: "This field is required." }, size: { sm: 6 } },
-    { name: "emailConfirmed", inputType: "checkbox", label: "Email confirmed", size: { sm: 6 } },
-    { name: "firstName", inputType: "text", label: "First name", required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: "This field is required." }, size: { sm: 4 } },
-    { name: "middleName", inputType: "text", label: "Middle name (optional)", maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
-    { name: "lastName", inputType: "text", label: "Last name", required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: "This field is required." }, size: { sm: 4 } },
-  ],
-  submitButtonText: "Create user",
-};
 
 function CreateUserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [createUser, result] = useCreateUserMutation();
+  const formModel: DynamicFormModel<CreateUserCommand> = {
+    inputs: [
+      { name: "username", inputType: "text", label: t("username"), required: true, rules: { required: t("this_field_is_required") }, size: { sm: 6 } },
+      { name: "email", inputType: "email", label: t("email"), required: true, rules: { required: t("this_field_is_required") }, size: { sm: 6 } },
+      { name: "emailConfirmed", inputType: "checkbox", label: t("email_confirmed"), size: { sm: 6 } },
+      { name: "firstName", inputType: "text", label: t("first_name"), required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: t("this_field_is_required") }, size: { sm: 4 } },
+      { name: "middleName", inputType: "text", label: t("middle_name_optional"), maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
+      { name: "lastName", inputType: "text", label: t("last_name"), required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: t("this_field_is_required") }, size: { sm: 4 } },
+    ],
+    submitButtonText: t("create_user"),
+  };
   const formContext = useForm<CreateUserCommand>({
     defaultValues: {
       id: 0,
@@ -52,14 +53,14 @@ function CreateUserPage() {
   const handleSubmit = async (data: CreateUserCommand) => {
     try {
       await createUser({ ...data, middleName: data.middleName || undefined }).unwrap();
-      dispatch(pushNotification({ text: "User created successfully.", severity: "success" }));
+      dispatch(pushNotification({ text: t("user_created_successfully"), severity: "success" }));
       navigate("/admin/users");
     } catch {}
   };
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>Create user</Typography>
+      <Typography variant="h5" sx={{ mb: 2 }}>{t("create_user")}</Typography>
       <DynamicGridForm formContext={formContext} model={formModel} loading={result.isLoading} gridProps={{ spacing: 2 }} onSubmit={handleSubmit} />
     </Paper>
   );
