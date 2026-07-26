@@ -1,4 +1,7 @@
 import Policy from "@/models/Policy";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PeopleIcon from "@mui/icons-material/People";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import React from "react";
 import { RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "../models";
@@ -8,9 +11,35 @@ const CreateUserPage = React.lazy(() => import("@/modules/admin/user/pages/Creat
 const UpdateUserPage = React.lazy(() => import("@/modules/admin/user/pages/UpdateUserPage"));
 
 const userRoutes: RouteObject[] = [
-  { path: "users", element: <UsersPage />, handle: { crumb: { label: "Users", to: "/admin/users" }, policies: [Policy.ViewUser] } as RouteHandleObject },
-  { path: "users/new", element: <CreateUserPage />, handle: { crumb: { label: "Create user" }, policies: [Policy.CreateUser] } as RouteHandleObject },
-  { path: "users/:id", element: <UpdateUserPage />, handle: { crumb: { label: "Update user" }, policies: [Policy.UpdateUser] } as RouteHandleObject },
+  {
+    path: "users",
+    handle: {
+      crumb: { label: "Users", icon: <PeopleIcon />, to: "/admin/users" },
+    } as RouteHandleObject,
+    children: [
+      {
+        index: true,
+        element: <UsersPage />,
+        handle: { policies: [Policy.ViewUser] } as RouteHandleObject,
+      },
+      {
+        path: "new",
+        element: <CreateUserPage />,
+        handle: {
+          crumb: { label: "Create user", icon: <PersonAddIcon /> },
+          policies: [Policy.CreateUser],
+        } as RouteHandleObject,
+      },
+      {
+        path: ":id",
+        element: <UpdateUserPage />,
+        handle: {
+          crumb: { label: "Update user", icon: <ManageAccountsIcon /> },
+          policies: [Policy.UpdateUser],
+        } as RouteHandleObject,
+      },
+    ],
+  },
 ];
 
 export default userRoutes;
