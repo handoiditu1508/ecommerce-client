@@ -47,11 +47,12 @@ function AuthorizationLayout() {
   }
 
   // page require specific permission
-  const hasAdminPolicyExclusion = ADMIN_POLICY_EXCLUSION.some((policy) => requiredPolicies.includes(policy));
-  const isCoveredByAdminPolicy = !hasAdminPolicyExclusion && userPolicies.includes(Policy.Admin);
-  const hasRequiredPolicies = requiredPolicies.every((policy) => userPolicies.includes(policy));
+  const hasAdminPolicy = userPolicies.includes(Policy.Admin);
+  const hasRequiredPolicies = requiredPolicies.every((policy) =>
+    userPolicies.includes(policy)
+    || (hasAdminPolicy && !ADMIN_POLICY_EXCLUSION.includes(policy)));
 
-  if (!isCoveredByAdminPolicy && !hasRequiredPolicies) {
+  if (!hasRequiredPolicies) {
     return <Navigate to="/403" replace />;
   }
 
