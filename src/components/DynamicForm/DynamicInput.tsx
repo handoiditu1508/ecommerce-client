@@ -22,6 +22,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs, { Dayjs } from "dayjs";
 import React, { useMemo, useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -29,6 +33,24 @@ import FileInput from "../FileInput";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
+
+type DateTimeInputType = "date" | "time" | "datetime";
+
+const DATE_TIME_FORMATS: Record<DateTimeInputType, string> = {
+  date: "YYYY-MM-DD",
+  time: "HH:mm",
+  datetime: "YYYY-MM-DDTHH:mm",
+};
+
+function parseDateTimeValue(value: unknown, inputType: DateTimeInputType): Dayjs | null {
+  if (typeof value !== "string" || !value) return null;
+
+  return inputType === "time" ? dayjs(`1970-01-01T${value}`) : dayjs(value);
+}
+
+function formatDateTimeValue(value: Dayjs | null, inputType: DateTimeInputType): string | null {
+  return value?.isValid() ? value.format(DATE_TIME_FORMATS[inputType]) : null;
+}
 
 type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   model: DynamicInputModel<T, K>;
@@ -497,7 +519,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.disabled}>
+            disabled={model.disabled || field.disabled}>
             <FormControlLabel
               slotProps={{
                 typography: {
@@ -546,7 +568,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.disabled}>
+            disabled={model.disabled || field.disabled}>
             <FormLabel>{finalLabel}</FormLabel>
             <RadioGroup
               {...field}
@@ -590,11 +612,11 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
         required={model.required}
         margin="normal"
         error={model.name in formContext.formState.errors}
-        disabled={model.disabled}
+        disabled={model.disabled || formRegisterReturn.disabled}
       >
         <FormLabel>{finalLabel}</FormLabel>
         <FileInput
-          disabled={model.disabled}
+          disabled={model.disabled || formRegisterReturn.disabled}
           readonly={model.readOnly || formLoading}
           inputProps={{
             ...formRegisterReturn,
@@ -612,6 +634,143 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           error={formContext.formState.errors[model.name]?.message as string}
         />
       </FormControl>
+    );
+  }
+
+  if (model.inputType === "date") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => {
+          const onChange = (newValue: Dayjs | null) => {
+            field.onChange(formatDateTimeValue(newValue, "date"));
+            if (model.validateOnChange) {
+              formContext.trigger(model.name);
+            }
+          };
+
+          return (
+            <DatePicker
+              name={field.name}
+              label={finalLabel}
+              disabled={model.disabled || field.disabled}
+              readOnly={model.readOnly || formLoading}
+              value={parseDateTimeValue(field.value, "date")}
+              minDate={parseDateTimeValue(model.min, "date") ?? undefined}
+              maxDate={parseDateTimeValue(model.max, "date") ?? undefined}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  required: model.required,
+                  margin: "normal",
+                  error: fieldState.invalid,
+                  helperText: fieldState.error?.message,
+                  inputRef: field.ref,
+                  onBlur: field.onBlur,
+                },
+              }}
+              onChange={onChange}
+            />
+          );
+        }}
+      />
+    );
+  }
+
+  if (model.inputType === "time") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => {
+          const onChange = (newValue: Dayjs | null) => {
+            field.onChange(formatDateTimeValue(newValue, "time"));
+            if (model.validateOnChange) {
+              formContext.trigger(model.name);
+            }
+          };
+
+          return (
+            <TimePicker
+              name={field.name}
+              label={finalLabel}
+              disabled={model.disabled || field.disabled}
+              readOnly={model.readOnly || formLoading}
+              value={parseDateTimeValue(field.value, "time")}
+              minTime={parseDateTimeValue(model.min, "time") ?? undefined}
+              maxTime={parseDateTimeValue(model.max, "time") ?? undefined}
+              minutesStep={model.minutesStep}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  required: model.required,
+                  margin: "normal",
+                  error: fieldState.invalid,
+                  helperText: fieldState.error?.message,
+                  inputRef: field.ref,
+                  onBlur: field.onBlur,
+                },
+              }}
+              onChange={onChange}
+            />
+          );
+        }}
+      />
+    );
+  }
+
+  if (model.inputType === "datetime") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => {
+          const onChange = (newValue: Dayjs | null) => {
+            field.onChange(formatDateTimeValue(newValue, "datetime"));
+            if (model.validateOnChange) {
+              formContext.trigger(model.name);
+            }
+          };
+
+          return (
+            <DateTimePicker
+              name={field.name}
+              label={finalLabel}
+              disabled={model.disabled || field.disabled}
+              readOnly={model.readOnly || formLoading}
+              value={parseDateTimeValue(field.value, "datetime")}
+              minDateTime={parseDateTimeValue(model.min, "datetime") ?? undefined}
+              maxDateTime={parseDateTimeValue(model.max, "datetime") ?? undefined}
+              minutesStep={model.minutesStep}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  required: model.required,
+                  margin: "normal",
+                  error: fieldState.invalid,
+                  helperText: fieldState.error?.message,
+                  inputRef: field.ref,
+                  onBlur: field.onBlur,
+                },
+              }}
+              onChange={onChange}
+            />
+          );
+        }}
+      />
     );
   }
 

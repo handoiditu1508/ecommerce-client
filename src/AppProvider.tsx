@@ -1,3 +1,5 @@
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Provider } from "react-redux";
 import { BreakpointsProvider } from "./contexts/breakpoints";
 import { InfoProvider } from "./contexts/info";
@@ -13,10 +15,12 @@ function AppProvider() {
       <ConfirmationDialogProvider>{/* shared confirmation dialog */}
         <InfoProvider>{/* info about style and environment changes */}
           <AppThemeProvider noSsr>{/* mui theme */}
-            <BreakpointsProvider>{/* breakpoints helper */}
-              <AuthorizationLayout />
-              <OneTimeSetup />
-            </BreakpointsProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>{/* mui date and time pickers */}
+              <BreakpointsProvider>{/* breakpoints helper */}
+                <AuthorizationLayout />
+                <OneTimeSetup />
+              </BreakpointsProvider>
+            </LocalizationProvider>
           </AppThemeProvider>
         </InfoProvider>
       </ConfirmationDialogProvider>
