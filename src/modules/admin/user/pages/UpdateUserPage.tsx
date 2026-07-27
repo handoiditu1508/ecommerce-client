@@ -37,7 +37,7 @@ function UpdateUserPage() {
       { name: "emailConfirmed", inputType: "checkbox", label: t("email_confirmed"), size: { sm: 4 } },
       { name: "lockoutEnabled", inputType: "checkbox", label: t("lockout_enabled"), size: { sm: 4 } },
       { name: "redirectEmailEnabled", inputType: "checkbox", label: t("redirect_email_enabled"), size: { sm: 4 } },
-      { name: "lockoutEnd", inputType: "text", label: t("lockout_end"), size: { sm: 6 } },
+      { name: "lockoutEnd", inputType: "datetime", label: t("lockout_end"), size: { sm: 6 } },
       { name: "status", inputType: "select", label: t("status"), options: statusOptions, size: { sm: 6 } },
       { name: "firstName", inputType: "text", label: t("first_name"), required: true, size: { sm: 4 } },
       { name: "middleName", inputType: "text", label: t("middle_name_optional"), size: { sm: 4 } },
@@ -47,7 +47,7 @@ function UpdateUserPage() {
       { name: "accessFailedCount", inputType: "text", label: t("access_failed_count"), readOnly: true, size: { sm: 4 } },
       { name: "twoFactorEnabled", inputType: "checkbox", label: t("two_factor_enabled"), readOnly: true, size: { sm: 4 } },
       { name: "isDeleted", inputType: "checkbox", label: t("deleted"), readOnly: true, size: { sm: 4 } },
-      { name: "deletedDate", inputType: "text", label: t("deleted_date"), readOnly: true, size: { sm: 4 } },
+      { name: "deletedDate", inputType: "datetime", label: t("deleted_date"), readOnly: true, size: { sm: 4 } },
     ],
     submitButtonText: t("update_user"),
   };
