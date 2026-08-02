@@ -7,6 +7,7 @@ import { RouteObject } from "react-router-dom";
 import { RouteHandleObject } from "../models";
 
 const CreateProductPage = React.lazy(() => import("@/modules/admin/product/pages/CreateProductPage"));
+const ProductsPage = React.lazy(() => import("@/modules/admin/product/pages/ProductsPage"));
 const UpdateProductPage = React.lazy(() => import("@/modules/admin/product/pages/UpdateProductPage"));
 const productRoutes: RouteObject[] = [
   {
@@ -19,6 +20,13 @@ const productRoutes: RouteObject[] = [
       },
     } as RouteHandleObject,
     children: [
+      {
+        index: true,
+        element: <ProductsPage />,
+        handle: {
+          policies: [Policy.ViewProduct],
+        } as RouteHandleObject,
+      },
       {
         path: "new",
         element: <CreateProductPage />,

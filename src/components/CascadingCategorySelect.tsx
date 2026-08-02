@@ -1,6 +1,8 @@
 import Category from "@/models/entities/Category";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
@@ -14,24 +16,40 @@ import { useMemo, useState } from "react";
 type Props = {
   categories: Category[];
   value?: number;
+  values?: number[];
+  multiple?: boolean;
   label: string;
   disabled?: boolean;
   error?: boolean;
   helperText?: string;
   onBlur?: () => void;
   onChange: (value?: number) => void;
+  onValuesChange?: (values: number[]) => void;
 };
 
 const flatten = (categories: Category[]): Category[] => categories.flatMap(
   (category) => [category, ...flatten(category.children)],
 );
 
-function CascadingCategorySelect({ categories, value, label, disabled, error, helperText, onBlur, onChange }: Props) {
+function CascadingCategorySelect({
+  categories,
+  value,
+  values = [],
+  multiple = false,
+  label,
+  disabled,
+  error,
+  helperText,
+  onBlur,
+  onChange,
+  onValuesChange,
+}: Props) {
   const [parentPath, setParentPath] = useState<Category[]>([]);
   const allCategories = useMemo(() => flatten(categories), [categories]);
   const currentParent = parentPath[parentPath.length - 1];
   const options = currentParent?.children ?? categories;
   const selectedCategory = allCategories.find((category) => category.id === value);
+  const selectedCategories = allCategories.filter((category) => values.includes(category.id));
 
   return (
     <FormControl fullWidth margin="normal" error={error} disabled={disabled}>
@@ -39,12 +57,26 @@ function CascadingCategorySelect({ categories, value, label, disabled, error, he
       <Select
         labelId="category-select-label"
         label={label}
-        value={value ?? ""}
-        renderValue={() => selectedCategory?.name ?? ""}
+        multiple={multiple}
+        value={multiple ? values : value ?? ""}
+        renderValue={() => multiple
+          ? (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selectedCategories.map((category) => (
+                <Chip key={category.id} label={category.name} size="small" />
+              ))}
+            </Box>
+          )
+          : selectedCategory?.name ?? ""}
         onBlur={onBlur}
-        onChange={(event) => onChange(
-          typeof event.target.value === "number" ? event.target.value : undefined,
-        )}
+        onChange={(event) => {
+          if (multiple) {
+            const newValues = event.target.value;
+            onValuesChange?.(Array.isArray(newValues) ? newValues.map(Number) : []);
+          } else {
+            onChange(typeof event.target.value === "number" ? event.target.value : undefined);
+          }
+        }}
       >
         {currentParent && <ListSubheader sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <IconButton
