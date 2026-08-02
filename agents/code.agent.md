@@ -54,6 +54,11 @@ ComplexFilter/
 
 - Prefer default exports for main component files and import them using the component folder path.
 - Use i18n for text wherever possible.
+- Keep `translation.json` for broadly shared UI text; put module or entity text in its own namespace file.
+- Give persistent shared UI its own namespace; do not load feature namespaces solely for text outside that feature.
+- Load page namespaces with `useTranslation("namespace")`. Keep equivalent keys in every supported locale.
+- Prefer duplication between namespaces over making page-specific text global.
+- Hoist static configuration outside components to avoid recreating it. Use `namespace:key` for translatable values, and inject runtime-dependent values through the configuration's supported extension points.
 - Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
 - Exception: locale JSON keys in `errors.json` map BE error codes, so they may use a different format.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.
