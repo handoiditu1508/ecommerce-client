@@ -110,8 +110,8 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   const [showPassword, setShowPassword] = useState(false);
   const selectOptions = model.inputType === "select" ? options || model.options : undefined;
   const selectOptionLabels = useMemo<Map<unknown, string>>(
-    () => new Map(selectOptions?.map((option) => [option.value, option.label] as const) ?? []),
-    [selectOptions],
+    () => new Map(selectOptions?.map((option) => [option.value, t(option.label)] as const) ?? []),
+    [selectOptions, t],
   );
   const data = formContext.watch();
 
@@ -119,7 +119,9 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
   let finalHidden: boolean | undefined = typeof hiddenProp === "function" ? hiddenProp(data) : hiddenProp;
   if (finalHidden) return null;
 
-  const finalLabel = label || model.label;
+  const rawLabel = label || model.label;
+  const finalLabel = typeof rawLabel === "string" ? t(rawLabel) : rawLabel;
+  const errorText = (message?: string) => (message ? t(message) : undefined);
 
   if (model.inputType === "text") {
     return (
@@ -135,10 +137,10 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             fullWidth
             required={model.required}
             label={finalLabel}
-            placeholder={model.placeholder}
+            placeholder={model.placeholder ? t(model.placeholder) : undefined}
             margin="normal"
             error={fieldState.invalid}
-            helperText={fieldState.error && fieldState.error.message}
+            helperText={errorText(fieldState.error?.message)}
             type="text"
             disabled={model.disabled}
             slotProps={{
@@ -199,10 +201,10 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             fullWidth
             required={model.required}
             label={finalLabel}
-            placeholder={model.placeholder}
+            placeholder={model.placeholder ? t(model.placeholder) : undefined}
             margin="normal"
             error={fieldState.invalid}
-            helperText={fieldState.error && fieldState.error.message}
+            helperText={errorText(fieldState.error?.message)}
             type="email"
             disabled={model.disabled}
             slotProps={{
@@ -261,7 +263,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             placeholder={model.placeholder}
             margin="normal"
             error={fieldState.invalid}
-            helperText={fieldState.error && fieldState.error.message}
+            helperText={errorText(fieldState.error?.message)}
             type={showPassword ? "text" : "password"}
             disabled={model.disabled}
             slotProps={{
@@ -387,15 +389,15 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   return (
                     <MenuItem key={option.key} value={option.value}>
                       <SelectionIcon fontSize="small" style={{ marginRight: 8, padding: 9, boxSizing: "content-box" }} />
-                      <ListItemText primary={option.label} />
+                      <ListItemText primary={t(option.label)} />
                     </MenuItem>
                   );
                 })
                 : finalOptions.map((option) => (
-                  <MenuItem key={option.key} value={option.value}>{option.label}</MenuItem>
+                  <MenuItem key={option.key} value={option.value}>{t(option.label)}</MenuItem>
                 ))}
             </Select>
-            {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
+            {fieldState.error && <FormHelperText>{errorText(fieldState.error.message)}</FormHelperText>}
           </FormControl>
         )}
       />
@@ -420,6 +422,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
           <Autocomplete
             fullWidth
             options={finalOptions}
+            getOptionLabel={(option) => (typeof option === "string" ? option : t(option.label))}
             isOptionEqualToValue={(option, value) => option.key === value.key}
             getOptionKey={(option) => (typeof option === "string" ? "" : option.key)}
             disabled={model.disabled}
@@ -438,10 +441,10 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 {...params}
                 required={model.required}
                 label={finalLabel}
-                placeholder={model.placeholder}
+                placeholder={model.placeholder ? t(model.placeholder) : undefined}
                 margin="normal"
                 error={fieldState.invalid}
-                helperText={fieldState.error && fieldState.error.message}
+                helperText={errorText(fieldState.error?.message)}
                 type="text"
                 slotProps={{
                   input: {
@@ -544,7 +547,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               />}
               label={finalLabel}
             />
-            {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
+            {fieldState.error && <FormHelperText>{errorText(fieldState.error.message)}</FormHelperText>}
           </FormControl>
         )}
       />
@@ -589,11 +592,11 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   key={option.key}
                   value={option.value}
                   control={<Radio readOnly={model.readOnly || formLoading} />}
-                  label={option.label}
+                  label={t(option.label)}
                 />
               ))}
             </RadioGroup>
-            {fieldState.error && <FormHelperText>{fieldState.error.message}</FormHelperText>}
+            {fieldState.error && <FormHelperText>{errorText(fieldState.error.message)}</FormHelperText>}
           </FormControl>
         )}
       />
@@ -631,7 +634,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
               }
               : formRegisterReturn.onChange,
           }}
-          error={formContext.formState.errors[model.name]?.message as string}
+          error={errorText(formContext.formState.errors[model.name]?.message as string)}
         />
       </FormControl>
     );
@@ -669,7 +672,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   required: model.required,
                   margin: "normal",
                   error: fieldState.invalid,
-                  helperText: fieldState.error?.message,
+                  helperText: errorText(fieldState.error?.message),
                   inputRef: field.ref,
                   onBlur: field.onBlur,
                 },
@@ -715,7 +718,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   required: model.required,
                   margin: "normal",
                   error: fieldState.invalid,
-                  helperText: fieldState.error?.message,
+                  helperText: errorText(fieldState.error?.message),
                   inputRef: field.ref,
                   onBlur: field.onBlur,
                 },
@@ -761,7 +764,7 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                   required: model.required,
                   margin: "normal",
                   error: fieldState.invalid,
-                  helperText: fieldState.error?.message,
+                  helperText: errorText(fieldState.error?.message),
                   inputRef: field.ref,
                   onBlur: field.onBlur,
                 },

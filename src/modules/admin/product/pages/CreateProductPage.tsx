@@ -19,6 +19,41 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+const formModel: DynamicFormModel<CreateProductCommand> = {
+  inputs: [
+    {
+      name: "name",
+      inputType: "text",
+      label: "product:product_name",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+    {
+      name: "sku",
+      inputType: "text",
+      label: "product:sku",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+    {
+      name: "price",
+      inputType: "text",
+      label: "product:price",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+    { name: "categoryId", inputType: "text", label: "product:category" },
+    {
+      name: "thumbnailFile",
+      inputType: "text",
+      label: "product:thumbnail",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+  ],
+  submitButtonText: "product:create_product",
+};
+
 function CreateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -34,17 +69,6 @@ function CreateProductPage() {
       thumbnailFile: undefined,
     },
   });
-  const requiredRule = { required: t("this_field_is_required") };
-  const formModel: DynamicFormModel<CreateProductCommand> = {
-    inputs: [
-      { name: "name", inputType: "text", label: t("product_name"), required: true, rules: requiredRule },
-      { name: "sku", inputType: "text", label: t("sku"), required: true, rules: requiredRule },
-      { name: "price", inputType: "text", label: t("price"), required: true, rules: requiredRule },
-      { name: "categoryId", inputType: "text", label: t("category") },
-      { name: "thumbnailFile", inputType: "text", label: t("thumbnail"), required: true, rules: requiredRule },
-    ],
-    submitButtonText: t("create_product"),
-  };
 
   const handleSubmit = async (data: CreateProductCommand) => {
     try {
@@ -118,7 +142,7 @@ function CreateProductPage() {
           thumbnailFile: <Controller
             control={formContext.control}
             name="thumbnailFile"
-            rules={requiredRule}
+            rules={{ required: t("this_field_is_required") }}
             render={({ field, fieldState }) => (
               <FormControl fullWidth required margin="normal" error={fieldState.invalid}>
                 <FormLabel>{t("thumbnail")}</FormLabel>

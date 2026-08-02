@@ -11,22 +11,59 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+const formModel: DynamicFormModel<CreateUserCommand> = {
+  inputs: [
+    {
+      name: "username",
+      inputType: "text",
+      label: "user:username",
+      required: true,
+      rules: { required: "user:this_field_is_required" },
+      size: { sm: 6 },
+    },
+    {
+      name: "email",
+      inputType: "email",
+      label: "user:email",
+      required: true,
+      rules: { required: "user:this_field_is_required" },
+      size: { sm: 6 },
+    },
+    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed", size: { sm: 6 } },
+    {
+      name: "firstName",
+      inputType: "text",
+      label: "user:first_name",
+      required: true,
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      rules: { required: "user:this_field_is_required" },
+      size: { sm: 4 },
+    },
+    {
+      name: "middleName",
+      inputType: "text",
+      label: "user:middle_name_optional",
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      size: { sm: 4 },
+    },
+    {
+      name: "lastName",
+      inputType: "text",
+      label: "user:last_name",
+      required: true,
+      maxLength: CONFIG.NAME_MAX_LENGTH,
+      rules: { required: "user:this_field_is_required" },
+      size: { sm: 4 },
+    },
+  ],
+  submitButtonText: "user:create_user",
+};
+
 function CreateUserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation("user");
   const [createUser, result] = useCreateUserMutation();
-  const formModel: DynamicFormModel<CreateUserCommand> = {
-    inputs: [
-      { name: "username", inputType: "text", label: t("username"), required: true, rules: { required: t("this_field_is_required") }, size: { sm: 6 } },
-      { name: "email", inputType: "email", label: t("email"), required: true, rules: { required: t("this_field_is_required") }, size: { sm: 6 } },
-      { name: "emailConfirmed", inputType: "checkbox", label: t("email_confirmed"), size: { sm: 6 } },
-      { name: "firstName", inputType: "text", label: t("first_name"), required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: t("this_field_is_required") }, size: { sm: 4 } },
-      { name: "middleName", inputType: "text", label: t("middle_name_optional"), maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
-      { name: "lastName", inputType: "text", label: t("last_name"), required: true, maxLength: CONFIG.NAME_MAX_LENGTH, rules: { required: t("this_field_is_required") }, size: { sm: 4 } },
-    ],
-    submitButtonText: t("create_user"),
-  };
   const formContext = useForm<CreateUserCommand>({
     defaultValues: {
       id: 0,

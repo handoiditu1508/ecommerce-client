@@ -23,6 +23,42 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
+const statusOptions = Object.values(UserStatus)
+  .filter((value): value is UserStatus => typeof value === "number")
+  .map((value) => ({
+    key: value,
+    label: value === UserStatus.Active ? "user:active" : "user:locked",
+    value,
+  }));
+
+const filterModel: DynamicFormModel<CountUsersQuery> = {
+  inputs: [
+    { name: "username", inputType: "text", label: "user:username", size: { sm: 4, md: 3 } },
+    { name: "email", inputType: "text", label: "user:email", size: { sm: 4, md: 3 } },
+    { name: "name", inputType: "text", label: "user:name", size: { sm: 4, md: 3 } },
+    {
+      name: "statuses",
+      inputType: "select",
+      label: "user:statuses",
+      multiple: true,
+      showCheckbox: true,
+      options: statusOptions,
+      size: { sm: 6, md: 3 },
+    },
+    {
+      name: "roles",
+      inputType: "select",
+      label: "user:roles",
+      multiple: true,
+      showCheckbox: true,
+      showSelectedAsChips: true,
+      options: [],
+      size: { sm: 6, md: 3 },
+    },
+  ],
+  submitButtonText: "user:apply_filters",
+};
+
 function UsersPage() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("user");
@@ -42,23 +78,6 @@ function UsersPage() {
     sortOrder: activeSort?.sort,
   });
   const countResult = useCountUsersQuery(filters);
-  const filterModel: DynamicFormModel<CountUsersQuery> = {
-    inputs: [
-      { name: "username", inputType: "text", label: t("username"), size: { sm: 4, md: 3 } },
-      { name: "email", inputType: "text", label: t("email"), size: { sm: 4, md: 3 } },
-      { name: "name", inputType: "text", label: t("name"), size: { sm: 4, md: 3 } },
-      { name: "statuses",
-        inputType: "select",
-        label: t("statuses"),
-        multiple: true,
-        showCheckbox: true,
-        options: Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
-          .map((value) => ({ key: value, label: t(value === UserStatus.Active ? "active" : "locked"), value })),
-        size: { sm: 6, md: 3 } },
-      { name: "roles", inputType: "select", label: t("roles"), multiple: true, showCheckbox: true, showSelectedAsChips: true, options: [], size: { sm: 6, md: 3 } },
-    ],
-    submitButtonText: t("apply_filters"),
-  };
   const userColumns = useMemo<GridColDef<UserView>[]>(() => [
     { field: "username", headerName: t("username"), flex: 1, minWidth: 150 },
     { field: "email", headerName: t("email"), flex: 1, minWidth: 190 },

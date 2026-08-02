@@ -4,6 +4,7 @@ import Box, { BoxProps } from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import React from "react";
 import { Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import DynamicInput from "./DynamicInput";
 import { DynamicFormModel, DynamicInputOption } from "./models";
 
@@ -43,6 +44,7 @@ function DynamicForm<T extends Record<string, any>>({
   onSubmit,
   ...props
 }: DynamicFormProps<T>) {
+  const { t } = useTranslation();
   const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => renderInputMap[inputModel.name] ?? (
     <DynamicInput
       key={inputModel.name}
@@ -75,7 +77,11 @@ function DynamicForm<T extends Record<string, any>>({
   return (
     <Box component="form" onSubmit={formContext.handleSubmit(onSubmit)} {...props}>
       {renderInputs(model.inputs)}
-      {model.submitButtonText && <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>}
+      {model.submitButtonText && (
+        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>
+          {t(model.submitButtonText)}
+        </Button>
+      )}
       {model.postActionInputs && renderInputs(model.postActionInputs)}
     </Box>
   );

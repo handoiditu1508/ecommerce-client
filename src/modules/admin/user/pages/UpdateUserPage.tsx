@@ -17,6 +17,59 @@ import { useNavigate, useParams } from "react-router-dom";
 
 type UpdateUserForm = UpdateUserCommand & Omit<User, keyof UpdateUserCommand> & { username: string; };
 
+const statusOptions = Object.values(UserStatus)
+  .filter((value): value is UserStatus => typeof value === "number")
+  .map((value) => ({
+    key: value,
+    label: value === UserStatus.Active ? "user:active" : "user:locked",
+    value,
+  }));
+
+const formModel: DynamicFormModel<UpdateUserForm> = {
+  inputs: [
+    { name: "username", inputType: "text", label: "user:username", readOnly: true, size: { sm: 6 } },
+    { name: "email", inputType: "email", label: "user:email", required: true, size: { sm: 6 } },
+    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed", size: { sm: 4 } },
+    { name: "lockoutEnabled", inputType: "checkbox", label: "user:lockout_enabled", size: { sm: 4 } },
+    {
+      name: "redirectEmailEnabled",
+      inputType: "checkbox",
+      label: "user:redirect_email_enabled",
+      size: { sm: 4 },
+    },
+    { name: "lockoutEnd", inputType: "datetime", label: "user:lockout_end", size: { sm: 6 } },
+    { name: "status", inputType: "select", label: "user:status", options: statusOptions, size: { sm: 6 } },
+    { name: "firstName", inputType: "text", label: "user:first_name", required: true, size: { sm: 4 } },
+    { name: "middleName", inputType: "text", label: "user:middle_name_optional", size: { sm: 4 } },
+    { name: "lastName", inputType: "text", label: "user:last_name", required: true, size: { sm: 4 } },
+    { name: "id", inputType: "text", label: "user:id", readOnly: true, size: { sm: 4 } },
+    { name: "phoneNumber", inputType: "text", label: "user:phone_number", readOnly: true, size: { sm: 4 } },
+    {
+      name: "accessFailedCount",
+      inputType: "text",
+      label: "user:access_failed_count",
+      readOnly: true,
+      size: { sm: 4 },
+    },
+    {
+      name: "twoFactorEnabled",
+      inputType: "checkbox",
+      label: "user:two_factor_enabled",
+      readOnly: true,
+      size: { sm: 4 },
+    },
+    { name: "isDeleted", inputType: "checkbox", label: "user:deleted", readOnly: true, size: { sm: 4 } },
+    {
+      name: "deletedDate",
+      inputType: "datetime",
+      label: "user:deleted_date",
+      readOnly: true,
+      size: { sm: 4 },
+    },
+  ],
+  submitButtonText: "user:update_user",
+};
+
 function UpdateUserPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
@@ -28,29 +81,6 @@ function UpdateUserPage() {
     ? { ...userResult.data, email: userResult.data.email ?? "" }
     : undefined, [userResult.data]);
   const formContext = useForm<UpdateUserForm>({ values: formValues });
-  const statusOptions = Object.values(UserStatus).filter((value): value is UserStatus => typeof value === "number")
-    .map((value) => ({ key: value, label: t(value === UserStatus.Active ? "active" : "locked"), value }));
-  const formModel: DynamicFormModel<UpdateUserForm> = {
-    inputs: [
-      { name: "username", inputType: "text", label: t("username"), readOnly: true, size: { sm: 6 } },
-      { name: "email", inputType: "email", label: t("email"), required: true, size: { sm: 6 } },
-      { name: "emailConfirmed", inputType: "checkbox", label: t("email_confirmed"), size: { sm: 4 } },
-      { name: "lockoutEnabled", inputType: "checkbox", label: t("lockout_enabled"), size: { sm: 4 } },
-      { name: "redirectEmailEnabled", inputType: "checkbox", label: t("redirect_email_enabled"), size: { sm: 4 } },
-      { name: "lockoutEnd", inputType: "datetime", label: t("lockout_end"), size: { sm: 6 } },
-      { name: "status", inputType: "select", label: t("status"), options: statusOptions, size: { sm: 6 } },
-      { name: "firstName", inputType: "text", label: t("first_name"), required: true, size: { sm: 4 } },
-      { name: "middleName", inputType: "text", label: t("middle_name_optional"), size: { sm: 4 } },
-      { name: "lastName", inputType: "text", label: t("last_name"), required: true, size: { sm: 4 } },
-      { name: "id", inputType: "text", label: t("id"), readOnly: true, size: { sm: 4 } },
-      { name: "phoneNumber", inputType: "text", label: t("phone_number"), readOnly: true, size: { sm: 4 } },
-      { name: "accessFailedCount", inputType: "text", label: t("access_failed_count"), readOnly: true, size: { sm: 4 } },
-      { name: "twoFactorEnabled", inputType: "checkbox", label: t("two_factor_enabled"), readOnly: true, size: { sm: 4 } },
-      { name: "isDeleted", inputType: "checkbox", label: t("deleted"), readOnly: true, size: { sm: 4 } },
-      { name: "deletedDate", inputType: "datetime", label: t("deleted_date"), readOnly: true, size: { sm: 4 } },
-    ],
-    submitButtonText: t("update_user"),
-  };
 
   if (!Number.isInteger(id)) return <Alert severity="error">{t("invalid_user_id")}</Alert>;
   if (userResult.isLoading) return <CircularProgress />;

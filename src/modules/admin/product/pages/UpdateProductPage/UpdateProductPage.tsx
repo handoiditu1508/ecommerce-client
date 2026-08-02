@@ -22,6 +22,35 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductReadonlyDetails from "./ProductReadonlyDetails";
 
+const formModel: DynamicFormModel<UpdateProductCommand> = {
+  inputs: [
+    {
+      name: "id",
+      inputType: "text",
+      label: "product:id",
+      required: true,
+      readOnly: true,
+    },
+    {
+      name: "name",
+      inputType: "text",
+      label: "product:product_name",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+    {
+      name: "price",
+      inputType: "text",
+      label: "product:price",
+      required: true,
+      rules: { required: "product:this_field_is_required" },
+    },
+    { name: "categoryId", inputType: "text", label: "product:category" },
+    { name: "thumbnailFile", inputType: "text", label: "product:thumbnail" },
+  ],
+  submitButtonText: "product:update_product",
+};
+
 function UpdateProductPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
@@ -45,17 +74,6 @@ function UpdateProductPage() {
       : undefined
   ), [productResult.data]);
   const formContext = useForm<UpdateProductCommand>({ values: formValues });
-  const requiredRule = { required: t("this_field_is_required") };
-  const formModel: DynamicFormModel<UpdateProductCommand> = {
-    inputs: [
-      { name: "id", inputType: "text", label: t("id"), required: true, readOnly: true },
-      { name: "name", inputType: "text", label: t("product_name"), required: true, rules: requiredRule },
-      { name: "price", inputType: "text", label: t("price"), required: true, rules: requiredRule },
-      { name: "categoryId", inputType: "text", label: t("category") },
-      { name: "thumbnailFile", inputType: "text", label: t("thumbnail") },
-    ],
-    submitButtonText: t("update_product"),
-  };
 
   if (!Number.isInteger(id)) {
     return <Alert severity="error">{t("invalid_product_id")}</Alert>;

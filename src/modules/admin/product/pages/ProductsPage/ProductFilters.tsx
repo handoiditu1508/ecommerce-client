@@ -15,22 +15,23 @@ type ProductFiltersProps = {
   onSubmit: (data: CountProductsQuery) => void;
 };
 
+const model: DynamicFormModel<CountProductsQuery> = {
+  inputs: [
+    { name: "id", inputType: "text", label: "product:id", size: { sm: 4, md: 2 } },
+    { name: "name", inputType: "text", label: "product:product_name", size: { sm: 8, md: 4 } },
+    { name: "minPrice", inputType: "text", label: "product:min_price", size: { sm: 6, md: 3 } },
+    { name: "maxPrice", inputType: "text", label: "product:max_price", size: { sm: 6, md: 3 } },
+    { name: "createdDate", inputType: "date", label: "product:created_date", size: { sm: 6, md: 3 } },
+    { name: "modifiedDate", inputType: "date", label: "product:modified_date", size: { sm: 6, md: 3 } },
+    { name: "categoryIds", inputType: "text", label: "product:categories", size: { md: 6 } },
+    { name: "includeSubCategories", inputType: "checkbox", label: "product:include_subcategories" },
+    { name: "isDeleted", inputType: "checkbox", label: "product:load_deleted_products" },
+  ],
+  submitButtonText: "product:apply_filters",
+};
+
 function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersProps) {
   const { t } = useTranslation("product");
-  const model: DynamicFormModel<CountProductsQuery> = {
-    inputs: [
-      { name: "id", inputType: "text", label: t("id"), size: { sm: 4, md: 2 } },
-      { name: "name", inputType: "text", label: t("product_name"), size: { sm: 8, md: 4 } },
-      { name: "minPrice", inputType: "text", label: t("min_price"), size: { sm: 6, md: 3 } },
-      { name: "maxPrice", inputType: "text", label: t("max_price"), size: { sm: 6, md: 3 } },
-      { name: "createdDate", inputType: "date", label: t("created_date"), size: { sm: 6, md: 3 } },
-      { name: "modifiedDate", inputType: "date", label: t("modified_date"), size: { sm: 6, md: 3 } },
-      { name: "categoryIds", inputType: "text", label: t("categories"), size: { md: 6 } },
-      { name: "includeSubCategories", inputType: "checkbox", label: t("include_subcategories") },
-      { name: "isDeleted", inputType: "checkbox", label: t("load_deleted_products") },
-    ],
-    submitButtonText: t("apply_filters"),
-  };
 
   const renderPriceField = (name: "minPrice" | "maxPrice", label: string) => (
     <Controller

@@ -2,6 +2,7 @@ import CONFIG from "@/configs";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid, { GridProps } from "@mui/material/Grid";
+import { useTranslation } from "react-i18next";
 import { DynamicFormProps } from "./DynamicForm";
 import DynamicInput from "./DynamicInput";
 
@@ -28,6 +29,7 @@ function DynamicGridForm<T extends Record<string, any>>({
   gridProps,
   ...props
 }: DynamicGridFormProps<T>) {
+  const { t } = useTranslation();
   const data = formContext.watch();
 
   const renderInputs = (inputs: DynamicFormProps<T>["model"]["inputs"]) => (
@@ -74,7 +76,11 @@ function DynamicGridForm<T extends Record<string, any>>({
   return (
     <Box component="form" onSubmit={formContext.handleSubmit(onSubmit)} {...props}>
       {renderInputs(model.inputs)}
-      {model.submitButtonText && <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>{model.submitButtonText}</Button>}
+      {model.submitButtonText && (
+        <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" loading={loading}>
+          {t(model.submitButtonText)}
+        </Button>
+      )}
       {model.postActionInputs && renderInputs(model.postActionInputs)}
     </Box>
   );
