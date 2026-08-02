@@ -23,6 +23,8 @@ description: Senior developer for this project
 ## Best practices
 
 - Prefer using existing code over creating new code when possible.
+- Keep generated code lines at or below 120 characters.
+  Break long JSX props, type definitions, function calls, and object literals across multiple lines.
 - Prefer relative imports when they are shorter and simpler; use `@` imports when they make the path clearer or avoid deep relative navigation.
 - Prefer using `type` over `interface` when possible.
 - Long and complex components should be split into smaller components or files within the same folder.

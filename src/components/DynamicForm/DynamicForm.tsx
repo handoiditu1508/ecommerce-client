@@ -21,6 +21,7 @@ export type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"for
   autocompleteOnInputChangeMap?: Partial<Record<Path<T>, (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void>>;
   autocompleteLoadingMap?: Partial<Record<Path<T>, boolean>>;
   hiddenMap?: Partial<Record<Path<T>, boolean | ((data: T) => boolean)>>;
+  renderInputMap?: Partial<Record<Path<T>, React.ReactNode>>;
   onSubmit: SubmitHandler<T>;
 };
 
@@ -38,10 +39,11 @@ function DynamicForm<T extends Record<string, any>>({
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
+  renderInputMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
   ...props
 }: DynamicFormProps<T>) {
-  const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => (
+  const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => renderInputMap[inputModel.name] ?? (
     <DynamicInput
       key={inputModel.name}
       model={inputModel}

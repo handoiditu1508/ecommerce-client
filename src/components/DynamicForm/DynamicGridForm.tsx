@@ -23,6 +23,7 @@ function DynamicGridForm<T extends Record<string, any>>({
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
+  renderInputMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
   gridProps,
   ...props
@@ -39,7 +40,7 @@ function DynamicGridForm<T extends Record<string, any>>({
 
         return (
           <Grid key={inputModel.name} size={inputModel.size ?? 12}>
-            <DynamicInput
+            {renderInputMap[inputModel.name] ?? <DynamicInput
               model={inputModel}
               formContext={formContext}
               formLoading={loading}
@@ -63,7 +64,7 @@ function DynamicGridForm<T extends Record<string, any>>({
               autocompleteRenderOptionMap={autocompleteRenderOptionMap}
               autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
               autocompleteLoadingMap={autocompleteLoadingMap}
-            />
+            />}
           </Grid>
         );
       })}

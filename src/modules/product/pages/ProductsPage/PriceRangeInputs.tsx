@@ -1,4 +1,5 @@
 import { toVndCurrency } from "@/common/format";
+import CurrencyMaskInput from "@/components/CurrencyMaskInput";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -8,30 +9,12 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { ActionDispatch, ChangeEventHandler } from "react";
 import { useTranslation } from "react-i18next";
-import { IMaskInput } from "react-imask";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
 export type PriceRangeInputsProps = {
   productsState: ProductsReducerState;
   productsDispatch: ActionDispatch<[ProductsReducerAction]>;
 };
-
-type PriceMaskCustomProps = {
-  onChange: (event: { target: { value: string; }; }) => void;
-  ref?: React.Ref<HTMLInputElement>;
-};
-
-function PriceMaskCustom({ onChange, ref, ...props }: PriceMaskCustomProps) {
-  return (
-    <IMaskInput
-      {...props}
-      mask={Number}
-      thousandsSeparator="."
-      inputRef={ref}
-      onAccept={(_value, mask) => onChange({ target: { value: mask.unmaskedValue } })}
-    />
-  );
-}
 
 function PriceRangeInputs({
   productsState,
@@ -101,7 +84,7 @@ function PriceRangeInputs({
           value={productsState.minPrice?.toString() ?? ""}
           slotProps={{
             input: {
-              inputComponent: PriceMaskCustom as unknown as React.ElementType<InputBaseComponentProps>,
+              inputComponent: CurrencyMaskInput as unknown as React.ElementType<InputBaseComponentProps>,
             },
           }}
           onChange={handleMinPriceChange}
@@ -116,7 +99,7 @@ function PriceRangeInputs({
           value={productsState.maxPrice?.toString() ?? ""}
           slotProps={{
             input: {
-              inputComponent: PriceMaskCustom as unknown as React.ElementType<InputBaseComponentProps>,
+              inputComponent: CurrencyMaskInput as unknown as React.ElementType<InputBaseComponentProps>,
             },
           }}
           onChange={handleMaxPriceChange}
