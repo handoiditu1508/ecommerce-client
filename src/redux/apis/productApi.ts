@@ -1,10 +1,15 @@
+import { CreateProductCommand } from "@/models/apis/product/createProduct";
+import { DeleteProductCommand } from "@/models/apis/product/deleteProduct";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
+import { CountProductsQuery, GetProductsQuery } from "@/models/apis/product/getProducts";
 import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
+import { RecoverProductCommand } from "@/models/apis/product/recoverProduct";
 import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
+import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
 import Product, { ProductView } from "@/models/entities/Product";
-import { providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
+import { invalidatesCountTag, invalidatesIdTag, providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 const productApi = appApi.injectEndpoints({
@@ -48,12 +53,28 @@ const productApi = appApi.injectEndpoints({
       }),
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
+    countProducts: builder.query<number, CountProductsQuery>({
+      query: (arg) => ({
+        url: "/products/count",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: (_result, error) => providesCountTag("Product", error),
+    }),
     getProduct: builder.query<Product, GetProductQuery>({
       query: (arg) => ({
         url: `/products/${arg.productId}`,
         method: "GET",
       }),
       providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
+    }),
+    getProducts: builder.query<ProductView[], GetProductsQuery>({
+      query: (arg) => ({
+        url: "/products",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: (result, error) => providesListTags("Product", result, error),
     }),
     getProductsToRehydrateCart: builder.query<Product[], GetProductsToRehydrateCartQuery>({
       query: (arg) => ({
@@ -64,6 +85,57 @@ const productApi = appApi.injectEndpoints({
         },
       }),
       providesTags: (result, error) => providesListTags("Product", result, error),
+    }),
+    createProduct: builder.mutation<Product, CreateProductCommand>({
+      query: (arg) => {
+        const bodyFormData = new FormData();
+
+        Object.entries(arg).forEach(([key, value]) => {
+          if (value !== undefined) {
+            bodyFormData.append(key, value instanceof Blob ? value : value.toString());
+          }
+        });
+
+        return {
+          url: "/products",
+          method: "POST",
+          body: bodyFormData,
+        };
+      },
+      invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
+    }),
+    updateProduct: builder.mutation<Product, UpdateProductCommand>({
+      query: (arg) => {
+        const bodyFormData = new FormData();
+
+        Object.entries(arg).forEach(([key, value]) => {
+          if (value !== undefined) {
+            bodyFormData.append(key, value instanceof Blob ? value : value.toString());
+          }
+        });
+
+        return {
+          url: `/products/${arg.id}`,
+          method: "POST",
+          body: bodyFormData,
+        };
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.id, error),
+    }),
+    deleteProduct: builder.mutation<Product | undefined, DeleteProductCommand>({
+      query: ({ productId, ...arg }) => ({
+        url: `/products/${productId}`,
+        method: "GET",
+        params: arg,
+      }),
+      invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
+    }),
+    recoverProduct: builder.mutation<Product, RecoverProductCommand>({
+      query: ({ productId }) => ({
+        url: `/products/${productId}/recover`,
+        method: "PUT",
+      }),
+      invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
     }),
   }),
 });
