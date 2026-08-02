@@ -78,7 +78,7 @@ function MenuButton() {
         <Box sx={{
           display: "flex",
           height: 120,
-          borderBottom: theme.shape.smallBorder,
+          borderBottom: theme.border.smallBorder,
           alignItems: "center",
           px: 1,
           [xsAndDownMediaQuery(theme.breakpoints)]: {

@@ -42,8 +42,8 @@ function Sidebar({
         boxShadow: "none",
         width: 216,
         boxSizing: "border-box",
-        borderTop: theme.vars.shape.smallBorder,
-        borderRight: theme.vars.shape.smallBorder,
+        borderTop: theme.vars.border.smallBorder,
+        borderRight: theme.vars.border.smallBorder,
         height: "fit-content",
         mb: -10, // overlap with footer margin top
         overflowX: "hidden",

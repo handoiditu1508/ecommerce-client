@@ -100,7 +100,7 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
       margin="normal"
       disabled={model.disabled}
       sx={{
-        border: theme.shape.smallBorder,
+        border: theme.border.smallBorder,
         borderRadius: (theme.shape.borderRadius as number) * 0.5,
         px: 2,
         pb: 2,

@@ -103,7 +103,7 @@ function ProductsPage() {
       {mdAndUp && <Sidebar productsState={productsState} productsDispatch={productsDispatch} />}
       {smAndDown && (
         <Box sx={{
-          borderBottom: theme.vars.shape.smallBorder,
+          borderBottom: theme.vars.border.smallBorder,
           pb: 2,
         }}>
           {SearchbarComponent}

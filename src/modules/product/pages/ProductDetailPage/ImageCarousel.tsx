@@ -113,7 +113,7 @@ function ImageCarousel({ defaultIndex = 0, images = CONFIG.EMPTY_ARRAY }: ImageC
                 width: "100%",
                 height: "100%",
                 ...(selectedIndex === index && {
-                  outline: theme.shape.smallBorder,
+                  outline: theme.border.smallBorder,
                   outlineColor: theme.vars.palette.primary.main,
                   outlineOffset: -1,
                 }),

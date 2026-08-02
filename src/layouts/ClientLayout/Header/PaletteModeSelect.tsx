@@ -1,8 +1,7 @@
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
-import { useColorScheme } from "@mui/material/styles";
-import { Mode } from "node_modules/@mui/system/esm/cssVars/useCurrentColorScheme";
+import { SupportedColorScheme, useColorScheme } from "@mui/material/styles";
 import TopHeaderSelect, { TopHeaderSelectItem } from "./TopHeaderSelect";
 
 const items: TopHeaderSelectItem[] = [
@@ -29,7 +28,7 @@ function PaletteModeSelect() {
   const selectedItem = items.find((item) => item.value === mode);
 
   const handleSelect = (item: TopHeaderSelectItem) => {
-    setMode(item.value as Mode);
+    setMode(item.value as SupportedColorScheme);
   };
 
   return (

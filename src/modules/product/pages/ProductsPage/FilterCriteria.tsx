@@ -56,7 +56,7 @@ function FilterCriteria({
         <ButtonBase
           sx={{
             ...theme.typography.caption,
-            border: theme.vars.shape.smallBorder,
+            border: theme.vars.border.smallBorder,
             px: 0.5,
             borderRadius: theme.vars.shape.borderRadius,
           }}
