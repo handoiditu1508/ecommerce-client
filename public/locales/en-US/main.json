@@ -1,6 +1,9 @@
 {
   "about_app": "About {{appName}}",
   "about_us": "About Us",
+  "about_us_line_1": "Lorem ipsum {{appName}} sit amet, consectetur adipiscing elit.",
+  "about_us_line_2": "Aliquam non euismod nibh, nec viverra lacus. Vivamus porta, elementum gravida lorem justo eget justo.",
+  "about_us_line_3": "Praesent maximus dui nec diam luctus, non dictum lectus cursus. Etiam vitae aliquet sapien.",
   "account": "Account",
   "all_categories": "All Categories",
   "best_rate": "Best Rate",

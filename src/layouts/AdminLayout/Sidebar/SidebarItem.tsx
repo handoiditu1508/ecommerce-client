@@ -26,7 +26,7 @@ type SidebarItemProps = {
 };
 
 export default function SidebarItem({ sidebarTab, level = 0, hideChilds }: SidebarItemProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("admin");
   const theme = useTheme();
   const { currentSidebarTab } = useContext(SidebarContext);
   const [leftPadding] = useState<number>(theme.constants.sidebarLeftPadding || 0);

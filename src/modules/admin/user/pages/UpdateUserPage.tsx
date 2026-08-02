@@ -21,7 +21,7 @@ function UpdateUserPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("user");
   const userResult = useGetUserQuery(id, { skip: !Number.isInteger(id) });
   const [updateUser, updateResult] = useUpdateUserMutation();
   const formValues = useMemo<UpdateUserForm | undefined>(() => userResult.data

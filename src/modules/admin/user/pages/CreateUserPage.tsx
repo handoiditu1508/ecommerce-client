@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 function CreateUserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("user");
   const [createUser, result] = useCreateUserMutation();
   const formModel: DynamicFormModel<CreateUserCommand> = {
     inputs: [

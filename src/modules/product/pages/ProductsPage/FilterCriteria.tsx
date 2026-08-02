@@ -30,7 +30,6 @@ function FilterCriteria({
   productsDispatch,
 }: FilterCriteriaProps) {
   const theme = useTheme();
-  const { t } = useTranslation();
   const { t: tProduct } = useTranslation("product");
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
@@ -110,7 +109,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>{t("brands")}</Typography>
+          <Typography>{tProduct("brands")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,

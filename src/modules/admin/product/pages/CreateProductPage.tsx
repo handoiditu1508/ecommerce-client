@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 function CreateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("product");
   const categories = useAppSelector(categorySelectors.tree);
   const [createProduct, result] = useCreateProductMutation();
   const formContext = useForm<CreateProductCommand>({

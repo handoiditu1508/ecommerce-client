@@ -33,7 +33,18 @@ function convertTemporaryToSidebarTab(temporary: TemporarySidebarTab, index: num
 
 const temporarySidebarTabs: TemporarySidebarTab[][] = [
   [
-    { title: "products", to: "/admin/products", icon: <Inventory2Icon />, children: [{ title: "create_product", to: "/admin/products/new", icon: <AddShoppingCartIcon /> }] },
+    {
+      title: "products",
+      to: "/admin/products",
+      icon: <Inventory2Icon />,
+      children: [
+        {
+          title: "create_product",
+          to: "/admin/products/new",
+          icon: <AddShoppingCartIcon />,
+        },
+      ],
+    },
     {
       title: "users",
       to: "/admin/users",

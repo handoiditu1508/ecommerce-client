@@ -26,7 +26,7 @@ function UpdateProductPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("product");
   const categories = useAppSelector(categorySelectors.tree);
   const productResult = useGetProductQuery(
     { productId: id },

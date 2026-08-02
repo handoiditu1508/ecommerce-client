@@ -1,6 +1,9 @@
 {
   "about_app": "Về {{appName}}",
   "about_us": "Về Chúng Tôi",
+  "about_us_line_1": "Lorem ipsum {{appName}} sit amet, consectetur adipiscing elit.",
+  "about_us_line_2": "Aliquam non euismod nibh, nec viverra lacus. Vivamus porta, elementum gravida lorem justo eget justo.",
+  "about_us_line_3": "Praesent maximus dui nec diam luctus, non dictum lectus cursus. Etiam vitae aliquet sapien.",
   "account": "Tài Khoản",
   "all_categories": "Tất Cả Danh Mục",
   "best_rate": "Đánh Giá Tốt Nhất",

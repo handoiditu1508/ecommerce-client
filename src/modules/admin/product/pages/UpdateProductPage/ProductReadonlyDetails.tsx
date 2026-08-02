@@ -15,7 +15,7 @@ type ProductReadonlyDetailsProps = {
 };
 
 function ProductReadonlyDetails({ product }: ProductReadonlyDetailsProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("product");
   const details = [
     [t("discount_price"), toVndCurrency(product.discountPrice)],
     [t("discount_percentage"), `${product.discountPercentage}%`],

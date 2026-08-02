@@ -25,7 +25,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function UsersPage() {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("user");
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
   const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(() => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })), [roles]);

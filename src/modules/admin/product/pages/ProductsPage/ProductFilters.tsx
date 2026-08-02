@@ -16,17 +16,16 @@ type ProductFiltersProps = {
 };
 
 function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersProps) {
-  const { t } = useTranslation();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const model: DynamicFormModel<CountProductsQuery> = {
     inputs: [
       { name: "id", inputType: "text", label: t("id"), size: { sm: 4, md: 2 } },
       { name: "name", inputType: "text", label: t("product_name"), size: { sm: 8, md: 4 } },
-      { name: "minPrice", inputType: "text", label: tProduct("min_price"), size: { sm: 6, md: 3 } },
-      { name: "maxPrice", inputType: "text", label: tProduct("max_price"), size: { sm: 6, md: 3 } },
+      { name: "minPrice", inputType: "text", label: t("min_price"), size: { sm: 6, md: 3 } },
+      { name: "maxPrice", inputType: "text", label: t("max_price"), size: { sm: 6, md: 3 } },
       { name: "createdDate", inputType: "date", label: t("created_date"), size: { sm: 6, md: 3 } },
       { name: "modifiedDate", inputType: "date", label: t("modified_date"), size: { sm: 6, md: 3 } },
-      { name: "categoryIds", inputType: "text", label: tProduct("categories"), size: { md: 6 } },
+      { name: "categoryIds", inputType: "text", label: t("categories"), size: { md: 6 } },
       { name: "includeSubCategories", inputType: "checkbox", label: t("include_subcategories") },
       { name: "isDeleted", inputType: "checkbox", label: t("load_deleted_products") },
     ],
@@ -66,8 +65,8 @@ function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersPro
       gridProps={{ spacing: 2 }}
       sx={{ mb: 3 }}
       renderInputMap={{
-        minPrice: renderPriceField("minPrice", tProduct("min_price")),
-        maxPrice: renderPriceField("maxPrice", tProduct("max_price")),
+        minPrice: renderPriceField("minPrice", t("min_price")),
+        maxPrice: renderPriceField("maxPrice", t("max_price")),
         categoryIds: (
           <Controller
             control={formContext.control}
@@ -77,7 +76,7 @@ function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersPro
                 multiple
                 categories={categories}
                 values={field.value ?? []}
-                label={tProduct("categories")}
+                label={t("categories")}
                 onBlur={field.onBlur}
                 onChange={() => undefined}
                 onValuesChange={field.onChange}
