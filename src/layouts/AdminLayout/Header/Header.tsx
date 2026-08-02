@@ -127,7 +127,7 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
           ...theme.typography.h6,
           paddingY: 1,
           textAlign: "center",
-          borderBottom: theme.vars.shape.smallBorder,
+          borderBottom: theme.vars.border.smallBorder,
           borderColor: theme.vars.palette.divider,
         }}>
           Settings

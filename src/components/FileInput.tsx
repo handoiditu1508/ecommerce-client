@@ -18,7 +18,7 @@ import { v1 as uuidv1 } from "uuid";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   minHeight: 100,
-  border: theme.vars.shape.smallBorder,
+  border: theme.vars.border.smallBorder,
   borderColor: theme.vars.palette.action.active,
   borderRadius: theme.shape.borderRadius,
   padding: theme.spacing(1),

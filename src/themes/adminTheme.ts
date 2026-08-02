@@ -178,7 +178,7 @@ const adminTheme = createTheme({
       long: 1000,
     },
   },
-  shape: {
+  border: {
     smallBorder: "1px solid var(--mui-palette-divider)",
     mediumBorder: "2px solid var(--mui-palette-divider)",
     largeBorder: "4px solid var(--mui-palette-divider)",
@@ -270,7 +270,7 @@ const adminTheme = createTheme({
             ...theme.mixins.scrollbar,
           },
           fieldset: {
-            border: theme.vars.shape.smallBorder,
+            border: theme.vars.border.smallBorder,
           },
           ".MuiInputBase-root": {
             ".MuiInputBase-input": {
