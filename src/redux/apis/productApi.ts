@@ -1,7 +1,7 @@
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
 import { DeleteProductCommand } from "@/models/apis/product/deleteProduct";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
-import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
+import { GetLatestProductsQuery } from "@/models/apis/product/getLatestProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { CountProductsQuery, GetProductsQuery } from "@/models/apis/product/getProducts";
 import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
@@ -14,7 +14,7 @@ import appApi from "./appApi";
 
 const productApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
-    getNewProducts: builder.query<ProductView[], GetNewProductsQuery>({
+    getLatestProducts: builder.query<ProductView[], GetLatestProductsQuery>({
       query: (arg) => ({
         url: "/products/latest",
         method: "GET",
@@ -143,7 +143,7 @@ const productApi = appApi.injectEndpoints({
 export default productApi;
 
 export const {
-  useGetNewProductsQuery,
+  useGetLatestProductsQuery,
   useCountAllProductsQuery,
   useGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
@@ -151,6 +151,14 @@ export const {
   useLazySearchProductsQuery,
   useCountSearchProductsQuery,
   useLazyCountSearchProductsQuery,
+  useCountProductsQuery,
+  useLazyCountProductsQuery,
   useGetProductQuery,
+  useGetProductsQuery,
+  useLazyGetProductsQuery,
   useGetProductsToRehydrateCartQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+  useRecoverProductMutation,
 } = productApi;

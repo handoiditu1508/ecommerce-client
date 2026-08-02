@@ -1,8 +1,8 @@
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
-import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
-import { useGetDiscountedProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
+import { GetLatestProductsQuery } from "@/models/apis/product/getLatestProducts";
+import { useGetDiscountedProductsQuery, useGetLatestProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
@@ -12,13 +12,13 @@ import "swiper/css/navigation";
 import PromotionalProductList from "./PromotionalProductList";
 import TopBrandsCarousel from "./TopBrandsCarousel";
 
-const getNewProductsQuery: GetNewProductsQuery = { pageSize: 12 };
+const getLatestProductsQuery: GetLatestProductsQuery = { pageSize: 12 };
 const getDiscountedProductsQuery: GetDiscountedProductsQuery = { pageSize: 12 };
 
 function HomePage() {
   const theme = useTheme();
   const { t: tMain } = useTranslation("main");
-  const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
+  const getLatestProductsResult = useGetLatestProductsQuery(getLatestProductsQuery);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
 
   return (
@@ -73,10 +73,10 @@ function HomePage() {
       </LayoutContainer>
       <PromotionalProductList
         title={tMain("new_collection")}
-        products={getNewProductsResult.data}
-        loading={getNewProductsResult.isLoading}
+        products={getLatestProductsResult.data}
+        loading={getLatestProductsResult.isLoading}
         viewAllUrlPath="/products/latest"
-        onRefresh={getNewProductsResult.refetch}
+        onRefresh={getLatestProductsResult.refetch}
       />
       <PromotionalProductList
         title={tMain("popular_products")}

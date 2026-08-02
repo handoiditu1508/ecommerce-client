@@ -1,8 +1,8 @@
 import { currentUrlWithPage } from "@/common/url";
 import ProductCardList from "@/components/ProductCardList";
 import { BreakpointsContext } from "@/contexts/breakpoints";
-import { GetNewProductsQuery } from "@/models/apis/product/getNewProducts";
-import { useCountAllProductsQuery, useGetNewProductsQuery } from "@/redux/apis/productApi";
+import { GetLatestProductsQuery } from "@/models/apis/product/getLatestProducts";
+import { useCountAllProductsQuery, useGetLatestProductsQuery } from "@/redux/apis/productApi";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
@@ -16,13 +16,13 @@ function LatestProductsPage() {
   const [searchParams] = useSearchParams();
   const page = parseInt(searchParams.get("page")!) || 1;
   const countAllProductsResult = useCountAllProductsQuery();
-  const getNewProductsQuery = useMemo<GetNewProductsQuery>(() => ({ page, pageSize: PAGE_SIZE }), [page]);
-  const getNewProductsResult = useGetNewProductsQuery(getNewProductsQuery);
+  const getLatestProductsQuery = useMemo<GetLatestProductsQuery>(() => ({ page, pageSize: PAGE_SIZE }), [page]);
+  const getLatestProductsResult = useGetLatestProductsQuery(getLatestProductsQuery);
   const totalPage = countAllProductsResult.data !== undefined ? Math.ceil(countAllProductsResult.data / PAGE_SIZE) : 1;
 
   return (
     <>
-      <ProductCardList products={getNewProductsResult.data} loading={getNewProductsResult.isLoading} />
+      <ProductCardList products={getLatestProductsResult.data} loading={getLatestProductsResult.isLoading} />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={totalPage}
