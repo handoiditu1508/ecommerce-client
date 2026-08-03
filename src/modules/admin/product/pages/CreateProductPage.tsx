@@ -1,5 +1,4 @@
 import CascadingCategorySelect from "@/components/CascadingCategorySelect";
-import CurrencyMaskInput from "@/components/CurrencyMaskInput";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import FileInput from "@/components/FileInput";
 import useAppDispatch from "@/hooks/useAppDispatch";
@@ -11,11 +10,8 @@ import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { InputBaseComponentProps } from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -38,10 +34,13 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
     },
     {
       name: "price",
-      inputType: "text",
+      inputType: "currency",
       label: "product:price",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: {
+        required: "product:this_field_is_required",
+        min: { value: 0, message: "product:price_must_not_be_negative" },
+      },
     },
     { name: "categoryId", inputType: "text", label: "product:category" },
     {
@@ -91,40 +90,6 @@ function CreateProductPage() {
         model={formModel}
         loading={result.isLoading}
         renderInputMap={{
-          price: <Controller
-            control={formContext.control}
-            name="price"
-            rules={{
-              required: t("this_field_is_required"),
-              min: {
-                value: 0,
-                message: t("price_must_not_be_negative"),
-              },
-            }}
-            render={({ field, fieldState }) => (
-              <TextField
-                fullWidth
-                required
-                margin="normal"
-                label={t("price")}
-                value={field.value.toString()}
-                error={fieldState.invalid}
-                helperText={fieldState.error?.message}
-                disabled={result.isLoading}
-                slotProps={{
-                  input: {
-                    inputComponent: CurrencyMaskInput as unknown as React.ElementType<
-                      InputBaseComponentProps
-                    >,
-                  },
-                }}
-                onBlur={field.onBlur}
-                onChange={(event) => field.onChange(
-                  event.target.value === "" ? 0 : Number(event.target.value),
-                )}
-              />
-            )}
-          />,
           categoryId: <Controller
             control={formContext.control}
             name="categoryId"

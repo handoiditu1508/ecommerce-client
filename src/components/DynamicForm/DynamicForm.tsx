@@ -45,33 +45,36 @@ function DynamicForm<T extends Record<string, any>>({
   ...props
 }: DynamicFormProps<T>) {
   const { t } = useTranslation();
-  const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => renderInputMap[inputModel.name] ?? (
-    <DynamicInput
-      key={inputModel.name}
-      model={inputModel}
-      formContext={formContext}
-      formLoading={loading}
-      hidden={hiddenMap[inputModel.name]}
-      startAdornment={startAdornmentMap[inputModel.name]}
-      endAdornment={endAdornmentMap[inputModel.name]}
-      label={labelMap[inputModel.name]}
-      rules={rulesMap[inputModel.name]}
-      options={optionsMap[inputModel.name]}
-      autocompleteRenderInput={autocompleteRenderInputMap[inputModel.name]}
-      autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
-      autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
-      autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
-      hiddenMap={hiddenMap}
-      startAdornmentMap={startAdornmentMap}
-      endAdornmentMap={endAdornmentMap}
-      labelMap={labelMap}
-      rulesMap={rulesMap}
-      optionsMap={optionsMap}
-      autocompleteRenderInputMap={autocompleteRenderInputMap}
-      autocompleteRenderOptionMap={autocompleteRenderOptionMap}
-      autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
-      autocompleteLoadingMap={autocompleteLoadingMap}
-    />
+  const renderInputs = (inputs: DynamicFormModel<T>["inputs"]) => inputs.map((inputModel) => (
+    <React.Fragment key={inputModel.name}>
+      {renderInputMap[inputModel.name] ?? (
+        <DynamicInput
+          model={inputModel}
+          formContext={formContext}
+          formLoading={loading}
+          hidden={hiddenMap[inputModel.name]}
+          startAdornment={startAdornmentMap[inputModel.name]}
+          endAdornment={endAdornmentMap[inputModel.name]}
+          label={labelMap[inputModel.name]}
+          rules={rulesMap[inputModel.name]}
+          options={optionsMap[inputModel.name]}
+          autocompleteRenderInput={autocompleteRenderInputMap[inputModel.name]}
+          autocompleteRenderOption={autocompleteRenderOptionMap[inputModel.name]}
+          autocompleteOnInputChange={autocompleteOnInputChangeMap[inputModel.name]}
+          autocompleteLoading={autocompleteLoadingMap[inputModel.name]}
+          hiddenMap={hiddenMap}
+          startAdornmentMap={startAdornmentMap}
+          endAdornmentMap={endAdornmentMap}
+          labelMap={labelMap}
+          rulesMap={rulesMap}
+          optionsMap={optionsMap}
+          autocompleteRenderInputMap={autocompleteRenderInputMap}
+          autocompleteRenderOptionMap={autocompleteRenderOptionMap}
+          autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
+          autocompleteLoadingMap={autocompleteLoadingMap}
+        />
+      )}
+    </React.Fragment>
   ));
 
   return (

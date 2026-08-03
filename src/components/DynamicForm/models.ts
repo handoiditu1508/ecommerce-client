@@ -5,6 +5,7 @@ import { Path, PathValue, RegisterOptions } from "react-hook-form";
 
 export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> =
   | DynamicTextInputModel<T, K>
+  | DynamicCurrencyInputModel<T, K>
   | DynamicDateTimeInputModel<T, K>
   | DynamicSelectInputModel<T, K>
   | DynamicAutoCompleteInputModel<T, K>
@@ -32,6 +33,12 @@ export type DynamicTextInputModel<T extends Record<string, any>, K extends Path<
   maxLength?: number;
   minLength?: number;
 };
+
+export type DynamicCurrencyInputModel<T extends Record<string, any>, K extends Path<T>> =
+  DynamicCommonInputModel<T, K> & {
+    inputType: "currency";
+    currencySymbol?: string;
+  };
 
 export type DynamicDateTimeInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "date" | "time" | "datetime";

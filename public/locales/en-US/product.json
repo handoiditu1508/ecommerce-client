@@ -1,4 +1,5 @@
 {
+  "brand": "Brand",
   "add_to_cart": "Add to Cart",
   "advanced_search": "Advanced Search",
   "actions": "Actions",
@@ -76,6 +77,9 @@
   "shopping_cart": "Shopping Cart",
   "standard": "Standard",
   "sku": "SKU",
+  "variant_color": "Variant Color",
+  "variant_name": "Variant Name",
+  "variant_quantity": "Variant Quantity",
   "subtotal": "Subtotal",
   "summary": "Summary",
   "to": "to",

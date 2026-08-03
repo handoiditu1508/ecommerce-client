@@ -1,13 +1,11 @@
 import { toVndCurrency } from "@/common/format";
-import CurrencyMaskInput from "@/components/CurrencyMaskInput";
+import CurrencyInput from "@/components/CurrencyInput";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import { InputBaseComponentProps } from "@mui/material/InputBase";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { ActionDispatch, ChangeEventHandler } from "react";
+import React, { ActionDispatch } from "react";
 import { useTranslation } from "react-i18next";
 import { ProductsReducerAction, ProductsReducerState } from "./useProductsReducer";
 
@@ -23,45 +21,17 @@ function PriceRangeInputs({
   const theme = useTheme();
   const { t: tProduct } = useTranslation("product");
 
-  const handleMinPriceChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (event.target.value === "") {
-      productsDispatch({
-        type: "SET_MIN_PRICE",
-        payload: undefined,
-      });
-
-      return;
-    }
-
-    const numb = parseInt(event.target.value);
-    if (isNaN(numb) || numb < 0) {
-      return;
-    }
-
+  const handleMinPriceChange = (value: number | undefined) => {
     productsDispatch({
       type: "SET_MIN_PRICE",
-      payload: numb,
+      payload: value,
     });
   };
 
-  const handleMaxPriceChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (event.target.value === "") {
-      productsDispatch({
-        type: "SET_MAX_PRICE",
-        payload: undefined,
-      });
-
-      return;
-    }
-
-    const numb = parseInt(event.target.value);
-    if (isNaN(numb) || numb < 0) {
-      return;
-    }
-
+  const handleMaxPriceChange = (value: number | undefined) => {
     productsDispatch({
       type: "SET_MAX_PRICE",
-      payload: numb,
+      payload: value,
     });
   };
 
@@ -78,31 +48,21 @@ function PriceRangeInputs({
         display: "flex",
         alignItems: "center",
       }}>
-        <TextField
+        <CurrencyInput
           label={tProduct("min_price")}
           size="small"
-          value={productsState.minPrice?.toString() ?? ""}
-          slotProps={{
-            input: {
-              inputComponent: CurrencyMaskInput as unknown as React.ElementType<InputBaseComponentProps>,
-            },
-          }}
-          onChange={handleMinPriceChange}
+          value={productsState.minPrice}
+          onValueChange={handleMinPriceChange}
         />
         <IconButton size="small" aria-label="swap price" onClick={handleSwapPrices}>
           <SwapHorizIcon fontSize="inherit" />
         </IconButton>
-        <TextField
+        <CurrencyInput
           label={tProduct("max_price")}
           size="small"
           error={productsState.minPrice !== undefined && productsState.maxPrice !== undefined && productsState.maxPrice < productsState.minPrice}
-          value={productsState.maxPrice?.toString() ?? ""}
-          slotProps={{
-            input: {
-              inputComponent: CurrencyMaskInput as unknown as React.ElementType<InputBaseComponentProps>,
-            },
-          }}
-          onChange={handleMaxPriceChange}
+          value={productsState.maxPrice}
+          onValueChange={handleMaxPriceChange}
         />
       </Box>
       <Typography variant="body2" sx={{ mt: 1 }}>

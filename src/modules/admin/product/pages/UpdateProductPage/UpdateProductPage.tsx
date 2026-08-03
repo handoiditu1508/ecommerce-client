@@ -1,10 +1,10 @@
 import CascadingCategorySelect from "@/components/CascadingCategorySelect";
-import CurrencyMaskInput from "@/components/CurrencyMaskInput";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import FileInput from "@/components/FileInput";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
+import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { useGetProductQuery, useUpdateProductMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
@@ -12,11 +12,9 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { InputBaseComponentProps } from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,13 +22,6 @@ import ProductReadonlyDetails from "./ProductReadonlyDetails";
 
 const formModel: DynamicFormModel<UpdateProductCommand> = {
   inputs: [
-    {
-      name: "id",
-      inputType: "text",
-      label: "product:id",
-      required: true,
-      readOnly: true,
-    },
     {
       name: "name",
       inputType: "text",
@@ -40,10 +31,13 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
     },
     {
       name: "price",
-      inputType: "text",
+      inputType: "currency",
       label: "product:price",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: {
+        required: "product:this_field_is_required",
+        min: { value: 0, message: "product:price_must_not_be_negative" },
+      },
     },
     { name: "categoryId", inputType: "text", label: "product:category" },
     { name: "thumbnailFile", inputType: "text", label: "product:thumbnail" },
@@ -56,6 +50,7 @@ function UpdateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation("product");
+  useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const productResult = useGetProductQuery(
     { productId: id },
@@ -102,39 +97,6 @@ function UpdateProductPage() {
         model={formModel}
         loading={updateResult.isLoading}
         renderInputMap={{
-          price: (
-            <Controller
-              control={formContext.control}
-              name="price"
-              rules={{
-                required: t("this_field_is_required"),
-                min: { value: 0, message: t("price_must_not_be_negative") },
-              }}
-              render={({ field, fieldState }) => (
-                <TextField
-                  fullWidth
-                  required
-                  margin="normal"
-                  label={t("price")}
-                  value={field.value.toString()}
-                  error={fieldState.invalid}
-                  helperText={fieldState.error?.message}
-                  disabled={updateResult.isLoading}
-                  slotProps={{
-                    input: {
-                      inputComponent: CurrencyMaskInput as unknown as React.ElementType<
-                        InputBaseComponentProps
-                      >,
-                    },
-                  }}
-                  onBlur={field.onBlur}
-                  onChange={(event) => field.onChange(
-                    event.target.value === "" ? 0 : Number(event.target.value),
-                  )}
-                />
-              )}
-            />
-          ),
           categoryId: (
             <Controller
               control={formContext.control}

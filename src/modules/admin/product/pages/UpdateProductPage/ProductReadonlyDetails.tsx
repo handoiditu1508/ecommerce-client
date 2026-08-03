@@ -1,52 +1,118 @@
-import { toVndCurrency } from "@/common/format";
-import Product from "@/models/entities/Product";
-import Chip from "@mui/material/Chip";
+import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
+import useAppSelector from "@/hooks/useAppSelector";
+import Product, { ProductVariant } from "@/models/entities/Product";
+import { useGetAllBrandsQuery } from "@/redux/apis/brandApi";
+import { brandSelectors } from "@/redux/slices/brandSlice";
+import PercentIcon from "@mui/icons-material/Percent";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 type ProductReadonlyDetailsProps = {
   product: Product;
 };
 
+type ProductDetailsForm = {
+  discountPrice: number;
+  discountPercentage: number;
+  thumbnailPath: string;
+  brandName?: string;
+  description?: string;
+  createdDate: string;
+  modifiedDate: string;
+  createdBy?: string;
+  modifiedBy?: string;
+  isDeleted: boolean;
+  deletedDate?: string;
+  productVariants: ProductVariant[];
+};
+
+const formModel: DynamicFormModel<ProductDetailsForm> = {
+  inputs: [
+    {
+      name: "discountPrice",
+      inputType: "currency",
+      label: "product:discount_price",
+      readOnly: true,
+      size: { sm: 6 },
+    },
+    {
+      name: "discountPercentage",
+      inputType: "text",
+      label: "product:discount_percentage",
+      readOnly: true,
+      size: { sm: 6 },
+    },
+    { name: "thumbnailPath", inputType: "text", label: "product:thumbnail_path", readOnly: true, size: { sm: 6 } },
+    { name: "brandName", inputType: "text", label: "product:brand", readOnly: true, size: { sm: 6 } },
+    { name: "description", inputType: "text", label: "product:description", readOnly: true, size: { sm: 6 } },
+    { name: "createdDate", inputType: "datetime", label: "product:created_date", readOnly: true, size: { sm: 6 } },
+    { name: "modifiedDate", inputType: "datetime", label: "product:modified_date", readOnly: true, size: { sm: 6 } },
+    { name: "createdBy", inputType: "text", label: "product:created_by", readOnly: true, size: { sm: 6 } },
+    { name: "modifiedBy", inputType: "text", label: "product:modified_by", readOnly: true, size: { sm: 6 } },
+    { name: "isDeleted", inputType: "checkbox", label: "product:deleted", readOnly: true, size: { sm: 6 } },
+    { name: "deletedDate", inputType: "datetime", label: "product:deleted_date", readOnly: true, size: { sm: 6 } },
+    {
+      name: "productVariants",
+      inputType: "array",
+      label: "product:product_variants",
+      readOnly: true,
+      itemInputs: [
+        { name: "name", inputType: "text", label: "product:variant_name", readOnly: true },
+        { name: "sku", inputType: "text", label: "product:sku", readOnly: true },
+        { name: "quantity", inputType: "text", label: "product:variant_quantity", readOnly: true },
+        { name: "color", inputType: "text", label: "product:variant_color", readOnly: true },
+        { name: "thumbnailPath", inputType: "text", label: "product:thumbnail_path", readOnly: true },
+        { name: "price", inputType: "currency", label: "product:price", readOnly: true },
+        { name: "discountPrice", inputType: "currency", label: "product:discount_price", readOnly: true },
+      ],
+      createDefaultValue: () => ({
+        id: 0,
+        productId: 0,
+        sku: "",
+        quantity: 0,
+        name: "",
+      }),
+    },
+  ],
+};
+
 function ProductReadonlyDetails({ product }: ProductReadonlyDetailsProps) {
   const { t } = useTranslation("product");
-  const details = [
-    [t("discount_price"), toVndCurrency(product.discountPrice)],
-    [t("discount_percentage"), `${product.discountPercentage}%`],
-    [t("thumbnail_path"), product.thumbnailPath],
-    [t("brand_id"), product.brandId?.toString() ?? t("none")],
-    [t("description"), product.description ?? t("none")],
-    [t("created_date"), product.createdDate],
-    [t("modified_date"), product.modifiedDate],
-    [t("created_by"), product.createdBy ?? t("none")],
-    [t("modified_by"), product.modifiedBy ?? t("none")],
-    [t("deleted"), product.isDeleted ? t("yes") : t("no")],
-    [t("deleted_date"), product.deletedDate ?? t("none")],
-  ];
+  useGetAllBrandsQuery();
+  const brand = useAppSelector(brandSelectors.byId(product.brandId ?? 0));
+  const formValues = useMemo<ProductDetailsForm>(() => ({
+    discountPrice: product.discountPrice,
+    discountPercentage: product.discountPercentage,
+    thumbnailPath: product.thumbnailPath,
+    brandName: brand?.name,
+    description: product.description,
+    createdDate: product.createdDate,
+    modifiedDate: product.modifiedDate,
+    createdBy: product.createdBy,
+    modifiedBy: product.modifiedBy,
+    isDeleted: product.isDeleted,
+    deletedDate: product.deletedDate,
+    productVariants: product.productVariants,
+  }), [brand?.name, product]);
+  const formContext = useForm<ProductDetailsForm>({ values: formValues });
 
   return (
     <>
       <Divider sx={{ my: 3 }} />
       <Typography variant="h6" gutterBottom>{t("product_details_readonly")}</Typography>
-      <Grid container spacing={2}>
-        {details.map(([label, value]) => (
-          <Grid key={label} size={{ xs: 12, sm: 6 }}>
-            <TextField
-              fullWidth
-              label={label}
-              value={value}
-              multiline={label === t("description")}
-              slotProps={{ input: { readOnly: true } }}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <DynamicGridForm
+        formContext={formContext}
+        model={formModel}
+        endAdornmentMap={{ discountPercentage: <PercentIcon fontSize="small" /> }}
+        gridProps={{ spacing: 2 }}
+        onSubmit={() => undefined}
+      />
 
       <Typography variant="subtitle1" sx={{ mt: 3 }}>{t("images")}</Typography>
       <List dense disablePadding>
@@ -54,23 +120,6 @@ function ProductReadonlyDetails({ product }: ProductReadonlyDetailsProps) {
         {product.images.map((image) => (
           <ListItem key={image.id} disableGutters>
             <ListItemText primary={image.name} secondary={image.filePath} />
-          </ListItem>
-        ))}
-      </List>
-
-      <Typography variant="subtitle1" sx={{ mt: 2 }}>{t("product_variants")}</Typography>
-      <List dense disablePadding>
-        {product.productVariants.length === 0 && <ListItem>{t("none")}</ListItem>}
-        {product.productVariants.map((variant) => (
-          <ListItem key={variant.id} disableGutters>
-            <ListItemText
-              primary={`${variant.name} · ${variant.sku}`}
-              secondary={t("product_variant_summary", {
-                quantity: variant.quantity,
-                price: variant.price === undefined ? t("none") : toVndCurrency(variant.price),
-              })}
-            />
-            {variant.color && <Chip label={variant.color} size="small" />}
           </ListItem>
         ))}
       </List>

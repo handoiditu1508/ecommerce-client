@@ -1,4 +1,5 @@
 {
+  "brand": "Thương Hiệu",
   "add_to_cart": "Thêm Vào Giỏ Hàng",
   "advanced_search": "Tìm Kiếm Nâng Cao",
   "actions": "Thao Tác",
@@ -76,6 +77,9 @@
   "shopping_cart": "Giỏ Hàng",
   "standard": "Tiêu Chuẩn",
   "sku": "SKU",
+  "variant_color": "Màu Biến Thể",
+  "variant_name": "Tên Biến Thể",
+  "variant_quantity": "Số Lượng Biến Thể",
   "subtotal": "Tạm Tính",
   "summary": "Tổng Quan",
   "to": "đến",

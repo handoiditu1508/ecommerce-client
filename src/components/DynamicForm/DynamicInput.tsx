@@ -30,6 +30,7 @@ import React, { useMemo, useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import FileInput from "../FileInput";
+import CurrencyInput from "../CurrencyInput";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -176,6 +177,45 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 }
                 : field.onChange
             }
+          />
+        )}
+      />
+    );
+  }
+
+  if (model.inputType === "currency") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => (
+          <CurrencyInput
+            fullWidth
+            required={model.required}
+            label={finalLabel}
+            margin="normal"
+            error={fieldState.invalid}
+            helperText={errorText(fieldState.error?.message)}
+            disabled={model.disabled}
+            value={typeof field.value === "number" ? field.value : undefined}
+            currencySymbol={model.currencySymbol ?? endAdornment}
+            slotProps={{
+              input: {
+                readOnly: model.readOnly || formLoading,
+                startAdornment: startAdornment && (
+                  <InputAdornment position="start">{startAdornment}</InputAdornment>
+                ),
+              },
+            }}
+            onBlur={field.onBlur}
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (model.validateOnChange) formContext.trigger(model.name);
+            }}
           />
         )}
       />

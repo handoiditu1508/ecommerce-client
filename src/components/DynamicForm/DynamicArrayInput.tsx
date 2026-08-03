@@ -1,7 +1,7 @@
 import CONFIG from "@/configs";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
@@ -109,30 +109,23 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
       {finalLabel && <FormLabel component="legend">{finalLabel}</FormLabel>}
       <FormGroup>
         {fields.map((field, index, fieldsArray) => (
-          <React.Fragment key={field.id}>
-            {index === 0 && (!model.required || fieldsArray.length > 1) && <Divider variant="inset" sx={{ mr: -2 }} textAlign="right">
-              <Button
-                variant="text"
-                size="small"
-                color="error"
-                startIcon={<DeleteIcon />}
-                disabled={model.disabled || model.readOnly || formLoading}
-                onClick={() => remove(index)}>
-                {model.removeButtonText ? t(model.removeButtonText) : t("remove")} #{index + 1}
-              </Button>
-            </Divider>}
-
-            {index !== 0 && <Divider sx={{ mx: -2, mt: 2 }} textAlign="right">
-              <Button
-                variant="text"
-                size="small"
-                color="error"
-                startIcon={<DeleteIcon />}
-                disabled={model.disabled || model.readOnly || formLoading}
-                onClick={() => remove(index)}>
-                {model.removeButtonText ? t(model.removeButtonText) : t("remove")} #{index + 1}
-              </Button>
-            </Divider>}
+          <Box
+            key={field.id}
+            sx={{ bgcolor: index % 2 === 0 ? "transparent" : "action.hover", mx: -2, px: 2, pb: 1 }}
+          >
+            {!model.readOnly && (!model.required || fieldsArray.length > 1) && (
+              <Box sx={{ textAlign: "right" }}>
+                <Button
+                  variant="text"
+                  size="small"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  disabled={model.disabled || formLoading}
+                  onClick={() => remove(index)}>
+                  {model.removeButtonText ? t(model.removeButtonText) : t("remove")} #{index + 1}
+                </Button>
+              </Box>
+            )}
 
             {"itemInputs" in model && model.itemInputs.map((itemInput) => {
               const pathName = `${model.name}.${index}.${itemInput.name}` as K;
@@ -184,17 +177,19 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                 />
               );
             })()}
-          </React.Fragment>
+          </Box>
         ))}
       </FormGroup>
-      <Button
-        variant="outlined"
-        disabled={model.disabled || model.readOnly || formLoading}
-        sx={{ mt: 2 }}
-        onClick={addItem}
-      >
-        {model.addButtonText ? t(model.addButtonText) : t("add")}
-      </Button>
+      {!model.readOnly && (
+        <Button
+          variant="outlined"
+          disabled={model.disabled || formLoading}
+          sx={{ mt: 2 }}
+          onClick={addItem}
+        >
+          {model.addButtonText ? t(model.addButtonText) : t("add")}
+        </Button>
+      )}
     </FormControl>
   );
 }

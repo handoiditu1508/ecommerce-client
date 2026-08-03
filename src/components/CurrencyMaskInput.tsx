@@ -11,10 +11,14 @@ function CurrencyMaskInput({ onChange, ref, ...props }: CurrencyMaskInputProps) 
     <IMaskInput
       {...props}
       mask={Number}
+      unmask={true}
+      radix=","
+      mapToRadix={["."]}
+      scale={2}
       thousandsSeparator="."
       min={0}
       inputRef={ref}
-      onAccept={(_value, mask) => onChange({ target: { value: mask.unmaskedValue } })}
+      onAccept={(value) => onChange({ target: { value } })}
     />
   );
 }
