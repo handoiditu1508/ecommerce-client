@@ -29,7 +29,6 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
       rules: { required: "user:this_field_is_required" },
       size: { sm: 6 },
     },
-    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed", size: { sm: 6 } },
     {
       name: "firstName",
       inputType: "text",
@@ -55,6 +54,7 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
       rules: { required: "user:this_field_is_required" },
       size: { sm: 4 },
     },
+    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed" },
   ],
   submitButtonText: "user:create_user",
 };
