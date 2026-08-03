@@ -5,6 +5,7 @@ import FileInput from "@/components/FileInput";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
+import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { useCreateProductMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
@@ -58,6 +59,7 @@ function CreateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation("product");
+  useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const [createProduct, result] = useCreateProductMutation();
   const formContext = useForm<CreateProductCommand>({
