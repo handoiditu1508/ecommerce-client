@@ -66,7 +66,7 @@ const formModel: DynamicFormModel<ProductDetailsForm> = {
         { name: "name", inputType: "text", label: "product:variant_name", readOnly: true },
         { name: "sku", inputType: "text", label: "product:sku", readOnly: true },
         { name: "quantity", inputType: "text", label: "product:variant_quantity", readOnly: true },
-        { name: "color", inputType: "text", label: "product:variant_color", readOnly: true },
+        { name: "color", inputType: "color", label: "product:variant_color", readOnly: true },
         { name: "thumbnailPath", inputType: "text", label: "product:thumbnail_path", readOnly: true },
         { name: "price", inputType: "currency", label: "product:price", readOnly: true },
         { name: "discountPrice", inputType: "currency", label: "product:discount_price", readOnly: true },

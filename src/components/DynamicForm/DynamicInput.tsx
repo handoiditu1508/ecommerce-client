@@ -29,8 +29,9 @@ import dayjs, { Dayjs } from "dayjs";
 import React, { useMemo, useState } from "react";
 import { Controller, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import FileInput from "../FileInput";
+import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
+import FileInput from "../FileInput";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -211,6 +212,38 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
                 ),
               },
             }}
+            onBlur={field.onBlur}
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (model.validateOnChange) formContext.trigger(model.name);
+            }}
+          />
+        )}
+      />
+    );
+  }
+
+  if (model.inputType === "color") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => (
+          <ColorInput
+            name={field.name}
+            label={finalLabel}
+            required={model.required}
+            disabled={model.disabled || field.disabled}
+            readOnly={model.readOnly || formLoading}
+            fullWidth
+            value={typeof field.value === "string" ? field.value : ""}
+            error={fieldState.invalid}
+            helperText={errorText(fieldState.error?.message)}
+            inputRef={field.ref}
             onBlur={field.onBlur}
             onValueChange={(value) => {
               field.onChange(value);
