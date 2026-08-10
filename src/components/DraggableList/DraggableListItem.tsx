@@ -16,7 +16,9 @@ type OwnProps = {
 
 type DraggableListItemProps = OwnProps & Omit<ListItemProps, keyof OwnProps>;
 
-const DraggableListItem = styled(({ dragging, selected, disableHoverEffect, text, onRemove, onClick, ...props }: DraggableListItemProps) => {
+const DraggableListItem = styled(({
+  dragging, selected, disableHoverEffect, text, onRemove, onClick, ...props
+}: DraggableListItemProps) => {
   return (
     <ListItem
       draggable

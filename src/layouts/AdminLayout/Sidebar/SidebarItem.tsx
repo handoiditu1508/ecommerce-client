@@ -77,7 +77,9 @@ export default function SidebarItem({ sidebarTab, level = 0, hideChilds }: Sideb
       </ListItem>
       {sidebarTab.children && sidebarTab.children.length !== 0 && <Collapse in={open && !hideChilds} unmountOnExit>
         <List disablePadding dense>
-          {sidebarTab.children.map((child) => <SidebarItem key={child.title} sidebarTab={child} level={level + 1} hideChilds={hideChilds} />)}
+          {sidebarTab.children.map((child) => (
+            <SidebarItem key={child.title} sidebarTab={child} level={level + 1} hideChilds={hideChilds} />
+          ))}
         </List>
       </Collapse>}
     </>

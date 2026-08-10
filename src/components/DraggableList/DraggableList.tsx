@@ -7,7 +7,7 @@ import React from "react";
 import { TransitionGroup } from "react-transition-group";
 import DraggableListItem from "./DraggableListItem";
 
-type OwnProps<T = any> = {
+type OwnProps<T = unknown> = {
   selectedIndex?: number;
   items: T[];
   selectItemId: (item: T) => React.Key;
@@ -17,10 +17,17 @@ type OwnProps<T = any> = {
   onSelectItem?: (index: number) => void;
 };
 
-export type DraggableListProps<T = any> = OwnProps<T> & Omit<ListProps, keyof OwnProps>;
+export type DraggableListProps<T = unknown> = OwnProps<T> & Omit<ListProps, keyof OwnProps>;
 
-const DraggableList = styled(({ selectedIndex, items, selectItemId, selectItemContent, onMoveItem, onRemoveItem = CONFIG.EMPTY_FUNCTION, onSelectItem = CONFIG.EMPTY_FUNCTION,
-  ...props }: DraggableListProps) => {
+const DraggableList = styled(({
+  selectedIndex,
+  items, selectItemId,
+  selectItemContent,
+  onMoveItem,
+  onRemoveItem = CONFIG.EMPTY_FUNCTION,
+  onSelectItem = CONFIG.EMPTY_FUNCTION,
+  ...props
+}: DraggableListProps) => {
   const [
     draggingIndex,
     handleDragStart,

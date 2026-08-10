@@ -5,7 +5,7 @@ import { UIMatch, useMatches } from "react-router-dom";
 import CustomLink from "./CustomLink";
 
 function RouteBasedBreadcrumbs(props: Omit<BreadcrumbsProps, "children">) {
-  const matches = useMatches() as UIMatch<any, RouteHandleObject>[];
+  const matches = useMatches() as UIMatch<unknown, RouteHandleObject>[];
   const currentMatch = matches[matches.length - 1];
 
   if (currentMatch.handle && currentMatch.handle.hideBreadcrumbs) {

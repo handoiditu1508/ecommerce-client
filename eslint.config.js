@@ -64,7 +64,7 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "error",
       "import/no-unresolved": "off",
       "import/named": "off",
       "import/order": [
@@ -382,7 +382,7 @@ export default tseslint.config(
       "@stylistic/max-len": [
         "warn",
         {
-          code: 200,
+          code: 120,
           tabWidth: 2,
           comments: 200,
           ignoreComments: false,
@@ -471,6 +471,7 @@ export default tseslint.config(
       "@stylistic/object-curly-newline": [
         "warn",
         {
+          multiline: true,
           consistent: true,
         },
       ],

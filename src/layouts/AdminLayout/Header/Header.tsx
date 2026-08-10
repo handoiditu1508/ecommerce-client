@@ -40,7 +40,9 @@ const languages: { code: string; name: string; }[] = [
 export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
-  const { sidebarOpen, setSidebarOpen, sidebarState, miniSidebarTransition, permanentSidebarTransition } = useContext(SidebarContext);
+  const {
+    sidebarOpen, setSidebarOpen, sidebarState, miniSidebarTransition, permanentSidebarTransition,
+  } = useContext(SidebarContext);
   const { mdAndDown } = useContext(BreakpointsContext);
   const { mobile } = useContext(InfoContext);
   const hideHeaderTrigger = useScrollTrigger({ threshold: 250 });
@@ -150,7 +152,9 @@ export default function Header({ ref }: { ref?: React.Ref<HTMLDivElement>; }) {
 
           <p className="title">Language</p>
           <Select value={i18n.resolvedLanguage || languages[0].code} fullWidth size="small" onChange={handleChangeLanguage}>
-            {languages.map((language) => <MenuItem key={language.code} value={language.code}>{language.name}</MenuItem>)}
+            {languages.map((language) => (
+              <MenuItem key={language.code} value={language.code}>{language.name}</MenuItem>
+            ))}
           </Select>
         </Box>
       </Drawer>

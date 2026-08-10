@@ -18,6 +18,8 @@ export type ConfirmationDialogContextType = {
   preventCloseOnConfirm: boolean;
 };
 
-const ConfirmationDialogContext = React.createContext<ConfirmationDialogContextType>({} as ConfirmationDialogContextType);
+const ConfirmationDialogContext = React.createContext<ConfirmationDialogContextType>(
+  {} as ConfirmationDialogContextType
+);
 
 export default ConfirmationDialogContext;

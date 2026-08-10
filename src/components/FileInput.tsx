@@ -197,7 +197,9 @@ function FileInput({
     }
     onFilesChange(CONFIG.EMPTY_ARRAY, "reset");
     if (inputProps && inputProps.onReset) {
-      inputProps.onReset(event ?? ({ target: hiddenFileInputRef.current } as unknown as React.FormEvent<HTMLInputElement>));
+      inputProps.onReset(event ?? ({
+        target: hiddenFileInputRef.current,
+      } as unknown as React.FormEvent<HTMLInputElement>));
     }
     if (inputProps && inputProps.onChange) {
       inputProps.onChange({

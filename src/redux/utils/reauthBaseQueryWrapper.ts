@@ -12,7 +12,7 @@ const mutex = new Mutex();
  * @returns Wrapped `baseQuery`.
  */
 const reauthBaseQueryWrapper = <F extends BaseQueryFn<
-  string | { url: string; method?: string; body?: any; },
+  string | { url: string; method?: string; body?: unknown; },
   unknown,
   { status: number | string; }
 >>(baseQuery: F): F => {

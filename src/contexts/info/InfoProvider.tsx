@@ -41,5 +41,10 @@ export function InfoProvider(props: InfoProviderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   });
 
-  return <InfoContext.Provider value={{ iOS, mobile, mac, windowWidth, windowHeight, windowScrollX, windowScrollY }} {...props} />;
+  return (
+    <InfoContext.Provider
+      value={{ iOS, mobile, mac, windowWidth, windowHeight, windowScrollX, windowScrollY }}
+      {...props}
+    />
+  );
 }

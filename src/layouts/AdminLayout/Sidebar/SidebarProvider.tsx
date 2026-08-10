@@ -17,12 +17,18 @@ type TemporarySidebarTab = Pick<SidebarTab, "title" | "to" | "icon"> & {
 
 const flatSidebarTabs: SidebarTab[] = [];
 
-function convertTemporaryToSidebarTab(temporary: TemporarySidebarTab, index: number = 0, parentHashPath: string = "/"): SidebarTab {
+function convertTemporaryToSidebarTab(
+  temporary: TemporarySidebarTab,
+  index: number = 0,
+  parentHashPath: string = "/"
+): SidebarTab {
   const hashPath = parentHashPath.endsWith("/") ? `${parentHashPath}${index}/` : `${parentHashPath}/${index}/`;
 
   const sidebarTab: SidebarTab = {
     ...temporary,
-    children: temporary.children ? temporary.children.map((t, i) => convertTemporaryToSidebarTab(t, i + 1, hashPath)) : [],
+    children: temporary.children
+      ? temporary.children.map((t, i) => convertTemporaryToSidebarTab(t, i + 1, hashPath))
+      : [],
     hashPath,
   };
 
@@ -60,7 +66,9 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
   ],
 ];
 
-const sidebarTabs: SidebarTab[][] = temporarySidebarTabs.map((tempArr, Arrindex) => tempArr.map((value, index) => convertTemporaryToSidebarTab(value, index, Arrindex.toString())));
+const sidebarTabs: SidebarTab[][] = temporarySidebarTabs.map((tempArr, arrayIndex) => tempArr.map(
+  (value, index) => convertTemporaryToSidebarTab(value, index, arrayIndex.toString())
+));
 
 type SidebarProviderProps = Omit<ProviderProps<SidebarContextType>, "value">;
 

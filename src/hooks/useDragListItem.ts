@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 const useDragListItem = (
-  moveItem: (fromIndex: number, toIndex: number) => any
+  moveItem: (fromIndex: number, toIndex: number) => void
 ): [
     draggingIndex: number | undefined,
     handleDragStart: (index: number) => void,

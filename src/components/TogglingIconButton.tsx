@@ -10,15 +10,21 @@ type OwnProps = {
 
 type TogglingIconButtonProps = OwnProps & Omit<IconButtonProps, keyof OwnProps>;
 
-const TogglingIconButton = styled(({ idleIcon, activeIcon, customColor, color, style, ...props }: TogglingIconButtonProps) => {
+const TogglingIconButton = styled(({
+  idleIcon, activeIcon, customColor, color, style, ...props
+}: TogglingIconButtonProps) => {
   const theme = useTheme();
-  const standardizedColor = customColor || (theme.palette.isPaletteColorOption(color) && theme.vars.palette[color].main) || color;
+  const standardizedColor = customColor
+    || (theme.palette.isPaletteColorOption(color) && theme.vars.palette[color].main)
+    || color;
   const hoverColor = standardizedColor && standardizedColor.startsWith("#")
     ? `color-mix(in srgb, ${standardizedColor}, transparent ${theme.vars.palette.action.hoverOpacity * 100}%)`
     : `rgba(0, 0, 0, ${theme.vars.palette.action.hoverOpacity})`;
 
   return (
-    <IconButton style={{ ...style, "--custom-color": standardizedColor, "--hover-color": hoverColor } as React.CSSProperties} {...props}>
+    <IconButton
+      style={{ ...style, "--custom-color": standardizedColor, "--hover-color": hoverColor } as React.CSSProperties}
+      {...props}>
       {idleIcon}
       {activeIcon || idleIcon}
     </IconButton>
