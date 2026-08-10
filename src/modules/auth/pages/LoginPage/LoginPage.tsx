@@ -44,10 +44,20 @@ function LoginPage() {
   };
 
   return (step === LoginStep.Login)
-    ? <LoginModal loginState={loginState} loginDispatch={loginDispatch} onLogin2fa={handleLogin2fa} onSuccess={handleLoginSuccess} />
+    ? <LoginModal
+      loginState={loginState}
+      loginDispatch={loginDispatch}
+      onLogin2fa={handleLogin2fa}
+      onSuccess={handleLoginSuccess}
+    />
     : (
       <Suspense>
-        <Login2faModal loginState={loginState} loginDispatch={loginDispatch} onSuccess={handleLoginSuccess} onReturnToLogin={handleReturnToLogin} />
+        <Login2faModal
+          loginState={loginState}
+          loginDispatch={loginDispatch}
+          onSuccess={handleLoginSuccess}
+          onReturnToLogin={handleReturnToLogin}
+        />
       </Suspense>
     );
 }

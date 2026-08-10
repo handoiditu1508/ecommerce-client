@@ -18,7 +18,9 @@ function DiscountedProductsPage() {
   const countDiscountedProductsResult = useCountDiscountedProductsQuery();
   const getDiscountedProductsQuery = useMemo<GetDiscountedProductsQuery>(() => ({ page, pageSize: PAGE_SIZE }), [page]);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
-  const totalPage = countDiscountedProductsResult.data !== undefined ? Math.ceil(countDiscountedProductsResult.data / PAGE_SIZE) : 1;
+  const totalPage = countDiscountedProductsResult.data !== undefined
+    ? Math.ceil(countDiscountedProductsResult.data / PAGE_SIZE)
+    : 1;
 
   return (
     <>

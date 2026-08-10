@@ -27,7 +27,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useMemo, useState } from "react";
-import { Controller, Path, UseFormReturn } from "react-hook-form";
+import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
@@ -54,7 +54,7 @@ function formatDateTimeValue(value: Dayjs | null, inputType: DateTimeInputType):
   return value?.isValid() ? value.format(DATE_TIME_FORMATS[inputType]) : null;
 }
 
-type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
+export type DynamicInputProps<T extends FieldValues, K extends Path<T>> = {
   model: DynamicInputModel<T, K>;
   formContext: UseFormReturn<T>;
   formLoading?: boolean;
@@ -65,7 +65,11 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   options?: DynamicInputOption<T, K>[];
   autocompleteRenderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
   autocompleteRenderOption?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"];
-  autocompleteOnInputChange?: (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void;
+  autocompleteOnInputChange?: (
+    event: React.SyntheticEvent,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => void;
   autocompleteLoading?: boolean;
   hidden?: boolean | ((data: T) => boolean);
 
@@ -82,7 +86,7 @@ type DynamicInputProps<T extends Record<string, any>, K extends Path<T>> = {
   hiddenMap?: DynamicFormProps<T>["hiddenMap"];
 };
 
-function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
+function DynamicInput<T extends FieldValues, K extends Path<T>>({
   model,
   formContext,
   formLoading = false,
@@ -456,7 +460,9 @@ function DynamicInput<T extends Record<string, any>, K extends Path<T>>({
             >
               {model.showCheckbox
                 ? finalOptions.map((option) => {
-                  const selected: boolean = model.multiple && Array.isArray(field.value) ? field.value.includes(option.value) : field.value === option.value;
+                  const selected: boolean = model.multiple && Array.isArray(field.value)
+                    ? field.value.includes(option.value)
+                    : field.value === option.value;
                   const SelectionIcon = selected ? CheckBoxIcon : CheckBoxOutlineBlankIcon;
 
                   return (

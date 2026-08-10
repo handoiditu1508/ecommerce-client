@@ -59,11 +59,21 @@ function ForgotPasswordPage() {
 
   switch (step) {
     case ForgotPasswordStep.SendEmail:
-      return <SendEmailModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onSuccess={handleSendUsernameEmailSuccess} />;
+      return (
+        <SendEmailModal
+          forgotPasswordState={forgotPasswordState}
+          forgotPasswordDispatch={forgotPasswordDispatch}
+          onSuccess={handleSendUsernameEmailSuccess}
+        />
+      );
     case ForgotPasswordStep.VerifyToken:
       return (
         <Suspense>
-          <VerifyTokenModal forgotPasswordState={forgotPasswordState} forgotPasswordDispatch={forgotPasswordDispatch} onChangeEmail={handleChangeEmail} />
+          <VerifyTokenModal
+            forgotPasswordState={forgotPasswordState}
+            forgotPasswordDispatch={forgotPasswordDispatch}
+            onChangeEmail={handleChangeEmail}
+          />
         </Suspense>
       );
     case ForgotPasswordStep.ResetPassword:

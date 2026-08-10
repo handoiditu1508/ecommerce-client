@@ -28,7 +28,7 @@ type Notification = {
 };
 
 const Transition = (props: TransitionProps & {
-  children: React.ReactElement<any, any>;
+  children: React.ReactElement;
   ref?: React.Ref<HTMLElement>;
 }) => {
   return <Grow {...props} />;

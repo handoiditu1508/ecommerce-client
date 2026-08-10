@@ -156,7 +156,11 @@ const cartSlice = createSlice({
         delete state.selectedVariantIds[action.payload.productVariantId];
       }
     },
-    changeProductVariantInCart: (state, action: PayloadAction<{ product: Product; prevProductVariantId: number; nextProductVariantId: number; }>) => {
+    changeProductVariantInCart: (state, action: PayloadAction<{
+      product: Product;
+      prevProductVariantId: number;
+      nextProductVariantId: number;
+    }>) => {
       if (action.payload.prevProductVariantId === action.payload.nextProductVariantId) {
         return;
       }
@@ -203,7 +207,11 @@ const cartSlice = createSlice({
         }
       }
     },
-    setQuantityForCart: (state, action: PayloadAction<{ product: Product; productVariantId: number; quantity: number; }>) => {
+    setQuantityForCart: (state, action: PayloadAction<{
+      product: Product;
+      productVariantId: number;
+      quantity: number;
+    }>) => {
       if (!action.payload.quantity) {
         return;
       }
@@ -376,7 +384,8 @@ const changeDehydratedProductVariantData = (
     const data = datas[dataIndex];
 
     // move quantity to the new variant data
-    data.productVariants[nextProductVariantId] = (data.productVariants[nextProductVariantId] || 0) + (data.productVariants[prevProductVariantId] || 0);
+    data.productVariants[nextProductVariantId] = (data.productVariants[nextProductVariantId] || 0)
+      + (data.productVariants[prevProductVariantId] || 0);
 
     // remove variant data
     delete data.productVariants[prevProductVariantId];
@@ -546,7 +555,9 @@ const changeHydratedProductVariantData = (
 
       // remove variant data
       data.productVariants.splice(prevVariantDataIndex, 1);
-      nextVariantDataIndex = nextVariantDataIndex < prevVariantDataIndex ? nextVariantDataIndex : nextVariantDataIndex - 1;
+      nextVariantDataIndex = nextVariantDataIndex < prevVariantDataIndex
+        ? nextVariantDataIndex
+        : nextVariantDataIndex - 1;
 
       // check invalid variant data quantity
       if (nextVariantData && nextVariantData.quantity < 1) {
@@ -632,9 +643,16 @@ export const cartSelectors = {
   hydrated: (state: RootState) => isCartHydrated(state.cart),
   cachedProductIds: (state: RootState) => state.cart.ids,
   itemDatas: (state: RootState) => state.cart.cartItemDatas,
-  cachedProduct: (id: number) => (state: RootState): Product | undefined => productAdapterSelectors.selectById(state, id),
+  cachedProduct: (id: number) => (state: RootState): Product | undefined => (
+    productAdapterSelectors.selectById(state, id)
+  ),
   selectedVariantIds: (state: RootState) => state.cart.selectedVariantIds,
-  allSelected: (state: RootState) => !!state.cart.cartItemDatas.length && state.cart.cartItemDatas.every((d) => d.productVariants.every((v) => state.cart.selectedVariantIds[v.productVariantId])),
+  allSelected: (state: RootState) => (
+    !!state.cart.cartItemDatas.length
+    && state.cart.cartItemDatas.every((d) => (
+      d.productVariants.every((v) => state.cart.selectedVariantIds[v.productVariantId])
+    ))
+  ),
   variantDatas: (state: RootState) => state.cart.cartItemDatas.flatMap((d) => d.productVariants),
   totalItems: (state: RootState): number => (state.cart.dehydratedCartItemDatas.length
     ? state.cart.dehydratedCartItemDatas.reduce<number>((total, data) => {

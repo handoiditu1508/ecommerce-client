@@ -7,13 +7,13 @@ import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
-import { ArrayPath, Path, UseFormReturn, useFieldArray } from "react-hook-form";
+import { ArrayPath, FieldValues, Path, UseFormReturn, useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DynamicFormProps } from "./DynamicForm";
-import DynamicInput from "./DynamicInput";
+import DynamicInput, { DynamicInputProps } from "./DynamicInput";
 import { DynamicArrayInputModel, DynamicInputModel } from "./models";
 
-export type DynamicArrayInputProps<T extends Record<string, any>, K extends Path<T>> = {
+export type DynamicArrayInputProps<T extends FieldValues, K extends Path<T>> = {
   model: DynamicArrayInputModel<T, K>;
   formContext: UseFormReturn<T>;
   formLoading?: boolean;
@@ -34,7 +34,7 @@ export type DynamicArrayInputProps<T extends Record<string, any>, K extends Path
 
 /**
  * Get value for specific item in field array.
- * @param map A dictionary of string key and any value type.
+ * @param map A dictionary whose values share the generic value type.
  * @param path String path to the specific item in form data.
  * @returns The value in map corresponse to path.
  * @example
@@ -52,7 +52,7 @@ export type DynamicArrayInputProps<T extends Record<string, any>, K extends Path
  * const path4 = "fullNames.-1.firstName"; // wild card path reference all firstNames in fullNames property
  * ```
  */
-const getFinalValue = <T extends Record<string, any>, V>(map: Partial<Record<Path<T>, V>>, path: Path<T>): V | undefined => {
+const getFinalValue = <T extends FieldValues, V>(map: Partial<Record<Path<T>, V>>, path: Path<T>): V | undefined => {
   let finalValue: V | undefined = map[path];
   if (finalValue === undefined) {
     const wildcardPath = path.replace(/\.[0-9]+(?=\.|$)/g, ".-1") as Path<T>;
@@ -62,7 +62,7 @@ const getFinalValue = <T extends Record<string, any>, V>(map: Partial<Record<Pat
   return finalValue;
 };
 
-function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
+function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
   model,
   formContext,
   formLoading = false,
@@ -136,16 +136,27 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                   model={{
                     ...itemInput,
                     name: pathName,
-                  } as DynamicInputModel<T, K>}
+                  } as unknown as DynamicInputModel<T, K>}
                   formContext={formContext}
                   formLoading={formLoading}
                   startAdornment={getFinalValue(startAdornmentMap, pathName)}
                   endAdornment={getFinalValue(endAdornmentMap, pathName)}
                   label={getFinalValue(labelMap, pathName)}
-                  rules={getFinalValue(rulesMap as Partial<Record<Path<T>, any>>, pathName)}
-                  options={getFinalValue(optionsMap as Partial<Record<Path<T>, any>>, pathName)}
+                  rules={getFinalValue(
+                    rulesMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["rules"]>>,
+                    pathName,
+                  )}
+                  options={getFinalValue(
+                    optionsMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["options"]>>,
+                    pathName,
+                  )}
                   autocompleteRenderInput={getFinalValue(autocompleteRenderInputMap, pathName)}
-                  autocompleteRenderOption={getFinalValue(autocompleteRenderOptionMap as Partial<Record<Path<T>, any>>, pathName)}
+                  autocompleteRenderOption={getFinalValue(
+                    autocompleteRenderOptionMap as Partial<
+                      Record<Path<T>, DynamicInputProps<T, K>["autocompleteRenderOption"]>
+                    >,
+                    pathName,
+                  )}
                   autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
                   autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
                   hidden={getFinalValue(hiddenMap, pathName)}
@@ -161,16 +172,27 @@ function DynamicArrayInput<T extends Record<string, any>, K extends Path<T>>({
                   model={{
                     ...model.itemInput,
                     name: pathName,
-                  } as DynamicInputModel<T, K>}
+                  } as unknown as DynamicInputModel<T, K>}
                   formContext={formContext}
                   formLoading={formLoading}
                   startAdornment={getFinalValue(startAdornmentMap, pathName)}
                   endAdornment={getFinalValue(endAdornmentMap, pathName)}
                   label={getFinalValue(labelMap, pathName)}
-                  rules={getFinalValue(rulesMap as Partial<Record<Path<T>, any>>, pathName)}
-                  options={getFinalValue(optionsMap as Partial<Record<Path<T>, any>>, pathName)}
+                  rules={getFinalValue(
+                    rulesMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["rules"]>>,
+                    pathName,
+                  )}
+                  options={getFinalValue(
+                    optionsMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["options"]>>,
+                    pathName,
+                  )}
                   autocompleteRenderInput={getFinalValue(autocompleteRenderInputMap, pathName)}
-                  autocompleteRenderOption={getFinalValue(autocompleteRenderOptionMap as Partial<Record<Path<T>, any>>, pathName)}
+                  autocompleteRenderOption={getFinalValue(
+                    autocompleteRenderOptionMap as Partial<
+                      Record<Path<T>, DynamicInputProps<T, K>["autocompleteRenderOption"]>
+                    >,
+                    pathName,
+                  )}
                   autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
                   autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
                   hidden={getFinalValue(hiddenMap, pathName)}

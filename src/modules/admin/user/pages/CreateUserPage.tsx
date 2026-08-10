@@ -98,7 +98,13 @@ function CreateUserPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Typography variant="h5" sx={{ mb: 2 }}>{t("create_user")}</Typography>
-      <DynamicGridForm formContext={formContext} model={formModel} loading={result.isLoading} gridProps={{ spacing: 2 }} onSubmit={handleSubmit} />
+      <DynamicGridForm
+        formContext={formContext}
+        model={formModel}
+        loading={result.isLoading}
+        gridProps={{ spacing: 2 }}
+        onSubmit={handleSubmit}
+      />
     </Paper>
   );
 }

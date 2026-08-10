@@ -165,12 +165,18 @@ export const {
 export const authSelectors = {
   signedIn: (state: RootState): boolean => !!state.auth.expiration,
   tokenExpired: (state: RootState): boolean => !!state.auth.expiration && state.auth.expiration <= Date.now(),
-  refreshTokenExpired: (state: RootState) => !!state.auth.refreshTokenExpiration && state.auth.refreshTokenExpiration <= Date.now(),
+  refreshTokenExpired: (state: RootState) => (
+    !!state.auth.refreshTokenExpiration && state.auth.refreshTokenExpiration <= Date.now()
+  ),
   expiration: (state: RootState) => state.auth.expiration,
   user: (state: RootState) => state.auth.user,
   policies: (state: RootState) => state.auth.user?.policies ?? CONFIG.EMPTY_ARRAY,
   loading: (state: RootState) => state.auth.loading,
-  authorizedFor: (...policies: Policy[]) => (state: RootState) => (state.auth.user ? policies.every((policy) => state.auth.user!.policies.includes(policy)) : false),
+  authorizedFor: (...policies: Policy[]) => (state: RootState) => (
+    state.auth.user
+      ? policies.every((policy) => state.auth.user!.policies.includes(policy))
+      : false
+  ),
 };
 
 export default authSlice;

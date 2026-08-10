@@ -56,8 +56,12 @@ function ProductCard({ product }: ProductCardProps) {
               position: "relative",
               "&::before": {
                 content: "var(--discount-ribbon-text)",
-                backgroundColor: product.discountPercentage ? theme.vars.palette.error.main : theme.vars.palette.info.main,
-                color: product.discountPercentage ? theme.vars.palette.error.contrastText : theme.vars.palette.info.contrastText,
+                backgroundColor: product.discountPercentage
+                  ? theme.vars.palette.error.main
+                  : theme.vars.palette.info.main,
+                color: product.discountPercentage
+                  ? theme.vars.palette.error.contrastText
+                  : theme.vars.palette.info.contrastText,
                 textAlign: "center",
                 position: "absolute",
                 top: 10,

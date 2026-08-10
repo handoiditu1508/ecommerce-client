@@ -21,7 +21,9 @@ function ImageCarousel({ defaultIndex = 0, images = CONFIG.EMPTY_ARRAY }: ImageC
   const theme = useTheme();
   const { sm } = useContext(BreakpointsContext);
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
-  const [selectedIndex, setSelectedIndex] = useState<number>(defaultIndex > images.length || defaultIndex < 0 ? 0 : defaultIndex);
+  const [selectedIndex, setSelectedIndex] = useState<number>(
+    defaultIndex > images.length || defaultIndex < 0 ? 0 : defaultIndex,
+  );
   const selectedImage: SimpleFileView | undefined = images[selectedIndex];
 
   useEffect(() => {

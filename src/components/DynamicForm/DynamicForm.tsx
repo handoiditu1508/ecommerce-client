@@ -3,12 +3,12 @@ import { AutocompleteInputChangeReason, AutocompleteProps, AutocompleteRenderInp
 import Box, { BoxProps } from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import React from "react";
-import { Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
+import { FieldValues, Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import DynamicInput from "./DynamicInput";
 import { DynamicFormModel, DynamicInputOption } from "./models";
 
-export type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
+export type DynamicFormProps<T extends FieldValues> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
   model: DynamicFormModel<T>;
   formContext: UseFormReturn<T>;
   loading?: boolean;
@@ -19,14 +19,17 @@ export type DynamicFormProps<T extends Record<string, any>> = Omit<BoxProps<"for
   optionsMap?: { [K in Path<T>]?: DynamicInputOption<T, K>[] };
   autocompleteRenderInputMap?: Partial<Record<Path<T>, (params: AutocompleteRenderInputParams) => React.ReactNode>>;
   autocompleteRenderOptionMap?: { [K in Path<T>]?: AutocompleteProps<DynamicInputOption<T, K>, boolean | undefined, boolean, boolean, "div">["renderOption"] };
-  autocompleteOnInputChangeMap?: Partial<Record<Path<T>, (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void>>;
+  autocompleteOnInputChangeMap?: Partial<Record<
+    Path<T>,
+    (event: React.SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => void
+  >>;
   autocompleteLoadingMap?: Partial<Record<Path<T>, boolean>>;
   hiddenMap?: Partial<Record<Path<T>, boolean | ((data: T) => boolean)>>;
   renderInputMap?: Partial<Record<Path<T>, React.ReactNode>>;
   onSubmit: SubmitHandler<T>;
 };
 
-function DynamicForm<T extends Record<string, any>>({
+function DynamicForm<T extends FieldValues>({
   model,
   formContext,
   loading = false,

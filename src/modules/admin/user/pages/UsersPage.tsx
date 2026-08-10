@@ -64,7 +64,10 @@ function UsersPage() {
   const { t, i18n } = useTranslation("user");
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
-  const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(() => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })), [roles]);
+  const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(
+    () => roles.map((role) => ({ key: role.id, label: role.name, value: role.id })),
+    [roles],
+  );
   const [filters, setFilters] = useState<CountUsersQuery>({ statuses: [], roles: [] });
   const [pagination, setPagination] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
@@ -119,7 +122,14 @@ function UsersPage() {
         <Typography variant="h5">{t("users")}</Typography>
         <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>{t("create_user")}</Button>
       </Box>
-      <DynamicGridForm formContext={formContext} model={filterModel} optionsMap={{ roles: roleOptions }} gridProps={{ spacing: 2 }} sx={{ mb: 3 }} onSubmit={handleFilter} />
+      <DynamicGridForm
+        formContext={formContext}
+        model={filterModel}
+        optionsMap={{ roles: roleOptions }}
+        gridProps={{ spacing: 2 }}
+        sx={{ mb: 3 }}
+        onSubmit={handleFilter}
+      />
       <div style={{ display: "flex", flexDirection: "column" }}>
         <DataGrid
           rows={usersResult.data ?? []}

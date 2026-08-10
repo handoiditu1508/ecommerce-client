@@ -84,7 +84,13 @@ function ProductDetailPage() {
         ? <>
           <Typography variant="h5" color="primary" fontWeight={700}>{toVndCurrency(currentPrice)}</Typography>
           {currentPrice !== originalPrice && <>
-            <Typography variant="body1" color="textDisabled" sx={{ textDecorationLine: "line-through", display: "inline" }}>{toVndCurrency(originalPrice)}</Typography>
+            <Typography
+              variant="body1"
+              color="textDisabled"
+              sx={{ textDecorationLine: "line-through", display: "inline" }}
+            >
+              {toVndCurrency(originalPrice)}
+            </Typography>
             <Typography component="sup" color="error" variant="caption"> {getDiscountValueText(product)}</Typography>
           </>}
         </>
@@ -244,7 +250,10 @@ function ProductDetailPage() {
             {ProductRating}
           </Box>
           <Divider sx={{ my: 1 }} />
-          <ProductVariantSelector variants={product ? product.productVariants : undefined} onChange={setSelectedVariantId} />
+          <ProductVariantSelector
+            variants={product ? product.productVariants : undefined}
+            onChange={setSelectedVariantId}
+          />
           {QuantityInput}
           {AddToCartButton}
         </Box>}

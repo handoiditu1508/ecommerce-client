@@ -28,7 +28,9 @@ const selectDefaultExpandedItems = createSelector(
     (_state: RootState, initialSelectedItems: string[]) => initialSelectedItems,
   ],
   (categories, initialSelectedItems) =>
-    distinct(initialSelectedItems.flatMap((id) => categories[id as unknown as number]?.ancestorIds ?? [])).map((id) => id.toString()),
+    distinct(
+      initialSelectedItems.flatMap((id) => categories[id as unknown as number]?.ancestorIds ?? []),
+    ).map((id) => id.toString()),
 );
 
 const selectionPropagation: TreeViewSelectionPropagation = {
@@ -50,7 +52,10 @@ function CategoryTree({
 }: CategoryTreeProps) {
   const theme = useTheme();
   const categoriesTree = useAppSelector(categorySelectors.tree);
-  const categoryTreeItems = useMemo<TreeViewBaseItem[]>(() => categoriesTree.map(categoryToTreeViewBaseItem), [categoriesTree]);
+  const categoryTreeItems = useMemo<TreeViewBaseItem[]>(
+    () => categoriesTree.map(categoryToTreeViewBaseItem),
+    [categoriesTree],
+  );
   const selectedItems: string[] = productsState.categoryIds.map((id) => id.toString());
   const initialSelectedItems = useApplyPropagationToSelectedItemsOnMount({
     items: categoryTreeItems,

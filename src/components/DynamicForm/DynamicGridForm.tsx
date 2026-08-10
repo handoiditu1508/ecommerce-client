@@ -2,15 +2,16 @@ import CONFIG from "@/configs";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid, { GridProps } from "@mui/material/Grid";
+import { FieldValues } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DynamicFormProps } from "./DynamicForm";
 import DynamicInput from "./DynamicInput";
 
-export type DynamicGridFormProps<T extends Record<string, any>> = DynamicFormProps<T> & {
+export type DynamicGridFormProps<T extends FieldValues> = DynamicFormProps<T> & {
   gridProps?: Omit<GridProps, "children" | "container">;
 };
 
-function DynamicGridForm<T extends Record<string, any>>({
+function DynamicGridForm<T extends FieldValues>({
   model,
   formContext,
   loading = false,

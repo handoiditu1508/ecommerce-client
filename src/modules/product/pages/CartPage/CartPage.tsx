@@ -3,7 +3,13 @@ import { mdAndUpMediaQuery, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/c
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import LayoutContainer from "@/layouts/ClientLayout/LayoutContainer";
-import { cartSelectors, refreshCartAsync, rehydrateCartAsync, toggleAllCartDataVariantIds, toggleCartDataVariantId } from "@/redux/slices/cartSlice";
+import {
+  cartSelectors,
+  refreshCartAsync,
+  rehydrateCartAsync,
+  toggleAllCartDataVariantIds,
+  toggleCartDataVariantId,
+} from "@/redux/slices/cartSlice";
 import { CartProductVariantData } from "@/redux/utils/cartUtils";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -33,7 +39,10 @@ function CartPage() {
   const isAllSelected = useAppSelector(cartSelectors.allSelected);
   const subtotal = totalVariantDatas
     .filter((v) => selectedVariantIds[v.productVariantId])
-    .reduce((sumVariantData: number, variantData: CartProductVariantData) => sumVariantData + variantData.totalPrice, 0);
+    .reduce(
+      (sumVariantData: number, variantData: CartProductVariantData) => sumVariantData + variantData.totalPrice,
+      0,
+    );
   const shippingFee = 10000;
   const promoCodeDiscount = 0;
   const total = subtotal + shippingFee + promoCodeDiscount;

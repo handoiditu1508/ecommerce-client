@@ -24,7 +24,7 @@ type ProductVariantSelectorDialogProps = {
 };
 
 const Transition = (props: TransitionProps & {
-  children: React.ReactElement<any, any>;
+  children: React.ReactElement;
   ref?: React.Ref<HTMLElement>;
 }) => {
   return <Slide direction="up" {...props} />;
@@ -76,7 +76,11 @@ function ProductVariantSelectorDialog({
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <ProductVariantSelector variants={variants} defaultVariantId={defaultVariantId} onChange={setSelectedVariantId} />
+        <ProductVariantSelector
+          variants={variants}
+          defaultVariantId={defaultVariantId}
+          onChange={setSelectedVariantId}
+        />
       </DialogContent>
       <DialogActions>
         <Button disabled={selectedVariantId === undefined} onClick={handleConfirm}>{confirmButtonText}</Button>

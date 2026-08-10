@@ -76,17 +76,31 @@ function RegisterPage() {
 
   switch (step) {
     case RegisterStep.SendPreConfirmEmail:
-      return <SendPreConfirmEmailModal registerState={registerState} registerDispatch={registerDispatch} onSuccess={handleSendPreConfirmEmailSuccess} />;
+      return (
+        <SendPreConfirmEmailModal
+          registerState={registerState}
+          registerDispatch={registerDispatch}
+          onSuccess={handleSendPreConfirmEmailSuccess}
+        />
+      );
     case RegisterStep.VerifyEmail:
       return (
         <Suspense>
-          <VerifyEmailModal registerState={registerState} registerDispatch={registerDispatch} onChangeEmail={handleChangeEmail} />
+          <VerifyEmailModal
+            registerState={registerState}
+            registerDispatch={registerDispatch}
+            onChangeEmail={handleChangeEmail}
+          />
         </Suspense>
       );
     case RegisterStep.Register:
       return (
         <Suspense>
-          <RegisterModal registerState={registerState} onSuccess={handleRegisterSuccess} onChangeEmail={handleChangeEmail} />
+          <RegisterModal
+            registerState={registerState}
+            onSuccess={handleRegisterSuccess}
+            onChangeEmail={handleChangeEmail}
+          />
         </Suspense>
       );
   }

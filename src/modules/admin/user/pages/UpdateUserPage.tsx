@@ -109,7 +109,13 @@ function UpdateUserPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Typography variant="h5" sx={{ mb: 2 }}>{t("update_user")}</Typography>
-      <DynamicGridForm formContext={formContext} model={formModel} loading={updateResult.isLoading} gridProps={{ spacing: 2 }} onSubmit={handleSubmit} />
+      <DynamicGridForm
+        formContext={formContext}
+        model={formModel}
+        loading={updateResult.isLoading}
+        gridProps={{ spacing: 2 }}
+        onSubmit={handleSubmit}
+      />
       <Box sx={{ mt: 3 }}>
         <Typography variant="subtitle2" gutterBottom>{t("roles_readonly")}</Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>

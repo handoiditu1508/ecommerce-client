@@ -8,7 +8,9 @@ type HeaderProviderProps = Omit<ProviderProps<HeaderContextType>, "value">;
 function HeaderProvider(props: HeaderProviderProps) {
   const theme = useTheme();
   const { xsAndDown, mdAndUp } = useContext(BreakpointsContext);
-  const [headerHeight, setHeaderHeight] = useState<number>((xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0);
+  const [headerHeight, setHeaderHeight] = useState<number>(
+    (xsAndDown ? theme.constants.xsHeaderHeight : theme.constants.headerHeight) || 0,
+  );
   const [topHeaderHeight, setTopHeaderHeight] = useState<number>(mdAndUp ? theme.constants.topHeaderHeight : 0);
   const [bottomHeaderHeight, setBottomHeaderHeight] = useState<number>(mdAndUp ? theme.constants.headerHeight : 0);
   const [headerClientHeight, setHeaderClientHeight] = useState<number>(headerHeight + topHeaderHeight);
@@ -35,7 +37,12 @@ function HeaderProvider(props: HeaderProviderProps) {
     setHeaderClientHeight(newValue);
   }, [headerHeight, topHeaderHeight, bottomHeaderHeight]);
 
-  return <HeaderContext.Provider value={{ headerHeight, topHeaderHeight, bottomHeaderHeight, headerClientHeight }} {...props} />;
+  return (
+    <HeaderContext.Provider
+      value={{ headerHeight, topHeaderHeight, bottomHeaderHeight, headerClientHeight }}
+      {...props}
+    />
+  );
 }
 
 export default HeaderProvider;

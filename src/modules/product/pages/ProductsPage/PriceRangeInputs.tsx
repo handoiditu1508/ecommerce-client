@@ -60,7 +60,11 @@ function PriceRangeInputs({
         <CurrencyInput
           label={tProduct("max_price")}
           size="small"
-          error={productsState.minPrice !== undefined && productsState.maxPrice !== undefined && productsState.maxPrice < productsState.minPrice}
+          error={
+            productsState.minPrice !== undefined
+            && productsState.maxPrice !== undefined
+            && productsState.maxPrice < productsState.minPrice
+          }
           value={productsState.maxPrice}
           onValueChange={handleMaxPriceChange}
         />
@@ -76,7 +80,9 @@ function PriceRangeInputs({
         {productsState.minPrice !== undefined && productsState.maxPrice !== undefined && <>
           {tProduct("from")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
           {" "}{tProduct("to")} <span style={{
-            color: productsState.maxPrice < productsState.minPrice ? theme.vars.palette.error.main : theme.vars.palette.primary.main,
+            color: productsState.maxPrice < productsState.minPrice
+              ? theme.vars.palette.error.main
+              : theme.vars.palette.primary.main,
           }}>
             {toVndCurrency(productsState.maxPrice)}
           </span>

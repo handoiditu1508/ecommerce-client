@@ -95,7 +95,11 @@ export const hydrateCartItemData = (dehydratedData: DehydratedCartItemData, prod
   return data;
 };
 
-export const generateCartProductVariantData = (product: Product, productVariantId: number, quantity: number = 1): CartProductVariantData | undefined => {
+export const generateCartProductVariantData = (
+  product: Product,
+  productVariantId: number,
+  quantity: number = 1,
+): CartProductVariantData | undefined => {
   const productVariant = product.productVariants.find((v) => v.id === productVariantId);
 
   if (!productVariant) {
@@ -116,7 +120,11 @@ export const generateCartProductVariantData = (product: Product, productVariantI
   return data;
 };
 
-export const generateCartItemData = (product: Product, productVariantId: number, quantity: number = 1): CartItemData | undefined => {
+export const generateCartItemData = (
+  product: Product,
+  productVariantId: number,
+  quantity: number = 1,
+): CartItemData | undefined => {
   const variantData = generateCartProductVariantData(product, productVariantId, quantity);
 
   if (variantData) {

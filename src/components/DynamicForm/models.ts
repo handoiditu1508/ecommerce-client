@@ -1,9 +1,9 @@
 import { ArrayItemType } from "@/common/type";
 import { GridProps } from "@mui/material/Grid";
 import { Property } from "csstype";
-import { Path, PathValue, RegisterOptions } from "react-hook-form";
+import { FieldValues, Path, PathValue, RegisterOptions } from "react-hook-form";
 
-export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> =
+export type DynamicInputModel<T extends FieldValues, K extends Path<T>> =
   | DynamicTextInputModel<T, K>
   | DynamicColorInputModel<T, K>
   | DynamicCurrencyInputModel<T, K>
@@ -15,7 +15,7 @@ export type DynamicInputModel<T extends Record<string, any>, K extends Path<T>> 
   | DynamicFileInputModel<T, K>
   | DynamicArrayInputModel<T, K>;
 
-type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> = {
+type DynamicCommonInputModel<T extends FieldValues, K extends Path<T>> = {
   name: K;
   size?: GridProps["size"];
   label?: string;
@@ -27,7 +27,7 @@ type DynamicCommonInputModel<T extends Record<string, any>, K extends Path<T>> =
   validateOnChange?: boolean;
 };
 
-export type DynamicTextInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicTextInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "text" | "email" | "password";
   placeholder?: string;
   textAlign?: Property.TextAlign;
@@ -35,24 +35,24 @@ export type DynamicTextInputModel<T extends Record<string, any>, K extends Path<
   minLength?: number;
 };
 
-export type DynamicColorInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicColorInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "color";
 };
 
-export type DynamicCurrencyInputModel<T extends Record<string, any>, K extends Path<T>> =
+export type DynamicCurrencyInputModel<T extends FieldValues, K extends Path<T>> =
   DynamicCommonInputModel<T, K> & {
     inputType: "currency";
     currencySymbol?: string;
   };
 
-export type DynamicDateTimeInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicDateTimeInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "date" | "time" | "datetime";
   min?: string;
   max?: string;
   minutesStep?: number;
 };
 
-export type DynamicSelectInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicSelectInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "select";
   placeholder?: string;
   showCheckbox?: boolean;
@@ -61,13 +61,13 @@ export type DynamicSelectInputModel<T extends Record<string, any>, K extends Pat
   options: DynamicInputOption<T, K>[];
 };
 
-export type DynamicInputOption<T extends Record<string, any>, K extends Path<T>> = {
+export type DynamicInputOption<T extends FieldValues, K extends Path<T>> = {
   key: string | number;
   label: string;
   value: ArrayItemType<PathValue<T, K>>;
 };
 
-export type DynamicAutoCompleteInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicAutoCompleteInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "autocomplete";
   placeholder?: string;
   multiple?: boolean;
@@ -78,17 +78,17 @@ export type DynamicAutoCompleteInputModel<T extends Record<string, any>, K exten
   stringToValueConverter?: (str: string) => ArrayItemType<PathValue<T, K>> | undefined;
 };
 
-export type DynamicCheckboxInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicCheckboxInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "checkbox";
 };
 
-export type DynamicRadioInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicRadioInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "radio";
   options: DynamicInputOption<T, K>[];
   row?: boolean;
 };
 
-export type DynamicFileInputModel<T extends Record<string, any>, K extends Path<T>> =
+export type DynamicFileInputModel<T extends FieldValues, K extends Path<T>> =
   PathValue<T, K> extends FileList | null | undefined
     ? (
       DynamicCommonInputModel<T, K> & {
@@ -99,7 +99,7 @@ export type DynamicFileInputModel<T extends Record<string, any>, K extends Path<
     )
     : never;
 
-export type DynamicArrayObjectInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
+export type DynamicArrayObjectInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
   inputType: "array";
   itemInputs: DynamicInputModel<ArrayItemType<PathValue<T, K>>, Path<ArrayItemType<PathValue<T, K>>>>[];
   addButtonText?: string;
@@ -107,19 +107,20 @@ export type DynamicArrayObjectInputModel<T extends Record<string, any>, K extend
   createDefaultValue: (data: T) => ArrayItemType<PathValue<T, K>>;
 };
 
-export type DynamicArrayPrimitiveInputModel<T extends Record<string, any>, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
-  inputType: "array";
-  itemInput: Omit<DynamicInputModel<ArrayItemType<PathValue<T, K>>, Path<ArrayItemType<PathValue<T, K>>>>, "name">;
-  addButtonText?: string;
-  removeButtonText?: string;
-  createDefaultValue: (data: T) => ArrayItemType<PathValue<T, K>>;
-};
+export type DynamicArrayPrimitiveInputModel<T extends FieldValues, K extends Path<T>> =
+  DynamicCommonInputModel<T, K> & {
+    inputType: "array";
+    itemInput: Omit<DynamicInputModel<ArrayItemType<PathValue<T, K>>, Path<ArrayItemType<PathValue<T, K>>>>, "name">;
+    addButtonText?: string;
+    removeButtonText?: string;
+    createDefaultValue: (data: T) => ArrayItemType<PathValue<T, K>>;
+  };
 
-export type DynamicArrayInputModel<T extends Record<string, any>, K extends Path<T>> =
+export type DynamicArrayInputModel<T extends FieldValues, K extends Path<T>> =
   | DynamicArrayObjectInputModel<T, K>
   | DynamicArrayPrimitiveInputModel<T, K>;
 
-export type DynamicFormModel<T extends Record<string, any>> = {
+export type DynamicFormModel<T extends FieldValues> = {
   inputs: {
     [K in Path<T>]: DynamicInputModel<T, K>
   }[Path<T>][];
