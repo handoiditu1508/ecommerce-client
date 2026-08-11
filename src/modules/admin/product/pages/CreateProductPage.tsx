@@ -1,6 +1,5 @@
 import CascadingCategorySelect from "@/components/CascadingCategorySelect";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
-import FileInput from "@/components/FileInput";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
@@ -8,8 +7,6 @@ import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { useCreateProductMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Controller, useForm } from "react-hook-form";
@@ -45,8 +42,9 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
     { name: "categoryId", inputType: "text", label: "product:category" },
     {
       name: "thumbnailFile",
-      inputType: "text",
+      inputType: "file",
       label: "product:thumbnail",
+      accept: "image/*",
       required: true,
       rules: { required: "product:this_field_is_required" },
     },
@@ -104,27 +102,6 @@ function CreateProductPage() {
                 onBlur={field.onBlur}
                 onChange={field.onChange}
               />
-            )}
-          />,
-          thumbnailFile: <Controller
-            control={formContext.control}
-            name="thumbnailFile"
-            rules={{ required: t("this_field_is_required") }}
-            render={({ field, fieldState }) => (
-              <FormControl fullWidth required margin="normal" error={fieldState.invalid}>
-                <FormLabel>{t("thumbnail")}</FormLabel>
-                <FileInput
-                  files={field.value ? [field.value] : []}
-                  error={fieldState.error?.message}
-                  disabled={result.isLoading}
-                  inputProps={{
-                    accept: "image/*",
-                    name: field.name,
-                    onBlur: field.onBlur,
-                  }}
-                  onFilesChange={(files) => field.onChange(files[0])}
-                />
-              </FormControl>
             )}
           />,
         }}

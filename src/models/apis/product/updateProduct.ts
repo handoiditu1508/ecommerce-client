@@ -2,6 +2,6 @@ export type UpdateProductCommand = {
   id: number;
   name: string;
   price: number;
-  thumbnailFile?: File;
+  thumbnailFile?: FileList;
   categoryId?: number;
 };

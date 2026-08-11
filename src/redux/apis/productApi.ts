@@ -91,8 +91,10 @@ const productApi = appApi.injectEndpoints({
         const bodyFormData = new FormData();
 
         Object.entries(arg).forEach(([key, value]) => {
-          if (value !== undefined) {
-            bodyFormData.append(key, value instanceof Blob ? value : value.toString());
+          if (value instanceof FileList) {
+            Array.from(value).forEach((file) => bodyFormData.append(key, file));
+          } else if (value !== undefined) {
+            bodyFormData.append(key, value.toString());
           }
         });
 
@@ -109,8 +111,10 @@ const productApi = appApi.injectEndpoints({
         const bodyFormData = new FormData();
 
         Object.entries(arg).forEach(([key, value]) => {
-          if (value !== undefined) {
-            bodyFormData.append(key, value instanceof Blob ? value : value.toString());
+          if (value instanceof FileList) {
+            Array.from(value).forEach((file) => bodyFormData.append(key, file));
+          } else if (value !== undefined) {
+            bodyFormData.append(key, value.toString());
           }
         });
 

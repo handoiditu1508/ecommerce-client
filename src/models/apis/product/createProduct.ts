@@ -1,7 +1,7 @@
 export type CreateProductCommand = {
   name: string;
   price: number;
-  thumbnailFile: File;
+  thumbnailFile: FileList;
   categoryId?: number;
   sku: string;
 };
