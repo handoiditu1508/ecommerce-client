@@ -81,6 +81,17 @@ const StyledStack = styled(Stack)(({ theme }) => ({
   ".result-overlay": {
     flexDirection: "column",
   },
+  "&.image-preview": {
+    minHeight: 180,
+  },
+  ".preview-thumbnail": {
+    display: "block",
+    maxWidth: "100%",
+    maxHeight: 100,
+    width: "auto",
+    height: "auto",
+    objectFit: "contain",
+  },
   "&.dragover": {
     borderColor: theme.vars.palette.primary.main,
     ".drop-overlay": {
@@ -132,6 +143,7 @@ function FileInput({
 }: FileInputProps) {
   const [status, setStatus] = useState<FileInputStatus>();
   const [inputValue, setInputValue] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState<string>();
   const dragInnerCounter = useRef<number>(0);
   const hiddenFileInputRef = useRef<HTMLInputElement>({} as HTMLInputElement);
 
@@ -140,6 +152,20 @@ function FileInput({
       setFileListToInput(files);
     }
   }, [files]);
+
+  useEffect(() => {
+    const file = hiddenFileInputRef.current.files?.item(0);
+    if (!file?.type.startsWith("image/")) {
+      setPreviewUrl(undefined);
+
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [files, status]);
 
   const startDrag: React.DragEventHandler<HTMLDivElement> = (event) => {
     if (disabled || readOnly) return;
@@ -290,7 +316,13 @@ function FileInput({
   };
 
   return (
-    <StyledStack {...props} className={classNames(status, { error: !!error, disabled, readOnly }, props.className)}>
+    <StyledStack
+      {...props}
+      className={classNames(
+        status,
+        { error: !!error, disabled, readOnly, "image-preview": !!previewUrl },
+        props.className,
+      )}>
       <Box className="dropzone" onClick={openFileSelectWindow} onDragEnter={startDrag}>{dropzonePlaceholder ?? "Drop file here or click to upload"}</Box>
       <TextField
         placeholder={inputPlaceholder ?? "Paste file or file url"}
@@ -332,7 +364,16 @@ function FileInput({
         <UploadFileIcon fontSize="large" color="primary" />
       </Box>
       <Box className="result-overlay">
-        <Typography variant="subtitle1" noWrap maxWidth="100%">{hiddenFileInputRef.current.files?.item(0)?.name}</Typography>
+        {previewUrl
+          ? (
+            <Box
+              component="img"
+              className="preview-thumbnail"
+              src={previewUrl}
+              alt={hiddenFileInputRef.current.files?.item(0)?.name ?? ""}
+            />
+          )
+          : <Typography variant="subtitle1" noWrap maxWidth="100%">{hiddenFileInputRef.current.files?.item(0)?.name}</Typography>}
         <Button size="small" disabled={disabled || readOnly} onClick={() => reset()}>Retry</Button>
       </Box>
       <Box className="loading-overlay">
