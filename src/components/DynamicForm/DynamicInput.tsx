@@ -15,11 +15,14 @@ import FormLabel from "@mui/material/FormLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -115,9 +118,9 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const selectOptions = model.inputType === "select" ? options || model.options : undefined;
-  const selectOptionLabels = useMemo<Map<unknown, string>>(
-    () => new Map(selectOptions?.map((option) => [option.value, t(option.label)] as const) ?? []),
-    [selectOptions, t],
+  const selectOptionsMap = useMemo<Map<unknown, DynamicInputOption<T, K>>>(
+    () => new Map(selectOptions?.map((option) => [option.value, option] as const) ?? []),
+    [selectOptions],
   );
   const data = formContext.watch();
 
@@ -397,7 +400,29 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
 
   if (model.inputType === "select") {
     const finalOptions = selectOptions || model.options;
-    const getOptionLabel = (value: unknown) => selectOptionLabels.get(value) ?? String(value);
+    const getOptionLabel = (value: unknown) => (selectOptionsMap.has(value)
+      ? t(selectOptionsMap.get(value)!.label)
+      : String(value));
+    const renderOptionContent = (option: DynamicInputOption<T, K>) => (
+      <>
+        {option.avatar && <ListItemAvatar sx={{ ">*": { width: 36, height: 36 } }}>{option.avatar}</ListItemAvatar>}
+        {!option.avatar && option.icon && <ListItemIcon sx={{ ">*": { width: 36, height: 36, fontSize: 36 }, mr: 2.5 }}>{option.icon}</ListItemIcon>}
+        <ListItemText primary={t(option.label)} />
+      </>
+    );
+    const renderSelectedChip = (value: unknown, key?: React.Key) => {
+      const option = selectOptionsMap.get(value);
+
+      return (
+        <Chip
+          key={key}
+          label={getOptionLabel(value)}
+          avatar={option?.avatar}
+          icon={option?.icon}
+          size="small"
+        />
+      );
+    };
 
     return (
       <Controller
@@ -436,15 +461,22 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
                   return (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                       {Array.isArray(selected)
-                        ? selected.map((value: unknown) => <Chip key={String(value)} label={getOptionLabel(value)} size="small" />)
-                        : <Chip label={getOptionLabel(selected)} size="small" />}
+                        ? selected.map((value: unknown) => renderSelectedChip(value, String(value)))
+                        : renderSelectedChip(selected)}
                     </Box>
                   );
                 }
 
                 return Array.isArray(selected)
                   ? selected.map(getOptionLabel).join(", ")
-                  : getOptionLabel(selected);
+                  : <Stack direction="row" gap={1.5} alignItems="center">
+                    {selectOptionsMap.has(selected)
+                      && !!(selectOptionsMap.get(selected)!.avatar || selectOptionsMap.get(selected)!.icon)
+                      && <Box sx={{ ">*": { width: "23px !important", height: "23px !important", fontSize: "23px !important" } }}>
+                        {selectOptionsMap.get(selected)!.avatar || selectOptionsMap.get(selected)!.icon}
+                      </Box>}
+                    {getOptionLabel(selected)}
+                  </Stack>;
               }}
               {...field}
               value={field.value ?? (model.multiple ? [] : "")}
@@ -467,13 +499,16 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
 
                   return (
                     <MenuItem key={option.key} value={option.value}>
-                      <SelectionIcon fontSize="small" style={{ marginRight: 8, padding: 9, boxSizing: "content-box" }} />
-                      <ListItemText primary={t(option.label)} />
+                      {!option.avatar && !option.icon && <SelectionIcon fontSize="small" style={{ marginRight: 8, padding: 9, boxSizing: "content-box" }} />}
+                      {renderOptionContent(option)}
+                      {(option.avatar || option.icon) && <SelectionIcon fontSize="small" style={{ marginLeft: 8, padding: 9, boxSizing: "content-box" }} />}
                     </MenuItem>
                   );
                 })
                 : finalOptions.map((option) => (
-                  <MenuItem key={option.key} value={option.value}>{t(option.label)}</MenuItem>
+                  <MenuItem key={option.key} value={option.value}>
+                    {renderOptionContent(option)}
+                  </MenuItem>
                 ))}
             </Select>
             {fieldState.error && <FormHelperText>{errorText(fieldState.error.message)}</FormHelperText>}

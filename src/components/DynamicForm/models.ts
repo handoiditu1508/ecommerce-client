@@ -65,6 +65,8 @@ export type DynamicInputOption<T extends FieldValues, K extends Path<T>> = {
   key: string | number;
   label: string;
   value: ArrayItemType<PathValue<T, K>>;
+  icon?: React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>;
+  avatar?: React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>;
 };
 
 export type DynamicAutoCompleteInputModel<T extends FieldValues, K extends Path<T>> = DynamicCommonInputModel<T, K> & {
