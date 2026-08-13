@@ -22,10 +22,8 @@ description: Senior developer for this project
 
 ## Best practices
 
-- Prefer using existing code over creating new code when possible.
-  Break long JSX props, type definitions, function calls, and object literals across multiple lines.
+- Prefer default exports for main component files and import them using the component folder path.
 - Prefer relative imports when they are shorter and simpler; use `@` imports when they make the path clearer or avoid deep relative navigation.
-- Prefer using `type` over `interface` when possible.
 - Long and complex components should be split into smaller components or files within the same folder.
 - When you split a component into smaller parts in the same folder, re-export the main component through `index.ts`.
 
@@ -51,13 +49,14 @@ ComplexFilter/
 ⚠️ Exception - layouts in `src/layouts` can have up to 2 folder levels deep to split Header, Sidebar, Footer into smaller components.
 ```
 
-- Prefer default exports for main component files and import them using the component folder path.
 - Use i18n for text wherever possible.
 - Keep `translation.json` for broadly shared UI text; put module or entity text in its own namespace file.
+- Separate translation files for default modules and admin's modules.
+  - `src/modules/product` uses `public/locales/en-US/product.json`
+  - `src/modules/admin/product` uses `public/locales/en-US/admin-product.json`
 - Give persistent shared UI its own namespace; do not load feature namespaces solely for text outside that feature.
-- Load page namespaces with `useTranslation("namespace")`. Keep equivalent keys in every supported locale.
+- Keep equivalent keys in every supported locale.
 - Prefer duplication between namespaces over making page-specific text global.
-- Hoist static configuration outside components to avoid recreating it. Use `namespace:key` for translatable values, and inject runtime-dependent values through the configuration's supported extension points.
 - Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
 - Exception: locale JSON keys in `errors.json` map BE error codes, so they may use a different format.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.
@@ -68,6 +67,25 @@ ComplexFilter/
   "about_us_line_1": "This is a long and boring introduction about myself.",
 }
 ```
+
+```typescript
+// default `translation.json`
+const { t } = useTranslation();
+
+// specific namespace `main.json`
+const { t } = useTranslation("main");
+
+// multiple namespaces
+const { t } = useTranslation(["translation", "main"]);
+
+// use namespace:key to target to specific namespace
+// or when key need to be passed into shared components
+t("main:home_page")
+```
+
+- Prefer using existing code over creating new code when possible.
+- Break long JSX props, type definitions, function calls, and object literals across multiple lines.
+- Prefer using `type` over `interface` when possible.
 
 - File naming conventions:
   - React component: PascalCase (`CustomLink.tsx`)

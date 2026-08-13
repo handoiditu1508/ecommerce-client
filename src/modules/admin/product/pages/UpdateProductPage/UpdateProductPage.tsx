@@ -47,19 +47,6 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
     },
     { name: "categoryId", inputType: "text", label: "admin-product:category" },
     { name: "thumbnailId", inputType: "select", label: "admin-product:thumbnail", options: [] },
-    // { name: "thumbnailId", inputType: "text", label: "admin-product:thumbnail" },
-    // {
-    //   name: "thumbnailFile",
-    //   inputType: "file",
-    //   label: "admin-product:upload_new_thumbnail",
-    //   accept: "image/*",
-    //   hidden: (data) => !!data.thumbnailId,
-    //   rules: {
-    //     validate: (files, data) => (
-    //       !!data.thumbnailId || !!files?.length || "admin-product:this_field_is_required"
-    //     ),
-    //   },
-    // },
   ],
   submitButtonText: "admin-product:update_product",
 };
@@ -222,70 +209,6 @@ function UpdateProductPage() {
               )}
             />
           ),
-          // thumbnailId: (
-          //   <Controller
-          //     control={formContext.control}
-          //     name="thumbnailId"
-          //     render={({ field }) => (
-          //       <FormControl fullWidth margin="normal">
-          //         <InputLabel>{t("thumbnail")}</InputLabel>
-          //         <Select
-          //           {...field}
-          //           label={t("thumbnail")}
-          //           disabled={updateResult.isLoading}
-          //           renderValue={(thumbnailId) => {
-          //             const image = product.images.find(({ id: imageId }) => imageId === thumbnailId);
-
-          //             return image
-          //               ? (
-          //                 <Stack direction="row" spacing={1} alignItems="center">
-          //                   <Box
-          //                     component="img"
-          //                     src={CONFIG.FILE_URL + image.filePath}
-          //                     alt=""
-          //                     sx={{ width: 32, height: 32, objectFit: "contain" }}
-          //                   />
-          //                   <Typography noWrap>{image.name}</Typography>
-          //                 </Stack>
-          //               )
-          //               : (
-          //                 <Stack direction="row" spacing={1} alignItems="center">
-          //                   <UploadFileIcon fontSize="small" />
-          //                   <Typography>{t("upload_new_thumbnail")}</Typography>
-          //                 </Stack>
-          //               );
-          //           }}
-          //           onChange={(event) => {
-          //             field.onChange(event);
-          //             if (event.target.value) {
-          //               formContext.setValue("thumbnailFile", undefined);
-          //             }
-          //           }}
-          //         >
-          //           <MenuItem value="">
-          //             <Stack direction="row" spacing={1} alignItems="center">
-          //               <UploadFileIcon fontSize="small" />
-          //               <Typography>{t("upload_new_thumbnail")}</Typography>
-          //             </Stack>
-          //           </MenuItem>
-          //           {product.images.map((image) => (
-          //             <MenuItem key={image.id} value={image.id}>
-          //               <Stack direction="row" spacing={1} alignItems="center">
-          //                 <Box
-          //                   component="img"
-          //                   src={CONFIG.FILE_URL + image.filePath}
-          //                   alt=""
-          //                   sx={{ width: 40, height: 40, objectFit: "contain" }}
-          //                 />
-          //                 <Typography>{image.name}</Typography>
-          //               </Stack>
-          //             </MenuItem>
-          //           ))}
-          //         </Select>
-          //       </FormControl>
-          //     )}
-          //   />
-          // ),
         }}
         onSubmit={handleSubmit}
       />
