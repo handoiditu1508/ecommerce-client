@@ -19,7 +19,7 @@ function PriceRangeInputs({
   productsDispatch,
 }: PriceRangeInputsProps) {
   const theme = useTheme();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
 
   const handleMinPriceChange = (value: number | undefined) => {
     productsDispatch({
@@ -49,7 +49,7 @@ function PriceRangeInputs({
         alignItems: "center",
       }}>
         <CurrencyInput
-          label={tProduct("min_price")}
+          label={t("min_price")}
           size="small"
           value={productsState.minPrice}
           onValueChange={handleMinPriceChange}
@@ -58,7 +58,7 @@ function PriceRangeInputs({
           <SwapHorizIcon fontSize="inherit" />
         </IconButton>
         <CurrencyInput
-          label={tProduct("max_price")}
+          label={t("max_price")}
           size="small"
           error={
             productsState.minPrice !== undefined
@@ -70,16 +70,16 @@ function PriceRangeInputs({
         />
       </Box>
       <Typography variant="body2" sx={{ mt: 1 }}>
-        {productsState.minPrice === undefined && productsState.maxPrice === undefined && tProduct("any_price")}
+        {productsState.minPrice === undefined && productsState.maxPrice === undefined && t("any_price")}
         {productsState.minPrice === undefined && productsState.maxPrice !== undefined && <>
-          {tProduct("no_greater_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.maxPrice)}</span>
+          {t("no_greater_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.maxPrice)}</span>
         </>}
         {productsState.minPrice !== undefined && productsState.maxPrice === undefined && <>
-          {tProduct("no_lesser_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
+          {t("no_lesser_than")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
         </>}
         {productsState.minPrice !== undefined && productsState.maxPrice !== undefined && <>
-          {tProduct("from")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
-          {" "}{tProduct("to")} <span style={{
+          {t("from")} <span style={{ color: theme.vars.palette.primary.main }}>{toVndCurrency(productsState.minPrice)}</span>
+          {" "}{t("to")} <span style={{
             color: productsState.maxPrice < productsState.minPrice
               ? theme.vars.palette.error.main
               : theme.vars.palette.primary.main,

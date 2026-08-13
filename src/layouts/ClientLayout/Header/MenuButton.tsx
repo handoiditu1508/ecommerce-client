@@ -48,7 +48,7 @@ function MenuButton() {
   const { xsAndDown } = useContext(BreakpointsContext);
   const { mode, setMode } = useColorScheme();
   const dispatch = useAppDispatch();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
 
   const logout: MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
@@ -132,13 +132,13 @@ function MenuButton() {
               ? <>
                 <Typography variant="h6">{authUser.firstName} {authUser.lastName}</Typography>
                 <Box flexGrow={1} />
-                <CustomLink to="/account" typography="caption">{tMain("setting")}</CustomLink>
-                <CustomLink to="/" typography="caption" onClick={logout}>{tMain("sign_out")}</CustomLink>
+                <CustomLink to="/account" typography="caption">{t("setting")}</CustomLink>
+                <CustomLink to="/" typography="caption" onClick={logout}>{t("sign_out")}</CustomLink>
               </>
               : <>
                 <Box flexGrow={1} />
-                <CustomLink to="/login" typography="caption">{tMain("login")}</CustomLink>
-                <CustomLink to="/register" typography="caption" onClick={logout}>{tMain("register")}</CustomLink>
+                <CustomLink to="/login" typography="caption">{t("login")}</CustomLink>
+                <CustomLink to="/register" typography="caption" onClick={logout}>{t("register")}</CustomLink>
                 <Box flexGrow={1} />
               </>}
           </Stack>
@@ -149,7 +149,7 @@ function MenuButton() {
               <ListItemIcon>
                 <NewReleasesIcon />
               </ListItemIcon>
-              <ListItemText primary={tMain("new_collection")} />
+              <ListItemText primary={t("new_collection")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -157,7 +157,7 @@ function MenuButton() {
               <ListItemIcon>
                 <TrendingUpIcon />
               </ListItemIcon>
-              <ListItemText primary={tMain("popular")} />
+              <ListItemText primary={t("popular")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -165,7 +165,7 @@ function MenuButton() {
               <ListItemIcon>
                 <ThumbUpIcon />
               </ListItemIcon>
-              <ListItemText primary={tMain("best_rated")} />
+              <ListItemText primary={t("best_rated")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -173,7 +173,7 @@ function MenuButton() {
               <ListItemIcon>
                 <MdiSvgIcon path={mdiSale} />
               </ListItemIcon>
-              <ListItemText primary={tMain("discount")} />
+              <ListItemText primary={t("discount")} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -181,7 +181,7 @@ function MenuButton() {
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>
-              <ListItemText primary={tMain("all_categories")} />
+              <ListItemText primary={t("all_categories")} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -196,7 +196,7 @@ function MenuButton() {
               <ListItemIcon>
                 <LanguageIcon />
               </ListItemIcon>
-              <ListItemText primary={tMain("language")} />
+              <ListItemText primary={t("language")} />
               <ExpandMoreIcon
                 style={{
                   ...(languageOpen && {
@@ -216,7 +216,7 @@ function MenuButton() {
                   <ListItemIcon>
                     <VNRoundedFlagIcon />
                   </ListItemIcon>
-                  <ListItemText primary={tMain("vietnamese")} />
+                  <ListItemText primary={t("vietnamese")} />
                 </ListItemButton>
               </ListItem>
               <ListItem>
@@ -224,7 +224,7 @@ function MenuButton() {
                   <ListItemIcon>
                     <UKRoundedFlagIcon />
                   </ListItemIcon>
-                  <ListItemText primary={tMain("english")} />
+                  <ListItemText primary={t("english")} />
                 </ListItemButton>
               </ListItem>
             </List>

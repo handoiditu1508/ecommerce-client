@@ -30,19 +30,18 @@ function Login2faModal({
   onReturnToLogin = CONFIG.EMPTY_FUNCTION,
 }: Login2faModalProps) {
   const theme = useTheme();
-  const { t } = useTranslation();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation(["auth", "translation"]);
 
   const formModel: DynamicFormModel<Login2faCommand> = {
-    submitButtonText: tAuth("sign_in"),
+    submitButtonText: t("sign_in"),
     inputs: [
       {
         name: "token",
         inputType: "text",
         rules: {
-          required: t("this_field_is_required"),
+          required: t("translation:this_field_is_required"),
         },
-        placeholder: tAuth("enter_otp"),
+        placeholder: t("enter_otp"),
         textAlign: "center",
       },
     ],
@@ -50,7 +49,7 @@ function Login2faModal({
       {
         name: "isPersistent",
         inputType: "checkbox",
-        label: tAuth("trusted_device"),
+        label: t("trusted_device"),
       },
     ],
   };
@@ -130,8 +129,8 @@ function Login2faModal({
         mx: "auto",
       }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("two_factor_authentication")}</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("check_inbox_otp_subtitle")}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{t("two_factor_authentication")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{t("check_inbox_otp_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -140,16 +139,16 @@ function Login2faModal({
         labelMap={{
           isPersistent: (
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              {tAuth("trusted_device")}
+              {t("trusted_device")}
               {loginState.emailCountdown > 0
                 ? (
                   <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>
-                    {tAuth("resend_otp_countdown", { seconds: loginState.emailCountdown })}
+                    {t("resend_otp_countdown", { seconds: loginState.emailCountdown })}
                   </Typography>
                 )
                 : (<>
-                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{tAuth("did_not_receive_otp")}</Typography>
-                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>{tAuth("resend_otp")}</Button>
+                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{t("did_not_receive_otp")}</Typography>
+                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>{t("resend_otp")}</Button>
                 </>)}
             </Box>
           ),
@@ -157,7 +156,7 @@ function Login2faModal({
         onSubmit={handleSubmit}
       />
       <Box sx={{ flex: 1 }} />
-      <CustomLink to="/login" align="center" onClick={onReturnToLogin}>{tAuth("return_to_login")}</CustomLink>
+      <CustomLink to="/login" align="center" onClick={onReturnToLogin}>{t("return_to_login")}</CustomLink>
     </Box>
   );
 }

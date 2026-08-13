@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 function SuccessModal() {
   const theme = useTheme();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation("auth");
 
   return (
     <Box sx={{
@@ -28,10 +28,10 @@ function SuccessModal() {
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("congratulation")}</Typography>
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("reset_password_success")}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{t("congratulation")}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{t("reset_password_success")}</Typography>
       <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>
-        {tAuth("login_continue_prefix")} <CustomLink to="/login">{tAuth("here")}</CustomLink> {tAuth("login_continue_suffix")}
+        {t("login_continue_prefix")} <CustomLink to="/login">{t("here")}</CustomLink> {t("login_continue_suffix")}
       </Typography>
     </Box>
   );

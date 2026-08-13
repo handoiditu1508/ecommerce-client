@@ -38,7 +38,7 @@ const getDiscountValueText = (product: Product): string => {
 
 function ProductDetailPage() {
   const theme = useTheme();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const { xsAndDown, smAndDown, sm, smAndUp, mdAndUp } = useContext(BreakpointsContext);
   const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
@@ -103,7 +103,7 @@ function ProductDetailPage() {
       {product
         ? <>
           <Rating defaultValue={3.3} readOnly />
-          <Typography variant="subtitle2" component="p" align="right">{tProduct("reviews_count", "", { rating: 3.3, total: "1k" })}</Typography>
+          <Typography variant="subtitle2" component="p" align="right">{t("reviews_count", "", { rating: 3.3, total: "1k" })}</Typography>
         </>
         : <>
           <Skeleton variant="rounded" width={120} height={24} />
@@ -125,7 +125,7 @@ function ProductDetailPage() {
           }}
           disabled={selectedVariantId === undefined}
           onClick={handleAddToCartButtonClick}>
-          {tProduct("add_to_cart")}
+          {t("add_to_cart")}
         </Button>
       )
       : (
@@ -227,7 +227,7 @@ function ProductDetailPage() {
             {product && <ProductVariantSelectorDialog
               open={attributeDialogOpen}
               variants={product.productVariants}
-              confirmButtonText={tProduct("add_to_cart")}
+              confirmButtonText={t("add_to_cart")}
               onChange={setSelectedVariantId}
               onClose={() => setAttributeDialogOpen(false)}
             />}

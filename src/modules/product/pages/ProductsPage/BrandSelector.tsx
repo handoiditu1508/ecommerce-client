@@ -62,7 +62,7 @@ function BrandSelector({
   productsState,
   productsDispatch,
 }: BrandSelectorProps) {
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const brands = useAppSelector(brandSelectors.haveActiveProducts);
   const brandIdSet = useMemo<Set<number>>(() => new Set<number>(productsState.brandIds), [productsState.brandIds]);
   const [searchText, setSearchText] = useState<string>("");
@@ -105,7 +105,7 @@ function BrandSelector({
         <SearchIcon />
         <InputBase
           value={searchText}
-          placeholder={tProduct("search_brands")}
+          placeholder={t("search_brands")}
           inputProps={{
             "aria-label": "search brands",
           }}

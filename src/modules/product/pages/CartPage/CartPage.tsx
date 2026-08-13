@@ -30,7 +30,7 @@ const cartSummaryWidth = 400;
 function CartPage() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const isCartHydrated = useAppSelector(cartSelectors.hydrated);
   const cachedProductIds = useAppSelector(cartSelectors.cachedProductIds);
   const cartItemDatas = useAppSelector(cartSelectors.itemDatas);
@@ -105,7 +105,7 @@ function CartPage() {
             size="small"
             slotProps={{
               input: {
-                "aria-label": tProduct("select_all"),
+                "aria-label": t("select_all"),
               },
             }}
             checked={isAllSelected}
@@ -121,8 +121,8 @@ function CartPage() {
               alignItems: "flex-start",
             },
           }}>
-            <Typography variant="h4">{tProduct("shopping_cart")}</Typography>
-            <Typography variant="h5">{tProduct("items_count", { count: totalVariantDatas.length })}</Typography>
+            <Typography variant="h4">{t("shopping_cart")}</Typography>
+            <Typography variant="h5">{t("items_count", { count: totalVariantDatas.length })}</Typography>
           </Box>
         </Box>
         <Divider sx={{ mt: 2, mb: 1 }} />
@@ -164,40 +164,40 @@ function CartPage() {
             width: "100%",
           },
         }}>
-        <Typography variant="h4">{tProduct("summary")}</Typography>
+        <Typography variant="h4">{t("summary")}</Typography>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Box sx={{
           display: "flex",
           justifyContent: "space-between",
         }}>
-          <Typography variant="body1">{tProduct("subtotal")}</Typography>
+          <Typography variant="body1">{t("subtotal")}</Typography>
           <Typography variant="body1">{toVndCurrency(subtotal)}</Typography>
         </Box>
         <Box sx={{
           mt: 1,
         }}>
-          <Typography variant="body2" component="label">{tProduct("shipping")}</Typography>
+          <Typography variant="body2" component="label">{t("shipping")}</Typography>
           <Select fullWidth size="small" defaultValue={1}>
-            <MenuItem value={1}>{tProduct("standard")} - {toVndCurrency(10000)}</MenuItem>
-            <MenuItem value={2}>{tProduct("express")} - {toVndCurrency(20000)}</MenuItem>
+            <MenuItem value={1}>{t("standard")} - {toVndCurrency(10000)}</MenuItem>
+            <MenuItem value={2}>{t("express")} - {toVndCurrency(20000)}</MenuItem>
           </Select>
         </Box>
         <Box sx={{
           mt: 1,
         }}>
-          <Typography variant="body2" component="label">{tProduct("promo_code")}</Typography>
-          <OutlinedInput fullWidth size="small" placeholder={tProduct("enter_promo_code")} />
+          <Typography variant="body2" component="label">{t("promo_code")}</Typography>
+          <OutlinedInput fullWidth size="small" placeholder={t("enter_promo_code")} />
         </Box>
-        <Button color="secondary" sx={{ mt: 1 }} disabled={!isCartHydrated}>{tProduct("apply")}</Button>
+        <Button color="secondary" sx={{ mt: 1 }} disabled={!isCartHydrated}>{t("apply")}</Button>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Box sx={{
           display: "flex",
           justifyContent: "space-between",
         }}>
-          <Typography variant="body1">{tProduct("total")}</Typography>
+          <Typography variant="body1">{t("total")}</Typography>
           <Typography variant="body1">{toVndCurrency(total)}</Typography>
         </Box>
-        <Button color="primary" fullWidth sx={{ mt: 1 }} disabled={!isCartHydrated}>{tProduct("checkout")}</Button>
+        <Button color="primary" fullWidth sx={{ mt: 1 }} disabled={!isCartHydrated}>{t("checkout")}</Button>
       </Paper>
     </LayoutContainer>
   );

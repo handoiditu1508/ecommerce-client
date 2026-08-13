@@ -23,7 +23,7 @@ function VerifyEmailModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: VerifyEmailModalProps) {
   const theme = useTheme();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation("auth");
   const [sendPreconfirmEmail, result] = useSendPreConfirmEmailMutation();
 
   useEffect(() => {
@@ -72,28 +72,28 @@ function VerifyEmailModal({
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">{tAuth("verify_email")}</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("verify_email_subtitle", { email: registerState.email })}</Typography>
+      <Typography variant="h4" align="center">{t("verify_email")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{t("verify_email_subtitle", { email: registerState.email })}</Typography>
       {registerState.emailCountdown > 0
-        ? <Typography align="right">{tAuth("resend_email_countdown", { seconds: registerState.emailCountdown })}</Typography>
+        ? <Typography align="right">{t("resend_email_countdown", { seconds: registerState.emailCountdown })}</Typography>
         : (
           <Box sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
           }}>
-            <Typography>{tAuth("did_not_receive_email")}</Typography>
+            <Typography>{t("did_not_receive_email")}</Typography>
             <Button
               variant="text"
               disabled={result.isLoading}
               sx={{ textTransform: "initial", ...theme.typography.body1 }}
               onClick={handleResendEmail}>
-              {tAuth("resend_email")}
+              {t("resend_email")}
             </Button>
           </Box>
         )}
       <Box sx={{ flex: 1 }} />
-      <CustomLink to="" align="center" onClick={onChangeEmail}>{tAuth("use_different_email")}</CustomLink>
+      <CustomLink to="" align="center" onClick={onChangeEmail}>{t("use_different_email")}</CustomLink>
     </Box>
   );
 }

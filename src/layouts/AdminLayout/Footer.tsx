@@ -80,8 +80,7 @@ const handleClickLink = () => {
 };
 
 const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
-  const { t } = useTranslation();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation(["translation", "main"]);
   const { xsAndDown, smAndUp, lgAndUp } = useContext(BreakpointsContext);
   const year = new Date().getFullYear();
 
@@ -95,11 +94,11 @@ const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
                 <img src={logo} alt="logo" width={100} height={100} />
               </Box>
               <Box>
-                <Typography className="title" variant="h5">{tMain("about_us")}</Typography>
+                <Typography className="title" variant="h5">{t("main:about_us")}</Typography>
                 <Typography variant="body1">
-                  {tMain("about_us_line_1", { appName: CONFIG.APP_NAME })}<br />
-                  {tMain("about_us_line_2")}<br />
-                  {tMain("about_us_line_3")}
+                  {t("main:about_us_line_1", { appName: CONFIG.APP_NAME })}<br />
+                  {t("main:about_us_line_2")}<br />
+                  {t("main:about_us_line_3")}
                 </Typography>
               </Box>
             </Stack>

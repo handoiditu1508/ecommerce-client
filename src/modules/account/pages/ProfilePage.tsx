@@ -16,8 +16,7 @@ import { useTranslation } from "react-i18next";
 
 function ProfilePage() {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const { t: tAccount } = useTranslation("account");
+  const { t } = useTranslation(["account", "translation"]);
   const authUser = useAppSelector(authSelectors.user);
 
   const formModel: DynamicFormModel<UpdateSelfCommand> = {
@@ -25,40 +24,40 @@ function ProfilePage() {
       {
         name: "firstName",
         inputType: "text",
-        label: tAccount("first_name"),
+        label: t("first_name"),
         maxLength: CONFIG.NAME_MAX_LENGTH,
         required: true,
         rules: {
-          required: t("this_field_is_required"),
+          required: t("translation:this_field_is_required"),
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAccount("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
       {
         name: "middleName",
         inputType: "text",
-        label: tAccount("middle_name"),
+        label: t("middle_name"),
         maxLength: CONFIG.NAME_MAX_LENGTH,
         rules: {
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAccount("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
       {
         name: "lastName",
         inputType: "text",
-        label: tAccount("last_name"),
+        label: t("last_name"),
         maxLength: CONFIG.NAME_MAX_LENGTH,
         required: true,
         rules: {
-          required: t("this_field_is_required"),
+          required: t("translation:this_field_is_required"),
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAccount("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
@@ -78,7 +77,7 @@ function ProfilePage() {
     try {
       await updateSelf(data).unwrap();
       dispatch(pushNotification({
-        text: t("update_success", { name: "profile" }),
+        text: t("translation:update_success", { name: "profile" }),
         severity: "success",
       }));
     } catch {}
@@ -87,7 +86,7 @@ function ProfilePage() {
   return (
     <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
       <CardContent>
-        <Typography variant="h5" sx={{ mb: 4 }}>{tAccount("profile_information")}</Typography>
+        <Typography variant="h5" sx={{ mb: 4 }}>{t("profile_information")}</Typography>
         <DynamicForm
           id="profile-form"
           formContext={formContext}
@@ -102,7 +101,7 @@ function ProfilePage() {
           form="profile-form"
           variant="text"
           loading={updateSelfResult.isLoading}>
-          {tAccount("save_changes")}
+          {t("save_changes")}
         </Button>
       </CardActions>
     </Card>

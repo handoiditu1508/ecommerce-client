@@ -16,7 +16,7 @@ import LayoutContainer from "./LayoutContainer";
 
 function InnerClientLayout() {
   const { xsAndDown } = useContext(BreakpointsContext);
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const bodyContentRef = useRef<HTMLElement>({} as HTMLElement);
 
   useEffect(() => {
@@ -61,8 +61,8 @@ function InnerClientLayout() {
             left: 0,
             right: 0,
           }}>
-          <BottomNavigationAction label={tMain("home")} icon={<HomeIcon />} component={Link} to="/" />
-          <BottomNavigationAction label={tMain("cart")} icon={<ShoppingCartIcon />} component={Link} to="/cart" />
+          <BottomNavigationAction label={t("home")} icon={<HomeIcon />} component={Link} to="/" />
+          <BottomNavigationAction label={t("cart")} icon={<ShoppingCartIcon />} component={Link} to="/cart" />
         </BottomNavigation>
       </>}
     </Box>

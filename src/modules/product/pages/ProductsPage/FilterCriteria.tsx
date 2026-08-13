@@ -30,7 +30,7 @@ function FilterCriteria({
   productsDispatch,
 }: FilterCriteriaProps) {
   const theme = useTheme();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const { mdAndUp, smAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
   const [, setSearchParams] = useSearchParams();
@@ -51,7 +51,7 @@ function FilterCriteria({
         alignItems: "center",
         mx: 0.5,
       }}>
-        <Typography variant="h6" color="primary">{tProduct("shop_by")}</Typography>
+        <Typography variant="h6" color="primary">{t("shop_by")}</Typography>
         <ButtonBase
           sx={{
             ...theme.typography.caption,
@@ -60,7 +60,7 @@ function FilterCriteria({
             borderRadius: theme.vars.shape.borderRadius,
           }}
           onClick={handleClearFilter}>
-          {tProduct("clear_all")}
+          {t("clear_all")}
         </ButtonBase>
       </Box>}
       <Accordion
@@ -80,7 +80,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>{tProduct("categories")}</Typography>
+          <Typography>{t("categories")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -109,7 +109,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>{tProduct("brands")}</Typography>
+          <Typography>{t("brands")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -136,7 +136,7 @@ function FilterCriteria({
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
         >
-          <Typography>{tProduct("price_range")}</Typography>
+          <Typography>{t("price_range")}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{
           px: 0,
@@ -169,7 +169,7 @@ function FilterCriteria({
             },
           }}
           onClick={handleSearch}>
-          {tProduct("apply")}
+          {t("apply")}
         </Button>
         {smAndDown && <Button
           size="large"
@@ -177,7 +177,7 @@ function FilterCriteria({
           endIcon={<FilterListOffIcon />}
           color="inherit"
           onClick={handleClearFilter}>
-          {tProduct("clear")}
+          {t("clear")}
         </Button>}
       </Box>
     </>

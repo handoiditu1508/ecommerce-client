@@ -64,7 +64,7 @@ function Searchbar({
   productsDispatch,
 }: SearchbarProps) {
   const theme = useTheme();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const { xsAndDown } = useContext(BreakpointsContext);
   const searchProductsResult = productApi.endpoints.searchProducts.useQueryState(productsState.query);
   const [, setSearchParams] = useSearchParams();
@@ -119,7 +119,7 @@ function Searchbar({
         sx={{
           flex: 1,
         }}
-        placeholder={tProduct("search_placeholder")}
+        placeholder={t("search_placeholder")}
         inputProps={{
           "aria-label": "search products",
         }}
@@ -166,7 +166,7 @@ function Searchbar({
         onChange={handleOrderingChange}>
         {sortOptions.map((o) => (
           <MenuItem key={o.sortBy + o.sortOrder} value={`${o.sortBy}-${o.sortOrder}`}>
-            {tProduct(o.labelKey)}
+            {t(o.labelKey)}
           </MenuItem>
         ))}
       </Select>

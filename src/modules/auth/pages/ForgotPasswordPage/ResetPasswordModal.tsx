@@ -30,24 +30,24 @@ function ResetPasswordModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: ResetPasswordModalProps) {
   const theme = useTheme();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation("auth");
 
   const formModel: DynamicFormModel<ResetPasswordInput> = {
-    submitButtonText: tAuth("reset_password"),
+    submitButtonText: t("reset_password"),
     inputs: [
       {
         name: "newPassword",
         inputType: "password",
         required: true,
-        label: tAuth("new_password"),
+        label: t("new_password"),
       },
       {
         name: "repassword",
         inputType: "password",
         required: true,
-        label: tAuth("confirm_password"),
+        label: t("confirm_password"),
         rules: {
-          validate: (value, formValues) => value === formValues.newPassword || tAuth("password_not_match"),
+          validate: (value, formValues) => value === formValues.newPassword || t("password_not_match"),
         },
       },
     ],
@@ -89,7 +89,7 @@ function ResetPasswordModal({
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("reset_password")}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{t("reset_password")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -118,7 +118,7 @@ function ResetPasswordModal({
           width: "fit-content",
           mx: "auto",
         }}>
-        <NavigateBeforeIcon fontSize="inherit" /> {tAuth("return_to_login")}
+        <NavigateBeforeIcon fontSize="inherit" /> {t("return_to_login")}
       </CustomLink>
     </Box>
   );

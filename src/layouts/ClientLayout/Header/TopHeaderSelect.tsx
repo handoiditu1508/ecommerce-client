@@ -22,7 +22,7 @@ export type TopHeaderSelectProps = {
 };
 
 function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps) {
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const menuAnchorId = useId();
@@ -63,7 +63,7 @@ function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps
             {selectedItem.title && <Typography
               variant="caption"
               sx={{ ml: 1 }}>
-              {tMain(selectedItem.title)}
+              {t(selectedItem.title)}
             </Typography>}
           </>
         }
@@ -90,7 +90,7 @@ function TopHeaderSelect({ items, selectedItem, onSelect }: TopHeaderSelectProps
             <ListItemIcon>
               {item.icon}
             </ListItemIcon>
-            <ListItemText>{tMain(item.title)}</ListItemText>
+            <ListItemText>{t(item.title)}</ListItemText>
           </MenuItem>
         ))}
       </Menu>

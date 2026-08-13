@@ -15,8 +15,7 @@ import { useTranslation } from "react-i18next";
 
 function ChangeEmailCard() {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const { t: tAccount } = useTranslation("account");
+  const { t } = useTranslation(["account", "translation"]);
   const authUser = useAppSelector(authSelectors.user);
   const changeEmailForm = useForm<ChangeEmailCommand>({ defaultValues: { newEmail: authUser?.email ?? "", password: "" } });
   const [changeEmail, changeEmailResult] = useChangeEmailMutation();
@@ -26,19 +25,19 @@ function ChangeEmailCard() {
       {
         name: "newEmail",
         inputType: "text",
-        label: tAccount("new_email"),
+        label: t("new_email"),
         required: true,
         rules: {
-          required: t("this_field_is_required"),
-          validate: (value) => value !== authUser?.email || tAccount("email_must_be_different"),
+          required: t("translation:this_field_is_required"),
+          validate: (value) => value !== authUser?.email || t("email_must_be_different"),
         },
       },
       {
         name: "password",
         inputType: "password",
-        label: tAccount("password"),
+        label: t("password"),
         required: true,
-        rules: { required: t("this_field_is_required") },
+        rules: { required: t("translation:this_field_is_required") },
       },
     ],
   };
@@ -47,7 +46,7 @@ function ChangeEmailCard() {
     try {
       await changeEmail(data).unwrap();
       dispatch(pushNotification({
-        text: tAccount("verification_email_sent"),
+        text: t("verification_email_sent"),
         severity: "success",
       }));
     } catch {}
@@ -56,11 +55,11 @@ function ChangeEmailCard() {
   return (
     <Card variant="outlined" sx={{ backgroundColor: "transparent" }}>
       <CardContent>
-        <Typography variant="h5" sx={{ mb: 2 }}>{tAccount("change_email")}</Typography>
+        <Typography variant="h5" sx={{ mb: 2 }}>{t("change_email")}</Typography>
         <DynamicForm id="change-email-form" formContext={changeEmailForm} model={changeEmailModel} loading={changeEmailResult.isLoading} onSubmit={handleChangeEmail} />
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>
-        <Button type="submit" form="change-email-form" variant="text" loading={changeEmailResult.isLoading}>{tAccount("change_email")}</Button>
+        <Button type="submit" form="change-email-form" variant="text" loading={changeEmailResult.isLoading}>{t("change_email")}</Button>
       </CardActions>
     </Card>
   );

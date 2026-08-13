@@ -27,7 +27,7 @@ function PromotionalProductList({
   viewAllUrlPath,
   onRefresh = CONFIG.EMPTY_FUNCTION,
 }: PromotionalProductListProps) {
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
 
   return (
     <Box sx={{ mt: 4 }}>
@@ -45,11 +45,11 @@ function PromotionalProductList({
           mt: 2,
           width: "fit-content",
         }}>
-        {tMain("view_all")}
+        {t("view_all")}
       </CustomButton>}
       {!loading && !products.length && <Stack alignItems="center">
         <WarningIcon fontSize="large" />
-        <Typography variant="body2">{tMain("error_loading_products")}</Typography>
+        <Typography variant="body2">{t("error_loading_products")}</Typography>
         <Button
           variant="text"
           disabled={loading}
@@ -58,7 +58,7 @@ function PromotionalProductList({
             mt: 2,
           }}
           onClick={onRefresh}>
-          {tMain("refresh")}
+          {t("refresh")}
         </Button>
       </Stack>}
     </Box>

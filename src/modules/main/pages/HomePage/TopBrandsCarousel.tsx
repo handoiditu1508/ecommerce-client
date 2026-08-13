@@ -18,7 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 function TopBrandsCarousel() {
   const { mdAndUp, xsAndDown } = useContext(BreakpointsContext);
   const theme = useTheme();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const getTopBrandsResult = useGetTopBrandsQuery();
   const isHiddden = !getTopBrandsResult.isFetching && !getTopBrandsResult.data;
   const slidesPerView = mdAndUp ? 4 : (xsAndDown ? 2 : 3);
@@ -57,7 +57,7 @@ function TopBrandsCarousel() {
           },
         },
       }}>
-      <Typography variant="h5" textAlign="center">{tMain("top_brands")}</Typography>
+      <Typography variant="h5" textAlign="center">{t("top_brands")}</Typography>
       <Swiper
         slidesPerView={slidesPerView}
         loop

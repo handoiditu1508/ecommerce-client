@@ -26,7 +26,7 @@ const PAGE_SIZE = 20;
 function ProductsPage() {
   // get url search params
   const [searchParams] = useSearchParams();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const searchOrdering = (searchParams.get("sort") as SearchOrderingValue | null) ?? "createdDate-desc";
   const [sortBy, SortOrder] = searchOrdering?.split("-", 2) ?? [];
   const searchText = searchParams.get("search") ?? "";
@@ -118,7 +118,7 @@ function ProductsPage() {
                 color: theme.vars.palette.primary.main,
               }}
               onClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}>
-              {tProduct("advanced_search")}
+              {t("advanced_search")}
               <ExpandMoreIcon
                 fontSize="small"
                 sx={{
@@ -148,11 +148,11 @@ function ProductsPage() {
           gap: 1,
         }}>
           <FilterChips query={query} />
-          {countProductsResult.data && <Typography variant="caption" color="textDisabled">{tProduct("results_found", { count: countProductsResult.data })}</Typography>}
+          {countProductsResult.data && <Typography variant="caption" color="textDisabled">{t("results_found", { count: countProductsResult.data })}</Typography>}
         </Box>
         {
           searchProductsResult.isUninitialized
-            ? <Typography color="textDisabled" variant="h6" textAlign="center">{tProduct("search_placeholder_hint")}</Typography>
+            ? <Typography color="textDisabled" variant="h6" textAlign="center">{t("search_placeholder_hint")}</Typography>
             : <>
               <ProductCardList products={searchProductsResult.data} loading={searchProductsResult.isLoading} />
               <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>

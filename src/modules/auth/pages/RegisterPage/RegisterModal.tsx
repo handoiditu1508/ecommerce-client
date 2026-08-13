@@ -32,8 +32,7 @@ function RegisterModal({
   onChangeEmail = CONFIG.EMPTY_FUNCTION,
 }: RegisterModalProps) {
   const theme = useTheme();
-  const { t } = useTranslation();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation(["auth", "translation"]);
   const [registerConfirmedEmail, result] = useRegisterConfirmedEmailMutation();
   const formContext = useForm<RegisterInput>({
     defaultValues: {
@@ -51,62 +50,62 @@ function RegisterModal({
   const password = watch("password");
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidatonResult>(validatePassword(password));
   const formModel: DynamicFormModel<RegisterInput> = {
-    submitButtonText: tAuth("sign_up"),
+    submitButtonText: t("sign_up"),
     inputs: [
       {
         name: "email",
-        label: tAuth("email"),
+        label: t("email"),
         inputType: "email",
         required: true,
         readOnly: true,
       },
       {
         name: "username",
-        label: tAuth("username"),
+        label: t("username"),
         inputType: "text",
         required: true,
       },
       {
         name: "firstName",
-        label: tAuth("first_name"),
+        label: t("first_name"),
         inputType: "text",
         required: true,
         maxLength: CONFIG.NAME_MAX_LENGTH,
         rules: {
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAuth("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
       {
         name: "middleName",
-        label: tAuth("middle_name"),
+        label: t("middle_name"),
         inputType: "text",
         maxLength: CONFIG.NAME_MAX_LENGTH,
         rules: {
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAuth("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
       {
         name: "lastName",
-        label: tAuth("last_name"),
+        label: t("last_name"),
         inputType: "text",
         required: true,
         maxLength: CONFIG.NAME_MAX_LENGTH,
         rules: {
           pattern: {
             value: /^[A-Za-z]+$/,
-            message: tAuth("invalid_name"),
+            message: t("invalid_name"),
           },
         },
       },
       {
         name: "password",
-        label: tAuth("password"),
+        label: t("password"),
         inputType: "password",
         required: true,
         validateOnChange: true,
@@ -116,7 +115,7 @@ function RegisterModal({
         inputType: "checkbox",
         required: true,
         rules: {
-          required: t("this_field_is_required"),
+          required: t("translation:this_field_is_required"),
         },
       },
     ],
@@ -140,8 +139,8 @@ function RegisterModal({
         px: 4,
       },
     }}>
-      <Typography variant="h4" align="center">{tAuth("create_account")}</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("finish_registration_subtitle")}</Typography>
+      <Typography variant="h4" align="center">{t("create_account")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{t("finish_registration_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -170,7 +169,7 @@ function RegisterModal({
           },
         }}
         labelMap={{
-          agreed: (<>{tAuth("agree_to_terms_prefix")} <CustomLink to="/terms-and-conditions" target="_blank">{tAuth("terms_and_conditions")}</CustomLink></>),
+          agreed: (<>{t("agree_to_terms_prefix")} <CustomLink to="/terms-and-conditions" target="_blank">{t("terms_and_conditions")}</CustomLink></>),
         }}
         onSubmit={handleSubmit}
       />

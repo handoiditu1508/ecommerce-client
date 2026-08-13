@@ -18,7 +18,7 @@ export type ProductVariantsEditButtonProps = {
 
 function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEditButtonProps) {
   const theme = useTheme();
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const dispatch = useAppDispatch();
   const [attributeDialogOpen, setAttributeDialogOpen] = useState(false);
   const product = useAppSelector(cartSelectors.cachedProduct(cartData.productId));
@@ -59,7 +59,7 @@ function ProductVariantsEditButton({ cartData, variantData }: ProductVariantsEdi
       </ButtonBase>
       {product && <ProductVariantSelectorDialog
         open={attributeDialogOpen}
-        confirmButtonText={tProduct("save")}
+        confirmButtonText={t("save")}
         variants={product.productVariants}
         defaultVariantId={variantData.productVariantId}
         onChange={(nextProductVariantId) => dispatch(changeProductVariantInCart({

@@ -24,7 +24,7 @@ function UserMenuButton(props: UserMenuButtonProps) {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(authSelectors.signedIn);
   const authUser = useAppSelector(authSelectors.user);
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
 
   const open = Boolean(anchorEl);
 
@@ -80,19 +80,19 @@ function UserMenuButton(props: UserMenuButtonProps) {
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>{tMain("setting")}</ListItemText>
+                <ListItemText>{t("setting")}</ListItemText>
               </MenuItem>,
               <MenuItem key="history" component={Link} to="/" onClick={handleClose}>
                 <ListItemIcon>
                   <HistoryIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>{tMain("order_history")}</ListItemText>
+                <ListItemText>{t("order_history")}</ListItemText>
               </MenuItem>,
               <MenuItem key="logout" onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>{tMain("logout")}</ListItemText>
+                <ListItemText>{t("logout")}</ListItemText>
               </MenuItem>,
             ]
           )
@@ -102,13 +102,13 @@ function UserMenuButton(props: UserMenuButtonProps) {
                 <ListItemIcon>
                   <LoginIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>{tMain("login")}</ListItemText>
+                <ListItemText>{t("login")}</ListItemText>
               </MenuItem>,
               <MenuItem key="register" component={Link} to="/register" onClick={handleClose}>
                 <ListItemIcon>
                   <PersonAddIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>{tMain("register")}</ListItemText>
+                <ListItemText>{t("register")}</ListItemText>
               </MenuItem>,
             ]
           )}

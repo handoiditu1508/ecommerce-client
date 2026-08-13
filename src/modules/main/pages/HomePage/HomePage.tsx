@@ -17,7 +17,7 @@ const getDiscountedProductsQuery: GetDiscountedProductsQuery = { pageSize: 12 };
 
 function HomePage() {
   const theme = useTheme();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const getLatestProductsResult = useGetLatestProductsQuery(getLatestProductsQuery);
   const getDiscountedProductsResult = useGetDiscountedProductsQuery(getDiscountedProductsQuery);
 
@@ -72,19 +72,19 @@ function HomePage() {
         </Box>
       </LayoutContainer>
       <PromotionalProductList
-        title={tMain("new_collection")}
+        title={t("new_collection")}
         products={getLatestProductsResult.data}
         loading={getLatestProductsResult.isLoading}
         viewAllUrlPath="/products/latest"
         onRefresh={getLatestProductsResult.refetch}
       />
       <PromotionalProductList
-        title={tMain("popular_products")}
+        title={t("popular_products")}
         loading={true}
         viewAllUrlPath="products/popular"
       />
       <PromotionalProductList
-        title={tMain("discount")}
+        title={t("discount")}
         products={getDiscountedProductsResult.data}
         loading={getDiscountedProductsResult.isLoading}
         viewAllUrlPath="/products/discount"

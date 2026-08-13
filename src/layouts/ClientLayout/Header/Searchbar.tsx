@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 function Searchbar() {
   const theme = useTheme();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
 
@@ -46,7 +46,7 @@ function Searchbar() {
     >
       <InputBase
         fullWidth
-        placeholder={tMain("search")}
+        placeholder={t("search")}
         size="small"
         value={searchText}
         sx={{

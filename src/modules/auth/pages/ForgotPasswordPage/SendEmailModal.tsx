@@ -27,19 +27,18 @@ function SendEmailModal({
   onSuccess = CONFIG.EMPTY_FUNCTION,
 }: SendEmailModalProps) {
   const theme = useTheme();
-  const { t } = useTranslation();
-  const { t: tAuth } = useTranslation("auth");
+  const { t } = useTranslation(["auth", "translation"]);
 
   const formModel: DynamicFormModel<ForgotPasswordCommand> = {
-    submitButtonText: tAuth("send_otp"),
+    submitButtonText: t("send_otp"),
     inputs: [
       {
         name: "username",
         inputType: "text",
         rules: {
-          required: t("this_field_is_required"),
+          required: t("translation:this_field_is_required"),
         },
-        placeholder: tAuth("username_or_email"),
+        placeholder: t("username_or_email"),
         textAlign: "center",
       },
     ],
@@ -116,8 +115,8 @@ function SendEmailModal({
           mx: "auto",
         }}
       />
-      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{tAuth("forgot_password")}</Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{tAuth("send_otp_subtitle")}</Typography>
+      <Typography variant="h4" align="center" sx={{ mt: 1 }}>{t("forgot_password")}</Typography>
+      <Typography variant="subtitle1" align="center" sx={{ mt: 0.5 }}>{t("send_otp_subtitle")}</Typography>
       <DynamicForm
         model={formModel}
         formContext={formContext}
@@ -133,7 +132,7 @@ function SendEmailModal({
           width: "fit-content",
           mx: "auto",
         }}>
-        <NavigateBeforeIcon fontSize="inherit" /> {tAuth("return_to_login")}
+        <NavigateBeforeIcon fontSize="inherit" /> {t("return_to_login")}
       </CustomLink>
     </Box>
   );

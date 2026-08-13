@@ -31,7 +31,7 @@ function Header() {
   const theme = useTheme();
   const shadowHeaderTrigger = useScrollTrigger({ threshold: 0, disableHysteresis: true });
   const { smAndUp, mdAndUp } = useContext(BreakpointsContext);
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
 
   return (
     <AppBar
@@ -100,7 +100,7 @@ function Header() {
               ml: -1.5,
             }}>
             <NewReleasesIcon />
-            <Typography variant="h6">{tMain("new_collection")}</Typography>
+            <Typography variant="h6">{t("new_collection")}</Typography>
           </ButtonBase>
           <ButtonBase sx={{
             display: "flex",
@@ -110,7 +110,7 @@ function Header() {
             px: 1.5,
           }}>
             <TrendingUpIcon />
-            <Typography variant="h6">{tMain("popular")}</Typography>
+            <Typography variant="h6">{t("popular")}</Typography>
           </ButtonBase>
           <ButtonBase sx={{
             display: "flex",
@@ -120,7 +120,7 @@ function Header() {
             px: 1.5,
           }}>
             <ThumbUpIcon />
-            <Typography variant="h6">{tMain("best_rated")}</Typography>
+            <Typography variant="h6">{t("best_rated")}</Typography>
           </ButtonBase>
           <ButtonBase
             component={Link}
@@ -133,7 +133,7 @@ function Header() {
               px: 1.5,
             }}>
             <MdiSvgIcon path={mdiSale} />
-            <Typography variant="h6">{tMain("discount")}</Typography>
+            <Typography variant="h6">{t("discount")}</Typography>
           </ButtonBase>
           <MoreOptionsButton />
         </LayoutContainer>

@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 function RelatedProducts() {
-  const { t: tProduct } = useTranslation("product");
+  const { t } = useTranslation("product");
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
 
   const handlePrevThumbnail = () => {
@@ -40,8 +40,8 @@ function RelatedProducts() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <Typography variant="h5">{tProduct("related_products")}</Typography>
-        <Button size="small" variant="text">{tProduct("view_all")}</Button>
+        <Typography variant="h5">{t("related_products")}</Typography>
+        <Button size="small" variant="text">{t("view_all")}</Button>
       </Box>
 
       <Swiper

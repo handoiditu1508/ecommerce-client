@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 function Footer() {
   const theme = useTheme();
-  const { t: tMain } = useTranslation("main");
+  const { t } = useTranslation("main");
   const ref = useRef<HTMLElement>({} as HTMLElement);
 
   useEffect(() => {
@@ -68,31 +68,31 @@ function Footer() {
         </Grid>
         <Grid size={{ xs: 1, sm: 3, md: 1 }}>
           <Stack sx={{ alignItems: "flex-start" }}>
-            <Typography variant="subtitle1" fontWeight={700}>{tMain("account")}</Typography>
-            <CustomLink to="/account" underline="hover" variant="subtitle2">{tMain("setting")}</CustomLink>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("order_history")}</CustomLink>
+            <Typography variant="subtitle1" fontWeight={700}>{t("account")}</Typography>
+            <CustomLink to="/account" underline="hover" variant="subtitle2">{t("setting")}</CustomLink>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("order_history")}</CustomLink>
           </Stack>
         </Grid>
         <Grid size={{ xs: 1, sm: 2, md: 1 }}>
           <Stack sx={{ alignItems: "flex-start" }}>
-            <Typography variant="subtitle1" fontWeight={700}>{tMain("about_app", { appName: CONFIG.APP_NAME })}</Typography>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("about_us")}</CustomLink>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("terms_and_conditions")}</CustomLink>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("privacy_policy")}</CustomLink>
+            <Typography variant="subtitle1" fontWeight={700}>{t("about_app", { appName: CONFIG.APP_NAME })}</Typography>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("about_us")}</CustomLink>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("terms_and_conditions")}</CustomLink>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("privacy_policy")}</CustomLink>
           </Stack>
         </Grid>
         <Grid size={{ xs: 1, sm: 2, md: 1 }}>
           <Stack sx={{ alignItems: "flex-start" }}>
-            <Typography variant="subtitle1" fontWeight={700}>{tMain("shop")}</Typography>
-            <CustomLink to="/products/latest" underline="hover" variant="subtitle2">{tMain("new_collection")}</CustomLink>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("popular")}</CustomLink>
-            <CustomLink to="/" underline="hover" variant="subtitle2">{tMain("best_rate")}</CustomLink>
-            <CustomLink to="/products/discount" underline="hover" variant="subtitle2">{tMain("discount")}</CustomLink>
+            <Typography variant="subtitle1" fontWeight={700}>{t("shop")}</Typography>
+            <CustomLink to="/products/latest" underline="hover" variant="subtitle2">{t("new_collection")}</CustomLink>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("popular")}</CustomLink>
+            <CustomLink to="/" underline="hover" variant="subtitle2">{t("best_rate")}</CustomLink>
+            <CustomLink to="/products/discount" underline="hover" variant="subtitle2">{t("discount")}</CustomLink>
           </Stack>
         </Grid>
         <Grid size={{ xs: 2, sm: 2, md: 1 }}>
           <Stack sx={{ alignItems: "flex-start" }}>
-            <Typography variant="subtitle1" fontWeight={700}>{tMain("support")}</Typography>
+            <Typography variant="subtitle1" fontWeight={700}>{t("support")}</Typography>
             <Box sx={{
               display: "flex",
               alignItems: "center",
