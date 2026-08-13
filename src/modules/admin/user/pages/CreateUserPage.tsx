@@ -16,53 +16,53 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
     {
       name: "username",
       inputType: "text",
-      label: "user:username",
+      label: "admin-user:username",
       required: true,
-      rules: { required: "user:this_field_is_required" },
+      rules: { required: "admin-user:this_field_is_required" },
       size: { sm: 6 },
     },
     {
       name: "email",
       inputType: "email",
-      label: "user:email",
+      label: "admin-user:email",
       required: true,
-      rules: { required: "user:this_field_is_required" },
+      rules: { required: "admin-user:this_field_is_required" },
       size: { sm: 6 },
     },
     {
       name: "firstName",
       inputType: "text",
-      label: "user:first_name",
+      label: "admin-user:first_name",
       required: true,
       maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: { required: "user:this_field_is_required" },
+      rules: { required: "admin-user:this_field_is_required" },
       size: { sm: 4 },
     },
     {
       name: "middleName",
       inputType: "text",
-      label: "user:middle_name_optional",
+      label: "admin-user:middle_name_optional",
       maxLength: CONFIG.NAME_MAX_LENGTH,
       size: { sm: 4 },
     },
     {
       name: "lastName",
       inputType: "text",
-      label: "user:last_name",
+      label: "admin-user:last_name",
       required: true,
       maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: { required: "user:this_field_is_required" },
+      rules: { required: "admin-user:this_field_is_required" },
       size: { sm: 4 },
     },
-    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed" },
+    { name: "emailConfirmed", inputType: "checkbox", label: "admin-user:email_confirmed" },
   ],
-  submitButtonText: "user:create_user",
+  submitButtonText: "admin-user:create_user",
 };
 
 function CreateUserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("user");
+  const { t } = useTranslation("admin-user");
   const [createUser, result] = useCreateUserMutation();
   const formContext = useForm<CreateUserCommand>({
     defaultValues: {

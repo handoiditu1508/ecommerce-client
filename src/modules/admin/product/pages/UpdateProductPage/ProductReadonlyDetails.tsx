@@ -37,39 +37,39 @@ const formModel: DynamicFormModel<ProductDetailsForm> = {
     {
       name: "discountPrice",
       inputType: "currency",
-      label: "product:discount_price",
+      label: "admin-product:discount_price",
       readOnly: true,
       size: { sm: 6 },
     },
     {
       name: "discountPercentage",
       inputType: "text",
-      label: "product:discount_percentage",
+      label: "admin-product:discount_percentage",
       readOnly: true,
       size: { sm: 6 },
     },
-    { name: "thumbnailPath", inputType: "text", label: "product:thumbnail_path", readOnly: true, size: { sm: 6 } },
-    { name: "brandName", inputType: "text", label: "product:brand", readOnly: true, size: { sm: 6 } },
-    { name: "description", inputType: "text", label: "product:description", readOnly: true, size: { sm: 6 } },
-    { name: "createdDate", inputType: "datetime", label: "product:created_date", readOnly: true, size: { sm: 6 } },
-    { name: "modifiedDate", inputType: "datetime", label: "product:modified_date", readOnly: true, size: { sm: 6 } },
-    { name: "createdBy", inputType: "text", label: "product:created_by", readOnly: true, size: { sm: 6 } },
-    { name: "modifiedBy", inputType: "text", label: "product:modified_by", readOnly: true, size: { sm: 6 } },
-    { name: "isDeleted", inputType: "checkbox", label: "product:deleted", readOnly: true, size: { sm: 6 } },
-    { name: "deletedDate", inputType: "datetime", label: "product:deleted_date", readOnly: true, size: { sm: 6 } },
+    { name: "thumbnailPath", inputType: "text", label: "admin-product:thumbnail_path", readOnly: true, size: { sm: 6 } },
+    { name: "brandName", inputType: "text", label: "admin-product:brand", readOnly: true, size: { sm: 6 } },
+    { name: "description", inputType: "text", label: "admin-product:description", readOnly: true, size: { sm: 6 } },
+    { name: "createdDate", inputType: "datetime", label: "admin-product:created_date", readOnly: true, size: { sm: 6 } },
+    { name: "modifiedDate", inputType: "datetime", label: "admin-product:modified_date", readOnly: true, size: { sm: 6 } },
+    { name: "createdBy", inputType: "text", label: "admin-product:created_by", readOnly: true, size: { sm: 6 } },
+    { name: "modifiedBy", inputType: "text", label: "admin-product:modified_by", readOnly: true, size: { sm: 6 } },
+    { name: "isDeleted", inputType: "checkbox", label: "admin-product:deleted", readOnly: true, size: { sm: 6 } },
+    { name: "deletedDate", inputType: "datetime", label: "admin-product:deleted_date", readOnly: true, size: { sm: 6 } },
     {
       name: "productVariants",
       inputType: "array",
-      label: "product:product_variants",
+      label: "admin-product:product_variants",
       readOnly: true,
       itemInputs: [
-        { name: "name", inputType: "text", label: "product:variant_name", readOnly: true },
-        { name: "sku", inputType: "text", label: "product:sku", readOnly: true },
-        { name: "quantity", inputType: "text", label: "product:variant_quantity", readOnly: true },
-        { name: "color", inputType: "color", label: "product:variant_color", readOnly: true },
-        { name: "thumbnailPath", inputType: "text", label: "product:thumbnail_path", readOnly: true },
-        { name: "price", inputType: "currency", label: "product:price", readOnly: true },
-        { name: "discountPrice", inputType: "currency", label: "product:discount_price", readOnly: true },
+        { name: "name", inputType: "text", label: "admin-product:variant_name", readOnly: true },
+        { name: "sku", inputType: "text", label: "admin-product:sku", readOnly: true },
+        { name: "quantity", inputType: "text", label: "admin-product:variant_quantity", readOnly: true },
+        { name: "color", inputType: "color", label: "admin-product:variant_color", readOnly: true },
+        { name: "thumbnailPath", inputType: "text", label: "admin-product:thumbnail_path", readOnly: true },
+        { name: "price", inputType: "currency", label: "admin-product:price", readOnly: true },
+        { name: "discountPrice", inputType: "currency", label: "admin-product:discount_price", readOnly: true },
       ],
       createDefaultValue: () => ({
         id: 0,
@@ -83,7 +83,7 @@ const formModel: DynamicFormModel<ProductDetailsForm> = {
 };
 
 function ProductReadonlyDetails({ product }: ProductReadonlyDetailsProps) {
-  const { t } = useTranslation("product");
+  const { t } = useTranslation("admin-product");
   useGetAllBrandsQuery();
   const brand = useAppSelector(brandSelectors.byId(product.brandId ?? 0));
   const formValues = useMemo<ProductDetailsForm>(() => ({

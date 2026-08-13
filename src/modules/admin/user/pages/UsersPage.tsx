@@ -27,19 +27,19 @@ const statusOptions = Object.values(UserStatus)
   .filter((value): value is UserStatus => typeof value === "number")
   .map((value) => ({
     key: value,
-    label: value === UserStatus.Active ? "user:active" : "user:locked",
+    label: value === UserStatus.Active ? "admin-user:active" : "admin-user:locked",
     value,
   }));
 
 const filterModel: DynamicFormModel<CountUsersQuery> = {
   inputs: [
-    { name: "username", inputType: "text", label: "user:username", size: { sm: 4, md: 3 } },
-    { name: "email", inputType: "text", label: "user:email", size: { sm: 4, md: 3 } },
-    { name: "name", inputType: "text", label: "user:name", size: { sm: 4, md: 3 } },
+    { name: "username", inputType: "text", label: "admin-user:username", size: { sm: 4, md: 3 } },
+    { name: "email", inputType: "text", label: "admin-user:email", size: { sm: 4, md: 3 } },
+    { name: "name", inputType: "text", label: "admin-user:name", size: { sm: 4, md: 3 } },
     {
       name: "statuses",
       inputType: "select",
-      label: "user:statuses",
+      label: "admin-user:statuses",
       multiple: true,
       showCheckbox: true,
       options: statusOptions,
@@ -48,7 +48,7 @@ const filterModel: DynamicFormModel<CountUsersQuery> = {
     {
       name: "roles",
       inputType: "select",
-      label: "user:roles",
+      label: "admin-user:roles",
       multiple: true,
       showCheckbox: true,
       showSelectedAsChips: true,
@@ -56,12 +56,12 @@ const filterModel: DynamicFormModel<CountUsersQuery> = {
       size: { sm: 6, md: 3 },
     },
   ],
-  submitButtonText: "user:apply_filters",
+  submitButtonText: "admin-user:apply_filters",
 };
 
 function UsersPage() {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation("user");
+  const { t, i18n } = useTranslation("admin-user");
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
   const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(

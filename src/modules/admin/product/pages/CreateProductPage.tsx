@@ -18,44 +18,44 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
     {
       name: "name",
       inputType: "text",
-      label: "product:product_name",
+      label: "admin-product:product_name",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: { required: "admin-product:this_field_is_required" },
     },
     {
       name: "sku",
       inputType: "text",
-      label: "product:sku",
+      label: "admin-product:sku",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: { required: "admin-product:this_field_is_required" },
     },
     {
       name: "price",
       inputType: "currency",
-      label: "product:price",
+      label: "admin-product:price",
       required: true,
       rules: {
-        required: "product:this_field_is_required",
-        min: { value: 0, message: "product:price_must_not_be_negative" },
+        required: "admin-product:this_field_is_required",
+        min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
-    { name: "categoryId", inputType: "text", label: "product:category" },
+    { name: "categoryId", inputType: "text", label: "admin-product:category" },
     {
       name: "thumbnailFile",
       inputType: "file",
-      label: "product:thumbnail",
+      label: "admin-product:thumbnail",
       accept: "image/*",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: { required: "admin-product:this_field_is_required" },
     },
   ],
-  submitButtonText: "product:create_product",
+  submitButtonText: "admin-product:create_product",
 };
 
 function CreateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("product");
+  const { t } = useTranslation("admin-product");
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const [createProduct, result] = useCreateProductMutation();

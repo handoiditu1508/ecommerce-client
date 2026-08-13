@@ -31,37 +31,37 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
     {
       name: "name",
       inputType: "text",
-      label: "product:product_name",
+      label: "admin-product:product_name",
       required: true,
-      rules: { required: "product:this_field_is_required" },
+      rules: { required: "admin-product:this_field_is_required" },
     },
     {
       name: "price",
       inputType: "currency",
-      label: "product:price",
+      label: "admin-product:price",
       required: true,
       rules: {
-        required: "product:this_field_is_required",
-        min: { value: 0, message: "product:price_must_not_be_negative" },
+        required: "admin-product:this_field_is_required",
+        min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
-    { name: "categoryId", inputType: "text", label: "product:category" },
-    { name: "thumbnailId", inputType: "select", label: "product:thumbnail", options: [] },
-    // { name: "thumbnailId", inputType: "text", label: "product:thumbnail" },
+    { name: "categoryId", inputType: "text", label: "admin-product:category" },
+    { name: "thumbnailId", inputType: "select", label: "admin-product:thumbnail", options: [] },
+    // { name: "thumbnailId", inputType: "text", label: "admin-product:thumbnail" },
     // {
     //   name: "thumbnailFile",
     //   inputType: "file",
-    //   label: "product:upload_new_thumbnail",
+    //   label: "admin-product:upload_new_thumbnail",
     //   accept: "image/*",
     //   hidden: (data) => !!data.thumbnailId,
     //   rules: {
     //     validate: (files, data) => (
-    //       !!data.thumbnailId || !!files?.length || "product:this_field_is_required"
+    //       !!data.thumbnailId || !!files?.length || "admin-product:this_field_is_required"
     //     ),
     //   },
     // },
   ],
-  submitButtonText: "product:update_product",
+  submitButtonText: "admin-product:update_product",
 };
 
 const getThumbnailId = (product: Product): string | undefined =>
@@ -71,7 +71,7 @@ function UpdateProductPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("product");
+  const { t } = useTranslation("admin-product");
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const productResult = useGetProductQuery(
@@ -183,14 +183,14 @@ function UpdateProductPage() {
           thumbnailId: [
             {
               key: UPLOAD_NEW_ID,
-              label: "product:upload_new_thumbnail",
+              label: "admin-product:upload_new_thumbnail",
               value: UPLOAD_NEW_ID,
               icon: <UploadIcon />,
             },
             ...(temporaryThumbnailUrl
               ? [{
                 key: TEMPORARY_UPLOAD_ID,
-                label: "product:new_thumbnail",
+                label: "admin-product:new_thumbnail",
                 value: TEMPORARY_UPLOAD_ID,
                 avatar: <Avatar src={temporaryThumbnailUrl} variant="rounded" />,
               }]

@@ -13,21 +13,21 @@ type ProductFiltersProps = {
 
 const model: DynamicFormModel<CountProductsQuery> = {
   inputs: [
-    { name: "id", inputType: "text", label: "product:id", size: { sm: 4, md: 2 } },
-    { name: "name", inputType: "text", label: "product:product_name", size: { sm: 8, md: 4 } },
+    { name: "id", inputType: "text", label: "admin-product:id", size: { sm: 4, md: 2 } },
+    { name: "name", inputType: "text", label: "admin-product:product_name", size: { sm: 8, md: 4 } },
     { name: "minPrice", inputType: "currency", label: "product:min_price", size: { sm: 6, md: 3 } },
     { name: "maxPrice", inputType: "currency", label: "product:max_price", size: { sm: 6, md: 3 } },
-    { name: "createdDate", inputType: "date", label: "product:created_date", size: { sm: 6, md: 3 } },
-    { name: "modifiedDate", inputType: "date", label: "product:modified_date", size: { sm: 6, md: 3 } },
+    { name: "createdDate", inputType: "date", label: "admin-product:created_date", size: { sm: 6, md: 3 } },
+    { name: "modifiedDate", inputType: "date", label: "admin-product:modified_date", size: { sm: 6, md: 3 } },
     { name: "categoryIds", inputType: "text", label: "product:categories", size: { md: 6 } },
-    { name: "includeSubCategories", inputType: "checkbox", label: "product:include_subcategories" },
-    { name: "isDeleted", inputType: "checkbox", label: "product:load_deleted_products" },
+    { name: "includeSubCategories", inputType: "checkbox", label: "admin-product:include_subcategories" },
+    { name: "isDeleted", inputType: "checkbox", label: "admin-product:load_deleted_products" },
   ],
-  submitButtonText: "product:apply_filters",
+  submitButtonText: "admin-product:apply_filters",
 };
 
 function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersProps) {
-  const { t } = useTranslation("product");
+  const { t } = useTranslation(["admin-product", "product"]);
 
   return (
     <DynamicGridForm
@@ -45,7 +45,7 @@ function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersPro
                 multiple
                 categories={categories}
                 values={field.value ?? []}
-                label={t("categories")}
+                label={t("product:categories")}
                 onBlur={field.onBlur}
                 onChange={() => undefined}
                 onValuesChange={field.onChange}

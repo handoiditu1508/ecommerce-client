@@ -37,7 +37,7 @@ import ProductFilters from "./ProductFilters";
 function ProductsPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("product");
+  const { t } = useTranslation("admin-product");
   const confirmationDialog = useContext(ConfirmationDialogContext);
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);

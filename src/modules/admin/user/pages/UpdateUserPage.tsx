@@ -21,59 +21,59 @@ const statusOptions = Object.values(UserStatus)
   .filter((value): value is UserStatus => typeof value === "number")
   .map((value) => ({
     key: value,
-    label: value === UserStatus.Active ? "user:active" : "user:locked",
+    label: value === UserStatus.Active ? "admin-user:active" : "admin-user:locked",
     value,
   }));
 
 const formModel: DynamicFormModel<UpdateUserForm> = {
   inputs: [
-    { name: "username", inputType: "text", label: "user:username", readOnly: true, size: { sm: 6 } },
-    { name: "email", inputType: "email", label: "user:email", required: true, size: { sm: 6 } },
-    { name: "firstName", inputType: "text", label: "user:first_name", required: true, size: { sm: 4 } },
-    { name: "middleName", inputType: "text", label: "user:middle_name_optional", size: { sm: 4 } },
-    { name: "lastName", inputType: "text", label: "user:last_name", required: true, size: { sm: 4 } },
-    { name: "phoneNumber", inputType: "text", label: "user:phone_number", readOnly: true },
-    { name: "emailConfirmed", inputType: "checkbox", label: "user:email_confirmed", size: { sm: 6 } },
+    { name: "username", inputType: "text", label: "admin-user:username", readOnly: true, size: { sm: 6 } },
+    { name: "email", inputType: "email", label: "admin-user:email", required: true, size: { sm: 6 } },
+    { name: "firstName", inputType: "text", label: "admin-user:first_name", required: true, size: { sm: 4 } },
+    { name: "middleName", inputType: "text", label: "admin-user:middle_name_optional", size: { sm: 4 } },
+    { name: "lastName", inputType: "text", label: "admin-user:last_name", required: true, size: { sm: 4 } },
+    { name: "phoneNumber", inputType: "text", label: "admin-user:phone_number", readOnly: true },
+    { name: "emailConfirmed", inputType: "checkbox", label: "admin-user:email_confirmed", size: { sm: 6 } },
     {
       name: "redirectEmailEnabled",
       inputType: "checkbox",
-      label: "user:redirect_email_enabled",
+      label: "admin-user:redirect_email_enabled",
       size: { sm: 6 },
     },
-    { name: "status", inputType: "select", label: "user:status", options: statusOptions, size: { sm: 4 } },
-    { name: "isDeleted", inputType: "checkbox", label: "user:deleted", readOnly: true, size: { sm: 4 } },
+    { name: "status", inputType: "select", label: "admin-user:status", options: statusOptions, size: { sm: 4 } },
+    { name: "isDeleted", inputType: "checkbox", label: "admin-user:deleted", readOnly: true, size: { sm: 4 } },
     {
       name: "deletedDate",
       inputType: "datetime",
-      label: "user:deleted_date",
+      label: "admin-user:deleted_date",
       readOnly: true,
       size: { sm: 4 },
     },
-    { name: "lockoutEnabled", inputType: "checkbox", label: "user:lockout_enabled", size: { sm: 4 } },
+    { name: "lockoutEnabled", inputType: "checkbox", label: "admin-user:lockout_enabled", size: { sm: 4 } },
     {
       name: "twoFactorEnabled",
       inputType: "checkbox",
-      label: "user:two_factor_enabled",
+      label: "admin-user:two_factor_enabled",
       readOnly: true,
       size: { sm: 4 },
     },
     {
       name: "accessFailedCount",
       inputType: "text",
-      label: "user:access_failed_count",
+      label: "admin-user:access_failed_count",
       readOnly: true,
       size: { sm: 4 },
     },
-    { name: "lockoutEnd", inputType: "datetime", label: "user:lockout_end" },
+    { name: "lockoutEnd", inputType: "datetime", label: "admin-user:lockout_end" },
   ],
-  submitButtonText: "user:update_user",
+  submitButtonText: "admin-user:update_user",
 };
 
 function UpdateUserPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("user");
+  const { t } = useTranslation("admin-user");
   const userResult = useGetUserQuery(id, { skip: !Number.isInteger(id) });
   const [updateUser, updateResult] = useUpdateUserMutation();
   const formValues = useMemo<UpdateUserForm | undefined>(() => userResult.data
