@@ -1,3 +1,4 @@
+import { AddProductQuantityCommand } from "@/models/apis/product/addProductQuantityCommand";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
 import { DeleteProductCommand } from "@/models/apis/product/deleteProduct";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
@@ -8,6 +9,8 @@ import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProduc
 import { RecoverProductCommand } from "@/models/apis/product/recoverProduct";
 import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
+import { UpdateProductVariantsCommand } from "@/models/apis/product/updateProductVariants";
+import { UpdateProductVariantThumbnailCommand } from "@/models/apis/product/updateProductVariantThumbnail";
 import Product, { ProductView } from "@/models/entities/Product";
 import { invalidatesCountTag, invalidatesIdTag, providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
@@ -126,6 +129,42 @@ const productApi = appApi.injectEndpoints({
       },
       invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.id, error),
     }),
+    updateProductVariants: builder.mutation<Product, UpdateProductVariantsCommand>({
+      query: (body) => ({
+        url: `/products/${body.id}/variants`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.id, error),
+    }),
+    updateProductVariantThumbnail: builder.mutation<Product, UpdateProductVariantThumbnailCommand>({
+      query: (arg) => {
+        const bodyFormData = new FormData();
+
+        Object.entries(arg).forEach(([key, value]) => {
+          if (value instanceof FileList) {
+            Array.from(value).forEach((file) => bodyFormData.append(key, file));
+          } else if (value !== undefined) {
+            bodyFormData.append(key, value.toString());
+          }
+        });
+
+        return {
+          url: `/products/variants/${arg.id}/thumbnail`,
+          method: "PUT",
+          body: bodyFormData,
+        };
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.productId, error),
+    }),
+    addProductQuantity: builder.mutation<number, AddProductQuantityCommand>({
+      query: (body) => ({
+        url: `/products/variants/${body.productVariantId}/quantity`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (_result, error, body) => invalidatesIdTag("Product", body.productId, error),
+    }),
     deleteProduct: builder.mutation<Product | undefined, DeleteProductCommand>({
       query: ({ productId, ...arg }) => ({
         url: `/products/${productId}`,
@@ -163,6 +202,9 @@ export const {
   useGetProductsToRehydrateCartQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
+  useUpdateProductVariantsMutation,
+  useUpdateProductVariantThumbnailMutation,
+  useAddProductQuantityMutation,
   useDeleteProductMutation,
   useRecoverProductMutation,
 } = productApi;
