@@ -75,6 +75,7 @@ function DynamicForm<T extends FieldValues>({
           autocompleteRenderOptionMap={autocompleteRenderOptionMap}
           autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
           autocompleteLoadingMap={autocompleteLoadingMap}
+          renderInputMap={renderInputMap}
         />
       )}
     </React.Fragment>

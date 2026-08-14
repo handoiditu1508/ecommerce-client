@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { NIL as NIL_UUID } from "uuid";
 import ProductReadonlyDetails from "./ProductReadonlyDetails";
+import ProductVariantsForm from "./ProductVariantsForm";
 
 const UPLOAD_NEW_ID = "upload-new";
 const TEMPORARY_UPLOAD_ID = NIL_UUID;
@@ -212,6 +213,7 @@ function UpdateProductPage() {
         }}
         onSubmit={handleSubmit}
       />
+      <ProductVariantsForm product={product} />
       <ProductReadonlyDetails product={product} />
     </Paper>
   );

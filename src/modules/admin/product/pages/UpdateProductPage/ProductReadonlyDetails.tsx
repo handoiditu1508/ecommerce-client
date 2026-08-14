@@ -1,6 +1,6 @@
 import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
 import useAppSelector from "@/hooks/useAppSelector";
-import Product, { ProductVariant } from "@/models/entities/Product";
+import Product from "@/models/entities/Product";
 import { useGetAllBrandsQuery } from "@/redux/apis/brandApi";
 import { brandSelectors } from "@/redux/slices/brandSlice";
 import PercentIcon from "@mui/icons-material/Percent";
@@ -29,7 +29,6 @@ type ProductDetailsForm = {
   modifiedBy?: string;
   isDeleted: boolean;
   deletedDate?: string;
-  productVariants: ProductVariant[];
 };
 
 const formModel: DynamicFormModel<ProductDetailsForm> = {
@@ -57,28 +56,6 @@ const formModel: DynamicFormModel<ProductDetailsForm> = {
     { name: "modifiedBy", inputType: "text", label: "admin-product:modified_by", readOnly: true, size: { sm: 6 } },
     { name: "isDeleted", inputType: "checkbox", label: "admin-product:deleted", readOnly: true, size: { sm: 6 } },
     { name: "deletedDate", inputType: "datetime", label: "admin-product:deleted_date", readOnly: true, size: { sm: 6 } },
-    {
-      name: "productVariants",
-      inputType: "array",
-      label: "admin-product:product_variants",
-      readOnly: true,
-      itemInputs: [
-        { name: "name", inputType: "text", label: "admin-product:variant_name", readOnly: true },
-        { name: "sku", inputType: "text", label: "admin-product:sku", readOnly: true },
-        { name: "quantity", inputType: "text", label: "admin-product:variant_quantity", readOnly: true },
-        { name: "color", inputType: "color", label: "admin-product:variant_color", readOnly: true },
-        { name: "thumbnailPath", inputType: "text", label: "admin-product:thumbnail_path", readOnly: true },
-        { name: "price", inputType: "currency", label: "admin-product:price", readOnly: true },
-        { name: "discountPrice", inputType: "currency", label: "admin-product:discount_price", readOnly: true },
-      ],
-      createDefaultValue: () => ({
-        id: 0,
-        productId: 0,
-        sku: "",
-        quantity: 0,
-        name: "",
-      }),
-    },
   ],
 };
 
@@ -98,7 +75,6 @@ function ProductReadonlyDetails({ product }: ProductReadonlyDetailsProps) {
     modifiedBy: product.modifiedBy,
     isDeleted: product.isDeleted,
     deletedDate: product.deletedDate,
-    productVariants: product.productVariants,
   }), [brand?.name, product]);
   const formContext = useForm<ProductDetailsForm>({ values: formValues });
 

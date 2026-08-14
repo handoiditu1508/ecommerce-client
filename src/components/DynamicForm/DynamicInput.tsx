@@ -87,6 +87,7 @@ export type DynamicInputProps<T extends FieldValues, K extends Path<T>> = {
   autocompleteOnInputChangeMap?: DynamicFormProps<T>["autocompleteOnInputChangeMap"];
   autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
   hiddenMap?: DynamicFormProps<T>["hiddenMap"];
+  renderInputMap?: DynamicFormProps<T>["renderInputMap"];
 };
 
 function DynamicInput<T extends FieldValues, K extends Path<T>>({
@@ -113,6 +114,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
   autocompleteOnInputChangeMap,
   autocompleteLoadingMap,
   hiddenMap,
+  renderInputMap,
 }: DynamicInputProps<T, K>) {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -897,7 +899,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
         model={model}
         formContext={formContext}
         formLoading={formLoading}
-        label={label}
+        label={finalLabel}
         hiddenMap={hiddenMap}
         startAdornmentMap={startAdornmentMap}
         endAdornmentMap={endAdornmentMap}
@@ -908,6 +910,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
         autocompleteRenderOptionMap={autocompleteRenderOptionMap}
         autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
         autocompleteLoadingMap={autocompleteLoadingMap}
+        renderInputMap={renderInputMap}
       />
     );
   }

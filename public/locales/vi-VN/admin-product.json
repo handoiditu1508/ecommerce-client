@@ -45,5 +45,11 @@
   "upload_new_thumbnail": "Tải Lên Ảnh Thu Nhỏ Mới",
   "variant_color": "Màu Biến Thể",
   "variant_name": "Tên Biến Thể",
-  "variant_quantity": "Số Lượng Biến Thể"
+  "variant_quantity": "Số Lượng Biến Thể",
+  "add_variant": "Thêm Biến Thể",
+  "empty_thumbnail": "Không Có Ảnh Thu Nhỏ",
+  "product_variants_updated_successfully": "Đã cập nhật biến thể sản phẩm thành công.",
+  "quantity_must_not_be_negative": "Số lượng không được âm.",
+  "remove_variant": "Xóa Biến Thể",
+  "update_product_variants": "Cập Nhật Biến Thể Sản Phẩm"
 }

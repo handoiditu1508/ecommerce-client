@@ -12,7 +12,14 @@ import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
 import { UpdateProductVariantsCommand } from "@/models/apis/product/updateProductVariants";
 import { UpdateProductVariantThumbnailCommand } from "@/models/apis/product/updateProductVariantThumbnail";
 import Product, { ProductView } from "@/models/entities/Product";
-import { invalidatesCountTag, invalidatesIdTag, providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
+import {
+  invalidatesCountTag,
+  invalidatesIdTag,
+  invalidatesPessimisticIdTag,
+  providesCountTag,
+  providesIdTag,
+  providesListTags,
+} from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 const productApi = appApi.injectEndpoints({
@@ -107,6 +114,18 @@ const productApi = appApi.injectEndpoints({
           body: bodyFormData,
         };
       },
+      onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: createdProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: createdProduct.id },
+              createdProduct,
+            ),
+          );
+        } catch {}
+      },
       invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
     }),
     updateProduct: builder.mutation<Product, UpdateProductCommand>({
@@ -127,7 +146,19 @@ const productApi = appApi.injectEndpoints({
           body: bodyFormData,
         };
       },
-      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.id, error),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.id },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.id, error),
     }),
     updateProductVariants: builder.mutation<Product, UpdateProductVariantsCommand>({
       query: (body) => ({
@@ -135,7 +166,19 @@ const productApi = appApi.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.id, error),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.id },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.id, error),
     }),
     updateProductVariantThumbnail: builder.mutation<Product, UpdateProductVariantThumbnailCommand>({
       query: (arg) => {
@@ -151,11 +194,23 @@ const productApi = appApi.injectEndpoints({
 
         return {
           url: `/products/variants/${arg.id}/thumbnail`,
-          method: "PUT",
+          method: "POST",
           body: bodyFormData,
         };
       },
-      invalidatesTags: (_result, error, arg) => invalidatesIdTag("Product", arg.productId, error),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.productId },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.productId, error),
     }),
     addProductQuantity: builder.mutation<number, AddProductQuantityCommand>({
       query: (body) => ({

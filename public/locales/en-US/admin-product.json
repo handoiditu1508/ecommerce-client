@@ -45,5 +45,11 @@
   "upload_new_thumbnail": "Upload New Thumbnail",
   "variant_color": "Variant Color",
   "variant_name": "Variant Name",
-  "variant_quantity": "Variant Quantity"
+  "variant_quantity": "Variant Quantity",
+  "add_variant": "Add Variant",
+  "empty_thumbnail": "Empty Thumbnail",
+  "product_variants_updated_successfully": "Product variants updated successfully.",
+  "quantity_must_not_be_negative": "Quantity must not be negative.",
+  "remove_variant": "Remove Variant",
+  "update_product_variants": "Update Product Variants"
 }

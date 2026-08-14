@@ -30,6 +30,7 @@ export type DynamicArrayInputProps<T extends FieldValues, K extends Path<T>> = {
   autocompleteOnInputChangeMap?: DynamicFormProps<T>["autocompleteOnInputChangeMap"];
   autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
   hiddenMap?: DynamicFormProps<T>["hiddenMap"];
+  renderInputMap?: DynamicFormProps<T>["renderInputMap"];
 };
 
 /**
@@ -77,6 +78,7 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
+  renderInputMap = CONFIG.EMPTY_OBJECT,
 }: DynamicArrayInputProps<T, K>) {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -130,7 +132,7 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
             {"itemInputs" in model && model.itemInputs.map((itemInput) => {
               const pathName = `${model.name}.${index}.${itemInput.name}` as K;
 
-              return (
+              return getFinalValue(renderInputMap, pathName) ?? (
                 <DynamicInput
                   key={itemInput.name}
                   model={{
@@ -167,7 +169,7 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
             {"itemInput" in model && (() => {
               const pathName = `${model.name}.${index}` as K;
 
-              return (
+              return getFinalValue(renderInputMap, pathName) ?? (
                 <DynamicInput
                   model={{
                     ...model.itemInput,
