@@ -37,6 +37,7 @@
   "products": "Products",
   "recover_product": "Recover Product",
   "sku": "SKU",
+  "sku_must_be_unique": "SKU must be unique.",
   "this_field_is_required": "This field is required.",
   "thumbnail": "Thumbnail",
   "thumbnail_path": "Thumbnail Path",

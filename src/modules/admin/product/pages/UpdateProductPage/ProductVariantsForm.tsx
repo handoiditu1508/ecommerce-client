@@ -1,9 +1,10 @@
+import { ArrayItemType } from "@/common/type";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
 import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { UpdateProductVariantRequest, UpdateProductVariantsCommand } from "@/models/apis/product/updateProductVariants";
-import Product from "@/models/entities/Product";
+import Product, { ProductVariant } from "@/models/entities/Product";
 import {
   useUpdateProductVariantsMutation,
   useUpdateProductVariantThumbnailMutation,
@@ -27,19 +28,23 @@ const TEMPORARY_UPLOAD_ID = NIL_UUID;
 // Give each unsaved variant a stable local identity; API requests convert negative IDs back to zero.
 let nextTemporaryVariantId = -1;
 
+type ProductVariantsFormModel = Omit<UpdateProductVariantsCommand, "productVariants"> & {
+  productVariants: (UpdateProductVariantRequest & Pick<ProductVariant, "quantity" | "price" | "discountPrice">)[];
+};
+
 // React Hook Form addresses array fields by index even though thumbnail state is stored by variant ID.
 type VariantThumbnailKey = `productVariants.${number}.thumbnailId`;
 
 // Each dynamic thumbnail field can receive its own list of select options.
 type VariantOptionsMap = Partial<{
-  [K in Path<UpdateProductVariantsCommand>]: DynamicInputOption<UpdateProductVariantsCommand, K>[]
+  [K in Path<ProductVariantsFormModel>]: DynamicInputOption<ProductVariantsFormModel, K>[]
 }>;
 
 // The parent supplies the product whose variants and images are being edited.
 type ProductVariantsFormProps = { product: Product; };
 
 // Describe the dynamic array and its fields once, outside the component, to avoid rebuilding it per render.
-const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
+const formModel: DynamicFormModel<ProductVariantsFormModel> = {
   inputs: [
     {
       name: "productVariants",
@@ -54,6 +59,7 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
           label: "admin-product:variant_name",
           required: true,
           size: {
+            sm: 6,
             md: 3,
           },
           rules: { required: "admin-product:this_field_is_required" },
@@ -64,15 +70,23 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
           label: "admin-product:sku",
           required: true,
           size: {
+            sm: 6,
             md: 3,
           },
-          rules: { required: "admin-product:this_field_is_required" },
+          rules: {
+            required: "admin-product:this_field_is_required",
+            validate: (value, model) => (
+              model.productVariants.filter((variant) => variant.sku === value).length === 1
+              || "admin-product:sku_must_be_unique"
+            ),
+          },
         },
         {
           name: "color",
           inputType: "color",
           label: "admin-product:variant_color",
           size: {
+            sm: 6,
             md: 3,
           },
         },
@@ -82,6 +96,37 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
           label: "admin-product:thumbnail",
           options: [],
           size: {
+            sm: 6,
+            md: 3,
+          },
+        },
+        {
+          name: "price",
+          inputType: "currency",
+          label: "admin-product:price",
+          readOnly: true,
+          size: {
+            sm: 6,
+            md: 3,
+          },
+        },
+        {
+          name: "discountPrice",
+          inputType: "currency",
+          label: "admin-product:discount_price",
+          readOnly: true,
+          size: {
+            sm: 6,
+            md: 3,
+          },
+        },
+        {
+          name: "quantity",
+          inputType: "text",
+          label: "admin-product:quantity",
+          readOnly: true,
+          size: {
+            sm: 6,
             md: 3,
           },
         },
@@ -92,6 +137,7 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
         sku: "",
         name: "",
         thumbnailId: EMPTY_THUMBNAIL_ID,
+        quantity: 0,
       }),
     },
   ],
@@ -112,19 +158,16 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   // Upload a new thumbnail or remove the current thumbnail in a separate request.
   const [updateThumbnail, updateThumbnailResult] = useUpdateProductVariantThumbnailMutation();
   // Rebuild initial form values whenever RTK Query supplies a refreshed product.
-  const values = useMemo<UpdateProductVariantsCommand>(() => ({
+  const values = useMemo<ProductVariantsFormModel>(() => ({
     id: product.id,
-    productVariants: product.productVariants.map<UpdateProductVariantRequest>((variant) => ({
-      id: variant.id,
-      name: variant.name,
-      sku: variant.sku,
-      color: variant.color,
+    productVariants: product.productVariants.map<ArrayItemType<ProductVariantsFormModel["productVariants"]>>((variant) => ({
+      ...variant,
       // Resolve the thumbnail path to an image ID, or select the explicit empty option.
       thumbnailId: getThumbnailId(product, variant.thumbnailPath),
     })),
   }), [product]);
   // Let server refreshes reset the form through React Hook Form's reactive values option.
-  const formContext = useForm<UpdateProductVariantsCommand>({ values });
+  const formContext = useForm<ProductVariantsFormModel>({ values });
   // Watch the array so thumbnail options and hidden file inputs follow dynamic add/remove operations.
   const variants = formContext.watch("productVariants");
   // React Hook Form can preserve the array reference when only a nested thumbnail selection changes.
@@ -201,7 +244,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
     const result: VariantOptionsMap = {};
 
     // This option opens the native file picker through the effect above.
-    const uploadThumbnailOption: DynamicInputOption<UpdateProductVariantsCommand, VariantThumbnailKey> = {
+    const uploadThumbnailOption: DynamicInputOption<ProductVariantsFormModel, VariantThumbnailKey> = {
       key: UPLOAD_NEW_ID,
       label: "admin-product:upload_new_thumbnail",
       value: UPLOAD_NEW_ID,
@@ -209,7 +252,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
     };
 
     // This option requests thumbnail removal for an existing variant.
-    const emptyOption: DynamicInputOption<UpdateProductVariantsCommand, VariantThumbnailKey> = {
+    const emptyOption: DynamicInputOption<ProductVariantsFormModel, VariantThumbnailKey> = {
       key: EMPTY_THUMBNAIL_ID,
       label: "admin-product:empty_thumbnail",
       value: EMPTY_THUMBNAIL_ID,
@@ -218,7 +261,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
 
     // Product images are reusable thumbnail choices for every variant row.
     const existingImageOptions = product.images.map<
-      DynamicInputOption<UpdateProductVariantsCommand, VariantThumbnailKey>
+      DynamicInputOption<ProductVariantsFormModel, VariantThumbnailKey>
     >((image) => ({
       key: image.id,
       label: image.name,
@@ -250,7 +293,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   }, [product.images, temporaryThumbnailUrlMap, variants]);
 
   // Save array changes first, then apply file uploads/removals that require persisted variant IDs.
-  const handleSubmit = async ({ productVariants }: UpdateProductVariantsCommand) => {
+  const handleSubmit = async ({ productVariants }: ProductVariantsFormModel) => {
     try {
       // The first request creates, updates, and deletes variants and returns their persisted IDs.
       const updatedProduct = await updateVariants({

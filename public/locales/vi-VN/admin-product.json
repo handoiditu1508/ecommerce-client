@@ -37,6 +37,7 @@
   "products": "Sản Phẩm",
   "recover_product": "Khôi Phục Sản Phẩm",
   "sku": "SKU",
+  "sku_must_be_unique": "SKU phải là duy nhất.",
   "this_field_is_required": "Trường này là bắt buộc.",
   "thumbnail": "Ảnh Thu Nhỏ",
   "thumbnail_path": "Đường Dẫn Ảnh Thu Nhỏ",
