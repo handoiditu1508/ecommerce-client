@@ -53,6 +53,9 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
           inputType: "text",
           label: "admin-product:variant_name",
           required: true,
+          size: {
+            md: 3,
+          },
           rules: { required: "admin-product:this_field_is_required" },
         },
         {
@@ -60,10 +63,28 @@ const formModel: DynamicFormModel<UpdateProductVariantsCommand> = {
           inputType: "text",
           label: "admin-product:sku",
           required: true,
+          size: {
+            md: 3,
+          },
           rules: { required: "admin-product:this_field_is_required" },
         },
-        { name: "color", inputType: "color", label: "admin-product:variant_color" },
-        { name: "thumbnailId", inputType: "select", label: "admin-product:thumbnail", options: [] },
+        {
+          name: "color",
+          inputType: "color",
+          label: "admin-product:variant_color",
+          size: {
+            md: 3,
+          },
+        },
+        {
+          name: "thumbnailId",
+          inputType: "select",
+          label: "admin-product:thumbnail",
+          options: [],
+          size: {
+            md: 3,
+          },
+        },
       ],
       // A negative ID uniquely identifies this row until the server creates the real variant.
       createDefaultValue: () => ({

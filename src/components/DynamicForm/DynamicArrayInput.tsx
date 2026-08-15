@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
+import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { ArrayPath, FieldValues, Path, UseFormReturn, useFieldArray } from "react-hook-form";
@@ -129,42 +130,49 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
               </Box>
             )}
 
-            {"itemInputs" in model && model.itemInputs.map((itemInput) => {
-              const pathName = `${model.name}.${index}.${itemInput.name}` as K;
+            {"itemInputs" in model && (
+              <Grid columnSpacing={1} container>
+                {model.itemInputs.map((itemInput) => {
+                  const pathName = `${model.name}.${index}.${itemInput.name}` as K;
 
-              return getFinalValue(renderInputMap, pathName) ?? (
-                <DynamicInput
-                  key={itemInput.name}
-                  model={{
-                    ...itemInput,
-                    name: pathName,
-                  } as unknown as DynamicInputModel<T, K>}
-                  formContext={formContext}
-                  formLoading={formLoading}
-                  startAdornment={getFinalValue(startAdornmentMap, pathName)}
-                  endAdornment={getFinalValue(endAdornmentMap, pathName)}
-                  label={getFinalValue(labelMap, pathName)}
-                  rules={getFinalValue(
-                    rulesMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["rules"]>>,
-                    pathName,
-                  )}
-                  options={getFinalValue(
-                    optionsMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["options"]>>,
-                    pathName,
-                  )}
-                  autocompleteRenderInput={getFinalValue(autocompleteRenderInputMap, pathName)}
-                  autocompleteRenderOption={getFinalValue(
-                    autocompleteRenderOptionMap as Partial<
-                      Record<Path<T>, DynamicInputProps<T, K>["autocompleteRenderOption"]>
-                    >,
-                    pathName,
-                  )}
-                  autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
-                  autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
-                  hidden={getFinalValue(hiddenMap, pathName)}
-                />
-              );
-            })}
+                  return (
+                    <Grid key={itemInput.name} size={itemInput.size ?? 12}>
+                      {getFinalValue(renderInputMap, pathName) ?? (
+                        <DynamicInput
+                          model={{
+                            ...itemInput,
+                            name: pathName,
+                          } as unknown as DynamicInputModel<T, K>}
+                          formContext={formContext}
+                          formLoading={formLoading}
+                          startAdornment={getFinalValue(startAdornmentMap, pathName)}
+                          endAdornment={getFinalValue(endAdornmentMap, pathName)}
+                          label={getFinalValue(labelMap, pathName)}
+                          rules={getFinalValue(
+                            rulesMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["rules"]>>,
+                            pathName,
+                          )}
+                          options={getFinalValue(
+                            optionsMap as Partial<Record<Path<T>, DynamicInputProps<T, K>["options"]>>,
+                            pathName,
+                          )}
+                          autocompleteRenderInput={getFinalValue(autocompleteRenderInputMap, pathName)}
+                          autocompleteRenderOption={getFinalValue(
+                            autocompleteRenderOptionMap as Partial<
+                              Record<Path<T>, DynamicInputProps<T, K>["autocompleteRenderOption"]>
+                            >,
+                            pathName,
+                          )}
+                          autocompleteOnInputChange={getFinalValue(autocompleteOnInputChangeMap, pathName)}
+                          autocompleteLoading={getFinalValue(autocompleteLoadingMap, pathName)}
+                          hidden={getFinalValue(hiddenMap, pathName)}
+                        />
+                      )}
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            )}
 
             {"itemInput" in model && (() => {
               const pathName = `${model.name}.${index}` as K;

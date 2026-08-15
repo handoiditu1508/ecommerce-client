@@ -474,7 +474,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
                   : <Stack direction="row" gap={1.5} alignItems="center">
                     {selectOptionsMap.has(selected)
                       && !!(selectOptionsMap.get(selected)!.avatar || selectOptionsMap.get(selected)!.icon)
-                      && <Box sx={{ ">*": { width: "23px !important", height: "23px !important", fontSize: "23px !important" } }}>
+                      && <Box sx={{ ">*": { width: "23px !important", height: "23px !important", fontSize: "23px !important", display: "flex" } }}>
                         {selectOptionsMap.get(selected)!.avatar || selectOptionsMap.get(selected)!.icon}
                       </Box>}
                     {getOptionLabel(selected)}
