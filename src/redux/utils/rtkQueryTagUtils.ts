@@ -193,6 +193,28 @@ export function invalidatesOptimisticPessimisticIdTag<T extends EntityTags, ID e
 
 /**
  * ```
+ * invalidatesPessimisticIdTag("Post", 2, error);
+ * ```
+ * @param tagType Tag type.
+ * @param id Entity id.
+ * @param error Error object returned by RTK Query.
+ * @returns
+ * ```
+ * [{ type: "Post", id: "LIST-2" }]
+ * // or
+ * []
+ * ```
+ */
+export function invalidatesPessimisticIdTag<T extends EntityTags, ID extends EntityId>(
+  tagType: T,
+  id: ID,
+  error: FetchBaseQueryError | undefined
+): TagList<T, ID> {
+  return error ? [] : [{ type: tagType, id: `LIST-${id}` }];
+}
+
+/**
+ * ```
  * invalidatesCountTag("Post", error);
  * ```
  * @param tagType Tag type.
