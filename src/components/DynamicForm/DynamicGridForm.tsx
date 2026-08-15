@@ -26,6 +26,7 @@ function DynamicGridForm<T extends FieldValues>({
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
   renderInputMap = CONFIG.EMPTY_OBJECT,
+  arrayItemActionsMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
   gridProps,
   ...props
@@ -68,6 +69,7 @@ function DynamicGridForm<T extends FieldValues>({
               autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
               autocompleteLoadingMap={autocompleteLoadingMap}
               renderInputMap={renderInputMap}
+              arrayItemActionsMap={arrayItemActionsMap}
             />}
           </Grid>
         );

@@ -1,11 +1,17 @@
 import CONFIG from "@/configs";
 import DeleteIcon from "@mui/icons-material/Delete";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { ArrayPath, FieldValues, Path, UseFormReturn, useFieldArray } from "react-hook-form";
@@ -32,6 +38,7 @@ export type DynamicArrayInputProps<T extends FieldValues, K extends Path<T>> = {
   autocompleteLoadingMap?: DynamicFormProps<T>["autocompleteLoadingMap"];
   hiddenMap?: DynamicFormProps<T>["hiddenMap"];
   renderInputMap?: DynamicFormProps<T>["renderInputMap"];
+  arrayItemActionsMap?: DynamicFormProps<T>["arrayItemActionsMap"];
 };
 
 /**
@@ -80,14 +87,23 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
   renderInputMap = CONFIG.EMPTY_OBJECT,
+  arrayItemActionsMap = CONFIG.EMPTY_OBJECT,
 }: DynamicArrayInputProps<T, K>) {
   const { t } = useTranslation();
   const theme = useTheme();
+  const [itemActionMenuAnchor, setItemActionMenuAnchor] = React.useState<HTMLElement | null>(null);
+  const [itemActionMenuIndex, setItemActionMenuIndex] = React.useState<number | null>(null);
   const { fields, append, remove } = useFieldArray<T, ArrayPath<T>>({
     control: formContext.control,
     name: model.name as ArrayPath<T>, // lie to type checking that this is ArrayPath<T>
   });
   const finalLabel = label || model.label;
+  const itemActions = getFinalValue(arrayItemActionsMap, model.name) ?? [];
+
+  const closeItemActionMenu = () => {
+    setItemActionMenuAnchor(null);
+    setItemActionMenuIndex(null);
+  };
 
   const addItem = () => {
     const data = formContext.getValues();
@@ -116,17 +132,49 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
             key={field.id}
             sx={{ bgcolor: index % 2 === 0 ? "transparent" : "action.hover", mx: -2, px: 2, pb: 1 }}
           >
-            {!model.readOnly && (!model.required || fieldsArray.length > 1) && (
+            {(itemActions.length > 0 || (!model.readOnly && (!model.required || fieldsArray.length > 1))) && (
               <Box sx={{ textAlign: "right" }}>
-                <Button
-                  variant="text"
-                  size="small"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                <IconButton
+                  aria-label={t("actions")}
                   disabled={model.disabled || formLoading}
-                  onClick={() => remove(index)}>
-                  {model.removeButtonText ? t(model.removeButtonText) : t("remove")} #{index + 1}
-                </Button>
+                  onClick={(event) => {
+                    setItemActionMenuAnchor(event.currentTarget);
+                    setItemActionMenuIndex(index);
+                  }}>
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={itemActionMenuAnchor}
+                  open={itemActionMenuIndex === index}
+                  onClose={closeItemActionMenu}>
+                  {itemActions.map((itemAction) => (
+                    <MenuItem
+                      key={itemAction.key}
+                      disabled={model.disabled || formLoading || itemAction.disabled}
+                      onClick={() => {
+                        itemAction.onClick(formContext.getValues(), index);
+                        closeItemActionMenu();
+                      }}>
+                      {itemAction.icon && <ListItemIcon>{itemAction.icon}</ListItemIcon>}
+                      {typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label}
+                    </MenuItem>
+                  ))}
+                  {!model.readOnly && (!model.required || fieldsArray.length > 1) && (
+                    <>
+                      {itemActions.length > 0 && <Divider />}
+                      <MenuItem
+                        disabled={model.disabled || formLoading}
+                        sx={{ color: "error.main" }}
+                        onClick={() => {
+                          remove(index);
+                          closeItemActionMenu();
+                        }}>
+                        <ListItemIcon sx={{ color: "inherit" }}><DeleteIcon /></ListItemIcon>
+                        {model.removeButtonText ? t(model.removeButtonText) : t("remove")}
+                      </MenuItem>
+                    </>
+                  )}
+                </Menu>
               </Box>
             )}
 

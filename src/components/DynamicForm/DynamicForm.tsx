@@ -6,7 +6,7 @@ import React from "react";
 import { FieldValues, Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import DynamicInput from "./DynamicInput";
-import { DynamicFormModel, DynamicInputOption } from "./models";
+import { DynamicArrayItemAction, DynamicFormModel, DynamicInputOption } from "./models";
 
 export type DynamicFormProps<T extends FieldValues> = Omit<BoxProps<"form">, "component" | "children" | "onSubmit"> & {
   model: DynamicFormModel<T>;
@@ -26,6 +26,7 @@ export type DynamicFormProps<T extends FieldValues> = Omit<BoxProps<"form">, "co
   autocompleteLoadingMap?: Partial<Record<Path<T>, boolean>>;
   hiddenMap?: Partial<Record<Path<T>, boolean | ((data: T) => boolean)>>;
   renderInputMap?: Partial<Record<Path<T>, React.ReactNode>>;
+  arrayItemActionsMap?: Partial<Record<Path<T>, DynamicArrayItemAction<T>[]>>;
   onSubmit: SubmitHandler<T>;
 };
 
@@ -44,6 +45,7 @@ function DynamicForm<T extends FieldValues>({
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
   renderInputMap = CONFIG.EMPTY_OBJECT,
+  arrayItemActionsMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
   ...props
 }: DynamicFormProps<T>) {
@@ -76,6 +78,7 @@ function DynamicForm<T extends FieldValues>({
           autocompleteOnInputChangeMap={autocompleteOnInputChangeMap}
           autocompleteLoadingMap={autocompleteLoadingMap}
           renderInputMap={renderInputMap}
+          arrayItemActionsMap={arrayItemActionsMap}
         />
       )}
     </React.Fragment>
