@@ -10,7 +10,9 @@ import {
   useUpdateProductVariantThumbnailMutation,
 } from "@/redux/apis/productApi";
 import { pushNotification } from "@/redux/slices/notificationSlice";
+import AddIcon from "@mui/icons-material/Add";
 import HideImageIcon from "@mui/icons-material/HideImage";
+import RemoveIcon from "@mui/icons-material/Remove";
 import UploadIcon from "@mui/icons-material/Upload";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -18,6 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Path, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NIL as NIL_UUID } from "uuid";
+import QuantityChangeDialog, { QuantityChangeDialogState, QuantityChangeType } from "./QuantityChangeDialog";
 
 // Select value that represents removing or not assigning a variant thumbnail.
 const EMPTY_THUMBNAIL_ID = "empty";
@@ -157,6 +160,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   const [updateVariants, updateVariantsResult] = useUpdateProductVariantsMutation();
   // Upload a new thumbnail or remove the current thumbnail in a separate request.
   const [updateThumbnail, updateThumbnailResult] = useUpdateProductVariantThumbnailMutation();
+  const [quantityChangeDialog, setQuantityChangeDialog] = useState<QuantityChangeDialogState | null>(null);
   // Rebuild initial form values whenever RTK Query supplies a refreshed product.
   const values = useMemo<ProductVariantsFormModel>(() => ({
     id: product.id,
@@ -176,6 +180,17 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   );
   // Disable the complete form while either stage of the save is running.
   const loading = updateVariantsResult.isLoading || updateThumbnailResult.isLoading;
+  const openQuantityChangeDialog = useCallback((
+    type: QuantityChangeType,
+    data: ProductVariantsFormModel,
+    index: number,
+  ) => {
+    const variant = data.productVariants[index];
+    if (!variant || variant.id <= 0) return;
+
+    setQuantityChangeDialog({ type, variant });
+  }, []);
+
   // Store each hidden file input by stable variant ID so reordering rows does not mix them up.
   const fileInputMapRef = useRef<Record<number, HTMLInputElement | null>>({});
   // Store selected files outside the API form model because thumbnails use a separate endpoint.
@@ -380,12 +395,35 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
           }}
         />
       ))}
+      <QuantityChangeDialog
+        productId={product.id}
+        quantityChange={quantityChangeDialog}
+        onClose={() => setQuantityChangeDialog(null)}
+      />
       {/* DynamicForm owns array rendering, validation, add/remove controls, and submission. */}
       <DynamicForm
         formContext={formContext}
         model={formModel}
         loading={loading}
         optionsMap={productVariantOptionsMap}
+        arrayItemActionsMap={{
+          productVariants: [
+            {
+              key: "increase_quantity",
+              label: "admin-product:increase_quantity",
+              icon: <AddIcon />,
+              disabled: (data, index) => data.productVariants[index].id <= 0,
+              onClick: (data, index) => openQuantityChangeDialog("increase", data, index),
+            },
+            {
+              key: "decrease_quantity",
+              label: "admin-product:decrease_quantity",
+              icon: <RemoveIcon />,
+              disabled: (data, index) => data.productVariants[index].id <= 0,
+              onClick: (data, index) => openQuantityChangeDialog("decrease", data, index),
+            },
+          ],
+        }}
         onSubmit={handleSubmit}
       />
     </Box>

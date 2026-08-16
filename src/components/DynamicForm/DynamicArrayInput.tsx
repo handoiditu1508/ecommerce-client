@@ -150,7 +150,11 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
                   {itemActions.map((itemAction) => (
                     <MenuItem
                       key={itemAction.key}
-                      disabled={model.disabled || formLoading || itemAction.disabled}
+                      disabled={model.disabled || formLoading || (
+                        typeof itemAction.disabled === "function"
+                          ? itemAction.disabled(formContext.getValues(), index)
+                          : itemAction.disabled
+                      )}
                       onClick={() => {
                         itemAction.onClick(formContext.getValues(), index);
                         closeItemActionMenu();

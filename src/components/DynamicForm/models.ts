@@ -82,7 +82,7 @@ export type DynamicArrayItemAction<T extends FieldValues> = {
   key: React.Key;
   label: React.ReactNode;
   icon?: React.ReactNode;
-  disabled?: boolean;
+  disabled?: boolean | ((data: T, index: number) => boolean);
   onClick: (data: T, index: number) => void;
 };
 
