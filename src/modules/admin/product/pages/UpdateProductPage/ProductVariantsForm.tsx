@@ -11,6 +11,8 @@ import {
 } from "@/redux/apis/productApi";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import HideImageIcon from "@mui/icons-material/HideImage";
 import RemoveIcon from "@mui/icons-material/Remove";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -421,6 +423,36 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
               icon: <RemoveIcon />,
               disabled: (data, index) => data.productVariants[index].id <= 0,
               onClick: (data, index) => openQuantityChangeDialog("decrease", data, index),
+            },
+            {
+              key: "move_up",
+              label: "admin-product:move_up",
+              icon: <ArrowUpwardIcon />,
+              hidden: (data, index) => index === 0,
+              onClick: (data, index) => {
+                const current = formContext.getValues().productVariants;
+                if (index <= 0) return;
+                const next = [...current];
+                const tmp = next[index - 1];
+                next[index - 1] = next[index];
+                next[index] = tmp;
+                formContext.setValue("productVariants", next, { shouldDirty: true });
+              },
+            },
+            {
+              key: "move_down",
+              label: "admin-product:move_down",
+              icon: <ArrowDownwardIcon />,
+              hidden: (data, index) => index === data.productVariants.length - 1,
+              onClick: (data, index) => {
+                const current = formContext.getValues().productVariants;
+                if (index >= current.length - 1) return;
+                const next = [...current];
+                const tmp = next[index + 1];
+                next[index + 1] = next[index];
+                next[index] = tmp;
+                formContext.setValue("productVariants", next, { shouldDirty: true });
+              },
             },
           ],
         }}

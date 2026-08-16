@@ -147,25 +147,37 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
                   anchorEl={itemActionMenuAnchor}
                   open={itemActionMenuIndex === index}
                   onClose={closeItemActionMenu}>
-                  {itemActions.map((itemAction) => (
-                    <MenuItem
-                      key={itemAction.key}
-                      disabled={model.disabled || formLoading || (
-                        typeof itemAction.disabled === "function"
-                          ? itemAction.disabled(formContext.getValues(), index)
-                          : itemAction.disabled
-                      )}
-                      onClick={() => {
-                        itemAction.onClick(formContext.getValues(), index);
-                        closeItemActionMenu();
-                      }}>
-                      {itemAction.icon && <ListItemIcon>{itemAction.icon}</ListItemIcon>}
-                      {typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label}
-                    </MenuItem>
-                  ))}
+                  {itemActions
+                    .filter((itemAction) => {
+                      const hidden = typeof itemAction.hidden === "function"
+                        ? itemAction.hidden(formContext.getValues(), index)
+                        : itemAction.hidden;
+
+                      return !hidden;
+                    })
+                    .map((itemAction) => (
+                      <MenuItem
+                        key={itemAction.key}
+                        disabled={model.disabled || formLoading || (
+                          typeof itemAction.disabled === "function"
+                            ? itemAction.disabled(formContext.getValues(), index)
+                            : itemAction.disabled
+                        )}
+                        onClick={() => {
+                          itemAction.onClick(formContext.getValues(), index);
+                          closeItemActionMenu();
+                        }}>
+                        {itemAction.icon && <ListItemIcon>{itemAction.icon}</ListItemIcon>}
+                        {typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label}
+                      </MenuItem>
+                    ))}
                   {!model.readOnly && (!model.required || fieldsArray.length > 1) && (
                     <>
-                      {itemActions.length > 0 && <Divider />}
+                      {itemActions.filter((a) => {
+                        const hidden = typeof a.hidden === "function" ? a.hidden(formContext.getValues(), index) : a.hidden;
+
+                        return !hidden;
+                      }).length > 0 && <Divider />}
                       <MenuItem
                         disabled={model.disabled || formLoading}
                         sx={{ color: "error.main" }}
