@@ -1,17 +1,21 @@
-import { AddProductQuantityCommand } from "@/models/apis/product/addProductQuantityCommand";
+import { AddProductQuantityCommand } from "@/models/apis/product/addProductQuantity";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
 import { DeleteProductCommand } from "@/models/apis/product/deleteProduct";
+import { DeleteProductImagesCommand } from "@/models/apis/product/deleteProductImages";
 import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedProducts";
 import { GetLatestProductsQuery } from "@/models/apis/product/getLatestProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { CountProductsQuery, GetProductsQuery } from "@/models/apis/product/getProducts";
 import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
 import { RecoverProductCommand } from "@/models/apis/product/recoverProduct";
+import { ReorderProductImagesCommand } from "@/models/apis/product/reorderProductImages";
 import { CountSearchProductsQuery, SearchProductsQuery } from "@/models/apis/product/searchProducts";
 import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
 import { UpdateProductVariantsCommand } from "@/models/apis/product/updateProductVariants";
 import { UpdateProductVariantThumbnailCommand } from "@/models/apis/product/updateProductVariantThumbnail";
+import { UploadProductImagesCommand } from "@/models/apis/product/uploadProductImages";
 import Product, { ProductView } from "@/models/entities/Product";
+import { objectToFormData } from "../utils/formDataUtils";
 import {
   invalidatesCountTag,
   invalidatesIdTag,
@@ -97,23 +101,11 @@ const productApi = appApi.injectEndpoints({
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
     createProduct: builder.mutation<Product, CreateProductCommand>({
-      query: (arg) => {
-        const bodyFormData = new FormData();
-
-        Object.entries(arg).forEach(([key, value]) => {
-          if (value instanceof FileList) {
-            Array.from(value).forEach((file) => bodyFormData.append(key, file));
-          } else if (value !== undefined) {
-            bodyFormData.append(key, value.toString());
-          }
-        });
-
-        return {
-          url: "/products",
-          method: "POST",
-          body: bodyFormData,
-        };
-      },
+      query: (arg) => ({
+        url: "/products",
+        method: "POST",
+        body: objectToFormData(arg),
+      }),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {
           const { data: createdProduct } = await queryFulfilled;
@@ -129,23 +121,11 @@ const productApi = appApi.injectEndpoints({
       invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
     }),
     updateProduct: builder.mutation<Product, UpdateProductCommand>({
-      query: (arg) => {
-        const bodyFormData = new FormData();
-
-        Object.entries(arg).forEach(([key, value]) => {
-          if (value instanceof FileList) {
-            Array.from(value).forEach((file) => bodyFormData.append(key, file));
-          } else if (value !== undefined) {
-            bodyFormData.append(key, value.toString());
-          }
-        });
-
-        return {
-          url: `/products/${arg.id}`,
-          method: "POST",
-          body: bodyFormData,
-        };
-      },
+      query: (arg) => ({
+        url: `/products/${arg.id}`,
+        method: "POST",
+        body: objectToFormData(arg),
+      }),
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         try {
           const { data: updatedProduct } = await queryFulfilled;
@@ -181,23 +161,11 @@ const productApi = appApi.injectEndpoints({
       invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.id, error),
     }),
     updateProductVariantThumbnail: builder.mutation<Product, UpdateProductVariantThumbnailCommand>({
-      query: (arg) => {
-        const bodyFormData = new FormData();
-
-        Object.entries(arg).forEach(([key, value]) => {
-          if (value instanceof FileList) {
-            Array.from(value).forEach((file) => bodyFormData.append(key, file));
-          } else if (value !== undefined) {
-            bodyFormData.append(key, value.toString());
-          }
-        });
-
-        return {
-          url: `/products/variants/${arg.id}/thumbnail`,
-          method: "POST",
-          body: bodyFormData,
-        };
-      },
+      query: (arg) => ({
+        url: `/products/variants/${arg.id}/thumbnail`,
+        method: "POST",
+        body: objectToFormData(arg),
+      }),
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         try {
           const { data: updatedProduct } = await queryFulfilled;
@@ -227,6 +195,66 @@ const productApi = appApi.injectEndpoints({
         params: arg,
       }),
       invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
+    }),
+    uploadProductImages: builder.mutation<Product, UploadProductImagesCommand>({
+      query: (arg) => ({
+        url: `/products/${arg.productId}/images`,
+        method: "POST",
+        body: objectToFormData(arg),
+      }),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.productId },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.productId, error),
+    }),
+    deleteProductImages: builder.mutation<Product, DeleteProductImagesCommand>({
+      query: (body) => ({
+        url: `/products/${body.productId}/images/delete`,
+        method: "POST",
+        body,
+      }),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.productId },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.productId, error),
+    }),
+    reorderProductImages: builder.mutation<Product, ReorderProductImagesCommand>({
+      query: (body) => ({
+        url: `/products/${body.productId}/images/order`,
+        method: "PUT",
+        body,
+      }),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data: updatedProduct } = await queryFulfilled;
+          dispatch(
+            productApi.util.upsertQueryData(
+              "getProduct",
+              { productId: arg.productId },
+              updatedProduct,
+            ),
+          );
+        } catch {}
+      },
+      invalidatesTags: (_result, error, arg) => invalidatesPessimisticIdTag("Product", arg.productId, error),
     }),
     recoverProduct: builder.mutation<Product, RecoverProductCommand>({
       query: ({ productId }) => ({
@@ -261,5 +289,8 @@ export const {
   useUpdateProductVariantThumbnailMutation,
   useAddProductQuantityMutation,
   useDeleteProductMutation,
+  useUploadProductImagesMutation,
+  useDeleteProductImagesMutation,
+  useReorderProductImagesMutation,
   useRecoverProductMutation,
 } = productApi;
