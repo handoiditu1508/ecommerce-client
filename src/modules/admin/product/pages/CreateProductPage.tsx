@@ -1,15 +1,15 @@
-import CascadingCategorySelect from "@/components/CascadingCategorySelect";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
+import { categoriesToDynamicInputOptions } from "@/models/entities/Category";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { useCreateProductMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +39,12 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
         min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
-    { name: "categoryId", inputType: "text", label: "admin-product:category" },
+    {
+      name: "categoryId",
+      inputType: "cascadingselect",
+      label: "admin-product:category",
+      options: [],
+    },
     {
       name: "thumbnailFile",
       inputType: "file",
@@ -87,23 +92,8 @@ function CreateProductPage() {
         formContext={formContext}
         model={formModel}
         loading={result.isLoading}
-        renderInputMap={{
-          categoryId: <Controller
-            control={formContext.control}
-            name="categoryId"
-            render={({ field, fieldState }) => (
-              <CascadingCategorySelect
-                categories={categories}
-                value={field.value}
-                label={t("category_optional")}
-                disabled={result.isLoading}
-                error={fieldState.invalid}
-                helperText={fieldState.error?.message}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-              />
-            )}
-          />,
+        optionsMap={{
+          categoryId: categoriesToDynamicInputOptions<CreateProductCommand, "categoryId">(categories),
         }}
         onSubmit={handleSubmit}
       />

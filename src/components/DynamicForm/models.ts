@@ -9,6 +9,7 @@ export type DynamicInputModel<T extends FieldValues, K extends Path<T>, A extend
   | DynamicCurrencyInputModel<T, K, A>
   | DynamicDateTimeInputModel<T, K, A>
   | DynamicSelectInputModel<T, K, A>
+  | DynamicCascadingSelectInputModel<T, K, A>
   | DynamicAutoCompleteInputModel<T, K, A>
   | DynamicCheckboxInputModel<T, K, A>
   | DynamicRadioInputModel<T, K, A>
@@ -76,16 +77,19 @@ export type DynamicInputOption<T extends FieldValues, K extends Path<T>> = {
   value: ArrayItemType<PathValue<T, K>>;
   icon?: React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>;
   avatar?: React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>;
+  /**
+   * for `inputType="cascadingselect"`
+   */
+  children?: DynamicInputOption<T, K>[];
 };
 
-export type DynamicArrayItemAction<T extends FieldValues> = {
-  key: React.Key;
-  label: React.ReactNode;
-  icon?: React.ReactNode;
-  disabled?: boolean | ((data: T, index: number) => boolean);
-  hidden?: boolean | ((data: T, index: number) => boolean);
-  onClick: (data: T, index: number) => void;
-};
+export type DynamicCascadingSelectInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
+  DynamicCommonInputModel<T, K, A> & {
+    inputType: "cascadingselect";
+    multiple?: boolean;
+    leafOnly?: boolean;
+    options: DynamicInputOption<T, K>[];
+  };
 
 export type DynamicAutoCompleteInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
   DynamicCommonInputModel<T, K, A> & {
@@ -150,6 +154,15 @@ export type DynamicArrayPrimitiveInputModel<T extends FieldValues, K extends Pat
 export type DynamicArrayInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
   | DynamicArrayObjectInputModel<T, K, A>
   | DynamicArrayPrimitiveInputModel<T, K, A>;
+
+export type DynamicArrayItemAction<T extends FieldValues> = {
+  key: React.Key;
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+  disabled?: boolean | ((data: T, index: number) => boolean);
+  hidden?: boolean | ((data: T, index: number) => boolean);
+  onClick: (data: T, index: number) => void;
+};
 
 export type DynamicFormModel<T extends FieldValues> = {
   inputs: {

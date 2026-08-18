@@ -1,10 +1,10 @@
-import CascadingCategorySelect from "@/components/CascadingCategorySelect";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
 import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
+import { categoriesToDynamicInputOptions } from "@/models/entities/Category";
 import Product from "@/models/entities/Product";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
 import { useGetProductQuery, useUpdateProductMutation } from "@/redux/apis/productApi";
@@ -17,7 +17,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { NIL as NIL_UUID } from "uuid";
@@ -46,7 +46,7 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
         min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
-    { name: "categoryId", inputType: "text", label: "admin-product:category" },
+    { name: "categoryId", inputType: "cascadingselect", label: "admin-product:category", options: [] },
     { name: "thumbnailId", inputType: "select", label: "admin-product:thumbnail", options: [] },
   ],
   submitButtonText: "admin-product:update_product",
@@ -190,26 +190,7 @@ function UpdateProductPage() {
               avatar: <Avatar alt={image.name} src={CONFIG.FILE_URL + image.filePath} variant="rounded" />,
             })),
           ],
-        }}
-        renderInputMap={{
-          categoryId: (
-            <Controller
-              control={formContext.control}
-              name="categoryId"
-              render={({ field, fieldState }) => (
-                <CascadingCategorySelect
-                  categories={categories}
-                  value={field.value}
-                  label={t("category_optional")}
-                  disabled={updateResult.isLoading}
-                  error={fieldState.invalid}
-                  helperText={fieldState.error?.message}
-                  onBlur={field.onBlur}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          ),
+          categoryId: categoriesToDynamicInputOptions<UpdateProductCommand, "categoryId">(categories),
         }}
         onSubmit={handleSubmit}
       />

@@ -32,6 +32,7 @@ import dayjs, { Dayjs } from "dayjs";
 import React, { useMemo, useState } from "react";
 import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import CascadingSelect from "../CascadingSelect";
 import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
 import FileInput from "../FileInput";
@@ -517,6 +518,51 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
             </Select>
             {fieldState.error && <FormHelperText>{errorText(fieldState.error.message)}</FormHelperText>}
           </FormControl>
+        )}
+      />
+    );
+  }
+
+  if (model.inputType === "cascadingselect") {
+    const finalOptions = options || model.options;
+
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => (
+          <CascadingSelect
+            fullWidth
+            required={model.required}
+            margin="normal"
+            error={fieldState.invalid}
+            disabled={model.disabled}
+            readOnly={model.readOnly || formLoading}
+            multiple={model.multiple}
+            label={finalLabel}
+            items={finalOptions}
+            helperText={fieldState.error?.message}
+            leafOnly={model.leafOnly}
+            selectKey={(o) => o.key}
+            selectValue={(o) => o.value}
+            selectLabel={(o) => o.label}
+            selectChildren={(o) => o.children ?? CONFIG.EMPTY_ARRAY}
+            {...field}
+            value={field.value ?? (model.multiple ? [] : "")}
+            onChange={
+              model.validateOnChange
+                ? (event) => {
+                  field.onChange(event);
+                  // trigger validation
+                  formContext.trigger(model.name);
+                }
+                : field.onChange
+            }
+          />
         )}
       />
     );
