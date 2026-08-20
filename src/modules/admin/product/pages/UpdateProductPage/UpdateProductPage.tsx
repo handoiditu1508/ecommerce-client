@@ -62,6 +62,10 @@ function UpdateProductPage() {
   const { t } = useTranslation("admin-product");
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
+  const categoryOptions = useMemo<DynamicInputOption<UpdateProductCommand, "categoryId">[]>(
+    () => categoriesToDynamicInputOptions<UpdateProductCommand, "categoryId">(categories),
+    [categories]
+  );
   const productResult = useGetProductQuery(
     { productId: id },
     { skip: !Number.isInteger(id) },
@@ -190,7 +194,7 @@ function UpdateProductPage() {
               avatar: <Avatar alt={image.name} src={CONFIG.FILE_URL + image.filePath} variant="rounded" />,
             })),
           ],
-          categoryId: categoriesToDynamicInputOptions<UpdateProductCommand, "categoryId">(categories),
+          categoryId: categoryOptions,
         }}
         onSubmit={handleSubmit}
       />

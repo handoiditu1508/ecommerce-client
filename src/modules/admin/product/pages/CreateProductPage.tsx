@@ -1,4 +1,5 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import { DynamicInputOption } from "@/components/DynamicForm/models";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
@@ -9,6 +10,7 @@ import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -63,6 +65,10 @@ function CreateProductPage() {
   const { t } = useTranslation("admin-product");
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
+  const categoryOptions = useMemo<DynamicInputOption<CreateProductCommand, "categoryId">[]>(
+    () => categoriesToDynamicInputOptions<CreateProductCommand, "categoryId">(categories),
+    [categories]
+  );
   const [createProduct, result] = useCreateProductMutation();
   const formContext = useForm<CreateProductCommand>({
     defaultValues: {
@@ -93,7 +99,7 @@ function CreateProductPage() {
         model={formModel}
         loading={result.isLoading}
         optionsMap={{
-          categoryId: categoriesToDynamicInputOptions<CreateProductCommand, "categoryId">(categories),
+          categoryId: categoryOptions,
         }}
         onSubmit={handleSubmit}
       />

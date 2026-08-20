@@ -1,6 +1,8 @@
 import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
+import { DynamicInputOption } from "@/components/DynamicForm/models";
 import { CountProductsQuery } from "@/models/apis/product/getProducts";
 import Category, { categoriesToDynamicInputOptions } from "@/models/entities/Category";
+import { useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -27,6 +29,10 @@ const model: DynamicFormModel<CountProductsQuery> = {
 
 function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersProps) {
   useTranslation(["admin-product", "product"]);
+  const categoryOptions = useMemo<DynamicInputOption<CountProductsQuery, "categoryIds">[]>(
+    () => categoriesToDynamicInputOptions<CountProductsQuery, "categoryIds">(categories),
+    [categories]
+  );
 
   return (
     <DynamicGridForm
@@ -35,7 +41,7 @@ function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersPro
       gridProps={{ spacing: 2 }}
       sx={{ mb: 3 }}
       optionsMap={{
-        categoryIds: categoriesToDynamicInputOptions(categories),
+        categoryIds: categoryOptions,
       }}
       onSubmit={onSubmit}
     />
