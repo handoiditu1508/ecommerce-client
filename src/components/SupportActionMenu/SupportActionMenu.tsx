@@ -5,18 +5,18 @@ import SupportActionMenuItem from "./SupportActionMenuItem";
 import { SupportAction } from "./models";
 
 type OwnProps = {
-  supportActions: SupportAction[];
+  items: SupportAction[];
   menuItemProps?: MenuItemProps;
 };
 
 type SupportActionMenuProps = OwnProps & Omit<MenuProps, keyof OwnProps>;
 
-function SupportActionMenu({ supportActions, menuItemProps, ...props }: SupportActionMenuProps) {
+function SupportActionMenu({ items, menuItemProps, ...props }: SupportActionMenuProps) {
   return (
     <Menu {...props}>
-      {supportActions.map((supportAction) => ([
-        <SupportActionMenuItem key={supportAction.id} supportAction={supportAction} {...menuItemProps} />,
-        (supportAction.bottomDivider && <Divider />),
+      {items.map((item) => ([
+        <SupportActionMenuItem key={item.key} item={item} {...menuItemProps} />,
+        (item.bottomDivider && <Divider />),
       ]))}
     </Menu>
   );

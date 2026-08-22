@@ -1,10 +1,10 @@
-import { JSX } from "react";
+import { Key, ReactNode } from "react";
 
 export type SupportAction = {
-  id: number;
-  text: string;
-  idleIcon?: JSX.Element;
-  activeIcon?: JSX.Element;
+  key: Key;
+  label: ReactNode;
+  idleIcon?: ReactNode;
+  activeIcon?: ReactNode;
   disabled?: boolean;
   bottomDivider?: boolean;
   secondaryText?: string;
