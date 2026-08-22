@@ -171,25 +171,24 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
                         {typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label}
                       </MenuItem>
                     ))}
-                  {!model.readOnly && (!model.required || fieldsArray.length > 1) && (
-                    <>
-                      {itemActions.filter((a) => {
-                        const hidden = typeof a.hidden === "function" ? a.hidden(formContext.getValues(), index) : a.hidden;
+                  {!model.readOnly && (!model.required || fieldsArray.length > 1) && [
+                    itemActions.filter((a) => {
+                      const hidden = typeof a.hidden === "function" ? a.hidden(formContext.getValues(), index) : a.hidden;
 
-                        return !hidden;
-                      }).length > 0 && <Divider />}
-                      <MenuItem
-                        disabled={model.disabled || formLoading}
-                        sx={{ color: "error.main" }}
-                        onClick={() => {
-                          remove(index);
-                          closeItemActionMenu();
-                        }}>
-                        <ListItemIcon sx={{ color: "inherit" }}><DeleteIcon /></ListItemIcon>
-                        {model.removeButtonText ? t(model.removeButtonText) : t("remove")}
-                      </MenuItem>
-                    </>
-                  )}
+                      return !hidden;
+                    }).length > 0 && <Divider key="divider" />,
+                    <MenuItem
+                      key="remove"
+                      disabled={model.disabled || formLoading}
+                      sx={{ color: "error.main" }}
+                      onClick={() => {
+                        remove(index);
+                        closeItemActionMenu();
+                      }}>
+                      <ListItemIcon sx={{ color: "inherit" }}><DeleteIcon /></ListItemIcon>
+                      {model.removeButtonText ? t(model.removeButtonText) : t("remove")}
+                    </MenuItem>,
+                  ]}
                 </Menu>
               </Box>
             )}

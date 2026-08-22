@@ -164,7 +164,13 @@ function FileInput({
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
 
-    return () => URL.revokeObjectURL(objectUrl);
+    return () => {
+      // Defer revocation past the next paint: this cleanup can fire in the same
+      // effect pass that schedules the re-render removing the <img>, before that
+      // re-render has actually painted, so revoking synchronously here can pull
+      // the URL out from under an <img> the browser is still displaying.
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+    };
   }, [files, status]);
 
   const startDrag: React.DragEventHandler<HTMLDivElement> = (event) => {

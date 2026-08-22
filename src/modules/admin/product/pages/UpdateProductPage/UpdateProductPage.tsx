@@ -19,8 +19,9 @@ import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NIL as NIL_UUID } from "uuid";
+import ProductImagesForm from "./ProductImagesForm";
 import ProductReadonlyDetails from "./ProductReadonlyDetails";
 import ProductVariantsForm from "./ProductVariantsForm";
 
@@ -58,7 +59,6 @@ const getThumbnailId = (product: Product): string | undefined =>
 function UpdateProductPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { t } = useTranslation("admin-product");
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
@@ -137,7 +137,6 @@ function UpdateProductPage() {
         text: t("product_updated_successfully"),
         severity: "success",
       }));
-      navigate("/admin/products");
     } catch {}
   };
 
@@ -199,6 +198,7 @@ function UpdateProductPage() {
         onSubmit={handleSubmit}
       />
       <ProductVariantsForm product={product} />
+      <ProductImagesForm product={product} />
       <ProductReadonlyDetails product={product} />
     </Paper>
   );
