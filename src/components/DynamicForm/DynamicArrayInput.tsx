@@ -1,18 +1,16 @@
+import SupportActionMenu, { SupportAction } from "@/components/SupportActionMenu";
 import CONFIG from "@/configs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { ArrayPath, FieldValues, Path, UseFormReturn, useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -111,6 +109,53 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
     append(defaultItem);
   };
 
+  // Build the row's action menu items, translating string labels and appending the remove action last.
+  const buildItemSupportActions = (index: number, fieldsArray: typeof fields): SupportAction[] => {
+    const visibleItemActions = itemActions.filter((itemAction) => {
+      const hidden = typeof itemAction.hidden === "function"
+        ? itemAction.hidden(formContext.getValues(), index)
+        : itemAction.hidden;
+
+      return !hidden;
+    });
+    const canRemove = !model.readOnly && (!model.required || fieldsArray.length > 1);
+
+    return [
+      ...visibleItemActions.map<SupportAction>((itemAction, actionIndex) => ({
+        key: itemAction.key,
+        label: typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label,
+        idleIcon: itemAction.icon,
+        disabled: model.disabled || formLoading || (
+          typeof itemAction.disabled === "function"
+            ? itemAction.disabled(formContext.getValues(), index)
+            : itemAction.disabled
+        ),
+        // Separate the remove action with a divider instead of inserting one as its own menu item.
+        bottomDivider: canRemove && actionIndex === visibleItemActions.length - 1,
+        actionHandler: () => {
+          itemAction.onClick(formContext.getValues(), index);
+          closeItemActionMenu();
+        },
+      })),
+      ...(canRemove
+        ? [{
+          key: "remove",
+          label: (
+            <Typography component="span" color="error">
+              {model.removeButtonText ? t(model.removeButtonText) : t("remove")}
+            </Typography>
+          ),
+          idleIcon: <DeleteIcon color="error" />,
+          disabled: model.disabled || formLoading,
+          actionHandler: () => {
+            remove(index);
+            closeItemActionMenu();
+          },
+        } satisfies SupportAction]
+        : []),
+    ];
+  };
+
   return (
     <FormControl
       component="fieldset"
@@ -143,53 +188,12 @@ function DynamicArrayInput<T extends FieldValues, K extends Path<T>>({
                   }}>
                   <MoreVertIcon />
                 </IconButton>
-                <Menu
+                <SupportActionMenu
+                  items={buildItemSupportActions(index, fieldsArray)}
                   anchorEl={itemActionMenuAnchor}
                   open={itemActionMenuIndex === index}
-                  onClose={closeItemActionMenu}>
-                  {itemActions
-                    .filter((itemAction) => {
-                      const hidden = typeof itemAction.hidden === "function"
-                        ? itemAction.hidden(formContext.getValues(), index)
-                        : itemAction.hidden;
-
-                      return !hidden;
-                    })
-                    .map((itemAction) => (
-                      <MenuItem
-                        key={itemAction.key}
-                        disabled={model.disabled || formLoading || (
-                          typeof itemAction.disabled === "function"
-                            ? itemAction.disabled(formContext.getValues(), index)
-                            : itemAction.disabled
-                        )}
-                        onClick={() => {
-                          itemAction.onClick(formContext.getValues(), index);
-                          closeItemActionMenu();
-                        }}>
-                        {itemAction.icon && <ListItemIcon>{itemAction.icon}</ListItemIcon>}
-                        {typeof itemAction.label === "string" ? t(itemAction.label) : itemAction.label}
-                      </MenuItem>
-                    ))}
-                  {!model.readOnly && (!model.required || fieldsArray.length > 1) && [
-                    itemActions.filter((a) => {
-                      const hidden = typeof a.hidden === "function" ? a.hidden(formContext.getValues(), index) : a.hidden;
-
-                      return !hidden;
-                    }).length > 0 && <Divider key="divider" />,
-                    <MenuItem
-                      key="remove"
-                      disabled={model.disabled || formLoading}
-                      sx={{ color: "error.main" }}
-                      onClick={() => {
-                        remove(index);
-                        closeItemActionMenu();
-                      }}>
-                      <ListItemIcon sx={{ color: "inherit" }}><DeleteIcon /></ListItemIcon>
-                      {model.removeButtonText ? t(model.removeButtonText) : t("remove")}
-                    </MenuItem>,
-                  ]}
-                </Menu>
+                  onClose={closeItemActionMenu}
+                />
               </Box>
             )}
 

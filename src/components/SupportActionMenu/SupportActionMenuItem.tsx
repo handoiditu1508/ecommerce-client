@@ -5,17 +5,17 @@ import Typography from "@mui/material/Typography";
 import { SupportAction } from "./models";
 
 type OwnProps = {
-  supportAction: SupportAction;
+  item: SupportAction;
 };
 
 type SupportActionMenuItemProps = OwnProps & Omit<MenuItemProps, keyof OwnProps>;
 
-function SupportActionMenuItem({ supportAction, ...props }: SupportActionMenuItemProps) {
+function SupportActionMenuItem({ item, ...props }: SupportActionMenuItemProps) {
   return (
-    <MenuItem disabled={supportAction.disabled} onClick={supportAction.actionHandler} {...props}>
-      {supportAction.idleIcon && <ListItemIcon>{supportAction.idleIcon}</ListItemIcon>}
-      <ListItemText>{supportAction.text}</ListItemText>
-      {supportAction.secondaryText && <Typography variant="body2" color="textSecondary">{supportAction.secondaryText}</Typography>}
+    <MenuItem disabled={item.disabled} onClick={item.actionHandler} {...props}>
+      {item.idleIcon && <ListItemIcon>{item.idleIcon}</ListItemIcon>}
+      <ListItemText>{item.label}</ListItemText>
+      {item.secondaryText && <Typography variant="body2" color="textSecondary">{item.secondaryText}</Typography>}
     </MenuItem>
   );
 }
