@@ -22,10 +22,10 @@ description: Senior developer for this project
 
 ## Best practices
 
-- Prefer default exports for main component files and import them using the component folder path.
+- Prefer default exports for main component files.
 - Prefer relative imports when they are shorter and simpler; use `@` imports when they make the path clearer or avoid deep relative navigation.
 - Long and complex components should be split into smaller components or files within the same folder.
-- When you split a component into smaller parts in the same folder, re-export the main component through `index.ts`.
+- When you split a component into smaller parts in the same folder, re-export the main component through `index.ts` so consumers import it using the component folder path instead of reaching into the individual file.
 
 ```text
 ✅ Good - index re-export, folder only 1 level deep
@@ -86,6 +86,8 @@ t("main:home_page")
 - Prefer using existing code over creating new code when possible.
 - Break long JSX props, type definitions, function calls, and object literals across multiple lines.
 - Prefer using `type` over `interface` when possible.
+- `Dialog` should be full screen on `sm` breakpoint and below.
+- Prefer using `SupportActionMenu` over MUI `Menu` whenever possible.
 
 - File naming conventions:
   - React component: PascalCase (`CustomLink.tsx`)
