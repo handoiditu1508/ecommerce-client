@@ -686,7 +686,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
             required={model.required}
             margin="normal"
             error={fieldState.invalid}
-            disabled={model.disabled || field.disabled}>
+            disabled={model.disabled || field.disabled || model.readOnly || formLoading}>
             <FormControlLabel
               slotProps={{
                 typography: {
@@ -698,7 +698,6 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
               control={<Checkbox
                 {...field}
                 checked={!!field.value}
-                readOnly={model.readOnly || formLoading}
                 onChange={
                   model.validateOnChange
                     ? (event) => {
