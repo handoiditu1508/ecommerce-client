@@ -115,8 +115,7 @@ function ProductImagesForm({ product }: ProductImagesFormProps) {
 
   return (
     <>
-      <Divider sx={{ my: 3 }} />
-      <Typography variant="h6" gutterBottom>{t("product_images")}</Typography>
+      <Divider sx={{ my: 3 }} textAlign="left"><Typography variant="h6" gutterBottom>{t("product_images")}</Typography></Divider>
       <Grid container spacing={2}>
         {/* Uploading column: full width below md, then the narrower half of the section. */}
         <Grid size={{ xs: 12, md: 4 }}>

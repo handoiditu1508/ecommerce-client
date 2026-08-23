@@ -17,7 +17,8 @@ import HideImageIcon from "@mui/icons-material/HideImage";
 import RemoveIcon from "@mui/icons-material/Remove";
 import UploadIcon from "@mui/icons-material/Upload";
 import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Path, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -54,7 +55,6 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
     {
       name: "productVariants",
       inputType: "array",
-      label: "admin-product:product_variants",
       addButtonText: "admin-product:add_variant",
       removeButtonText: "admin-product:remove_variant",
       itemInputs: [
@@ -365,7 +365,8 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   };
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <>
+      <Divider sx={{ mt: 3, mb: 1 }} textAlign="left"><Typography variant="h6" gutterBottom>{t("admin-product:product_variants")}</Typography></Divider>
       {/* Render one hidden native picker per dynamic row so every variant can select its own file. */}
       {variants.map((variant, index) => (
         <input
@@ -458,7 +459,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
         }}
         onSubmit={handleSubmit}
       />
-    </Box>
+    </>
   );
 }
 
