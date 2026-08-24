@@ -83,10 +83,10 @@ const productApi = appApi.injectEndpoints({
       providesTags: (_result, error, arg) => providesIdTag("Product", arg.productId, error),
     }),
     getProducts: builder.query<ProductView[], GetProductsQuery>({
-      query: (arg) => ({
+      query: (params) => ({
         url: "/products",
         method: "GET",
-        params: arg,
+        params,
       }),
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),

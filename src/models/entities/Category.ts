@@ -11,6 +11,13 @@ type Category = {
   children: Category[];
 };
 
+export type CategoryView = {
+  id: number;
+  name: string;
+  iconPath?: string;
+  parentId?: number;
+};
+
 export const categoriesToDynamicInputOptions = <T extends FieldValues, K extends Path<T>>
 (categories: Category[]): DynamicInputOption<T, K>[] => {
   return categories.map<DynamicInputOption<T, K>>(
