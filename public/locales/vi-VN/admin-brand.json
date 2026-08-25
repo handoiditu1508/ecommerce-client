@@ -1,0 +1,16 @@
+{
+  "actions": "Thao Tác",
+  "apply_filters": "Áp Dụng Bộ Lọc",
+  "brand_name": "Tên Thương Hiệu",
+  "brands": "Thương Hiệu",
+  "create_brand": "Tạo Thương Hiệu",
+  "edit_brand": "Chỉnh Sửa Thương Hiệu",
+  "has_active_product": "Có Sản Phẩm Đang Hoạt Động",
+  "has_logo": "Có Logo",
+  "id": "ID",
+  "logo": "Logo",
+  "no": "Không",
+  "not_supported_yet": "Chưa được hỗ trợ.",
+  "top_brand": "Thương Hiệu Nổi Bật",
+  "yes": "Có"
+}

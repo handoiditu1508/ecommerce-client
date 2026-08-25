@@ -1,0 +1,16 @@
+{
+  "actions": "Actions",
+  "apply_filters": "Apply Filters",
+  "brand_name": "Brand Name",
+  "brands": "Brands",
+  "create_brand": "Create Brand",
+  "edit_brand": "Edit Brand",
+  "has_active_product": "Has Active Product",
+  "has_logo": "Has Logo",
+  "id": "ID",
+  "logo": "Logo",
+  "no": "No",
+  "not_supported_yet": "Not supported yet.",
+  "top_brand": "Top Brand",
+  "yes": "Yes"
+}

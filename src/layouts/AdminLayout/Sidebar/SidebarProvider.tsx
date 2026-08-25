@@ -3,6 +3,7 @@ import { InfoContext } from "@/contexts/info";
 import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 import CategoryIcon from "@mui/icons-material/Category";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -64,6 +65,11 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
           icon: <CreateNewFolderIcon />,
         },
       ],
+    },
+    {
+      title: "brands",
+      to: "/admin/brands",
+      icon: <BrandingWatermarkIcon />,
     },
     {
       title: "users",
