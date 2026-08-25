@@ -1,0 +1,21 @@
+{
+  "actions": "Actions",
+  "apply_filters": "Apply Filters",
+  "categories": "Categories",
+  "category_created_successfully": "Category created successfully.",
+  "category_name": "Category Name",
+  "category_updated_successfully": "Category updated successfully.",
+  "create_category": "Create Category",
+  "current_icon": "Current Icon",
+  "edit_category": "Edit Category",
+  "has_icon": "Has Icon",
+  "icon": "Icon",
+  "id": "ID",
+  "invalid_category_id": "Invalid category ID.",
+  "none": "None",
+  "parent_category": "Parent Category",
+  "this_field_is_required": "This field is required.",
+  "unable_to_load_category": "Unable to load category.",
+  "update_category": "Update Category",
+  "upload_new_icon": "Upload New Icon"
+}

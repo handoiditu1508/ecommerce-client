@@ -1,6 +1,7 @@
 import Suspense from "@/components/Suspense";
 import React from "react";
 import { RouteObject } from "react-router-dom";
+import categoryRoutes from "./categoryRoutes";
 import mainRoutes from "./mainRoutes";
 import productRoutes from "./productRoutes";
 import userRoutes from "./userRoutes";
@@ -16,6 +17,7 @@ const adminRoutes: RouteObject[] = [
         children: [
           ...mainRoutes,
           ...productRoutes,
+          ...categoryRoutes,
           ...userRoutes,
         ],
       },

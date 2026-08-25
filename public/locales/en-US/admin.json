@@ -1,4 +1,6 @@
 {
+  "categories": "Categories",
+  "create_category": "Create Categories",
   "create_product": "Create Product",
   "create_user": "Create User",
   "products": "Products",

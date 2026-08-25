@@ -112,7 +112,15 @@ function ProductsPage() {
           component="img"
           src={CONFIG.FILE_URL + row.thumbnailPath}
           alt={row.name}
-          sx={{ width: 52, height: 52, objectFit: "cover", borderRadius: 1 }}
+          sx={{
+            width: 52,
+            height: 52,
+            objectFit: "cover",
+            borderRadius: 1,
+            mx: "auto",
+            mt: "8px", // (68 - 52) / 2
+            display: "block",
+          }}
         />
       ),
     },

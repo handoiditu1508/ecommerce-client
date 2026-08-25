@@ -1,4 +1,6 @@
 {
+  "categories": "Danh Mục",
+  "create_category": "Tạo Danh Mục",
   "create_product": "Tạo Sản Phẩm",
   "create_user": "Tạo Người Dùng",
   "products": "Sản Phẩm",

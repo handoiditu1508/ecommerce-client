@@ -3,6 +3,8 @@ import { InfoContext } from "@/contexts/info";
 import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import CategoryIcon from "@mui/icons-material/Category";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import { useTheme } from "@mui/material/styles";
 import { SwipeableDrawerProps } from "@mui/material/SwipeableDrawer";
@@ -48,6 +50,18 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
           title: "create_product",
           to: "/admin/products/new",
           icon: <AddShoppingCartIcon />,
+        },
+      ],
+    },
+    {
+      title: "categories",
+      to: "/admin/categories",
+      icon: <CategoryIcon />,
+      children: [
+        {
+          title: "create_category",
+          to: "/admin/categories/new",
+          icon: <CreateNewFolderIcon />,
         },
       ],
     },
