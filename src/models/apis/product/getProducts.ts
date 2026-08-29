@@ -15,4 +15,8 @@ export type CountProductsQuery = {
    */
   categoryIds?: number[];
   includeSubCategories?: boolean;
+  /**
+   * Ids of products to leave out of the result.
+   */
+  excludedProductIds?: number[];
 };
