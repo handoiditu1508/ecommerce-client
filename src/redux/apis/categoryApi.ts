@@ -5,7 +5,7 @@ import { GetCategoryQuery } from "@/models/apis/category/getCategory";
 import { UpdateCategoryCommand } from "@/models/apis/category/updateCategory";
 import Category, { CategoryView } from "@/models/entities/Category";
 import { objectToFormData } from "../utils/formDataUtils";
-import { invalidatesCountTag, invalidatesIdTag, invalidatesPessimisticIdTag, providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
+import { invalidatesCountTag, invalidatesIdTag, invalidatesListTag, invalidatesPessimisticIdTag, providesCountTag, providesIdTag, providesListTags } from "../utils/rtkQueryTagUtils";
 import appApi from "./appApi";
 
 const categoryApi = appApi.injectEndpoints({
@@ -56,7 +56,10 @@ const categoryApi = appApi.injectEndpoints({
           );
         } catch {}
       },
-      invalidatesTags: (_result, error) => invalidatesCountTag("Category", error),
+      invalidatesTags: (_result, error) => [
+        ...invalidatesListTag("Category", error),
+        ...invalidatesCountTag("Category", error),
+      ],
     }),
     updateCategory: builder.mutation<Category, UpdateCategoryCommand>({
       query: (arg) => ({

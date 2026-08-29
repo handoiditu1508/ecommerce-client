@@ -19,6 +19,7 @@ import { objectToFormData } from "../utils/formDataUtils";
 import {
   invalidatesCountTag,
   invalidatesIdTag,
+  invalidatesListTag,
   invalidatesPessimisticIdTag,
   providesCountTag,
   providesIdTag,
@@ -118,7 +119,10 @@ const productApi = appApi.injectEndpoints({
           );
         } catch {}
       },
-      invalidatesTags: (_result, error) => invalidatesCountTag("Product", error),
+      invalidatesTags: (_result, error) => [
+        ...invalidatesListTag("Product", error),
+        ...invalidatesCountTag("Product", error),
+      ],
     }),
     updateProduct: builder.mutation<Product, UpdateProductCommand>({
       query: (arg) => ({
