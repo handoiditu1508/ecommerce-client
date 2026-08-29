@@ -88,6 +88,7 @@ t("main:home_page")
 - Prefer using `type` over `interface` when possible.
 - Mui `Dialog` with `maxWidth` above `sm` and have `fullWidth`, should be `fullScreen` on `sm` breakpoint and below.
 - Prefer using `SupportActionMenu` over MUI `Menu` whenever possible.
+- RTK Query APIs for creating/updating entity should use pessimistic update whenever possible. Refer to `addPost` and `updatePost` in `src/redux/apis/postApi.ts`.
 
 - File naming conventions:
   - React component: PascalCase (`CustomLink.tsx`)

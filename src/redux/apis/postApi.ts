@@ -1,6 +1,7 @@
 import Post from "@/models/entities/Post";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
 import {
+  invalidatesCountTag,
   invalidatesIdTag,
   invalidatesListTag,
   invalidatesOptimisticPessimisticIdTag,
@@ -96,7 +97,10 @@ const postApi = appApi.injectEndpoints({
           );
         } catch {}
       },
-      invalidatesTags: (result, error) => invalidatesListTag("Post", error),
+      invalidatesTags: (result, error) => [
+        ...invalidatesListTag("Post", error),
+        ...invalidatesCountTag("Post", error),
+      ],
     }),
     updatePost: builder.mutation<Post, Partial<Post> & Pick<Post, "id">>({
       query: (body) => ({
