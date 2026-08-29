@@ -9,11 +9,11 @@ type GiftPromotion = PromotionBase & RequiredProductQuantity & ChooseProducts & 
 export type GiftPromotionDetail = {
   giftId: number;
   quantity: number;
-  giftViewDto?: GiftView;
+  gift?: GiftView;
 };
 
 export type GiftPromotionView = PromotionViewBase & {
-  type: PromotionType.InvoiceDiscount;
+  type: PromotionType.GiftPromotion;
 };
 
 export default GiftPromotion;
