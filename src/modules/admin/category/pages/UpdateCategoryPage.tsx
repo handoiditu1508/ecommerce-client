@@ -32,6 +32,7 @@ const formModel: DynamicFormModel<UpdateCategoryForm> = {
       inputType: "text",
       label: "admin-category:category_name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     { name: "iconFile", inputType: "select", label: "admin-category:icon", options: [] },

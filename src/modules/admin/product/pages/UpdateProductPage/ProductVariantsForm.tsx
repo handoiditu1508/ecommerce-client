@@ -63,6 +63,7 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
           inputType: "text",
           label: "admin-product:variant_name",
           required: true,
+          maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
           size: {
             sm: 6,
             md: 3,
@@ -74,6 +75,7 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
           inputType: "text",
           label: "admin-product:sku",
           required: true,
+          maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
           size: {
             sm: 6,
             md: 3,
@@ -90,6 +92,7 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
           name: "color",
           inputType: "color",
           label: "admin-product:variant_color",
+          maxLength: 7, // "#rrggbb"
           size: {
             sm: 6,
             md: 3,

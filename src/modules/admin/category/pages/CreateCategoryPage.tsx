@@ -1,5 +1,6 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateCategoryCommand } from "@/models/apis/category/createCategory";
@@ -21,6 +22,7 @@ const formModel: DynamicFormModel<CreateCategoryCommand> = {
       inputType: "text",
       label: "admin-category:category_name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     {

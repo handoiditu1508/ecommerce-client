@@ -35,6 +35,7 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
       inputType: "text",
       label: "admin-product:product_name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     {

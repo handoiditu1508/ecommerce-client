@@ -64,6 +64,7 @@ function RegisterModal({
         label: t("username"),
         inputType: "text",
         required: true,
+        maxLength: CONFIG.USERNAME_MAX_LENGTH,
       },
       {
         name: "firstName",

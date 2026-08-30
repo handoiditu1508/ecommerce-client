@@ -1,5 +1,6 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
@@ -22,6 +23,7 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       inputType: "text",
       label: "admin-product:product_name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     {
@@ -29,6 +31,7 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       inputType: "text",
       label: "admin-product:sku",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     {

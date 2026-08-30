@@ -286,6 +286,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
             required={model.required}
             disabled={model.disabled || field.disabled}
             readOnly={model.readOnly || formLoading}
+            maxLength={model.maxLength}
             fullWidth
             value={typeof field.value === "string" ? field.value : ""}
             error={fieldState.invalid}

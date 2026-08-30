@@ -1,4 +1,5 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { ChangeEmailCommand } from "@/models/apis/auth/changeEmail";
@@ -27,6 +28,7 @@ function ChangeEmailCard() {
         inputType: "text",
         label: t("new_email"),
         required: true,
+        maxLength: CONFIG.EMAIL_MAX_LENGTH,
         rules: {
           required: t("translation:this_field_is_required"),
           validate: (value) => value !== authUser?.email || t("email_must_be_different"),

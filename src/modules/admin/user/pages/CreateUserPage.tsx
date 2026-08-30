@@ -18,6 +18,7 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
       inputType: "text",
       label: "auth:username",
       required: true,
+      maxLength: CONFIG.USERNAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
       size: { sm: 6 },
     },

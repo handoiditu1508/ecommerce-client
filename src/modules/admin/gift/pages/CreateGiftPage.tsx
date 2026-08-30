@@ -1,4 +1,5 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { CreateGiftCommand } from "@/models/apis/gift/createGift";
 import { useCreateGiftMutation } from "@/redux/apis/giftApi";
@@ -16,6 +17,7 @@ const formModel: DynamicFormModel<CreateGiftCommand> = {
       inputType: "text",
       label: "admin:name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     {

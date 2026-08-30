@@ -1,5 +1,6 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import useProductSearchOptions from "@/hooks/useProductSearchOptions";
@@ -23,6 +24,7 @@ const formModel: DynamicFormModel<CreateGiftPromotionCommand> = {
       inputType: "text",
       label: "admin:name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     { name: "description", inputType: "text", label: "admin-gift-promotion:description" },

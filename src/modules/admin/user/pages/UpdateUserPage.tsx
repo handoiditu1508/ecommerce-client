@@ -1,4 +1,5 @@
 import { DynamicFormModel, DynamicGridForm } from "@/components/DynamicForm";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { UpdateUserCommand } from "@/models/apis/user/updateUser";
 import User, { UserStatus } from "@/models/entities/User";
@@ -29,9 +30,9 @@ const formModel: DynamicFormModel<UpdateUserForm> = {
   inputs: [
     { name: "username", inputType: "text", label: "auth:username", readOnly: true, size: { sm: 6 } },
     { name: "email", inputType: "email", label: "auth:email", required: true, size: { sm: 6 } },
-    { name: "firstName", inputType: "text", label: "auth:first_name", required: true, size: { sm: 4 } },
-    { name: "middleName", inputType: "text", label: "admin-user:middle_name_optional", size: { sm: 4 } },
-    { name: "lastName", inputType: "text", label: "auth:last_name", required: true, size: { sm: 4 } },
+    { name: "firstName", inputType: "text", label: "auth:first_name", required: true, maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
+    { name: "middleName", inputType: "text", label: "admin-user:middle_name_optional", maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
+    { name: "lastName", inputType: "text", label: "auth:last_name", required: true, maxLength: CONFIG.NAME_MAX_LENGTH, size: { sm: 4 } },
     { name: "phoneNumber", inputType: "text", label: "admin-user:phone_number", readOnly: true },
     { name: "emailConfirmed", inputType: "checkbox", label: "admin-user:email_confirmed", size: { sm: 6 } },
     {

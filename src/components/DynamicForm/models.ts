@@ -46,6 +46,7 @@ export type DynamicTextInputModel<T extends FieldValues, K extends Path<T>, A ex
 export type DynamicColorInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
   DynamicCommonInputModel<T, K, A> & {
     inputType: "color";
+    maxLength?: number;
   };
 
 export type DynamicCurrencyInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =

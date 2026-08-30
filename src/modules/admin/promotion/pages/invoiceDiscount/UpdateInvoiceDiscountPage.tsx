@@ -1,4 +1,5 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { UpdateInvoiceDiscountCommand } from "@/models/apis/invoiceDiscount/updateInvoiceDiscount";
 import { useGetInvoiceDiscountQuery, useUpdateInvoiceDiscountMutation } from "@/redux/apis/invoiceDiscountApi";
@@ -24,6 +25,7 @@ const formModel: DynamicFormModel<UpdateInvoiceDiscountForm> = {
       inputType: "text",
       label: "admin:name",
       required: true,
+      maxLength: CONFIG.ENTITY_NAME_MAX_LENGTH,
       rules: { required: "translation:this_field_is_required" },
     },
     { name: "description", inputType: "text", label: "admin-invoice-discount:description" },
@@ -34,6 +36,7 @@ const formModel: DynamicFormModel<UpdateInvoiceDiscountForm> = {
       inputType: "text",
       label: "admin-invoice-discount:discount_code",
       required: true,
+      maxLength: 32,
       rules: { required: "translation:this_field_is_required" },
     },
     {

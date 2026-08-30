@@ -15,6 +15,7 @@ type ColorInputProps = {
   fullWidth?: boolean;
   error?: boolean;
   helperText?: React.ReactNode;
+  maxLength?: number;
   inputRef?: React.Ref<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onValueChange: (value: string) => void;
@@ -33,6 +34,7 @@ function ColorInput({
   fullWidth,
   error,
   helperText,
+  maxLength,
   inputRef,
   onBlur,
   onValueChange,
@@ -55,6 +57,9 @@ function ColorInput({
         helperText={helperText}
         inputRef={inputRef}
         slotProps={{
+          htmlInput: {
+            maxLength,
+          },
           input: {
             readOnly,
             endAdornment: (

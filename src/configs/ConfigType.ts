@@ -24,6 +24,8 @@ type ConfigType = {
   PASSWORD_MAX_LENGTH: number;
   EMAIL_MAX_LENGTH: number;
   NAME_MAX_LENGTH: number;
+  ENTITY_NAME_MAX_LENGTH: number;
+  USERNAME_MAX_LENGTH: number;
 };
 
 export default ConfigType;

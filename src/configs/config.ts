@@ -14,6 +14,8 @@ const defaultConfig: ConfigType = {
   PASSWORD_MAX_LENGTH: 256,
   EMAIL_MAX_LENGTH: 256,
   NAME_MAX_LENGTH: 30,
+  ENTITY_NAME_MAX_LENGTH: 256,
+  USERNAME_MAX_LENGTH: 256,
 };
 
 export default defaultConfig;
