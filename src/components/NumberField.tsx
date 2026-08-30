@@ -25,6 +25,8 @@ export type NumberFieldProps = BaseNumberField.Root.Props & {
   size?: "small" | "medium";
   error?: boolean;
   helperText?: React.ReactNode;
+  fullWidth?: boolean;
+  margin?: "none" | "dense" | "normal";
   sx?: SxProps<Theme>;
 };
 
@@ -34,6 +36,8 @@ function NumberField({
   error,
   size = "medium",
   helperText,
+  fullWidth,
+  margin,
   sx,
   ...other
 }: NumberFieldProps) {
@@ -52,6 +56,8 @@ function NumberField({
           disabled={state.disabled}
           required={state.required}
           error={error}
+          fullWidth={fullWidth}
+          margin={margin}
           variant="outlined"
           sx={sx}
         >

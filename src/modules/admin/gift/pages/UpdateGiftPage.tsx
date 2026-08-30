@@ -18,8 +18,7 @@ import { useParams } from "react-router-dom";
 const UPLOAD_NEW_ID = "upload-new";
 const KEEP_CURRENT_ID = "keep-current";
 
-type UpdateGiftForm = Omit<UpdateGiftCommand, "quantity" | "thumbnailFile"> & {
-  quantity: string;
+type UpdateGiftForm = Omit<UpdateGiftCommand, "thumbnailFile"> & {
   thumbnailFile: string;
   thumbnailFileList?: FileList;
 };
@@ -35,7 +34,8 @@ const formModel: DynamicFormModel<UpdateGiftForm> = {
     },
     {
       name: "quantity",
-      inputType: "text",
+      inputType: "number",
+      min: 0,
       label: "admin-gift:quantity",
       required: true,
       rules: { required: "translation:this_field_is_required" },
@@ -58,7 +58,7 @@ function UpdateGiftPage() {
       ? {
         id: giftResult.data.id,
         name: giftResult.data.name,
-        quantity: giftResult.data.quantity.toString(),
+        quantity: giftResult.data.quantity,
         thumbnailFile: KEEP_CURRENT_ID,
         thumbnailFileList: undefined,
       }
@@ -98,7 +98,7 @@ function UpdateGiftPage() {
     const command: UpdateGiftCommand = {
       id: data.id,
       name: data.name,
-      quantity: Number(data.quantity),
+      quantity: data.quantity,
       thumbnailFile: data.thumbnailFile === UPLOAD_NEW_ID ? data.thumbnailFileList : undefined,
     };
     try {

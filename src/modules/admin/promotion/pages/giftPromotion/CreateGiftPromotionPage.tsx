@@ -30,8 +30,8 @@ const formModel: DynamicFormModel<CreateGiftPromotionCommand> = {
     { name: "endDate", inputType: "datetime", label: "admin-gift-promotion:end_date", size: { sm: 6 } },
     {
       name: "requiredProductQuantity",
-      inputType: "currency",
-      currencySymbol: "",
+      inputType: "number",
+      min: 0,
       label: "admin-gift-promotion:required_product_quantity",
     },
     { name: "productIds", inputType: "autocomplete", label: "admin:products", multiple: true, searchAsYouType: true, options: [] },

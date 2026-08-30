@@ -39,8 +39,8 @@ const formModel: DynamicFormModel<UpdateProductDiscountForm> = {
     { name: "endDate", inputType: "datetime", label: "admin-product-discount:end_date", size: { sm: 6 } },
     {
       name: "requiredProductQuantity",
-      inputType: "currency",
-      currencySymbol: "",
+      inputType: "number",
+      min: 0,
       label: "admin-product-discount:required_product_quantity",
       size: { sm: 6 },
     },

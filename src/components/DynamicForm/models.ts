@@ -7,6 +7,7 @@ export type DynamicInputModel<T extends FieldValues, K extends Path<T>, A extend
   | DynamicTextInputModel<T, K, A>
   | DynamicColorInputModel<T, K, A>
   | DynamicCurrencyInputModel<T, K, A>
+  | DynamicNumberInputModel<T, K, A>
   | DynamicDateTimeInputModel<T, K, A>
   | DynamicSelectInputModel<T, K, A>
   | DynamicCascadingSelectInputModel<T, K, A>
@@ -51,6 +52,14 @@ export type DynamicCurrencyInputModel<T extends FieldValues, K extends Path<T>, 
   DynamicCommonInputModel<T, K, A> & {
     inputType: "currency";
     currencySymbol?: string;
+  };
+
+export type DynamicNumberInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
+  DynamicCommonInputModel<T, K, A> & {
+    inputType: "number";
+    min?: number;
+    max?: number;
+    step?: number;
   };
 
 export type DynamicDateTimeInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =

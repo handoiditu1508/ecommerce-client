@@ -9,9 +9,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-type CreateGiftForm = Omit<CreateGiftCommand, "quantity"> & { quantity: string; };
-
-const formModel: DynamicFormModel<CreateGiftForm> = {
+const formModel: DynamicFormModel<CreateGiftCommand> = {
   inputs: [
     {
       name: "name",
@@ -22,7 +20,8 @@ const formModel: DynamicFormModel<CreateGiftForm> = {
     },
     {
       name: "quantity",
-      inputType: "text",
+      inputType: "number",
+      min: 0,
       label: "admin-gift:quantity",
       required: true,
       rules: { required: "translation:this_field_is_required" },
@@ -44,17 +43,17 @@ function CreateGiftPage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["admin-gift", "translation", "admin"]);
   const [createGift, result] = useCreateGiftMutation();
-  const formContext = useForm<CreateGiftForm>({
+  const formContext = useForm<CreateGiftCommand>({
     defaultValues: {
       name: "",
-      quantity: "",
+      quantity: 0,
       thumbnailFile: undefined,
     },
   });
 
-  const handleSubmit = async (data: CreateGiftForm) => {
+  const handleSubmit = async (data: CreateGiftCommand) => {
     try {
-      await createGift({ ...data, quantity: Number(data.quantity) }).unwrap();
+      await createGift(data).unwrap();
       dispatch(pushNotification({
         text: t("gift_created_successfully"),
         severity: "success",

@@ -29,8 +29,8 @@ const model: DynamicFormModel<CountGiftPromotionsQuery> = {
     },
     {
       name: "requiredProductQuantity",
-      inputType: "currency",
-      currencySymbol: "",
+      inputType: "number",
+      min: 0,
       label: "admin-gift-promotion:required_product_quantity",
       size: { sm: 6, md: 4 },
     },

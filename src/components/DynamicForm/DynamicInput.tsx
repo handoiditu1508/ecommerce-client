@@ -36,6 +36,7 @@ import CascadingSelect from "../CascadingSelect";
 import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
 import FileInput from "../FileInput";
+import NumberField from "../NumberField";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -227,6 +228,40 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
             onBlur={field.onBlur}
             onValueChange={(value) => {
               field.onChange(value);
+              if (model.validateOnChange) formContext.trigger(model.name);
+            }}
+          />
+        )}
+      />
+    );
+  }
+
+  if (model.inputType === "number") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => (
+          <NumberField
+            fullWidth
+            required={model.required}
+            label={finalLabel}
+            margin="normal"
+            error={fieldState.invalid}
+            helperText={errorText(fieldState.error?.message)}
+            disabled={model.disabled}
+            readOnly={model.readOnly || formLoading}
+            min={model.min}
+            max={model.max}
+            step={model.step}
+            value={typeof field.value === "number" ? field.value : null}
+            onBlur={field.onBlur}
+            onValueChange={(value) => {
+              field.onChange(value ?? undefined);
               if (model.validateOnChange) formContext.trigger(model.name);
             }}
           />

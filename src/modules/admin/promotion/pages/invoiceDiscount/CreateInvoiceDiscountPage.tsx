@@ -40,8 +40,8 @@ const formModel: DynamicFormModel<CreateInvoiceDiscountCommand> = {
     { name: "isPercentage", inputType: "checkbox", label: "admin-invoice-discount:is_percentage", size: { sm: 6 } },
     { name: "discountLimit", inputType: "currency", label: "admin-invoice-discount:discount_limit", size: { sm: 6 } },
     { name: "requiredInvoiceValue", inputType: "currency", label: "admin-invoice-discount:required_invoice_value", size: { sm: 6 } },
-    { name: "usesLimit", inputType: "currency", currencySymbol: "", label: "admin-invoice-discount:uses_limit", size: { sm: 6 } },
-    { name: "usesLimitsPerUser", inputType: "currency", currencySymbol: "", label: "admin-invoice-discount:uses_limits_per_user", size: { sm: 6 } },
+    { name: "usesLimit", inputType: "number", min: 0, label: "admin-invoice-discount:uses_limit", size: { sm: 6 } },
+    { name: "usesLimitsPerUser", inputType: "number", min: 0, label: "admin-invoice-discount:uses_limits_per_user", size: { sm: 6 } },
   ],
   submitButtonText: "admin:create_invoice_discount",
 };

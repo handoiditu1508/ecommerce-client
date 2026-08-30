@@ -28,7 +28,7 @@ const model: DynamicFormModel<CountProductDiscountsQuery> = {
       size: { sm: 6, md: 3 },
     },
     { name: "isPercentage", inputType: "checkbox", label: "admin-product-discount:is_percentage", size: { sm: 6, md: 3 } },
-    { name: "requiredProductQuantity", inputType: "currency", currencySymbol: "", label: "admin-product-discount:required_product_quantity", size: { sm: 6, md: 3 } },
+    { name: "requiredProductQuantity", inputType: "number", min: 0, label: "admin-product-discount:required_product_quantity", size: { sm: 6, md: 3 } },
     { name: "minDiscountValue", inputType: "currency", label: "admin-product-discount:min_discount_value", size: { sm: 6, md: 3 } },
     { name: "maxDiscountValue", inputType: "currency", label: "admin-product-discount:max_discount_value", size: { sm: 6, md: 3 } },
   ],

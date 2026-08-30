@@ -54,8 +54,8 @@ const formModel: DynamicFormModel<GiftPromotionGiftsFormModel> = {
         },
         {
           name: "quantity",
-          inputType: "currency",
-          currencySymbol: "",
+          inputType: "number",
+          min: 1,
           label: "admin-gift-promotion:quantity",
           required: true,
           size: { sm: 4 },
