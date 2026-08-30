@@ -10,7 +10,7 @@ type BrandFiltersProps = {
 
 const model: DynamicFormModel<CountBrandsQuery> = {
   inputs: [
-    { name: "id", inputType: "text", label: "admin-brand:id", size: { sm: 4, md: 2 } },
+    { name: "id", inputType: "text", label: "admin:id", size: { sm: 4, md: 2 } },
     { name: "name", inputType: "text", label: "admin-brand:brand_name", size: { sm: 8, md: 4 } },
     { name: "hasLogo", inputType: "checkbox", label: "admin-brand:has_logo", size: { sm: 4, md: 2 } },
     { name: "isTop", inputType: "checkbox", label: "admin-brand:top_brand", size: { sm: 4, md: 2 } },
@@ -20,7 +20,7 @@ const model: DynamicFormModel<CountBrandsQuery> = {
 };
 
 function BrandFilters({ formContext, onSubmit }: BrandFiltersProps) {
-  useTranslation("admin-brand");
+  useTranslation(["admin-brand", "admin"]);
 
   return (
     <DynamicGridForm

@@ -3,15 +3,11 @@
   "back_to_home_page": "Back To Home Page",
   "empty": "Empty",
   "invalid_email_address": "Invalid email address.",
-  "navigates": "Navigates",
   "page_not_found_message": "There's nothing here!",
   "page_restricted_message": "The content on this page is restricted!",
   "remove": "Remove",
   "this_field_is_required": "This field is required.",
   "update_success": "Update {{name}} success.",
   "error": "Error",
-  "actions": "Actions",
-  "id": "ID",
-  "name": "Name",
-  "none": "None"
+  "actions": "Actions"
 }

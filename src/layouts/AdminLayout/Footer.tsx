@@ -80,7 +80,7 @@ const handleClickLink = () => {
 };
 
 const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
-  const { t } = useTranslation(["translation", "main"]);
+  const { t } = useTranslation(["admin", "main"]);
   const { xsAndDown, smAndUp, lgAndUp } = useContext(BreakpointsContext);
   const year = new Date().getFullYear();
 
@@ -105,7 +105,7 @@ const Footer = styled(({ component = "footer", ...props }: BoxProps) => {
           </Grid>
           <Grid container size={{ xs: 12, lg: 8 }}>
             <Grid size={{ xs: 12, lg: 6 }}>
-              <Typography className="title" variant="h5" textAlign={{ xs: "center", lg: "start" }}>{t("navigates")}</Typography>
+              <Typography className="title" variant="h5" textAlign={{ xs: "center", lg: "start" }}>{t("admin:navigates")}</Typography>
             </Grid>
             {lgAndUp && <Grid size={6} />}
             <Grid size={{ xs: 12, sm: 6 }}>

@@ -37,7 +37,7 @@ import ProductFilters from "./ProductFilters";
 function ProductsPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("admin-product");
+  const { t } = useTranslation(["admin-product", "translation", "admin"]);
   const confirmationDialog = useContext(ConfirmationDialogContext);
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
@@ -177,7 +177,7 @@ function ProductsPage() {
     },
     {
       field: "actions",
-      headerName: t("actions"),
+      headerName: t("translation:actions"),
       width: 120,
       align: "center",
       headerAlign: "center",
@@ -226,9 +226,9 @@ function ProductsPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">{t("products")}</Typography>
+        <Typography variant="h5">{t("admin:products")}</Typography>
         <Button component={Link} to="/admin/products/new" startIcon={<AddIcon />}>
-          {t("create_product")}
+          {t("admin:create_product")}
         </Button>
       </Box>
       <ProductFilters categories={categories} formContext={formContext} onSubmit={handleFilter} />

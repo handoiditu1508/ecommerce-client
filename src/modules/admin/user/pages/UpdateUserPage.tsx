@@ -27,11 +27,11 @@ const statusOptions = Object.values(UserStatus)
 
 const formModel: DynamicFormModel<UpdateUserForm> = {
   inputs: [
-    { name: "username", inputType: "text", label: "admin-user:username", readOnly: true, size: { sm: 6 } },
-    { name: "email", inputType: "email", label: "admin-user:email", required: true, size: { sm: 6 } },
-    { name: "firstName", inputType: "text", label: "admin-user:first_name", required: true, size: { sm: 4 } },
+    { name: "username", inputType: "text", label: "auth:username", readOnly: true, size: { sm: 6 } },
+    { name: "email", inputType: "email", label: "auth:email", required: true, size: { sm: 6 } },
+    { name: "firstName", inputType: "text", label: "auth:first_name", required: true, size: { sm: 4 } },
     { name: "middleName", inputType: "text", label: "admin-user:middle_name_optional", size: { sm: 4 } },
-    { name: "lastName", inputType: "text", label: "admin-user:last_name", required: true, size: { sm: 4 } },
+    { name: "lastName", inputType: "text", label: "auth:last_name", required: true, size: { sm: 4 } },
     { name: "phoneNumber", inputType: "text", label: "admin-user:phone_number", readOnly: true },
     { name: "emailConfirmed", inputType: "checkbox", label: "admin-user:email_confirmed", size: { sm: 6 } },
     {
@@ -73,7 +73,7 @@ function UpdateUserPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("admin-user");
+  const { t } = useTranslation(["admin-user", "auth", "admin"]);
   const userResult = useGetUserQuery(id, { skip: !Number.isInteger(id) });
   const [updateUser, updateResult] = useUpdateUserMutation();
   const formValues = useMemo<UpdateUserForm | undefined>(() => userResult.data
@@ -121,13 +121,13 @@ function UpdateUserPage() {
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
           {userResult.data.roles.length
             ? userResult.data.roles.map((role) => <Chip key={role.id} label={role.name} size="small" />)
-            : <Typography color="text.secondary">{t("none")}</Typography>}
+            : <Typography color="text.secondary">{t("admin:none")}</Typography>}
         </Box>
         <Typography variant="subtitle2" gutterBottom>{t("policies_readonly")}</Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           {userResult.data.policies.length
             ? userResult.data.policies.map((policy) => <Chip key={policy} label={policy} size="small" variant="outlined" />)
-            : <Typography color="text.secondary">{t("none")}</Typography>}
+            : <Typography color="text.secondary">{t("admin:none")}</Typography>}
         </Box>
       </Box>
     </Paper>

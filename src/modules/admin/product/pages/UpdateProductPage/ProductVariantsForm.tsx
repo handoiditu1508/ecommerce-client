@@ -67,7 +67,7 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
             sm: 6,
             md: 3,
           },
-          rules: { required: "admin-product:this_field_is_required" },
+          rules: { required: "translation:this_field_is_required" },
         },
         {
           name: "sku",
@@ -79,7 +79,7 @@ const formModel: DynamicFormModel<ProductVariantsFormModel> = {
             md: 3,
           },
           rules: {
-            required: "admin-product:this_field_is_required",
+            required: "translation:this_field_is_required",
             validate: (value, model) => (
               model.productVariants.filter((variant) => variant.sku === value).length === 1
               || "admin-product:sku_must_be_unique"
@@ -157,7 +157,7 @@ function ProductVariantsForm({ product }: ProductVariantsFormProps) {
   // Dispatch global success notifications.
   const dispatch = useAppDispatch();
   // Read labels from the admin product namespace.
-  const { t } = useTranslation("admin-product");
+  const { t } = useTranslation(["admin-product", "translation"]);
   // Update variant fields and add/delete rows in one request.
   const [updateVariants, updateVariantsResult] = useUpdateProductVariantsMutation();
   // Upload a new thumbnail or remove the current thumbnail in a separate request.

@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import BrandFilters from "./BrandFilters";
 
 function BrandsPage() {
-  const { t } = useTranslation("admin-brand");
+  const { t } = useTranslation(["admin-brand", "admin", "translation", "product"]);
   const [filters, setFilters] = useState<CountBrandsQuery>({});
   const [pagination, setPagination] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
@@ -62,12 +62,12 @@ function BrandsPage() {
       headerName: t("top_brand"),
       width: 130,
       renderCell: ({ value }) => (
-        <Chip size="small" label={t(value ? "yes" : "no")} color={value ? "success" : "default"} />
+        <Chip size="small" label={t(value ? "product:yes" : "product:no")} color={value ? "success" : "default"} />
       ),
     },
     {
       field: "actions",
-      headerName: t("actions"),
+      headerName: t("translation:actions"),
       width: 80,
       align: "center",
       headerAlign: "center",
@@ -94,7 +94,7 @@ function BrandsPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">{t("brands")}</Typography>
+        <Typography variant="h5">{t("admin:brands")}</Typography>
         <Tooltip title={t("not_supported_yet")}>
           <span>
             <Button startIcon={<AddIcon />} disabled>

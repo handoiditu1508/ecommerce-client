@@ -33,8 +33,8 @@ const statusOptions = Object.values(UserStatus)
 
 const filterModel: DynamicFormModel<CountUsersQuery> = {
   inputs: [
-    { name: "username", inputType: "text", label: "admin-user:username", size: { sm: 4, md: 3 } },
-    { name: "email", inputType: "text", label: "admin-user:email", size: { sm: 4, md: 3 } },
+    { name: "username", inputType: "text", label: "auth:username", size: { sm: 4, md: 3 } },
+    { name: "email", inputType: "text", label: "auth:email", size: { sm: 4, md: 3 } },
     { name: "name", inputType: "text", label: "admin-user:name", size: { sm: 4, md: 3 } },
     {
       name: "statuses",
@@ -61,7 +61,7 @@ const filterModel: DynamicFormModel<CountUsersQuery> = {
 
 function UsersPage() {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation("admin-user");
+  const { t, i18n } = useTranslation(["admin-user", "auth", "translation", "admin"]);
   useGetRolesQuery({ allPages: true });
   const roles = useAppSelector(roleSelectors.all);
   const roleOptions = useMemo<DynamicInputOption<CountUsersQuery, "roles">[]>(
@@ -82,9 +82,9 @@ function UsersPage() {
   });
   const countResult = useCountUsersQuery(filters);
   const userColumns = useMemo<GridColDef<UserView>[]>(() => [
-    { field: "username", headerName: t("username"), flex: 1, minWidth: 150 },
-    { field: "email", headerName: t("email"), flex: 1, minWidth: 190 },
-    { field: "name", headerName: t("name"), flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
+    { field: "username", headerName: t("auth:username"), flex: 1, minWidth: 150 },
+    { field: "email", headerName: t("auth:email"), flex: 1, minWidth: 190 },
+    { field: "name", headerName: t("admin-user:name"), flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
     { field: "status", headerName: t("status"), width: 120, renderCell: ({ value }) => <Chip size="small" label={t(value === UserStatus.Active ? "active" : "locked")} color={value === UserStatus.Active ? "success" : "warning"} /> },
     { field: "modifiedDate", headerName: t("modified_date"), width: 180, valueFormatter: (value) => (value ? new Date(value).toLocaleString(i18n.resolvedLanguage) : "") },
     { field: "roles", headerName: t("roles"), flex: 1, minWidth: 200, sortable: false, renderCell: ({ value }: GridRenderCellParams<UserView, RoleView[]>) => <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", py: 1 }}>{(value ?? []).map((role, index) => <Chip key={role.id} size="small" label={role.name} color={(["primary", "secondary", "info", "success"] as const)[index % 4]} />)}</Box> },
@@ -93,7 +93,7 @@ function UsersPage() {
     ...userColumns.map((column) => ({ ...column, filterable: false, hideable: false })),
     {
       field: "actions",
-      headerName: t("actions"),
+      headerName: t("translation:actions"),
       width: 80,
       align: "center",
       headerAlign: "center",
@@ -119,8 +119,8 @@ function UsersPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">{t("users")}</Typography>
-        <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>{t("create_user")}</Button>
+        <Typography variant="h5">{t("admin:users")}</Typography>
+        <Button component={Link} to="/admin/users/new" startIcon={<AddIcon />}>{t("admin:create_user")}</Button>
       </Box>
       <DynamicGridForm
         formContext={formContext}

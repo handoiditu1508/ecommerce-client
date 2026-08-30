@@ -21,7 +21,7 @@ import CategoryFilters from "./CategoryFilters";
 
 function CategoriesPage() {
   const navigate = useNavigate();
-  const { t } = useTranslation("admin-category");
+  const { t } = useTranslation(["admin-category", "translation", "admin"]);
   const [filters, setFilters] = useState<CountCategoriesQuery>({});
   const [pagination, setPagination] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
@@ -70,7 +70,7 @@ function CategoriesPage() {
     },
     {
       field: "actions",
-      headerName: t("actions"),
+      headerName: t("translation:actions"),
       width: 80,
       align: "center",
       headerAlign: "center",
@@ -99,9 +99,9 @@ function CategoriesPage() {
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">{t("categories")}</Typography>
+        <Typography variant="h5">{t("admin:categories")}</Typography>
         <Button component={Link} to="/admin/categories/new" startIcon={<AddIcon />}>
-          {t("create_category")}
+          {t("admin:create_category")}
         </Button>
       </Box>
       <CategoryFilters categories={categories} formContext={formContext} onSubmit={handleFilter} />

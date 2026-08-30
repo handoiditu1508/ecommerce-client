@@ -14,7 +14,7 @@ type CategoryFiltersProps = {
 
 const model: DynamicFormModel<CountCategoriesQuery> = {
   inputs: [
-    { name: "id", inputType: "text", label: "admin-category:id", size: { sm: 4, md: 2 } },
+    { name: "id", inputType: "text", label: "admin:id", size: { sm: 4, md: 2 } },
     { name: "name", inputType: "text", label: "admin-category:category_name", size: { sm: 8, md: 4 } },
     { name: "parentId", inputType: "select", label: "admin-category:parent_category", options: [], size: { sm: 6, md: 4 } },
     { name: "hasIcon", inputType: "checkbox", label: "admin-category:has_icon", size: { sm: 6, md: 2 } },
@@ -23,7 +23,7 @@ const model: DynamicFormModel<CountCategoriesQuery> = {
 };
 
 function CategoryFilters({ categories, formContext, onSubmit }: CategoryFiltersProps) {
-  useTranslation("admin-category");
+  useTranslation(["admin-category", "admin"]);
   const categoryOptions = useMemo<DynamicInputOption<CountCategoriesQuery, "parentId">[]>(
     () => categories.map((category) => ({ key: category.id, label: category.name, value: category.id })),
     [categories]

@@ -28,7 +28,7 @@ type QuantityChangeDialogProps = {
 
 function QuantityChangeDialog({ productId, quantityChange, onClose }: QuantityChangeDialogProps) {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("admin-product");
+  const { t } = useTranslation(["admin-product", "account"]);
   const [addProductQuantity, addProductQuantityResult] = useAddProductQuantityMutation();
   const [quantityChangeAmount, setQuantityChangeAmount] = useState("");
   const quantityChangeAmountAsNumber = Number(quantityChangeAmount);
@@ -117,7 +117,7 @@ function QuantityChangeDialog({ productId, quantityChange, onClose }: QuantityCh
           color="error"
           variant="outlined"
           onClick={handleClose}>
-          {t("cancel")}
+          {t("account:cancel")}
         </Button>
         <Button
           disabled={!isQuantityChangeValid}

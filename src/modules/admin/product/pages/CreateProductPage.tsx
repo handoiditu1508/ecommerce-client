@@ -22,14 +22,14 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       inputType: "text",
       label: "admin-product:product_name",
       required: true,
-      rules: { required: "admin-product:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
     {
       name: "sku",
       inputType: "text",
       label: "admin-product:sku",
       required: true,
-      rules: { required: "admin-product:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
     {
       name: "price",
@@ -37,7 +37,7 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       label: "admin-product:price",
       required: true,
       rules: {
-        required: "admin-product:this_field_is_required",
+        required: "translation:this_field_is_required",
         min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
@@ -53,16 +53,16 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       label: "admin-product:thumbnail",
       accept: "image/*",
       required: true,
-      rules: { required: "admin-product:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
   ],
-  submitButtonText: "admin-product:create_product",
+  submitButtonText: "admin:create_product",
 };
 
 function CreateProductPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("admin-product");
+  const { t } = useTranslation(["admin-product", "translation", "admin"]);
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const categoryOptions = useMemo<DynamicInputOption<CreateProductCommand, "categoryId">[]>(
@@ -93,7 +93,7 @@ function CreateProductPage() {
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>{t("create_product")}</Typography>
+      <Typography variant="h5" sx={{ mb: 2 }}>{t("admin:create_product")}</Typography>
       <DynamicForm
         formContext={formContext}
         model={formModel}

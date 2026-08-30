@@ -16,26 +16,26 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
     {
       name: "username",
       inputType: "text",
-      label: "admin-user:username",
+      label: "auth:username",
       required: true,
-      rules: { required: "admin-user:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
       size: { sm: 6 },
     },
     {
       name: "email",
       inputType: "email",
-      label: "admin-user:email",
+      label: "auth:email",
       required: true,
-      rules: { required: "admin-user:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
       size: { sm: 6 },
     },
     {
       name: "firstName",
       inputType: "text",
-      label: "admin-user:first_name",
+      label: "auth:first_name",
       required: true,
       maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: { required: "admin-user:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
       size: { sm: 4 },
     },
     {
@@ -48,21 +48,21 @@ const formModel: DynamicFormModel<CreateUserCommand> = {
     {
       name: "lastName",
       inputType: "text",
-      label: "admin-user:last_name",
+      label: "auth:last_name",
       required: true,
       maxLength: CONFIG.NAME_MAX_LENGTH,
-      rules: { required: "admin-user:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
       size: { sm: 4 },
     },
     { name: "emailConfirmed", inputType: "checkbox", label: "admin-user:email_confirmed" },
   ],
-  submitButtonText: "admin-user:create_user",
+  submitButtonText: "admin:create_user",
 };
 
 function CreateUserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("admin-user");
+  const { t } = useTranslation(["admin-user", "auth", "translation", "admin"]);
   const [createUser, result] = useCreateUserMutation();
   const formContext = useForm<CreateUserCommand>({
     defaultValues: {
@@ -97,7 +97,7 @@ function CreateUserPage() {
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>{t("create_user")}</Typography>
+      <Typography variant="h5" sx={{ mb: 2 }}>{t("admin:create_user")}</Typography>
       <DynamicGridForm
         formContext={formContext}
         model={formModel}

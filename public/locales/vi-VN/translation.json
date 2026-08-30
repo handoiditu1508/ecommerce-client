@@ -3,15 +3,11 @@
   "back_to_home_page": "Trở Lại Trang Chủ",
   "empty": "Trống rỗng",
   "invalid_email_address": "Địa chỉ email không hợp lệ.",
-  "navigates": "Điều Hướng",
   "page_not_found_message": "Không có gì ở đây!",
   "page_restricted_message": "Nội dung trên trang này bị hạn chế truy cập!",
   "remove": "Xóa",
   "this_field_is_required": "Trường này là bắt buộc.",
   "update_success": "Cập nhật {{name}} thành công.",
   "error": "Lỗi",
-  "actions": "Thao Tác",
-  "id": "ID",
-  "name": "Họ Tên",
-  "none": "Không Có"
+  "actions": "Thao Tác"
 }

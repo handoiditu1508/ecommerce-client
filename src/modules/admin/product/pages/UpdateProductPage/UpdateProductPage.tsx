@@ -35,7 +35,7 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
       inputType: "text",
       label: "admin-product:product_name",
       required: true,
-      rules: { required: "admin-product:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
     {
       name: "price",
@@ -43,7 +43,7 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
       label: "admin-product:price",
       required: true,
       rules: {
-        required: "admin-product:this_field_is_required",
+        required: "translation:this_field_is_required",
         min: { value: 0, message: "admin-product:price_must_not_be_negative" },
       },
     },
@@ -59,7 +59,7 @@ const getThumbnailId = (product: Product): string | undefined =>
 function UpdateProductPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("admin-product");
+  const { t } = useTranslation(["admin-product", "translation"]);
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const categoryOptions = useMemo<DynamicInputOption<UpdateProductCommand, "categoryId">[]>(

@@ -21,7 +21,7 @@ const formModel: DynamicFormModel<CreateCategoryCommand> = {
       inputType: "text",
       label: "admin-category:category_name",
       required: true,
-      rules: { required: "admin-category:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
     {
       name: "parentId",
@@ -36,13 +36,13 @@ const formModel: DynamicFormModel<CreateCategoryCommand> = {
       accept: "image/*",
     },
   ],
-  submitButtonText: "admin-category:create_category",
+  submitButtonText: "admin:create_category",
 };
 
 function CreateCategoryPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation("admin-category");
+  const { t } = useTranslation(["admin-category", "translation", "admin"]);
   useGetCategoryTreesQuery();
   const categories = useAppSelector(categorySelectors.tree);
   const categoryOptions = useMemo<DynamicInputOption<CreateCategoryCommand, "parentId">[]>(

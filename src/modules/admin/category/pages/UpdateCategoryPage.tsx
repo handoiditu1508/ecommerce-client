@@ -32,7 +32,7 @@ const formModel: DynamicFormModel<UpdateCategoryForm> = {
       inputType: "text",
       label: "admin-category:category_name",
       required: true,
-      rules: { required: "admin-category:this_field_is_required" },
+      rules: { required: "translation:this_field_is_required" },
     },
     { name: "iconFile", inputType: "select", label: "admin-category:icon", options: [] },
   ],
@@ -42,7 +42,7 @@ const formModel: DynamicFormModel<UpdateCategoryForm> = {
 function UpdateCategoryPage() {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("admin-category");
+  const { t } = useTranslation(["admin-category", "translation", "admin"]);
   const categoryResult = useGetCategoryQuery({ categoryId: id }, { skip: !Number.isInteger(id) });
   const [updateCategory, updateResult] = useUpdateCategoryMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -144,7 +144,7 @@ function UpdateCategoryPage() {
             },
             {
               key: REMOVE_ICON_ID,
-              label: "admin-category:none",
+              label: "admin:none",
               value: REMOVE_ICON_ID,
               icon: <ClearIcon />,
             },
