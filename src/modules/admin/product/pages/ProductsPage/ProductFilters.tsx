@@ -14,7 +14,6 @@ type ProductFiltersProps = {
 
 const model: DynamicFormModel<CountProductsQuery> = {
   inputs: [
-    { name: "id", inputType: "text", label: "admin:id", size: { sm: 4, md: 2 } },
     { name: "name", inputType: "text", label: "admin-product:product_name", size: { sm: 8, md: 4 } },
     { name: "minPrice", inputType: "currency", label: "product:min_price", size: { sm: 6, md: 3 } },
     { name: "maxPrice", inputType: "currency", label: "product:max_price", size: { sm: 6, md: 3 } },
@@ -28,7 +27,7 @@ const model: DynamicFormModel<CountProductsQuery> = {
 };
 
 function ProductFilters({ categories, formContext, onSubmit }: ProductFiltersProps) {
-  useTranslation(["admin-product", "product", "admin"]);
+  useTranslation(["admin-product", "product"]);
   const categoryOptions = useMemo<DynamicInputOption<CountProductsQuery, "categoryIds">[]>(
     () => categoriesToDynamicInputOptions<CountProductsQuery, "categoryIds">(categories),
     [categories]
