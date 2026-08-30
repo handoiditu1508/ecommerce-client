@@ -1,6 +1,6 @@
-import { PageFilter, SortFilter } from "../common";
+import { AllPagesFilter, SortFilter } from "../common";
 
-export type GetProductsQuery = SortFilter & PageFilter & CountProductsQuery;
+export type GetProductsQuery = SortFilter & AllPagesFilter & CountProductsQuery;
 
 export type CountProductsQuery = {
   isDeleted?: boolean;

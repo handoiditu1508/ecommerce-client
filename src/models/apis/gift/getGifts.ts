@@ -1,6 +1,6 @@
-import { PageFilter, SortFilter } from "../common";
+import { AllPagesFilter, SortFilter } from "../common";
 
-export type GetGiftsQuery = SortFilter & PageFilter & CountGiftsQuery;
+export type GetGiftsQuery = SortFilter & AllPagesFilter & CountGiftsQuery;
 
 export type CountGiftsQuery = {
   id?: number;
