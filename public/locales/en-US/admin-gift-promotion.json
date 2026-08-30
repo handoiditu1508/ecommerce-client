@@ -1,0 +1,22 @@
+{
+  "active": "Active",
+  "add_gift": "Add Gift",
+  "apply_filters": "Apply Filters",
+  "description": "Description",
+  "disabled": "Disabled",
+  "end_date": "End Date",
+  "excluded_products": "Excluded Products",
+  "gift": "Gift",
+  "gift_promotion_created_successfully": "Gift promotion created successfully.",
+  "gift_promotion_gifts_updated_successfully": "Gift promotion gifts updated successfully.",
+  "gift_promotion_updated_successfully": "Gift promotion updated successfully.",
+  "invalid_gift_promotion_id": "Invalid gift promotion ID.",
+  "quantity": "Quantity",
+  "remove_gift": "Remove Gift",
+  "required_product_quantity": "Required Product Quantity",
+  "start_date": "Start Date",
+  "statuses": "Statuses",
+  "unable_to_load_gift_promotion": "Unable to load gift promotion.",
+  "update_gift_promotion": "Update Gift Promotion",
+  "update_gifts": "Update Gifts"
+}

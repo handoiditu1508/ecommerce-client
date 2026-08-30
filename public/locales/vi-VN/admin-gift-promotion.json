@@ -1,0 +1,22 @@
+{
+  "active": "Hoạt Động",
+  "add_gift": "Thêm Quà Tặng",
+  "apply_filters": "Áp Dụng Bộ Lọc",
+  "description": "Mô Tả",
+  "disabled": "Vô Hiệu Hóa",
+  "end_date": "Ngày Kết Thúc",
+  "excluded_products": "Sản Phẩm Loại Trừ",
+  "gift": "Quà Tặng",
+  "gift_promotion_created_successfully": "Đã tạo khuyến mãi quà tặng thành công.",
+  "gift_promotion_gifts_updated_successfully": "Đã cập nhật quà tặng khuyến mãi thành công.",
+  "gift_promotion_updated_successfully": "Đã cập nhật khuyến mãi quà tặng thành công.",
+  "invalid_gift_promotion_id": "ID khuyến mãi quà tặng không hợp lệ.",
+  "quantity": "Số Lượng",
+  "remove_gift": "Xóa Quà Tặng",
+  "required_product_quantity": "Số Lượng Sản Phẩm Yêu Cầu",
+  "start_date": "Ngày Bắt Đầu",
+  "statuses": "Trạng Thái",
+  "unable_to_load_gift_promotion": "Không thể tải khuyến mãi quà tặng.",
+  "update_gift_promotion": "Cập Nhật Khuyến Mãi Quà Tặng",
+  "update_gifts": "Cập Nhật Quà Tặng"
+}

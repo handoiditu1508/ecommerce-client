@@ -1,0 +1,23 @@
+{
+  "active": "Hoạt Động",
+  "apply_filters": "Áp Dụng Bộ Lọc",
+  "description": "Mô Tả",
+  "disabled": "Vô Hiệu Hóa",
+  "discount_code": "Mã Giảm Giá",
+  "discount_limit": "Giới Hạn Giảm Giá",
+  "discount_value": "Giá Trị Giảm Giá",
+  "end_date": "Ngày Kết Thúc",
+  "invalid_invoice_discount_id": "ID giảm giá hóa đơn không hợp lệ.",
+  "invoice_discount_created_successfully": "Đã tạo giảm giá hóa đơn thành công.",
+  "invoice_discount_updated_successfully": "Đã cập nhật giảm giá hóa đơn thành công.",
+  "is_percentage": "Theo Phần Trăm",
+  "max_discount_value": "Giá Trị Giảm Giá Tối Đa",
+  "min_discount_value": "Giá Trị Giảm Giá Tối Thiểu",
+  "required_invoice_value": "Giá Trị Hóa Đơn Yêu Cầu",
+  "start_date": "Ngày Bắt Đầu",
+  "statuses": "Trạng Thái",
+  "unable_to_load_invoice_discount": "Không thể tải giảm giá hóa đơn.",
+  "update_invoice_discount": "Cập Nhật Giảm Giá Hóa Đơn",
+  "uses_limit": "Giới Hạn Lượt Sử Dụng",
+  "uses_limits_per_user": "Giới Hạn Lượt Sử Dụng Mỗi Người"
+}

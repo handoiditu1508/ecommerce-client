@@ -107,6 +107,7 @@ export default giftApi;
 export const {
   useGetGiftQuery,
   useGetGiftsQuery,
+  useLazyGetGiftsQuery,
   useCountGiftsQuery,
   useCreateGiftMutation,
   useUpdateGiftMutation,

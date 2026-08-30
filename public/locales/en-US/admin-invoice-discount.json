@@ -1,0 +1,23 @@
+{
+  "active": "Active",
+  "apply_filters": "Apply Filters",
+  "description": "Description",
+  "disabled": "Disabled",
+  "discount_code": "Discount Code",
+  "discount_limit": "Discount Limit",
+  "discount_value": "Discount Value",
+  "end_date": "End Date",
+  "invalid_invoice_discount_id": "Invalid invoice discount ID.",
+  "invoice_discount_created_successfully": "Invoice discount created successfully.",
+  "invoice_discount_updated_successfully": "Invoice discount updated successfully.",
+  "is_percentage": "Is Percentage",
+  "max_discount_value": "Max Discount Value",
+  "min_discount_value": "Min Discount Value",
+  "required_invoice_value": "Required Invoice Value",
+  "start_date": "Start Date",
+  "statuses": "Statuses",
+  "unable_to_load_invoice_discount": "Unable to load invoice discount.",
+  "update_invoice_discount": "Update Invoice Discount",
+  "uses_limit": "Uses Limit",
+  "uses_limits_per_user": "Uses Limit Per User"
+}

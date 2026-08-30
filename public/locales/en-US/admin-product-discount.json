@@ -1,0 +1,20 @@
+{
+  "active": "Active",
+  "apply_filters": "Apply Filters",
+  "description": "Description",
+  "disabled": "Disabled",
+  "discount_value": "Discount Value",
+  "end_date": "End Date",
+  "excluded_products": "Excluded Products",
+  "invalid_product_discount_id": "Invalid product discount ID.",
+  "is_percentage": "Is Percentage",
+  "max_discount_value": "Max Discount Value",
+  "min_discount_value": "Min Discount Value",
+  "product_discount_created_successfully": "Product discount created successfully.",
+  "product_discount_updated_successfully": "Product discount updated successfully.",
+  "required_product_quantity": "Required Product Quantity",
+  "start_date": "Start Date",
+  "statuses": "Statuses",
+  "unable_to_load_product_discount": "Unable to load product discount.",
+  "update_product_discount": "Update Product Discount"
+}

@@ -1,0 +1,13 @@
+{
+  "apply_filters": "Áp Dụng Bộ Lọc",
+  "current_thumbnail": "Ảnh Thu Nhỏ Hiện Tại",
+  "gift_created_successfully": "Đã tạo quà tặng thành công.",
+  "gift_updated_successfully": "Đã cập nhật quà tặng thành công.",
+  "invalid_gift_id": "ID quà tặng không hợp lệ.",
+  "load_deleted_gifts": "Tải Quà Tặng Đã Xóa",
+  "quantity": "Số Lượng",
+  "thumbnail": "Ảnh Thu Nhỏ",
+  "unable_to_load_gift": "Không thể tải quà tặng.",
+  "update_gift": "Cập Nhật Quà Tặng",
+  "upload_new_thumbnail": "Tải Lên Ảnh Thu Nhỏ Mới"
+}

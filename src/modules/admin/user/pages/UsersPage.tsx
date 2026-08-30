@@ -35,7 +35,7 @@ const filterModel: DynamicFormModel<CountUsersQuery> = {
   inputs: [
     { name: "username", inputType: "text", label: "auth:username", size: { sm: 4, md: 3 } },
     { name: "email", inputType: "text", label: "auth:email", size: { sm: 4, md: 3 } },
-    { name: "name", inputType: "text", label: "admin-user:name", size: { sm: 4, md: 3 } },
+    { name: "name", inputType: "text", label: "admin:name", size: { sm: 4, md: 3 } },
     {
       name: "statuses",
       inputType: "select",
@@ -84,7 +84,7 @@ function UsersPage() {
   const userColumns = useMemo<GridColDef<UserView>[]>(() => [
     { field: "username", headerName: t("auth:username"), flex: 1, minWidth: 150 },
     { field: "email", headerName: t("auth:email"), flex: 1, minWidth: 190 },
-    { field: "name", headerName: t("admin-user:name"), flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
+    { field: "name", headerName: t("admin:name"), flex: 1, minWidth: 180, valueGetter: (_value, row) => [row.firstName, row.middleName, row.lastName].filter(Boolean).join(" ") },
     { field: "status", headerName: t("status"), width: 120, renderCell: ({ value }) => <Chip size="small" label={t(value === UserStatus.Active ? "active" : "locked")} color={value === UserStatus.Active ? "success" : "warning"} /> },
     { field: "modifiedDate", headerName: t("modified_date"), width: 180, valueFormatter: (value) => (value ? new Date(value).toLocaleString(i18n.resolvedLanguage) : "") },
     { field: "roles", headerName: t("roles"), flex: 1, minWidth: 200, sortable: false, renderCell: ({ value }: GridRenderCellParams<UserView, RoleView[]>) => <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", py: 1 }}>{(value ?? []).map((role, index) => <Chip key={role.id} size="small" label={role.name} color={(["primary", "secondary", "info", "success"] as const)[index % 4]} />)}</Box> },

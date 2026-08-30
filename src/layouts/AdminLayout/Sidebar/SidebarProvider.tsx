@@ -2,11 +2,17 @@ import { BreakpointsContext } from "@/contexts/breakpoints";
 import { InfoContext } from "@/contexts/info";
 import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import CategoryIcon from "@mui/icons-material/Category";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import RedeemIcon from "@mui/icons-material/Redeem";
+import SellIcon from "@mui/icons-material/Sell";
 import { useTheme } from "@mui/material/styles";
 import { SwipeableDrawerProps } from "@mui/material/SwipeableDrawer";
 import { ProviderProps, useContext, useEffect, useState } from "react";
@@ -80,6 +86,60 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
           title: "create_user",
           to: "/admin/users/new",
           icon: <PersonAddIcon />,
+        },
+      ],
+    },
+    {
+      title: "promotions",
+      icon: <LocalOfferIcon />,
+      children: [
+        {
+          title: "product_discounts",
+          to: "/admin/promotions/product-discounts",
+          icon: <SellIcon />,
+          children: [
+            {
+              title: "create_product_discount",
+              to: "/admin/promotions/product-discounts/new",
+              icon: <AddCircleIcon />,
+            },
+          ],
+        },
+        {
+          title: "invoice_discounts",
+          to: "/admin/promotions/invoice-discounts",
+          icon: <ReceiptLongIcon />,
+          children: [
+            {
+              title: "create_invoice_discount",
+              to: "/admin/promotions/invoice-discounts/new",
+              icon: <AddCircleIcon />,
+            },
+          ],
+        },
+        {
+          title: "gift_promotions",
+          to: "/admin/promotions/gift-promotions",
+          icon: <RedeemIcon />,
+          children: [
+            {
+              title: "create_gift_promotion",
+              to: "/admin/promotions/gift-promotions/new",
+              icon: <AddCircleIcon />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: "gifts",
+      to: "/admin/gifts",
+      icon: <CardGiftcardIcon />,
+      children: [
+        {
+          title: "create_gift",
+          to: "/admin/gifts/new",
+          icon: <AddCircleIcon />,
         },
       ],
     },

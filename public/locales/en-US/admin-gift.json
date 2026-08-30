@@ -1,0 +1,13 @@
+{
+  "apply_filters": "Apply Filters",
+  "current_thumbnail": "Current Thumbnail",
+  "gift_created_successfully": "Gift created successfully.",
+  "gift_updated_successfully": "Gift updated successfully.",
+  "invalid_gift_id": "Invalid gift ID.",
+  "load_deleted_gifts": "Load Deleted Gifts",
+  "quantity": "Quantity",
+  "thumbnail": "Thumbnail",
+  "unable_to_load_gift": "Unable to load gift.",
+  "update_gift": "Update Gift",
+  "upload_new_thumbnail": "Upload New Thumbnail"
+}
