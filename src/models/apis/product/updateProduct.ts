@@ -5,4 +5,5 @@ export type UpdateProductCommand = {
   thumbnailId: string;
   thumbnailFile?: FileList;
   categoryId?: number;
+  description?: string;
 };

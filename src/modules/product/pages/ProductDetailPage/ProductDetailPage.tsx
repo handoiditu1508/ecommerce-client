@@ -259,7 +259,7 @@ function ProductDetailPage() {
         </Box>}
       </Box>
       <RelatedProducts />
-      <ProductDescription loading={!product} />
+      <ProductDescription loading={!product} content={product?.description} />
     </LayoutContainer>
   );
 }

@@ -1,17 +1,18 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
+import { RichTextEditorHandle } from "@/components/RichTextEditor";
 import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { CreateProductCommand } from "@/models/apis/product/createProduct";
 import { categoriesToDynamicInputOptions } from "@/models/entities/Category";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
-import { useCreateProductMutation } from "@/redux/apis/productApi";
+import { useCreateProductMutation, useUploadProductImagesMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +59,11 @@ const formModel: DynamicFormModel<CreateProductCommand> = {
       required: true,
       rules: { required: "translation:this_field_is_required" },
     },
+    {
+      name: "description",
+      inputType: "richtext",
+      label: "admin-product:description",
+    },
   ],
   submitButtonText: "admin:create_product",
 };
@@ -73,6 +79,8 @@ function CreateProductPage() {
     [categories]
   );
   const [createProduct, result] = useCreateProductMutation();
+  const [uploadProductImages, uploadResult] = useUploadProductImagesMutation();
+  const richTextEditorRef = useRef<RichTextEditorHandle>(null);
   const formContext = useForm<CreateProductCommand>({
     defaultValues: {
       name: "",
@@ -80,12 +88,28 @@ function CreateProductPage() {
       categoryId: undefined,
       sku: "",
       thumbnailFile: undefined,
+      description: "",
     },
   });
 
   const handleSubmit = async (data: CreateProductCommand) => {
     try {
-      await createProduct(data).unwrap();
+      const createdProduct = await createProduct(data).unwrap();
+
+      const pendingImages = richTextEditorRef.current?.getPendingImages() ?? [];
+      if (pendingImages.length) {
+        const uploadedProduct = await uploadProductImages({
+          productId: createdProduct.id,
+          images: pendingImages.map((image) => image.file),
+          localIds: pendingImages.map((image) => image.localId),
+        }).unwrap();
+        richTextEditorRef.current?.resolvePendingImages(
+          uploadedProduct.images
+            .filter((image) => image.localId)
+            .map((image) => ({ localId: image.localId!, filePath: image.filePath })),
+        );
+      }
+
       dispatch(pushNotification({
         text: t("product_created_successfully"),
         severity: "success",
@@ -100,9 +124,12 @@ function CreateProductPage() {
       <DynamicForm
         formContext={formContext}
         model={formModel}
-        loading={result.isLoading}
+        loading={result.isLoading || uploadResult.isLoading}
         optionsMap={{
           categoryId: categoryOptions,
+        }}
+        richTextRefMap={{
+          description: richTextEditorRef,
         }}
         onSubmit={handleSubmit}
       />

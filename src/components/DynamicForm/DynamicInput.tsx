@@ -37,6 +37,7 @@ import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
 import FileInput from "../FileInput";
 import NumberField from "../NumberField";
+import RichTextEditor, { RichTextEditorHandle } from "../RichTextEditor";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -77,6 +78,7 @@ export type DynamicInputProps<T extends FieldValues, K extends Path<T>> = {
   ) => void;
   autocompleteLoading?: boolean;
   hidden?: boolean | ((data: T) => boolean);
+  richTextRef?: React.Ref<RichTextEditorHandle>;
 
   // these props come from DynamicForm and is used for DynamicArrayInput
   startAdornmentMap?: DynamicFormProps<T>["startAdornmentMap"];
@@ -107,6 +109,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
   autocompleteOnInputChange,
   autocompleteLoading,
   hidden,
+  richTextRef,
   startAdornmentMap,
   endAdornmentMap,
   labelMap,
@@ -836,6 +839,37 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
           error={errorText(formContext.formState.errors[model.name]?.message as string)}
         />
       </FormControl>
+    );
+  }
+
+  if (model.inputType === "richtext") {
+    return (
+      <Controller
+        control={formContext.control}
+        name={model.name}
+        rules={{
+          ...model.rules,
+          ...rules,
+        }}
+        render={({ field, fieldState }) => (
+          <RichTextEditor
+            ref={richTextRef}
+            fullWidth
+            label={finalLabel}
+            required={model.required}
+            disabled={model.disabled}
+            readOnly={model.readOnly || formLoading}
+            value={typeof field.value === "string" ? field.value : ""}
+            error={fieldState.invalid}
+            helperText={errorText(fieldState.error?.message)}
+            onBlur={field.onBlur}
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (model.validateOnChange) formContext.trigger(model.name);
+            }}
+          />
+        )}
+      />
     );
   }
 

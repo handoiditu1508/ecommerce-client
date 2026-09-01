@@ -4,4 +4,5 @@ export type CreateProductCommand = {
   thumbnailFile: FileList;
   categoryId?: number;
   sku: string;
+  description?: string;
 };

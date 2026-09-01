@@ -1,5 +1,6 @@
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
 import { DynamicInputOption } from "@/components/DynamicForm/models";
+import { RichTextEditorHandle } from "@/components/RichTextEditor";
 import CONFIG from "@/configs";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
@@ -7,7 +8,7 @@ import { UpdateProductCommand } from "@/models/apis/product/updateProduct";
 import { categoriesToDynamicInputOptions } from "@/models/entities/Category";
 import Product from "@/models/entities/Product";
 import { useGetCategoryTreesQuery } from "@/redux/apis/categoryApi";
-import { useGetProductQuery, useUpdateProductMutation } from "@/redux/apis/productApi";
+import { useGetProductQuery, useUpdateProductMutation, useUploadProductImagesMutation } from "@/redux/apis/productApi";
 import { categorySelectors } from "@/redux/slices/categorySlice";
 import { pushNotification } from "@/redux/slices/notificationSlice";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -50,6 +51,7 @@ const formModel: DynamicFormModel<UpdateProductCommand> = {
     },
     { name: "categoryId", inputType: "cascadingselect", label: "admin-product:category", options: [] },
     { name: "thumbnailId", inputType: "select", label: "admin-product:thumbnail", options: [] },
+    { name: "description", inputType: "richtext", label: "admin-product:description" },
   ],
   submitButtonText: "admin-product:update_product",
 };
@@ -72,6 +74,8 @@ function UpdateProductPage() {
     { skip: !Number.isInteger(id) },
   );
   const [updateProduct, updateResult] = useUpdateProductMutation();
+  const [uploadProductImages, uploadResult] = useUploadProductImagesMutation();
+  const richTextEditorRef = useRef<RichTextEditorHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previousThumbnailIdRef = useRef<string | undefined>(undefined);
   const [temporaryThumbnailUrl, setTemporaryThumbnailUrl] = useState<string>();
@@ -84,6 +88,7 @@ function UpdateProductPage() {
         categoryId: productResult.data.categoryId,
         thumbnailId: getThumbnailId(productResult.data) ?? UPLOAD_NEW_ID,
         thumbnailFile: undefined,
+        description: productResult.data.description ?? "",
       }
       : undefined
   ), [productResult.data]);
@@ -134,6 +139,21 @@ function UpdateProductPage() {
   const handleSubmit = async (data: UpdateProductCommand) => {
     try {
       await updateProduct(data).unwrap();
+
+      const pendingImages = richTextEditorRef.current?.getPendingImages() ?? [];
+      if (pendingImages.length) {
+        const uploadedProduct = await uploadProductImages({
+          productId: data.id,
+          images: pendingImages.map((image) => image.file),
+          localIds: pendingImages.map((image) => image.localId),
+        }).unwrap();
+        richTextEditorRef.current?.resolvePendingImages(
+          uploadedProduct.images
+            .filter((image) => image.localId)
+            .map((image) => ({ localId: image.localId!, filePath: image.filePath })),
+        );
+      }
+
       dispatch(pushNotification({
         text: t("product_updated_successfully"),
         severity: "success",
@@ -170,7 +190,10 @@ function UpdateProductPage() {
       <DynamicForm
         formContext={formContext}
         model={formModel}
-        loading={updateResult.isLoading}
+        loading={updateResult.isLoading || uploadResult.isLoading}
+        richTextRefMap={{
+          description: richTextEditorRef,
+        }}
         optionsMap={{
           thumbnailId: [
             {

@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import React from "react";
 import { FieldValues, Path, RegisterOptions, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { RichTextEditorHandle } from "../RichTextEditor";
 import DynamicInput from "./DynamicInput";
 import { DynamicArrayItemAction, DynamicFormModel, DynamicInputOption } from "./models";
 
@@ -25,6 +26,7 @@ export type DynamicFormProps<T extends FieldValues> = Omit<BoxProps<"form">, "co
   >>;
   autocompleteLoadingMap?: Partial<Record<Path<T>, boolean>>;
   hiddenMap?: Partial<Record<Path<T>, boolean | ((data: T) => boolean)>>;
+  richTextRefMap?: Partial<Record<Path<T>, React.Ref<RichTextEditorHandle>>>;
   renderInputMap?: Partial<Record<Path<T>, React.ReactNode>>;
   arrayItemActionsMap?: Partial<Record<Path<T>, DynamicArrayItemAction<T>[]>>;
   onSubmit: SubmitHandler<T>;
@@ -44,6 +46,7 @@ function DynamicForm<T extends FieldValues>({
   autocompleteOnInputChangeMap = CONFIG.EMPTY_OBJECT,
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
+  richTextRefMap = CONFIG.EMPTY_OBJECT,
   renderInputMap = CONFIG.EMPTY_OBJECT,
   arrayItemActionsMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
@@ -58,6 +61,7 @@ function DynamicForm<T extends FieldValues>({
           formContext={formContext}
           formLoading={loading}
           hidden={hiddenMap[inputModel.name]}
+          richTextRef={richTextRefMap[inputModel.name]}
           startAdornment={startAdornmentMap[inputModel.name]}
           endAdornment={endAdornmentMap[inputModel.name]}
           label={labelMap[inputModel.name]}

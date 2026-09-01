@@ -15,6 +15,7 @@ export type DynamicInputModel<T extends FieldValues, K extends Path<T>, A extend
   | DynamicCheckboxInputModel<T, K, A>
   | DynamicRadioInputModel<T, K, A>
   | DynamicFileInputModel<T, K, A>
+  | DynamicRichTextInputModel<T, K, A>
   | DynamicArrayInputModel<T, K, A>;
 
 type DynamicRules<T extends FieldValues, K extends Path<T>, A extends FieldValues> =
@@ -132,6 +133,15 @@ export type DynamicFileInputModel<T extends FieldValues, K extends Path<T>, A ex
         inputType: "file";
         multiple?: boolean;
         accept?: string;
+      }
+    )
+    : never;
+
+export type DynamicRichTextInputModel<T extends FieldValues, K extends Path<T>, A extends FieldValues = T> =
+  PathValue<T, K> extends string | null | undefined
+    ? (
+      DynamicCommonInputModel<T, K, A> & {
+        inputType: "richtext";
       }
     )
     : never;
