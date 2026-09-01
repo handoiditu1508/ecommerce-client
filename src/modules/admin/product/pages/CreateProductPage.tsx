@@ -98,16 +98,23 @@ function CreateProductPage() {
 
       const pendingImages = richTextEditorRef.current?.getPendingImages() ?? [];
       if (pendingImages.length) {
-        const uploadedProduct = await uploadProductImages({
-          productId: createdProduct.id,
-          images: pendingImages.map((image) => image.file),
-          localIds: pendingImages.map((image) => image.localId),
-        }).unwrap();
-        richTextEditorRef.current?.resolvePendingImages(
-          uploadedProduct.images
-            .filter((image) => image.localId)
-            .map((image) => ({ localId: image.localId!, filePath: image.filePath })),
-        );
+        const localIds = pendingImages.map((image) => image.localId);
+        richTextEditorRef.current?.markImagesUploading(localIds);
+        try {
+          const uploadedProduct = await uploadProductImages({
+            productId: createdProduct.id,
+            images: pendingImages.map((image) => image.file),
+            localIds,
+          }).unwrap();
+          richTextEditorRef.current?.resolvePendingImages(
+            uploadedProduct.images
+              .filter((image) => image.localId)
+              .map((image) => ({ localId: image.localId!, filePath: image.filePath })),
+          );
+        } catch (uploadError) {
+          richTextEditorRef.current?.markImagesFailed(localIds);
+          throw uploadError;
+        }
       }
 
       dispatch(pushNotification({
