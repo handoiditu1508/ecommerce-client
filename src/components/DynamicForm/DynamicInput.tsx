@@ -37,7 +37,7 @@ import ColorInput from "../ColorInput";
 import CurrencyInput from "../CurrencyInput";
 import FileInput from "../FileInput";
 import NumberField from "../NumberField";
-import RichTextEditor, { RichTextEditorHandle } from "../RichTextEditor";
+import RichTextEditor, { ImagePickerRenderProps, RichTextEditorHandle } from "../RichTextEditor";
 import DynamicArrayInput from "./DynamicArrayInput";
 import { DynamicFormProps } from "./DynamicForm";
 import { DynamicInputModel, DynamicInputOption } from "./models";
@@ -79,6 +79,7 @@ export type DynamicInputProps<T extends FieldValues, K extends Path<T>> = {
   autocompleteLoading?: boolean;
   hidden?: boolean | ((data: T) => boolean);
   richTextRef?: React.Ref<RichTextEditorHandle>;
+  richTextImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode;
 
   // these props come from DynamicForm and is used for DynamicArrayInput
   startAdornmentMap?: DynamicFormProps<T>["startAdornmentMap"];
@@ -110,6 +111,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
   autocompleteLoading,
   hidden,
   richTextRef,
+  richTextImagePicker,
   startAdornmentMap,
   endAdornmentMap,
   labelMap,
@@ -862,6 +864,7 @@ function DynamicInput<T extends FieldValues, K extends Path<T>>({
             value={typeof field.value === "string" ? field.value : ""}
             error={fieldState.invalid}
             helperText={errorText(fieldState.error?.message)}
+            renderImagePicker={richTextImagePicker}
             onBlur={field.onBlur}
             onValueChange={(value) => {
               field.onChange(value);

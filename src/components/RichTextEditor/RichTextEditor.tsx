@@ -33,7 +33,7 @@ import { ImageNode } from "./nodes/ImageNode";
 import EmbedPlugin, { insertEmbed } from "./plugins/EmbedPlugin";
 import HorizontalRulePlugin from "./plugins/HorizontalRulePlugin";
 import ImageDropPastePlugin from "./plugins/ImageDropPastePlugin";
-import ImagesPlugin from "./plugins/ImagesPlugin";
+import ImagesPlugin, { ImagePickerRenderProps } from "./plugins/ImagesPlugin";
 import Toolbar from "./Toolbar";
 import { getLocalImageRegistry } from "./useLocalImageRegistry";
 
@@ -94,6 +94,13 @@ type RichTextEditorProps = {
   helperText?: React.ReactNode;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
   onValueChange: (value: string) => void;
+  /**
+   * Opt-in "insert from library" toolbar button. Omit to keep the editor's default,
+   * upload-only image flow - RichTextEditor stays agnostic about where library images come
+   * from; the consumer supplies its own picker UI (e.g. a dialog over a product's existing
+   * images) and calls `onSelect` with the chosen image's already-persisted src.
+   */
+  renderImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode;
 };
 
 const StyledStack = styled(Stack)(({ theme }) => ({
@@ -186,7 +193,7 @@ function EditorBridge({
 }
 
 function RichTextEditor(
-  { value = "", label, required, disabled, readOnly, fullWidth, error, helperText, onBlur, onValueChange }: RichTextEditorProps,
+  { value = "", label, required, disabled, readOnly, fullWidth, error, helperText, onBlur, onValueChange, renderImagePicker }: RichTextEditorProps,
   ref: React.Ref<RichTextEditorHandle>,
 ) {
   const editorRef = useRef<LexicalEditor | null>(null);
@@ -300,7 +307,7 @@ function RichTextEditor(
         <StyledStack
           className={[error && "error", disabled && "disabled", readOnly && "readonly"].filter(Boolean).join(" ")}
         >
-          {!readOnly && <Toolbar />}
+          {!readOnly && <Toolbar renderImagePicker={renderImagePicker} />}
           <div style={{ position: "relative" }}>
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-content" onBlur={onBlur} />}

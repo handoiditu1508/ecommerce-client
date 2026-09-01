@@ -56,6 +56,7 @@
   "quantity_must_not_be_negative": "Số lượng không được âm.",
   "recover_product": "Khôi Phục Sản Phẩm",
   "remove_variant": "Xóa Biến Thể",
+  "select_product_image": "Chọn Hình Ảnh Sản Phẩm",
   "sku": "SKU",
   "sku_must_be_unique": "SKU phải là duy nhất.",
   "thumbnail": "Ảnh Thu Nhỏ",

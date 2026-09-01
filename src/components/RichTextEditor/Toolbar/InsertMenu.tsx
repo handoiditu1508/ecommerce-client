@@ -2,6 +2,7 @@ import { INSERT_HORIZONTAL_RULE_COMMAND } from "@lexical/react/LexicalHorizontal
 import { INSERT_TABLE_COMMAND } from "@lexical/table";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ImageIcon from "@mui/icons-material/Image";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import Button from "@mui/material/Button";
@@ -14,7 +15,7 @@ import { LexicalEditor } from "lexical";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { insertEmbed } from "../plugins/EmbedPlugin";
-import { insertImage } from "../plugins/ImagesPlugin";
+import { ImagePickerRenderProps, insertImage, insertImageFromUrl } from "../plugins/ImagesPlugin";
 
 function TablePopoverButton({ editor }: { editor: LexicalEditor; }) {
   const { t } = useTranslation();
@@ -114,7 +115,39 @@ function EmbedPopoverButton({ editor }: { editor: LexicalEditor; }) {
   );
 }
 
-function InsertMenu({ editor }: { editor: LexicalEditor; }) {
+function ImageLibraryPickerButton({
+  editor,
+  renderImagePicker,
+}: {
+  editor: LexicalEditor;
+  renderImagePicker: (props: ImagePickerRenderProps) => React.ReactNode;
+}) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Tooltip title={t("insert_from_library")}>
+        <IconButton size="small" onClick={() => setOpen(true)}>
+          <PhotoLibraryIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      {renderImagePicker({
+        open,
+        onClose: () => setOpen(false),
+        onSelect: (image) => {
+          insertImageFromUrl(editor, image.src, image.altText ?? "");
+          setOpen(false);
+        },
+      })}
+    </>
+  );
+}
+
+function InsertMenu({ editor, renderImagePicker }: {
+  editor: LexicalEditor;
+  renderImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode;
+}) {
   const { t } = useTranslation();
   const hiddenImageInputRef = useRef<HTMLInputElement>(null);
 
@@ -136,6 +169,7 @@ function InsertMenu({ editor }: { editor: LexicalEditor; }) {
           event.currentTarget.value = "";
         }}
       />
+      {renderImagePicker && <ImageLibraryPickerButton editor={editor} renderImagePicker={renderImagePicker} />}
       <TablePopoverButton editor={editor} />
       <EmbedPopoverButton editor={editor} />
       <Tooltip title={t("insert_horizontal_rule")}>

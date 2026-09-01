@@ -56,6 +56,7 @@
   "quantity_must_not_be_negative": "Quantity must not be negative.",
   "recover_product": "Recover Product",
   "remove_variant": "Remove Variant",
+  "select_product_image": "Select Product Image",
   "sku": "SKU",
   "sku_must_be_unique": "SKU must be unique.",
   "thumbnail": "Thumbnail",

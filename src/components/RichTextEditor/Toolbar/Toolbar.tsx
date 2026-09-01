@@ -53,6 +53,7 @@ import {
 } from "lexical";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ImagePickerRenderProps } from "../plugins/ImagesPlugin";
 import ColorAndFontControls from "./ColorAndFontControls";
 import InsertMenu from "./InsertMenu";
 import LinkControl from "./LinkControl";
@@ -107,7 +108,7 @@ function getBlockType(node: LexicalNode): BlockType {
   return "paragraph";
 }
 
-function Toolbar() {
+function Toolbar({ renderImagePicker }: { renderImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode; }) {
   const { t } = useTranslation();
   const [editor] = useLexicalComposerContext();
   const [activeFormats, setActiveFormats] = useState<TextFormatType[]>([]);
@@ -301,7 +302,7 @@ function Toolbar() {
       <Divider orientation="vertical" flexItem />
       <LinkControl editor={editor} isLink={isLink} linkUrl={linkUrl} />
       <Divider orientation="vertical" flexItem />
-      <InsertMenu editor={editor} />
+      <InsertMenu editor={editor} renderImagePicker={renderImagePicker} />
       {insideTable && <TableControls editor={editor} canMergeCells={canMergeCells} canUnmergeCell={canUnmergeCell} />}
     </Stack>
   );

@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { NIL as NIL_UUID } from "uuid";
+import ProductImageLibraryDialog from "./ProductImageLibraryDialog";
 import ProductImagesForm from "./ProductImagesForm";
 import ProductReadonlyDetails from "./ProductReadonlyDetails";
 import ProductVariantsForm from "./ProductVariantsForm";
@@ -200,6 +201,9 @@ function UpdateProductPage() {
         loading={updateResult.isLoading || uploadResult.isLoading}
         richTextRefMap={{
           description: richTextEditorRef,
+        }}
+        richTextImagePickerMap={{
+          description: (props) => <ProductImageLibraryDialog images={product.images} {...props} />,
         }}
         optionsMap={{
           thumbnailId: [
