@@ -144,15 +144,13 @@ function ImageLibraryPickerButton({
   );
 }
 
-function InsertMenu({ editor, renderImagePicker }: {
-  editor: LexicalEditor;
-  renderImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode;
-}) {
+// Always visible on the primary toolbar row - the single most common insert action.
+export function InsertImageButton({ editor }: { editor: LexicalEditor; }) {
   const { t } = useTranslation();
   const hiddenImageInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Stack direction="row" alignItems="center" gap={0.5}>
+    <>
       <Tooltip title={t("insert_image")}>
         <IconButton size="small" onClick={() => hiddenImageInputRef.current?.click()}>
           <ImageIcon fontSize="small" />
@@ -169,6 +167,19 @@ function InsertMenu({ editor, renderImagePicker }: {
           event.currentTarget.value = "";
         }}
       />
+    </>
+  );
+}
+
+// Everything else insertable - lives behind the "More tools" popover (see MoreToolsPopover).
+export function InsertMoreTools({ editor, renderImagePicker }: {
+  editor: LexicalEditor;
+  renderImagePicker?: (props: ImagePickerRenderProps) => React.ReactNode;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <Stack direction="row" alignItems="center" gap={0.5}>
       {renderImagePicker && <ImageLibraryPickerButton editor={editor} renderImagePicker={renderImagePicker} />}
       <TablePopoverButton editor={editor} />
       <EmbedPopoverButton editor={editor} />
@@ -180,5 +191,3 @@ function InsertMenu({ editor, renderImagePicker }: {
     </Stack>
   );
 }
-
-export default InsertMenu;

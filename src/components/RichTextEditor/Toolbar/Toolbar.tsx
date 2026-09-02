@@ -12,24 +12,10 @@ import { $createHeadingNode, $createQuoteNode, $isHeadingNode, $isQuoteNode, Hea
 import { $getSelectionStyleValueForProperty, $patchStyleText, $setBlocksType } from "@lexical/selection";
 import { $getTableCellNodeFromLexicalNode, $isTableSelection } from "@lexical/table";
 import { $getNearestNodeOfType } from "@lexical/utils";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CodeIcon from "@mui/icons-material/Code";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
-import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
-import FormatBoldIcon from "@mui/icons-material/FormatBold";
-import FormatClearIcon from "@mui/icons-material/FormatClear";
-import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
-import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
-import FormatItalicIcon from "@mui/icons-material/FormatItalic";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import FormatStrikethroughIcon from "@mui/icons-material/FormatStrikethrough";
-import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
-import SubscriptIcon from "@mui/icons-material/Subscript";
-import SuperscriptIcon from "@mui/icons-material/Superscript";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -44,40 +30,21 @@ import {
   $getSelection,
   $isRangeSelection,
   ElementFormatType,
-  FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  INDENT_CONTENT_COMMAND,
   LexicalNode,
-  OUTDENT_CONTENT_COMMAND,
   TextFormatType,
 } from "lexical";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ImagePickerRenderProps } from "../plugins/ImagesPlugin";
-import ColorAndFontControls from "./ColorAndFontControls";
-import InsertMenu from "./InsertMenu";
+import { PRIMARY_TEXT_FORMATS, SECONDARY_TEXT_FORMATS, TEXT_FORMATS } from "./formatOptions";
+import { InsertImageButton } from "./InsertMenu";
 import LinkControl from "./LinkControl";
+import MoreToolsPopover from "./MoreToolsPopover";
 import TableControls from "./TableControls";
-import TextCaseControl, { TextCase } from "./TextCaseControl";
+import { TextCase } from "./TextCaseControl";
 
 type BlockType = "paragraph" | HeadingTagType | "quote" | "code";
-
-const TEXT_FORMATS: { value: TextFormatType; icon: React.ReactNode; label: string; }[] = [
-  { value: "bold", icon: <FormatBoldIcon fontSize="small" />, label: "bold" },
-  { value: "italic", icon: <FormatItalicIcon fontSize="small" />, label: "italic" },
-  { value: "underline", icon: <FormatUnderlinedIcon fontSize="small" />, label: "underline" },
-  { value: "strikethrough", icon: <FormatStrikethroughIcon fontSize="small" />, label: "strikethrough" },
-  { value: "subscript", icon: <SubscriptIcon fontSize="small" />, label: "subscript" },
-  { value: "superscript", icon: <SuperscriptIcon fontSize="small" />, label: "superscript" },
-  { value: "code", icon: <CodeIcon fontSize="small" />, label: "inline_code" },
-];
-
-const ALIGNMENTS: { value: ElementFormatType; icon: React.ReactNode; label: string; }[] = [
-  { value: "left", icon: <FormatAlignLeftIcon fontSize="small" />, label: "align_left" },
-  { value: "center", icon: <FormatAlignCenterIcon fontSize="small" />, label: "align_center" },
-  { value: "right", icon: <FormatAlignRightIcon fontSize="small" />, label: "align_right" },
-  { value: "justify", icon: <FormatAlignJustifyIcon fontSize="small" />, label: "align_justify" },
-];
 
 function selectionHasAncestor(node: LexicalNode, predicate: (node: LexicalNode) => boolean): boolean {
   let current: LexicalNode | null = node;
@@ -237,52 +204,17 @@ function Toolbar({ renderImagePicker }: { renderImagePicker?: (props: ImagePicke
         size="small"
         value={activeFormats}
         onChange={(_event, formats: TextFormatType[]) => {
-          TEXT_FORMATS.forEach(({ value }) => {
+          PRIMARY_TEXT_FORMATS.forEach(({ value }) => {
             if (formats.includes(value) !== activeFormats.includes(value)) {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, value);
             }
           });
         }}
       >
-        {TEXT_FORMATS.map(({ value, icon, label }) => (
+        {PRIMARY_TEXT_FORMATS.map(({ value, icon, label }) => (
           <ToggleButton key={value} value={value} aria-label={t(label)}>{icon}</ToggleButton>
         ))}
       </ToggleButtonGroup>
-      <Tooltip title={t("clear_formatting")}>
-        <IconButton size="small" onClick={clearFormatting}><FormatClearIcon fontSize="small" /></IconButton>
-      </Tooltip>
-      <Divider orientation="vertical" flexItem />
-      <ColorAndFontControls
-        editor={editor}
-        color={color}
-        backgroundColor={backgroundColor}
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-      />
-      <TextCaseControl editor={editor} textCase={textCase} />
-      <Divider orientation="vertical" flexItem />
-      <ToggleButtonGroup
-        size="small"
-        exclusive
-        value={alignment}
-        onChange={(_event, value: ElementFormatType | null) => {
-          if (value) editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, value);
-        }}
-      >
-        {ALIGNMENTS.map(({ value, icon, label }) => (
-          <ToggleButton key={value} value={value} aria-label={t(label)}>{icon}</ToggleButton>
-        ))}
-      </ToggleButtonGroup>
-      <Tooltip title={t("outdent")}>
-        <IconButton size="small" onClick={() => editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)}>
-          <FormatIndentDecreaseIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title={t("indent")}>
-        <IconButton size="small" onClick={() => editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)}>
-          <FormatIndentIncreaseIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
       <Divider orientation="vertical" flexItem />
       <Tooltip title={t("bulleted_list")}>
         <IconButton size="small" color={listType === "bullet" ? "primary" : "default"} onClick={() => toggleList("bullet")}>
@@ -294,15 +226,32 @@ function Toolbar({ renderImagePicker }: { renderImagePicker?: (props: ImagePicke
           <FormatListNumberedIcon fontSize="small" />
         </IconButton>
       </Tooltip>
-      <Tooltip title={t("checklist")}>
-        <IconButton size="small" color={listType === "check" ? "primary" : "default"} onClick={() => toggleList("check")}>
-          <CheckBoxIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
       <Divider orientation="vertical" flexItem />
       <LinkControl editor={editor} isLink={isLink} linkUrl={linkUrl} />
       <Divider orientation="vertical" flexItem />
-      <InsertMenu editor={editor} renderImagePicker={renderImagePicker} />
+      <InsertImageButton editor={editor} />
+      <Divider orientation="vertical" flexItem />
+      <MoreToolsPopover
+        editor={editor}
+        activeFormats={activeFormats}
+        color={color}
+        backgroundColor={backgroundColor}
+        fontFamily={fontFamily}
+        fontSize={fontSize}
+        textCase={textCase}
+        alignment={alignment}
+        checklistActive={listType === "check"}
+        renderImagePicker={renderImagePicker}
+        onToggleFormats={(formats) => {
+          SECONDARY_TEXT_FORMATS.forEach(({ value }) => {
+            if (formats.includes(value) !== activeFormats.includes(value)) {
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, value);
+            }
+          });
+        }}
+        onClearFormatting={clearFormatting}
+        onToggleChecklist={() => toggleList("check")}
+      />
       {insideTable && <TableControls editor={editor} canMergeCells={canMergeCells} canUnmergeCell={canUnmergeCell} />}
     </Stack>
   );
