@@ -8,7 +8,10 @@ import { Theme } from "@mui/material/styles";
  */
 export function getSharedContentStyles(theme: Theme) {
   return {
-    img: { maxWidth: "100%" },
+    // A resized image carries explicit `width`/`height` HTML attributes (see ImageNode). Without
+    // `height: auto`, `maxWidth: 100%` shrinking the rendered width on a narrower viewport leaves
+    // that fixed height attribute in place and distorts the image's aspect ratio.
+    img: { maxWidth: "100%", height: "auto" },
     "ul, ol": { margin: 0, paddingInlineStart: theme.spacing(3) },
     a: { color: theme.vars.palette.primary.main },
     // A left/right-aligned image uses CSS float, which otherwise bleeds past its own paragraph

@@ -6,10 +6,13 @@ import AlignHorizontalRightIcon from "@mui/icons-material/AlignHorizontalRight";
 import CloseIcon from "@mui/icons-material/Close";
 import ErrorIcon from "@mui/icons-material/Error";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import {
   $getNodeByKey,
   $getSelection,
@@ -68,6 +71,26 @@ function resolveImageSrc(editor: LexicalEditor, src: string, localId: string | u
   return src ? CONFIG.FILE_URL + src : "";
 }
 
+const MIN_IMAGE_DIMENSION = 40;
+
+// Handles Tab/keyboard-driven focus, which has no competing default action to fight.
+function selectAllOnFocus(event: React.FocusEvent<HTMLInputElement>) {
+  event.target.select();
+}
+
+// Handles mouse-driven focus. A click's default action also places the caret at the clicked
+// position - and does so as part of `mouseup`, i.e. *after* the 'focus' event a fresh click
+// causes, so a plain `select()` in `onFocus` alone gets immediately overwritten by it. Blocking
+// that default action here and selecting explicitly wins in both cases: a fresh click (which
+// fires focus + this) and a re-click on a field that already had focus (Lexical deliberately
+// leaves DOM focus on a nested decorator input like this one alone - see the NodeSelection
+// explanation on `reselectAndFocus` - so re-clicking it fires no new 'focus' event at all, only
+// this).
+function selectAllOnMouseUp(event: React.MouseEvent<HTMLInputElement>) {
+  event.preventDefault();
+  event.currentTarget.select();
+}
+
 function ImageComponent({
   nodeKey,
   editor,
@@ -92,6 +115,29 @@ function ImageComponent({
   const imageRef = useRef<HTMLImageElement>(null);
   const [isSelected, setSelected, clearSelected] = useLexicalNodeSelection(nodeKey);
   const [draftWidth, setDraftWidth] = useState<number>();
+  // Captured once the <img> loads, so both drag-resize and the numeric fields can derive the
+  // other dimension without needing an active drag first (natural size isn't known until then).
+  const naturalAspectRatioRef = useRef<number | undefined>(undefined);
+
+  const resolveAspectRatio = () => naturalAspectRatioRef.current ?? (height && width ? height / width : undefined);
+  const draftHeight = (() => {
+    if (draftWidth === undefined) return undefined;
+    const ratio = resolveAspectRatio();
+
+    return ratio ? Math.round(draftWidth * ratio) : undefined;
+  })();
+  // What the width/height fields (and the <img> itself) should currently show: the live drag
+  // preview while dragging, otherwise the node's committed dimensions.
+  const effectiveWidth = draftWidth ?? width;
+  const effectiveHeight = draftWidth !== undefined ? draftHeight : height;
+
+  const [widthInput, setWidthInput] = useState(() => String(effectiveWidth ?? ""));
+  const [heightInput, setHeightInput] = useState(() => String(effectiveHeight ?? ""));
+
+  // Keep the fields in sync with the live/committed dimensions without clobbering what the user
+  // is actively typing into the other one.
+  useEffect(() => setWidthInput(String(effectiveWidth ?? "")), [effectiveWidth]);
+  useEffect(() => setHeightInput(String(effectiveHeight ?? "")), [effectiveHeight]);
 
   useEffect(() => mergeRegister(
     editor.registerCommand(
@@ -136,6 +182,66 @@ function ImageComponent({
     });
   };
 
+  const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
+    const { naturalWidth, naturalHeight } = event.currentTarget;
+    if (naturalWidth && naturalHeight) naturalAspectRatioRef.current = naturalHeight / naturalWidth;
+  };
+
+  // Re-selects the node and restores editor focus. Doing this synchronously, right after the
+  // `editor.update()` that changed dimensions, isn't enough on its own: `editor.focus()`'s DOM
+  // `.focus()` call on the root (needed to make keyboard interaction with the image work again)
+  // leaves no native Range behind for a NodeSelection, so the browser's own async
+  // `selectionchange` event - which always fires a tick *after* the triggering action, never
+  // synchronously with it - lets Lexical's selection-sync listener see a caret-less/stray native
+  // selection and clobber our NodeSelection right back out from under us. Deferring to
+  // `requestAnimationFrame`, which runs after that pending `selectionchange` has already been
+  // processed, makes this the final, winning word instead of a doomed synchronous one.
+  const reselectAndFocus = () => {
+    requestAnimationFrame(() => {
+      setSelected(true);
+      editor.focus();
+    });
+  };
+
+  const applyDimensions = (nextWidth: number, nextHeight: number | undefined) => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isImageNode(node)) node.setDimensions(nextWidth, nextHeight);
+    });
+    reselectAndFocus();
+  };
+
+  const commitWidthInput = () => {
+    const parsed = Math.round(Number(widthInput));
+    if (!Number.isFinite(parsed) || parsed < MIN_IMAGE_DIMENSION) {
+      setWidthInput(String(width ?? ""));
+
+      return;
+    }
+    const ratio = resolveAspectRatio();
+    applyDimensions(parsed, ratio ? Math.round(parsed * ratio) : height);
+  };
+
+  const commitHeightInput = () => {
+    const parsed = Math.round(Number(heightInput));
+    if (!Number.isFinite(parsed) || parsed < MIN_IMAGE_DIMENSION) {
+      setHeightInput(String(height ?? ""));
+
+      return;
+    }
+    const ratio = resolveAspectRatio();
+    applyDimensions(ratio ? Math.round(parsed / ratio) : (width ?? parsed), parsed);
+  };
+
+  // Clears the custom width/height back to the image's original/natural size.
+  const resetDimensions = () => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isImageNode(node)) node.setDimensions(undefined, undefined);
+    });
+    reselectAndFocus();
+  };
+
   const startResize: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -144,25 +250,18 @@ function ImageComponent({
 
     const startX = event.clientX;
     const startWidth = image.getBoundingClientRect().width;
-    const aspectRatio = image.naturalHeight && image.naturalWidth
-      ? image.naturalHeight / image.naturalWidth
-      : (height && width ? height / width : undefined);
+    const ratio = resolveAspectRatio();
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      const nextWidth = Math.max(40, Math.round(startWidth + (moveEvent.clientX - startX)));
+      const nextWidth = Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + (moveEvent.clientX - startX)));
       setDraftWidth(nextWidth);
     };
     const onMouseUp = (upEvent: MouseEvent) => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
-      const finalWidth = Math.max(40, Math.round(startWidth + (upEvent.clientX - startX)));
+      const finalWidth = Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + (upEvent.clientX - startX)));
       setDraftWidth(undefined);
-      editor.update(() => {
-        const node = $getNodeByKey(nodeKey);
-        if ($isImageNode(node)) {
-          node.setDimensions(finalWidth, aspectRatio ? Math.round(finalWidth * aspectRatio) : undefined);
-        }
-      });
+      applyDimensions(finalWidth, ratio ? Math.round(finalWidth * ratio) : undefined);
     };
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
@@ -209,21 +308,85 @@ function ImageComponent({
               <CloseIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+          <Stack direction="row" alignItems="center" gap={0.5} sx={{ pl: 0.5, pr: 1 }}>
+            <TextField
+              size="small"
+              variant="standard"
+              // Not type="number": that input type doesn't support the text-selection APIs
+              // (.select()), so focus-select-all below would silently no-op on it.
+              type="text"
+              value={widthInput}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  style: { width: 36, fontSize: 12, textAlign: "right" },
+                  onMouseUp: selectAllOnMouseUp,
+                },
+              }}
+              onChange={(event) => setWidthInput(event.target.value)}
+              onFocus={selectAllOnFocus}
+              // Discards an uncommitted edit - only Enter (below) applies a new size.
+              onBlur={() => setWidthInput(String(effectiveWidth ?? ""))}
+              onKeyDown={(event) => {
+                // This <input> renders inside the contentEditable root, so an unstopped keydown
+                // (Backspace, Ctrl/Cmd+A, arrow keys, ...) would bubble up to Lexical's own
+                // command handlers - e.g. KEY_BACKSPACE_COMMAND, which would delete the whole
+                // selected image instead of editing this field's text.
+                event.stopPropagation();
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                commitWidthInput();
+              }}
+              onClick={(event) => event.stopPropagation()}
+            />
+            <Typography variant="caption" color="text.secondary">×</Typography>
+            <TextField
+              size="small"
+              variant="standard"
+              type="text"
+              value={heightInput}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  style: { width: 36, fontSize: 12, textAlign: "right" },
+                  onMouseUp: selectAllOnMouseUp,
+                },
+              }}
+              onChange={(event) => setHeightInput(event.target.value)}
+              onFocus={selectAllOnFocus}
+              onBlur={() => setHeightInput(String(effectiveHeight ?? ""))}
+              onKeyDown={(event) => {
+                event.stopPropagation();
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                commitHeightInput();
+              }}
+              onClick={(event) => event.stopPropagation()}
+            />
+            <Typography variant="caption" color="text.secondary">px</Typography>
+          </Stack>
+          <Tooltip title="Reset size">
+            <IconButton size="small" onClick={resetDimensions}>
+              <RestartAltIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Stack>
       )}
       <img
         ref={imageRef}
         src={resolveImageSrc(editor, src, localId)}
         alt={altText}
-        width={draftWidth ?? width}
-        height={draftWidth ? undefined : height}
+        width={effectiveWidth}
+        height={effectiveHeight}
         style={{
           maxWidth: "100%",
+          height: "auto",
           display: "block",
           outline: isSelected ? "2px solid" : undefined,
           outlineColor: isSelected ? "primary.main" : undefined,
           opacity: status === "uploading" ? 0.5 : 1,
         }}
+        onLoad={handleImageLoad}
       />
       {status === "uploading" && (
         <CircularProgress size={28} sx={{ position: "absolute", top: "50%", left: "50%", mt: "-14px", ml: "-14px" }} />
