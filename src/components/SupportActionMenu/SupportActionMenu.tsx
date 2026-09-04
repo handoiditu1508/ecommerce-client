@@ -16,7 +16,7 @@ function SupportActionMenu({ items, menuItemProps, ...props }: SupportActionMenu
     <Menu {...props}>
       {items.map((item) => ([
         <SupportActionMenuItem key={item.key} item={item} {...menuItemProps} />,
-        (item.bottomDivider && <Divider />),
+        (item.bottomDivider && <Divider key={`${item.key}-divider`} />),
       ]))}
     </Menu>
   );

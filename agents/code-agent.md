@@ -57,6 +57,7 @@ ComplexFilter/
 - Give persistent shared UI its own namespace; do not load feature namespaces solely for text outside that feature.
 - Keep equivalent keys in every supported locale.
 - Prefer duplication between namespaces over making page-specific text global.
+- Namespace files have a priority: `translation.json`, then any non-`admin-`-prefixed file, then `admin-*.json` files. A file may not duplicate a key already defined in a higher-priority file; reference the higher-priority namespace instead (e.g. `t("admin:brands")`). Duplication is allowed only between files of equal priority.
 - Locale JSON keys should be `snake_case` using only lowercase letters, numbers and underscores.
 - Exception: locale JSON keys in `errors.json` map BE error codes, so they may use a different format.
 - Locale JSON values should use Title Case, and paragraph text should use Sentence case ending with punctuation.
@@ -86,9 +87,23 @@ t("main:home_page")
 - Prefer using existing code over creating new code when possible.
 - Break long JSX props, type definitions, function calls, and object literals across multiple lines.
 - Prefer using `type` over `interface` when possible.
+- Before typing a declared object, always search for an existing type first, including types from libraries or other project files. Only write an inline/new type definition when no existing type matches.
 - Mui `Dialog` with `maxWidth` above `sm` and have `fullWidth`, should be `fullScreen` on `sm` breakpoint and below.
 - Prefer using `SupportActionMenu` over MUI `Menu` whenever possible.
 - RTK Query APIs for creating/updating entity should use pessimistic update whenever possible. Refer to `addPost` and `updatePost` in `src/redux/apis/postApi.ts`.
+- Don't display any technical term likes `id` to users (as a grid column, filter field, or form field), only display business term.
+- Every text-like input (`DynamicForm`'s `text`/`email`/`color` types, or a raw MUI `TextField`) whose value is sent to the BE for storing must set a max length.
+
+- API models (`src/models/apis`):
+  - Group files into a folder matching their `src/redux/apis` file (e.g. `category/` for `categoryApi.ts`, `brand/` for `brandApi.ts`), with one file per RTK Query endpoint, named after that endpoint (e.g. `getCategories.ts`, `createCategory.ts`).
+  - Name types `Get<Entity>Query`/`Get<Entities>Query` for query params, and `Create<Entity>Command`/`Update<Entity>Command`/`Delete<Entity>Command` for mutation bodies.
+  - Single-item `Get`/`Delete` query types identify the target via `<entity>Id` (e.g. `categoryId`), not a bare `id`; `Create`/`Update` commands use `id` directly since it is part of the submitted body.
+  - Put filter fragments reused across entities in `src/models/apis/common.ts` (see `SortFilter`, `PageFilter`, `AllPagesFilter`) instead of duplicating them per entity.
+  - Date properties on request types (`Get*Query`, `Create*Command`, `Update*Command`) use `Date`; date properties on response types (entities, DTOs, views) use `string`.
+
+- Icon:
+  - When picking an icon, check `@mui/icons-material`, `@fortawesome/free-solid-svg-icons` and `@mdi/js`/`@mdi/light-js` for the most fitting icon, preferring the MUI icon whenever the same icon exists in multiple libraries.
+  - Render a chosen Font Awesome icon via `FaSvgIcon` and a Material Design Icons one via `MdiSvgIcon`, e.g. `<FaSvgIcon icon={faTruck} />` or `<MdiSvgIcon path={mdiTruck} />`.
 
 - File naming conventions:
   - React component: PascalCase (`CustomLink.tsx`)

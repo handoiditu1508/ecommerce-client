@@ -1,3 +1,4 @@
+import SupportActionMenu, { SupportAction } from "@/components/SupportActionMenu";
 import {
   $deleteTableColumnAtSelection,
   $deleteTableRowAtSelection,
@@ -14,8 +15,6 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import { $getSelection, LexicalEditor } from "lexical";
 import { useState } from "react";
@@ -56,6 +55,17 @@ function TableControls({ editor, canMergeCells, canUnmergeCell }: {
     editor.update(() => $unmergeCell());
   };
 
+  const rowItems: SupportAction[] = [
+    { key: "above", label: t("insert_row_above"), actionHandler: () => insertRow(false) },
+    { key: "below", label: t("insert_row_below"), actionHandler: () => insertRow(true) },
+    { key: "delete", label: t("delete_row"), actionHandler: deleteRow },
+  ];
+  const columnItems: SupportAction[] = [
+    { key: "left", label: t("insert_column_left"), actionHandler: () => insertColumn(false) },
+    { key: "right", label: t("insert_column_right"), actionHandler: () => insertColumn(true) },
+    { key: "delete", label: t("delete_column"), actionHandler: deleteColumn },
+  ];
+
   return (
     <>
       <Divider orientation="vertical" flexItem />
@@ -64,22 +74,24 @@ function TableControls({ editor, canMergeCells, canUnmergeCell }: {
           <TableRowsIcon fontSize="small" />
         </IconButton>
       </Tooltip>
-      <Menu open={Boolean(rowMenuAnchor)} anchorEl={rowMenuAnchor} onClose={() => setRowMenuAnchor(null)}>
-        <MenuItem onClick={() => insertRow(false)}>{t("insert_row_above")}</MenuItem>
-        <MenuItem onClick={() => insertRow(true)}>{t("insert_row_below")}</MenuItem>
-        <MenuItem onClick={deleteRow}>{t("delete_row")}</MenuItem>
-      </Menu>
+      <SupportActionMenu
+        items={rowItems}
+        anchorEl={rowMenuAnchor}
+        open={Boolean(rowMenuAnchor)}
+        onClose={() => setRowMenuAnchor(null)}
+      />
 
       <Tooltip title={t("table_column")}>
         <IconButton size="small" onClick={(event) => setColumnMenuAnchor(event.currentTarget)}>
           <ViewColumnIcon fontSize="small" />
         </IconButton>
       </Tooltip>
-      <Menu open={Boolean(columnMenuAnchor)} anchorEl={columnMenuAnchor} onClose={() => setColumnMenuAnchor(null)}>
-        <MenuItem onClick={() => insertColumn(false)}>{t("insert_column_left")}</MenuItem>
-        <MenuItem onClick={() => insertColumn(true)}>{t("insert_column_right")}</MenuItem>
-        <MenuItem onClick={deleteColumn}>{t("delete_column")}</MenuItem>
-      </Menu>
+      <SupportActionMenu
+        items={columnItems}
+        anchorEl={columnMenuAnchor}
+        open={Boolean(columnMenuAnchor)}
+        onClose={() => setColumnMenuAnchor(null)}
+      />
 
       <Tooltip title={t("merge_cells")}>
         <span>

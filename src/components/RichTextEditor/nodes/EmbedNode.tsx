@@ -1,8 +1,9 @@
 import { useLexicalNodeSelection } from "@lexical/react/useLexicalNodeSelection";
 import { mergeRegister } from "@lexical/utils";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import {
   $getNodeByKey,
   $getSelection,
@@ -23,6 +24,7 @@ import {
   Spread,
 } from "lexical";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export type EmbedProvider = "youtube" | "vimeo";
 
@@ -68,6 +70,7 @@ export function resolveEmbedUrl(url: string): { embedUrl: string; provider: Embe
 }
 
 function EmbedComponent({ nodeKey, editor, embedUrl }: { nodeKey: NodeKey; editor: LexicalEditor; embedUrl: string; }) {
+  const { t } = useTranslation();
   const [isSelected, setSelected, clearSelected] = useLexicalNodeSelection(nodeKey);
 
   useEffect(() => mergeRegister(
@@ -128,16 +131,18 @@ function EmbedComponent({ nodeKey, editor, embedUrl }: { nodeKey: NodeKey; edito
         />
       </Box>
       {isSelected && (
-        <IconButton
-          size="small"
-          sx={{ position: "absolute", top: 4, right: 4, bgcolor: "background.paper" }}
-          onClick={() => {
-            editor.update(() => $getNodeByKey(nodeKey)?.remove());
-            clearSelected();
-          }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
+        <Tooltip title={t("remove")}>
+          <IconButton
+            size="small"
+            sx={{ position: "absolute", top: 4, right: 4, bgcolor: "background.paper" }}
+            onClick={() => {
+              editor.update(() => $getNodeByKey(nodeKey)?.remove());
+              clearSelected();
+            }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
       )}
     </Box>
   );

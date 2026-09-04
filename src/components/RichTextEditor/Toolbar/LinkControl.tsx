@@ -1,39 +1,33 @@
 import { TOGGLE_LINK_COMMAND } from "@lexical/link";
 import LinkIcon from "@mui/icons-material/Link";
-import LinkOffIcon from "@mui/icons-material/LinkOff";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import IconButton from "@mui/material/IconButton";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import { LexicalEditor } from "lexical";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { shortcutText } from "../shortcuts";
 
-function LinkControl({ editor, isLink, linkUrl }: { editor: LexicalEditor; isLink: boolean; linkUrl: string | null; }) {
+// Inserts a link on a plain selection only - editing/removing/opening an *existing* link is
+// handled by the automatic FloatingLinkEditorPlugin bubble instead (see plugins/), so this button
+// disables itself while the selection is already inside a link.
+function LinkControl({ editor, isLink }: { editor: LexicalEditor; isLink: boolean; }) {
   const { t } = useTranslation();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const [url, setUrl] = useState("");
 
-  useEffect(() => {
-    if (anchor) setUrl(linkUrl ?? "");
-  }, [anchor, linkUrl]);
-
   const applyLink = () => {
     editor.dispatchCommand(TOGGLE_LINK_COMMAND, url || null);
     setAnchor(null);
-  };
-
-  const removeLink = () => {
-    editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-    setAnchor(null);
+    setUrl("");
   };
 
   return (
     <>
-      <Tooltip title={t("insert_link")}>
-        <IconButton size="small" color={isLink ? "primary" : "default"} onClick={(event) => setAnchor(event.currentTarget)}>
+      <Tooltip title={`${t("insert_link")} (${shortcutText("INSERT_LINK")})`}>
+        <IconButton size="small" disabled={isLink} onClick={(event) => setAnchor(event.currentTarget)}>
           <LinkIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -62,22 +56,6 @@ function LinkControl({ editor, isLink, linkUrl }: { editor: LexicalEditor; isLin
               <LinkIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          {isLink && (
-            <>
-              <Tooltip title={t("open_link")}>
-                <span>
-                  <IconButton size="small" component="a" href={linkUrl ?? undefined} target="_blank" rel="noopener noreferrer" disabled={!linkUrl}>
-                    <OpenInNewIcon fontSize="small" />
-                  </IconButton>
-                </span>
-              </Tooltip>
-              <Tooltip title={t("remove")}>
-                <IconButton size="small" onClick={removeLink}>
-                  <LinkOffIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </>
-          )}
         </Stack>
       </Popover>
     </>

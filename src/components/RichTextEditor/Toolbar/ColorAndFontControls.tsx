@@ -8,10 +8,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Popover from "@mui/material/Popover";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import { $getSelection, $isRangeSelection, LexicalEditor } from "lexical";
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useTranslation } from "react-i18next";
+import FontSizeInput from "./FontSizeInput";
 
 const FONT_FAMILIES: { label: string; value: string; }[] = [
   { label: "font_default", value: "" },
@@ -21,8 +23,6 @@ const FONT_FAMILIES: { label: string; value: string; }[] = [
   { label: "font_courier_new", value: "'Courier New', monospace" },
   { label: "font_verdana", value: "Verdana, sans-serif" },
 ];
-
-const FONT_SIZES = ["", "12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px", "40px"];
 
 function applyStyle(editor: LexicalEditor, property: string, value: string) {
   editor.update(() => {
@@ -47,9 +47,11 @@ function ColorPopoverButton({
 
   return (
     <>
-      <IconButton size="small" aria-label={label} onClick={(event) => setAnchor(event.currentTarget)}>
-        {icon}
-      </IconButton>
+      <Tooltip title={label}>
+        <IconButton size="small" aria-label={label} onClick={(event) => setAnchor(event.currentTarget)}>
+          {icon}
+        </IconButton>
+      </Tooltip>
       <Popover
         open={Boolean(anchor)}
         anchorEl={anchor}
@@ -93,32 +95,23 @@ function ColorAndFontControls({ editor, color, backgroundColor, fontFamily, font
         value={backgroundColor}
         onChange={(value) => applyStyle(editor, "background-color", value)}
       />
-      <FormControl size="small" variant="standard">
-        <Select
-          value={fontFamily ?? ""}
-          displayEmpty
-          sx={{ minWidth: 110, fontSize: "0.875rem" }}
-          onChange={(event) => applyStyle(editor, "font-family", event.target.value)}
-        >
-          {FONT_FAMILIES.map((font) => (
-            <MenuItem key={font.value} value={font.value} sx={{ fontFamily: font.value || undefined }}>
-              {t(font.label)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl size="small" variant="standard">
-        <Select
-          value={fontSize ?? ""}
-          displayEmpty
-          sx={{ minWidth: 70, fontSize: "0.875rem" }}
-          onChange={(event) => applyStyle(editor, "font-size", event.target.value)}
-        >
-          {FONT_SIZES.map((size) => (
-            <MenuItem key={size} value={size}>{size || t("font_default")}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Tooltip title={t("font_family")}>
+        <FormControl size="small" variant="standard">
+          <Select
+            value={fontFamily ?? ""}
+            displayEmpty
+            sx={{ minWidth: 110, fontSize: "0.875rem" }}
+            onChange={(event) => applyStyle(editor, "font-family", event.target.value)}
+          >
+            {FONT_FAMILIES.map((font) => (
+              <MenuItem key={font.value} value={font.value} sx={{ fontFamily: font.value || undefined }}>
+                {t(font.label)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Tooltip>
+      <FontSizeInput value={fontSize} onChange={(value) => applyStyle(editor, "font-size", value)} />
     </Stack>
   );
 }

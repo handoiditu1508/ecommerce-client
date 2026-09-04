@@ -1,13 +1,17 @@
 import CONFIG from "@/configs";
+import MdiSvgIcon from "@/components/MdiSvgIcon";
 import { useLexicalNodeSelection } from "@lexical/react/useLexicalNodeSelection";
 import { mergeRegister } from "@lexical/utils";
+import { mdiFormatFloatLeft, mdiFormatFloatRight } from "@mdi/js";
 import AlignHorizontalLeftIcon from "@mui/icons-material/AlignHorizontalLeft";
 import AlignHorizontalRightIcon from "@mui/icons-material/AlignHorizontalRight";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ErrorIcon from "@mui/icons-material/Error";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import NotesIcon from "@mui/icons-material/Notes";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -35,7 +39,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getLocalImageRegistry } from "../useLocalImageRegistry";
 
-export type ImageAlignment = "none" | "left" | "center" | "right";
+export type ImageAlignment = "none" | "left" | "center" | "right" | "wrap-left" | "wrap-right";
 export type ImageUploadStatus = "idle" | "uploading" | "error";
 
 export type SerializedImageNode = Spread<
@@ -45,24 +49,34 @@ export type SerializedImageNode = Spread<
     width?: number;
     height?: number;
     alignment?: ImageAlignment;
+    caption?: string;
   },
   SerializedLexicalNode
 >;
 
-// Applied to the persisted <img> on export, which already carries an explicit width/height
-// attribute from resizing, so `margin: auto` has something concrete to center against.
+// "left"/"right"/"center" position the image alone on its own line (no text wrap); "wrap-left"/
+// "wrap-right" float it so surrounding text flows around the opposite side - matches the Lexical
+// playground's own float model for the latter, kept as our own addition for the former. Applied
+// to the persisted <img> on export, which already carries an explicit width/height attribute from
+// resizing, so `margin: auto` has something concrete to center/push against.
 const ALIGNMENT_STYLE: Record<ImageAlignment, React.CSSProperties> = {
   none: {},
-  left: { float: "left", margin: "0 16px 8px 0" },
-  right: { float: "right", margin: "0 0 8px 16px" },
+  left: { display: "block", margin: "0 auto 0 0" },
   center: { display: "block", margin: "0 auto" },
+  right: { display: "block", margin: "0 0 0 auto" },
+  "wrap-left": { float: "left", margin: "0 16px 8px 0" },
+  "wrap-right": { float: "right", margin: "0 0 8px 16px" },
 };
 
 // Applied to the editor's wrapping <span>, which has no explicit width of its own - unlike the
-// exported <img>, `margin: auto` needs `width: fit-content` here or there's nothing to center.
+// exported <img> (a replaced element, sized from its own width/height), a plain block-level <span>
+// with `width: auto` stretches to fill its container, leaving no slack for `margin: auto`/
+// `margin-left: auto` to push against. `width: fit-content` gives it one.
 const EDITOR_ALIGNMENT_STYLE: Record<ImageAlignment, React.CSSProperties> = {
   ...ALIGNMENT_STYLE,
+  left: { ...ALIGNMENT_STYLE.left, width: "fit-content" },
   center: { ...ALIGNMENT_STYLE.center, width: "fit-content" },
+  right: { ...ALIGNMENT_STYLE.right, width: "fit-content" },
 };
 
 function resolveImageSrc(editor: LexicalEditor, src: string, localId: string | undefined): string {
@@ -72,6 +86,22 @@ function resolveImageSrc(editor: LexicalEditor, src: string, localId: string | u
 }
 
 const MIN_IMAGE_DIMENSION = 40;
+
+// 8 resize handles (4 corners + 4 edges), matching the Lexical playground's own image resizer.
+// Corner drags lock aspect ratio (this editor's existing behavior); edge drags resize just that
+// one axis independently - new in this reimplementation.
+type HandlePosition = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
+const CORNER_HANDLES: ReadonlySet<HandlePosition> = new Set(["ne", "se", "sw", "nw"]);
+const HANDLE_STYLES: Record<HandlePosition, React.CSSProperties> = {
+  n: { top: -6, left: "50%", marginLeft: -6, cursor: "ns-resize" },
+  ne: { top: -6, right: -6, cursor: "nesw-resize" },
+  e: { top: "50%", right: -6, marginTop: -6, cursor: "ew-resize" },
+  se: { bottom: -6, right: -6, cursor: "nwse-resize" },
+  s: { bottom: -6, left: "50%", marginLeft: -6, cursor: "ns-resize" },
+  sw: { bottom: -6, left: -6, cursor: "nesw-resize" },
+  w: { top: "50%", left: -6, marginTop: -6, cursor: "ew-resize" },
+  nw: { top: -6, left: -6, cursor: "nwse-resize" },
+};
 
 // Handles Tab/keyboard-driven focus, which has no competing default action to fight.
 function selectAllOnFocus(event: React.FocusEvent<HTMLInputElement>) {
@@ -101,6 +131,7 @@ function ImageComponent({
   height,
   alignment,
   status,
+  caption,
 }: {
   nodeKey: NodeKey;
   editor: LexicalEditor;
@@ -111,25 +142,22 @@ function ImageComponent({
   height?: number;
   alignment: ImageAlignment;
   status: ImageUploadStatus;
+  caption?: string;
 }) {
   const imageRef = useRef<HTMLImageElement>(null);
   const [isSelected, setSelected, clearSelected] = useLexicalNodeSelection(nodeKey);
-  const [draftWidth, setDraftWidth] = useState<number>();
+  // Set during an active drag; corner handles set both (ratio-locked), edge handles set only the
+  // axis being dragged.
+  const [draftSize, setDraftSize] = useState<{ width?: number; height?: number; }>();
   // Captured once the <img> loads, so both drag-resize and the numeric fields can derive the
   // other dimension without needing an active drag first (natural size isn't known until then).
   const naturalAspectRatioRef = useRef<number | undefined>(undefined);
 
   const resolveAspectRatio = () => naturalAspectRatioRef.current ?? (height && width ? height / width : undefined);
-  const draftHeight = (() => {
-    if (draftWidth === undefined) return undefined;
-    const ratio = resolveAspectRatio();
-
-    return ratio ? Math.round(draftWidth * ratio) : undefined;
-  })();
   // What the width/height fields (and the <img> itself) should currently show: the live drag
   // preview while dragging, otherwise the node's committed dimensions.
-  const effectiveWidth = draftWidth ?? width;
-  const effectiveHeight = draftWidth !== undefined ? draftHeight : height;
+  const effectiveWidth = draftSize?.width ?? width;
+  const effectiveHeight = draftSize?.height ?? height;
 
   const [widthInput, setWidthInput] = useState(() => String(effectiveWidth ?? ""));
   const [heightInput, setHeightInput] = useState(() => String(effectiveHeight ?? ""));
@@ -138,6 +166,19 @@ function ImageComponent({
   // is actively typing into the other one.
   useEffect(() => setWidthInput(String(effectiveWidth ?? "")), [effectiveWidth]);
   useEffect(() => setHeightInput(String(effectiveHeight ?? "")), [effectiveHeight]);
+
+  // Once shown (either because a caption already exists, or the user turned it on), the caption
+  // field stays visible even if cleared back to empty - matches typical caption UX, and avoids the
+  // field vanishing out from under someone still typing.
+  const [showCaption, setShowCaption] = useState(!!caption);
+  const [captionDraft, setCaptionDraft] = useState(caption ?? "");
+  useEffect(() => setCaptionDraft(caption ?? ""), [caption]);
+  const commitCaption = () => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isImageNode(node)) node.setCaption(captionDraft);
+    });
+  };
 
   useEffect(() => mergeRegister(
     editor.registerCommand(
@@ -180,6 +221,7 @@ function ImageComponent({
       const node = $getNodeByKey(nodeKey);
       if ($isImageNode(node)) node.setAlignment(nextAlignment);
     });
+    reselectAndFocus();
   };
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
@@ -242,36 +284,63 @@ function ImageComponent({
     reselectAndFocus();
   };
 
-  const startResize: React.MouseEventHandler<HTMLDivElement> = (event) => {
+  const startResize = (handle: HandlePosition): React.MouseEventHandler<HTMLDivElement> => (event) => {
     event.preventDefault();
     event.stopPropagation();
     const image = imageRef.current;
     if (!image) return;
 
     const startX = event.clientX;
-    const startWidth = image.getBoundingClientRect().width;
+    const startY = event.clientY;
+    const rect = image.getBoundingClientRect();
+    const startWidth = rect.width;
+    const startHeight = rect.height;
     const ratio = resolveAspectRatio();
+    const isCorner = CORNER_HANDLES.has(handle);
+    // Which direction of drag grows the image, per handle: dragging the west/north edges further
+    // away from the image (left/up) still means "make it bigger", hence the sign flip there.
+    const widthSign = handle.includes("w") ? -1 : handle.includes("e") ? 1 : 0;
+    const heightSign = handle.includes("n") ? -1 : handle.includes("s") ? 1 : 0;
+
+    const computeSize = (clientX: number, clientY: number) => {
+      if (isCorner) {
+        const nextWidth = Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + ((clientX - startX) * widthSign)));
+
+        return { width: nextWidth, height: ratio ? Math.round(nextWidth * ratio) : startHeight };
+      }
+      if (widthSign !== 0) {
+        return { width: Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + ((clientX - startX) * widthSign))) };
+      }
+
+      return { height: Math.max(MIN_IMAGE_DIMENSION, Math.round(startHeight + ((clientY - startY) * heightSign))) };
+    };
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      const nextWidth = Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + (moveEvent.clientX - startX)));
-      setDraftWidth(nextWidth);
+      setDraftSize(computeSize(moveEvent.clientX, moveEvent.clientY));
     };
     const onMouseUp = (upEvent: MouseEvent) => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
-      const finalWidth = Math.max(MIN_IMAGE_DIMENSION, Math.round(startWidth + (upEvent.clientX - startX)));
-      setDraftWidth(undefined);
-      applyDimensions(finalWidth, ratio ? Math.round(finalWidth * ratio) : undefined);
+      const finalSize = computeSize(upEvent.clientX, upEvent.clientY);
+      setDraftSize(undefined);
+      // A dimension the drag didn't touch falls back to the image's current *rendered* size
+      // (not the possibly-unset `width`/`height` prop) - dragging one edge on a still-natural-size
+      // image needs to lock in a concrete value for the other axis too, not leave it unset.
+      applyDimensions(finalSize.width ?? Math.round(startWidth), finalSize.height ?? Math.round(startHeight));
     };
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
   };
 
   return (
-    <span style={{ position: "relative", display: alignment === "center" ? "block" : "inline-block", ...EDITOR_ALIGNMENT_STYLE[alignment] }}>
+    <span style={{ position: "relative", display: "inline-block", ...EDITOR_ALIGNMENT_STYLE[alignment] }}>
       {isSelected && (
         <Stack
           direction="row"
+          // Without this, a click here still reaches Lexical's own global click handling (nothing
+          // in this Stack's onClick handlers stops it from bubbling), which replaces the
+          // NodeSelection with a plain RangeSelection at the click point - deselecting the image
+          // and hiding this whole toolbar right as a button in it is clicked.
           sx={{
             position: "absolute",
             top: -36,
@@ -281,6 +350,7 @@ function ImageComponent({
             boxShadow: 1,
             borderRadius: 1,
           }}
+          onMouseDown={(event) => event.stopPropagation()}
         >
           <Tooltip title="Align left">
             <IconButton size="small" color={alignment === "left" ? "primary" : "default"} onClick={() => setAlignment("left")}>
@@ -297,6 +367,30 @@ function ImageComponent({
               <AlignHorizontalRightIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+          <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+          <Tooltip title="Wrap left">
+            <IconButton size="small" color={alignment === "wrap-left" ? "primary" : "default"} onClick={() => setAlignment("wrap-left")}>
+              <MdiSvgIcon path={mdiFormatFloatLeft} fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Wrap right">
+            <IconButton size="small" color={alignment === "wrap-right" ? "primary" : "default"} onClick={() => setAlignment("wrap-right")}>
+              <MdiSvgIcon path={mdiFormatFloatRight} fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+          <Tooltip title="Caption">
+            <IconButton
+              size="small"
+              color={showCaption ? "primary" : "default"}
+              onClick={() => {
+                setShowCaption((current) => !current);
+                reselectAndFocus();
+              }}
+            >
+              <NotesIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Delete image">
             <IconButton
               size="small"
@@ -305,7 +399,7 @@ function ImageComponent({
                 clearSelected();
               }}
             >
-              <CloseIcon fontSize="small" />
+              <DeleteIcon fontSize="small" />
             </IconButton>
           </Tooltip>
           <Stack direction="row" alignItems="center" gap={0.5} sx={{ pl: 0.5, pr: 1 }}>
@@ -388,6 +482,27 @@ function ImageComponent({
         }}
         onLoad={handleImageLoad}
       />
+      {showCaption && (
+        <TextField
+          size="small"
+          variant="standard"
+          fullWidth
+          placeholder="Add a caption"
+          value={captionDraft}
+          slotProps={{ input: { sx: { fontSize: 13, textAlign: "center" }, disableUnderline: !isSelected } }}
+          sx={{ display: "block", mt: 0.5, "& input": { textAlign: "center" } }}
+          onChange={(event) => setCaptionDraft(event.target.value)}
+          onBlur={commitCaption}
+          onKeyDown={(event) => {
+            event.stopPropagation();
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            commitCaption();
+            event.currentTarget.blur();
+          }}
+          onClick={(event) => event.stopPropagation()}
+        />
+      )}
       {status === "uploading" && (
         <CircularProgress size={28} sx={{ position: "absolute", top: "50%", left: "50%", mt: "-14px", ml: "-14px" }} />
       )}
@@ -396,25 +511,24 @@ function ImageComponent({
           <ErrorIcon color="error" sx={{ position: "absolute", top: 4, right: 4, bgcolor: "background.paper", borderRadius: "50%" }} />
         </Tooltip>
       )}
-      {isSelected && (
+      {isSelected && (Object.keys(HANDLE_STYLES) as HandlePosition[]).map((handle) => (
         <div
+          key={handle}
           title="Drag to resize"
           style={{
             position: "absolute",
-            right: -8,
-            bottom: -8,
-            width: 20,
-            height: 20,
-            cursor: "nwse-resize",
+            width: 12,
+            height: 12,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            ...HANDLE_STYLES[handle],
           }}
-          onMouseDown={startResize}
+          onMouseDown={startResize(handle)}
         >
-          <div style={{ width: 12, height: 12, borderRadius: "50%", border: "2px solid white", background: "#1976d2" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", border: "2px solid white", background: "#1976d2" }} />
         </div>
-      )}
+      ))}
     </span>
   );
 }
@@ -440,6 +554,33 @@ function convertImageElement(domNode: Node): DOMConversionOutput | null {
   };
 }
 
+// A captioned image round-trips as `<figure data-align=...><img ...><figcaption>...</figcaption></figure>`
+// instead of a bare `<img>` (see `ImageNode.exportDOM`) - this is the matching import side. Returning
+// a node here for the whole `<figure>` means Lexical treats this subtree as fully handled, so the
+// nested `<img>` is never separately re-matched by `convertImageElement` above.
+function convertFigureElement(domNode: Node): DOMConversionOutput | null {
+  if (!(domNode instanceof HTMLElement) || domNode.tagName !== "FIGURE") return null;
+  const img = domNode.querySelector("img");
+  if (!img) return null;
+
+  const src = img.getAttribute("src") ?? "";
+  const altText = img.getAttribute("alt") ?? "";
+  const localId = img.getAttribute("data-local-id") ?? undefined;
+  const widthAttr = img.getAttribute("width");
+  const heightAttr = img.getAttribute("height");
+  const alignment = (domNode.getAttribute("data-align") as ImageAlignment | null) ?? "none";
+  const caption = domNode.querySelector("figcaption")?.textContent ?? undefined;
+
+  return {
+    node: $createImageNode(src, altText, localId, {
+      width: widthAttr ? Number(widthAttr) : undefined,
+      height: heightAttr ? Number(heightAttr) : undefined,
+      alignment,
+      caption,
+    }),
+  };
+}
+
 export class ImageNode extends DecoratorNode<React.JSX.Element> {
   __src: string;
   __altText: string;
@@ -448,6 +589,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
   __height?: number;
   __alignment: ImageAlignment;
   __status: ImageUploadStatus = "idle";
+  __caption?: string;
 
   static getType(): string {
     return "image";
@@ -458,6 +600,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
       width: node.__width,
       height: node.__height,
       alignment: node.__alignment,
+      caption: node.__caption,
     }, node.__key);
     cloned.__status = node.__status;
 
@@ -469,6 +612,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
       width: serializedNode.width,
       height: serializedNode.height,
       alignment: serializedNode.alignment,
+      caption: serializedNode.caption,
     });
   }
 
@@ -481,6 +625,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
       width: this.__width,
       height: this.__height,
       alignment: this.__alignment,
+      caption: this.__caption,
     };
   }
 
@@ -488,7 +633,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
     src: string,
     altText: string,
     localId?: string,
-    options?: { width?: number; height?: number; alignment?: ImageAlignment; },
+    options?: { width?: number; height?: number; alignment?: ImageAlignment; caption?: string; },
     key?: NodeKey,
   ) {
     super(key);
@@ -498,6 +643,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
     this.__width = options?.width;
     this.__height = options?.height;
     this.__alignment = options?.alignment ?? "none";
+    this.__caption = options?.caption;
   }
 
   createDOM(): HTMLElement {
@@ -509,22 +655,46 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
   }
 
   exportDOM(): DOMExportOutput {
-    const element = document.createElement("img");
-    element.setAttribute("src", this.__localId ? "" : this.__src);
-    element.setAttribute("alt", this.__altText);
-    if (this.__localId) element.setAttribute("data-local-id", this.__localId);
-    if (this.__width) element.setAttribute("width", String(this.__width));
-    if (this.__height) element.setAttribute("height", String(this.__height));
-    if (this.__alignment !== "none") {
-      element.setAttribute("data-align", this.__alignment);
-      Object.assign(element.style, ALIGNMENT_STYLE[this.__alignment]);
+    const img = document.createElement("img");
+    img.setAttribute("src", this.__localId ? "" : this.__src);
+    img.setAttribute("alt", this.__altText);
+    if (this.__localId) img.setAttribute("data-local-id", this.__localId);
+    if (this.__width) img.setAttribute("width", String(this.__width));
+    if (this.__height) img.setAttribute("height", String(this.__height));
+
+    if (!this.__caption) {
+      if (this.__alignment !== "none") {
+        img.setAttribute("data-align", this.__alignment);
+        Object.assign(img.style, ALIGNMENT_STYLE[this.__alignment]);
+      }
+
+      return { element: img };
     }
 
-    return { element };
+    // A caption needs a block-level wrapper - the alignment float/margin moves from the <img>
+    // itself to the <figure>, since floating just the <img> would leave the caption text
+    // outside/beside the float instead of stacked directly under the image.
+    const figure = document.createElement("figure");
+    figure.style.margin = "0";
+    if (this.__alignment !== "none") {
+      figure.setAttribute("data-align", this.__alignment);
+      Object.assign(figure.style, ALIGNMENT_STYLE[this.__alignment]);
+    }
+    figure.appendChild(img);
+    const figcaption = document.createElement("figcaption");
+    figcaption.textContent = this.__caption;
+    figcaption.style.cssText = "font-size: 0.85em; text-align: center; margin-top: 4px;";
+    figure.appendChild(figcaption);
+
+    return { element: figure };
   }
 
   static importDOM(): DOMConversionMap | null {
     return {
+      figure: () => ({
+        conversion: convertFigureElement,
+        priority: 1,
+      }),
       img: () => ({
         conversion: convertImageElement,
         priority: 0,
@@ -534,6 +704,14 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
 
   getLocalId(): string | undefined {
     return this.__localId;
+  }
+
+  getCaption(): string | undefined {
+    return this.__caption;
+  }
+
+  setCaption(caption: string): void {
+    this.getWritable().__caption = caption || undefined;
   }
 
   getStatus(): ImageUploadStatus {
@@ -574,6 +752,7 @@ export class ImageNode extends DecoratorNode<React.JSX.Element> {
         height={this.__height}
         alignment={this.__alignment}
         status={this.__status}
+        caption={this.__caption}
       />
     );
   }
@@ -583,7 +762,7 @@ export function $createImageNode(
   src: string,
   altText: string,
   localId?: string,
-  options?: { width?: number; height?: number; alignment?: ImageAlignment; },
+  options?: { width?: number; height?: number; alignment?: ImageAlignment; caption?: string; },
 ): ImageNode {
   return new ImageNode(src, altText, localId, options);
 }

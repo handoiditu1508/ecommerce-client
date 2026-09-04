@@ -44,6 +44,7 @@ export function getSharedContentStyles(theme: Theme) {
     },
     ".rte-code-block": {
       display: "block",
+      position: "relative" as const,
       fontFamily: "monospace",
       backgroundColor: theme.vars.palette.action.hover,
       padding: theme.spacing(1.5),
@@ -51,6 +52,19 @@ export function getSharedContentStyles(theme: Theme) {
       whiteSpace: "pre-wrap" as const,
       overflowX: "auto" as const,
     },
+    // Prism token classes (see `codeHighlight` in RichTextEditor.tsx's LexicalComposer theme),
+    // mapped onto the MUI palette instead of a full imported Prism theme stylesheet - keeps code
+    // blocks visually consistent with the rest of the admin UI (and correct in dark mode).
+    ".rte-token-comment": { color: theme.vars.palette.text.disabled },
+    ".rte-token-punctuation": { color: theme.vars.palette.text.secondary },
+    ".rte-token-property": { color: theme.vars.palette.secondary.main },
+    ".rte-token-selector": { color: theme.vars.palette.success.main },
+    ".rte-token-operator": { color: theme.vars.palette.warning.dark },
+    ".rte-token-attr": { color: theme.vars.palette.info.main },
+    ".rte-token-variable": { color: theme.vars.palette.warning.main },
+    ".rte-token-function": { color: theme.vars.palette.error.main },
+    ".rte-token-inserted": { backgroundColor: theme.vars.palette.success.light, color: theme.vars.palette.success.contrastText },
+    ".rte-token-deleted": { backgroundColor: theme.vars.palette.error.light, color: theme.vars.palette.error.contrastText },
     ".rte-subscript": { verticalAlign: "sub" as const, fontSize: "0.8em" },
     ".rte-superscript": { verticalAlign: "super" as const, fontSize: "0.8em" },
     'li[role="checkbox"]': { listStyle: "none" as const, position: "relative" as const, paddingLeft: 28, cursor: "pointer" },
@@ -80,5 +94,22 @@ export function getSharedContentStyles(theme: Theme) {
       borderWidth: "0 2px 2px 0",
       transform: "rotate(45deg)",
     },
+    ".rte-collapsible-container": {
+      border: `1px solid ${theme.vars.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      margin: theme.spacing(1, 0),
+      padding: theme.spacing(0.5, 1),
+    },
+    ".rte-collapsible-title": {
+      cursor: "pointer",
+      fontWeight: 600,
+      "&::marker": { color: theme.vars.palette.text.secondary },
+    },
+    ".rte-collapsible-content": { padding: theme.spacing(0.5, 0, 0, 2) },
+    ".rte-layout-container": { display: "grid", gap: theme.spacing(2), margin: theme.spacing(1, 0) },
+    // Dashed border marks each column's boundary while editing, matching the Lexical playground's
+    // own layout item styling - otherwise an empty/short column is invisible and easy to lose
+    // track of.
+    ".rte-layout-item": { minWidth: 0, maxWidth: "100%", border: `1px dashed ${theme.vars.palette.divider}`, padding: theme.spacing(1, 2) },
   };
 }

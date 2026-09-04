@@ -1,4 +1,4 @@
-import { CodeNode } from "@lexical/code";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -13,6 +13,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { SelectionAlwaysOnDisplay } from "@lexical/react/LexicalSelectionAlwaysOnDisplay";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
@@ -24,16 +25,36 @@ import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { $nodesOfType, LexicalEditor } from "lexical";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import i18n from "@/i18n";
 import { getSharedContentStyles } from "./contentStyles";
 import { generateHtml, hydrateFromHtml } from "./htmlContent";
+import { RICH_TEXT_MARKDOWN_TRANSFORMERS } from "./markdownTransformers";
+import { CollapsibleContainerNode } from "./nodes/CollapsibleContainerNode";
+import { CollapsibleContentNode } from "./nodes/CollapsibleContentNode";
+import { CollapsibleTitleNode } from "./nodes/CollapsibleTitleNode";
 import { EmbedNode, resolveEmbedUrl } from "./nodes/EmbedNode";
 import { ImageNode } from "./nodes/ImageNode";
+import { LayoutContainerNode } from "./nodes/LayoutContainerNode";
+import { LayoutItemNode } from "./nodes/LayoutItemNode";
+import CodeActionMenuPlugin from "./plugins/CodeActionMenuPlugin";
+import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
+import CollapsiblePlugin from "./plugins/CollapsiblePlugin";
+import ComponentPickerPlugin from "./plugins/ComponentPickerPlugin";
+import ContextMenuPlugin from "./plugins/ContextMenuPlugin";
+import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 import EmbedPlugin, { insertEmbed } from "./plugins/EmbedPlugin";
+import EmojiPickerPlugin from "./plugins/EmojiPickerPlugin";
+import FindReplacePlugin from "./plugins/FindReplacePlugin";
+import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
+import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
 import HorizontalRulePlugin from "./plugins/HorizontalRulePlugin";
 import ImageDropPastePlugin from "./plugins/ImageDropPastePlugin";
 import ImagesPlugin, { ImagePickerRenderProps } from "./plugins/ImagesPlugin";
+import LayoutPlugin from "./plugins/LayoutPlugin";
+import ShortcutsPlugin from "./plugins/ShortcutsPlugin";
+import TableCellResizerPlugin from "./plugins/TableCellResizer";
+import TableHoverActionsPlugin from "./plugins/TableHoverActions";
 import Toolbar from "./Toolbar";
 import { getLocalImageRegistry } from "./useLocalImageRegistry";
 
@@ -125,6 +146,13 @@ const StyledStack = styled(Stack)(({ theme }) => ({
   ".editor-content": {
     minHeight: 160,
     padding: theme.spacing(1, 1.5),
+    // Extra left padding reserves room for the draggable-block handle/"+" button (positioned via
+    // DraggableBlockPlugin at a fixed 4px from this same relatively-positioned anchor) - without
+    // it, the handle floats on top of the first few characters of every line instead of beside
+    // them. Right padding mirrors it for visual symmetry, matching the Lexical playground's own
+    // ContentEditable__root (`padding: 8px 46px 40px`, symmetric left/right).
+    paddingLeft: 72,
+    paddingRight: 72,
     outline: "none",
     ...getSharedContentStyles(theme),
     // Bold/italic/underline/strikethrough export to real <b>/<i>/<u>/<s> tags (browser-styled by
@@ -197,6 +225,9 @@ function RichTextEditor(
   ref: React.Ref<RichTextEditorHandle>,
 ) {
   const editorRef = useRef<LexicalEditor | null>(null);
+  // Callback ref (not a plain useRef) - the floating plugins below need a re-render once this DOM
+  // node actually exists, so they can compute positions against it.
+  const [anchorElem, setAnchorElem] = useState<HTMLDivElement | null>(null);
 
   useImperativeHandle(ref, () => ({
     getPendingImages: () => {
@@ -270,10 +301,16 @@ function RichTextEditor(
           HeadingNode,
           QuoteNode,
           CodeNode,
+          CodeHighlightNode,
           HorizontalRuleNode,
           TableNode,
           TableRowNode,
           TableCellNode,
+          CollapsibleContainerNode,
+          CollapsibleTitleNode,
+          CollapsibleContentNode,
+          LayoutContainerNode,
+          LayoutItemNode,
         ],
         editable: !disabled && !readOnly,
         onError: (err) => console.error(err),
@@ -292,6 +329,40 @@ function RichTextEditor(
             capitalize: "rte-capitalize",
           },
           code: "rte-code-block",
+          // Prism token type -> theme class, consolidated onto `.rte-token-*` (see contentStyles.ts)
+          // rather than one class per token type - mirrors the Lexical playground's own grouping.
+          codeHighlight: {
+            atrule: "rte-token-attr",
+            attr: "rte-token-attr",
+            boolean: "rte-token-property",
+            builtin: "rte-token-selector",
+            cdata: "rte-token-comment",
+            char: "rte-token-selector",
+            class: "rte-token-function",
+            "class-name": "rte-token-function",
+            comment: "rte-token-comment",
+            constant: "rte-token-property",
+            deleted: "rte-token-deleted",
+            doctype: "rte-token-comment",
+            entity: "rte-token-operator",
+            function: "rte-token-function",
+            important: "rte-token-variable",
+            inserted: "rte-token-inserted",
+            keyword: "rte-token-attr",
+            namespace: "rte-token-variable",
+            number: "rte-token-property",
+            operator: "rte-token-operator",
+            prolog: "rte-token-comment",
+            property: "rte-token-property",
+            punctuation: "rte-token-punctuation",
+            regex: "rte-token-variable",
+            selector: "rte-token-selector",
+            string: "rte-token-selector",
+            symbol: "rte-token-property",
+            tag: "rte-token-property",
+            url: "rte-token-operator",
+            variable: "rte-token-variable",
+          },
         },
       }}
     >
@@ -308,21 +379,48 @@ function RichTextEditor(
           className={[error && "error", disabled && "disabled", readOnly && "readonly"].filter(Boolean).join(" ")}
         >
           {!readOnly && <Toolbar renderImagePicker={renderImagePicker} />}
-          <div style={{ position: "relative" }}>
+          <div ref={setAnchorElem} style={{ position: "relative" }}>
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-content" onBlur={onBlur} />}
               placeholder={null}
               ErrorBoundary={LexicalErrorBoundary}
             />
+            {!readOnly && (
+              <>
+                <FloatingTextFormatToolbarPlugin anchorElem={anchorElem} />
+                <FloatingLinkEditorPlugin anchorElem={anchorElem} />
+                <CodeActionMenuPlugin anchorElem={anchorElem} />
+                <DraggableBlockPlugin anchorElem={anchorElem} />
+                <FindReplacePlugin anchorElem={anchorElem} />
+              </>
+            )}
           </div>
           <HistoryPlugin />
+          <CodeHighlightPlugin />
           <ListPlugin />
           <CheckListPlugin />
           <LinkPlugin />
           <ClickableLinkPlugin newTab />
           <AutoLinkPlugin matchers={AUTO_LINK_MATCHERS} />
           <LexicalAutoEmbedPlugin embedConfigs={EMBED_CONFIGS} getMenuOptions={getEmbedMenuOptions} />
+          {!readOnly && (
+            <>
+              <ComponentPickerPlugin />
+              <EmojiPickerPlugin />
+              <ContextMenuPlugin />
+              <ShortcutsPlugin />
+            </>
+          )}
+          <MarkdownShortcutPlugin transformers={RICH_TEXT_MARKDOWN_TRANSFORMERS} />
           <TablePlugin />
+          {!readOnly && (
+            <>
+              <TableCellResizerPlugin />
+              <TableHoverActionsPlugin />
+            </>
+          )}
+          <CollapsiblePlugin />
+          <LayoutPlugin />
           <ImagesPlugin />
           <ImageDropPastePlugin />
           <EmbedPlugin />

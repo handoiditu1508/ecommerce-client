@@ -26,6 +26,7 @@ function DynamicGridForm<T extends FieldValues>({
   autocompleteLoadingMap = CONFIG.EMPTY_OBJECT,
   hiddenMap = CONFIG.EMPTY_OBJECT,
   richTextRefMap = CONFIG.EMPTY_OBJECT,
+  richTextImagePickerMap = CONFIG.EMPTY_OBJECT,
   renderInputMap = CONFIG.EMPTY_OBJECT,
   arrayItemActionsMap = CONFIG.EMPTY_OBJECT,
   onSubmit,
@@ -51,6 +52,7 @@ function DynamicGridForm<T extends FieldValues>({
               formLoading={loading}
               hidden={hiddenMap[inputModel.name]}
               richTextRef={richTextRefMap[inputModel.name]}
+              richTextImagePicker={richTextImagePickerMap[inputModel.name]}
               startAdornment={startAdornmentMap[inputModel.name]}
               endAdornment={endAdornmentMap[inputModel.name]}
               label={labelMap[inputModel.name]}
