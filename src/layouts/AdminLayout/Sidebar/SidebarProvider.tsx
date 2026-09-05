@@ -5,6 +5,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import CategoryIcon from "@mui/icons-material/Category";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
@@ -76,6 +77,13 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
       title: "brands",
       to: "/admin/brands",
       icon: <BrandingWatermarkIcon />,
+      children: [
+        {
+          title: "create_brand",
+          to: "/admin/brands/new",
+          icon: <LibraryAddIcon />,
+        },
+      ],
     },
     {
       title: "users",

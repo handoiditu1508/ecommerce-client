@@ -1,6 +1,7 @@
 {
   "brands": "Brands",
   "categories": "Categories",
+  "create_brand": "Create Brand",
   "create_category": "Create Category",
   "create_gift": "Create Gift",
   "create_gift_promotion": "Create Gift Promotion",

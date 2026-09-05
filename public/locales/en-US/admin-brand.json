@@ -1,11 +1,20 @@
 {
   "apply_filters": "Apply Filters",
+  "brand_created_successfully": "Brand created successfully.",
+  "brand_deleted_successfully": "Brand deleted successfully.",
   "brand_name": "Brand Name",
-  "create_brand": "Create Brand",
+  "brand_updated_successfully": "Brand updated successfully.",
+  "current_logo": "Current Logo",
+  "delete": "Delete",
+  "delete_brand": "Delete Brand",
+  "delete_brand_confirmation": "Delete {{name}}?",
   "edit_brand": "Edit Brand",
   "has_active_product": "Has Active Product",
   "has_logo": "Has Logo",
+  "invalid_brand_id": "Invalid brand ID.",
   "logo": "Logo",
-  "not_supported_yet": "Not supported yet.",
-  "top_brand": "Top Brand"
+  "top_brand": "Top Brand",
+  "unable_to_load_brand": "Unable to load brand.",
+  "update_brand": "Update Brand",
+  "upload_new_logo": "Upload New Logo"
 }

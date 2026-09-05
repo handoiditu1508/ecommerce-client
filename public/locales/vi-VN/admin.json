@@ -1,6 +1,7 @@
 {
   "brands": "Thương Hiệu",
   "categories": "Danh Mục",
+  "create_brand": "Tạo Thương Hiệu",
   "create_category": "Tạo Danh Mục",
   "create_gift": "Tạo Quà Tặng",
   "create_gift_promotion": "Tạo Khuyến Mãi Quà Tặng",

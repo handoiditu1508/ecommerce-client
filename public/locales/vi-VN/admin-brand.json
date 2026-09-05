@@ -1,11 +1,20 @@
 {
   "apply_filters": "Áp Dụng Bộ Lọc",
+  "brand_created_successfully": "Tạo thương hiệu thành công.",
+  "brand_deleted_successfully": "Xóa thương hiệu thành công.",
   "brand_name": "Tên Thương Hiệu",
-  "create_brand": "Tạo Thương Hiệu",
+  "brand_updated_successfully": "Cập nhật thương hiệu thành công.",
+  "current_logo": "Logo Hiện Tại",
+  "delete": "Xóa",
+  "delete_brand": "Xóa Thương Hiệu",
+  "delete_brand_confirmation": "Xóa {{name}}?",
   "edit_brand": "Chỉnh Sửa Thương Hiệu",
   "has_active_product": "Có Sản Phẩm Đang Hoạt Động",
   "has_logo": "Có Logo",
+  "invalid_brand_id": "ID thương hiệu không hợp lệ.",
   "logo": "Logo",
-  "not_supported_yet": "Chưa được hỗ trợ.",
-  "top_brand": "Thương Hiệu Nổi Bật"
+  "top_brand": "Thương Hiệu Nổi Bật",
+  "unable_to_load_brand": "Không thể tải thương hiệu.",
+  "update_brand": "Cập Nhật Thương Hiệu",
+  "upload_new_logo": "Tải Lên Logo Mới"
 }
