@@ -1,16 +1,13 @@
-import authSample from "@/assets/auth-sample.jpg";
 import Suspense from "@/components/Suspense";
-import { BreakpointsContext, smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
+import { smAndDownMediaQuery, xsAndDownMediaQuery } from "@/contexts/breakpoints";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
-import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
 function AuthLayout() {
   const theme = useTheme();
-  const { xsAndDown } = useContext(BreakpointsContext);
 
   return (
     <Paper elevation={0} square>
@@ -31,9 +28,7 @@ function AuthLayout() {
         <Box
           sx={{
             borderRadius: 4,
-            backgroundColor: theme.vars.palette.primary.light,
-            backgroundImage: `url(${authSample})`,
-            backgroundRepeat: "repeat",
+            background: `linear-gradient(160deg, ${theme.vars.palette.primary.main} 10%, ${theme.vars.palette.primary.light} 50%, ${theme.vars.palette.primary.dark} 90%)`,
             flex: 1,
             [smAndDownMediaQuery(theme.breakpoints)]: {
               borderRadius: 0,
@@ -44,23 +39,7 @@ function AuthLayout() {
               height: "100%",
             },
           }}
-        >
-          {xsAndDown && <>
-            <Box sx={{
-              width: "100%",
-              height: "30%",
-              backgroundColor: theme.vars.palette.background.paper,
-            }}
-            />
-            <Box sx={{
-              width: 0,
-              height: 0,
-              borderTop: `30vh solid ${theme.vars.palette.background.paper}`,
-              borderLeft: "100vw solid transparent",
-            }}
-            />
-          </>}
-        </Box>
+        />
         <Paper
           elevation={0}
           sx={{
@@ -71,7 +50,6 @@ function AuthLayout() {
               zIndex: 1,
             },
             [xsAndDownMediaQuery(theme.breakpoints)]: {
-              backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.5)`,
               borderRadius: 0,
             },
           }}
