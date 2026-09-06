@@ -4,6 +4,7 @@ import { ConfirmChangeEmailCommand } from "@/models/apis/auth/confirmChangeEmail
 import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/auth/forgotPassword";
 import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
 import { Login2faCommand } from "@/models/apis/auth/login2fa";
+import { LoginGoogleCommand } from "@/models/apis/auth/loginGoogle";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/auth/registerConfirmedEmail";
 import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
 import { SendPreConfirmEmailCommand } from "@/models/apis/auth/sendPreConfirmEmail";
@@ -27,6 +28,13 @@ const authApi = appApi.injectEndpoints({
         method: "POST",
       }),
       invalidatesTags: (result) => (result ? ["UNAUTHORIZED"] : []),
+    }),
+    loginGoogle: builder.mutation<LoginResponse, LoginGoogleCommand>({
+      query: (body) => ({
+        url: "/auth/loginGoogle",
+        method: "POST",
+        body,
+      }),
     }),
     sendPreConfirmEmail: builder.mutation<SendEmailResponse, SendPreConfirmEmailCommand>({
       query: (body) => ({
@@ -99,6 +107,7 @@ export default authApi;
 export const {
   useRefreshTokenMutation,
   useLoginMutation,
+  useLoginGoogleMutation,
   useSendPreConfirmEmailMutation,
   useRegisterConfirmedEmailMutation,
   useLogin2faMutation,

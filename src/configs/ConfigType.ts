@@ -8,6 +8,7 @@ type ConfigType = {
    * File base URL without slash suffix.
    */
   FILE_URL: string;
+  GOOGLE_CLIENT_ID: string;
   IS_AWESOME: boolean;
   /**
    * theme.spacing(CONFIG.LAYOUT_PADDING)

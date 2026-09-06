@@ -1,11 +1,12 @@
 import { preventDefault } from "@/common/event";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { Login2faCommand } from "@/models/apis/auth/login2fa";
 import { Problem } from "@/models/apis/common";
-import { useLogin2faMutation, useLoginMutation } from "@/redux/apis/authApi";
+import { useLogin2faMutation, useLoginGoogleMutation, useLoginMutation } from "@/redux/apis/authApi";
 import LockIcon from "@mui/icons-material/Lock";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -56,7 +57,8 @@ function Login2faModal({
 
   const [login2fa, result] = useLogin2faMutation();
   const [resendOtp, resendOtpResult] = useLoginMutation();
-  const loading = result.isLoading || resendOtpResult.isLoading;
+  const [resendGoogleOtp, resendGoogleOtpResult] = useLoginGoogleMutation();
+  const loading = result.isLoading || resendOtpResult.isLoading || resendGoogleOtpResult.isLoading;
   const formContext = useForm<Login2faCommand>({
     defaultValues: {
       username: loginState.loginCommand.username,
@@ -88,6 +90,36 @@ function Login2faModal({
 
   const handleResentOtp: MouseEventHandler<HTMLButtonElement> = async (_event) => {
     const response = await resendOtp(loginState.loginCommand);
+    if (response.data) {
+      if (response.data.twoFactorAuthenticate) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: response.data,
+        });
+      } else {
+        // somehow 2fa is disabled => successful login
+        onSuccess();
+      }
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
+      // send otp failed because email sending is cooldown => start countdown
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
+      }
+    }
+  };
+
+  const handleGoogleResendCredential = async (idToken: string) => {
+    const response = await resendGoogleOtp({
+      idToken,
+      isPersistent: formContext.getValues("isPersistent"),
+    });
     if (response.data) {
       if (response.data.twoFactorAuthenticate) {
         loginDispatch({
@@ -146,10 +178,22 @@ function Login2faModal({
                     {t("resend_otp_countdown", { seconds: loginState.emailCountdown })}
                   </Typography>
                 )
-                : (<>
-                  <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{t("did_not_receive_otp")}</Typography>
-                  <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>{t("resend_otp")}</Button>
-                </>)}
+                : loginState.loginMethod === "google"
+                  ? (<>
+                    <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{t("did_not_receive_otp")}</Typography>
+                    <Box sx={{ width: 180 }}>
+                      <GoogleSignInButton
+                        disabled={loading}
+                        size="medium"
+                        text="continue_with"
+                        onCredential={handleGoogleResendCredential}
+                      />
+                    </Box>
+                  </>)
+                  : (<>
+                    <Typography sx={{ flex: 1, cursor: "initial" }} align="right" onClick={preventDefault}>{t("did_not_receive_otp")}</Typography>
+                    <Button variant="text" disabled={loading} sx={{ textTransform: "initial", ...theme.typography.body1 }} onClick={handleResentOtp}>{t("resend_otp")}</Button>
+                  </>)}
             </Box>
           ),
         }}

@@ -1,12 +1,14 @@
 import logo from "@/assets/logo.svg";
 import { preventDefault } from "@/common/event";
+import { decodeJwtPayload } from "@/common/jwt";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { LoginCommand } from "@/models/apis/auth/login";
 import { Problem } from "@/models/apis/common";
-import { useLoginMutation } from "@/redux/apis/authApi";
+import { useLoginGoogleMutation, useLoginMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -61,6 +63,7 @@ function LoginModal({
   };
 
   const [login, result] = useLoginMutation();
+  const [loginGoogle, googleResult] = useLoginGoogleMutation();
   const formContext = useForm<LoginCommand>({
     defaultValues: {
       ...loginState.loginCommand,
@@ -114,6 +117,58 @@ function LoginModal({
     }
   };
 
+  const handleGoogleCredential = async (idToken: string) => {
+    const response = await loginGoogle({
+      idToken,
+      isPersistent: formContext.getValues("isPersistent"),
+    });
+
+    if (response.data) {
+      if (response.data.twoFactorAuthenticate) {
+        const payload = decodeJwtPayload<{ email: string; }>(idToken);
+        if (payload?.email) {
+          loginDispatch({
+            type: "SET_GOOGLE_LOGIN_USERNAME",
+            payload: payload.email,
+          });
+        }
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: response.data,
+        });
+        onLogin2fa();
+      } else {
+        onSuccess();
+      }
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
+      // 2fa otp email already sent and need to wait before can send more => to login 2fa step
+      const payload = decodeJwtPayload<{ email: string; }>(idToken);
+      if (payload?.email) {
+        loginDispatch({
+          type: "SET_GOOGLE_LOGIN_USERNAME",
+          payload: payload.email,
+        });
+      }
+
+      loginDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
+      }
+
+      onLogin2fa();
+    }
+  };
+
   return (
     <Box sx={{
       display: "flex",
@@ -147,7 +202,10 @@ function LoginModal({
         alignItems: "center",
         gap: 2,
       }}>
-        <Button fullWidth variant="outlined" disabled={result.isLoading}>Google</Button>
+        <GoogleSignInButton
+          disabled={result.isLoading || googleResult.isLoading}
+          onCredential={handleGoogleCredential}
+        />
         <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
       </Box>
       <Box sx={{ flex: 1 }} />
