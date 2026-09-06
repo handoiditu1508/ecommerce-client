@@ -17,6 +17,7 @@ type User = {
   policies: Policy[];
   emailConfirmed: boolean;
   redirectEmailEnabled: boolean;
+  avatarPath?: string;
   twoFactorEnabled: boolean;
   isDeleted: boolean;
   deletedDate?: string;

@@ -1,3 +1,4 @@
+import { resolveFileUrl } from "@/common/url";
 import CustomLink from "@/components/CustomLink";
 import LetterAvatar from "@/components/LetterAvatar";
 import MdiSvgIcon from "@/components/MdiSvgIcon";
@@ -106,6 +107,7 @@ function MenuButton() {
           />
           <LetterAvatar
             alt="avatar"
+            src={resolveFileUrl(authUser?.avatarPath)}
             sx={{
               color: "inherit",
               width: 80,

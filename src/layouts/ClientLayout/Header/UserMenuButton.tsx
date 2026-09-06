@@ -1,3 +1,4 @@
+import { resolveFileUrl } from "@/common/url";
 import LetterAvatar from "@/components/LetterAvatar";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
@@ -51,10 +52,13 @@ function UserMenuButton(props: UserMenuButtonProps) {
       >
         {authUser
           ? (
-            <LetterAvatar sx={{
-              width: 24,
-              height: 24,
-            }}>
+            <LetterAvatar
+              src={resolveFileUrl(authUser.avatarPath)}
+              sx={{
+                width: 24,
+                height: 24,
+              }}
+            >
               {`${authUser.firstName} ${authUser.lastName}`}
             </LetterAvatar>
           )
