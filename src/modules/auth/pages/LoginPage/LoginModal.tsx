@@ -3,14 +3,14 @@ import { preventDefault } from "@/common/event";
 import { decodeJwtPayload } from "@/common/jwt";
 import CustomLink from "@/components/CustomLink";
 import DynamicForm, { DynamicFormModel } from "@/components/DynamicForm";
+import FacebookSignInButton from "@/components/FacebookSignInButton";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import CONFIG from "@/configs";
 import { smAndDownMediaQuery } from "@/contexts/breakpoints";
 import { LoginCommand } from "@/models/apis/auth/login";
 import { Problem } from "@/models/apis/common";
-import { useLoginGoogleMutation, useLoginMutation } from "@/redux/apis/authApi";
+import { useLoginFacebookMutation, useLoginGoogleMutation, useLoginMutation } from "@/redux/apis/authApi";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -64,6 +64,7 @@ function LoginModal({
 
   const [login, result] = useLoginMutation();
   const [loginGoogle, googleResult] = useLoginGoogleMutation();
+  const [loginFacebook, facebookResult] = useLoginFacebookMutation();
   const formContext = useForm<LoginCommand>({
     defaultValues: {
       ...loginState.loginCommand,
@@ -128,8 +129,8 @@ function LoginModal({
         const payload = decodeJwtPayload<{ email: string; }>(idToken);
         if (payload?.email) {
           loginDispatch({
-            type: "SET_GOOGLE_LOGIN_USERNAME",
-            payload: payload.email,
+            type: "SET_EXTERNAL_LOGIN_USERNAME",
+            payload: { method: "google", username: payload.email },
           });
         }
         loginDispatch({
@@ -145,8 +146,58 @@ function LoginModal({
       const payload = decodeJwtPayload<{ email: string; }>(idToken);
       if (payload?.email) {
         loginDispatch({
-          type: "SET_GOOGLE_LOGIN_USERNAME",
-          payload: payload.email,
+          type: "SET_EXTERNAL_LOGIN_USERNAME",
+          payload: { method: "google", username: payload.email },
+        });
+      }
+
+      loginDispatch({
+        type: "RESET_EMAIL_COUNTDOWN",
+      });
+
+      const problem = response.error.data as Problem;
+      if ("sentTime" in problem.data && "cooldown" in problem.data) {
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: {
+            sentTime: problem.data["sentTime"] as string,
+            cooldown: problem.data["cooldown"] as number,
+          },
+        });
+      }
+
+      onLogin2fa();
+    }
+  };
+
+  const handleFacebookCredential = async (accessToken: string, email?: string) => {
+    const response = await loginFacebook({
+      accessToken,
+      isPersistent: formContext.getValues("isPersistent"),
+    });
+
+    if (response.data) {
+      if (response.data.twoFactorAuthenticate) {
+        if (email) {
+          loginDispatch({
+            type: "SET_EXTERNAL_LOGIN_USERNAME",
+            payload: { method: "facebook", username: email },
+          });
+        }
+        loginDispatch({
+          type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE",
+          payload: response.data,
+        });
+        onLogin2fa();
+      } else {
+        onSuccess();
+      }
+    } else if (response.error.code === "Identity-005" && "data" in response.error) {
+      // 2fa otp email already sent and need to wait before can send more => to login 2fa step
+      if (email) {
+        loginDispatch({
+          type: "SET_EXTERNAL_LOGIN_USERNAME",
+          payload: { method: "facebook", username: email },
         });
       }
 
@@ -206,7 +257,10 @@ function LoginModal({
           disabled={result.isLoading || googleResult.isLoading}
           onCredential={handleGoogleCredential}
         />
-        <Button fullWidth variant="outlined" disabled={result.isLoading}>Facebook</Button>
+        <FacebookSignInButton
+          disabled={result.isLoading || facebookResult.isLoading}
+          onCredential={handleFacebookCredential}
+        />
       </Box>
       <Box sx={{ flex: 1 }} />
       <Typography align="center">{t("dont_have_an_account")} <CustomLink to="/register">{t("sign_up")}</CustomLink></Typography>

@@ -102,8 +102,12 @@ t("main:home_page")
   - Date properties on request types (`Get*Query`, `Create*Command`, `Update*Command`) use `Date`; date properties on response types (entities, DTOs, views) use `string`.
 
 - Icon:
-  - When picking an icon, check `@mui/icons-material`, `@fortawesome/free-solid-svg-icons` and `@mdi/js`/`@mdi/light-js` for the most fitting icon, preferring the MUI icon whenever the same icon exists in multiple libraries.
-  - Render a chosen Font Awesome icon via `FaSvgIcon` and a Material Design Icons one via `MdiSvgIcon`, e.g. `<FaSvgIcon icon={faTruck} />` or `<MdiSvgIcon path={mdiTruck} />`.
+  - Search in this priority order for the best-fitting icon:
+    - `@mui/icons-material`: filter file names in `node_modules/@mui/icons-material/*.js`.
+    - `@mdi/js`: read `node_modules/@mdi/js/mdi.d.ts`.
+    - `@fortawesome/free-solid-svg-icons`: filter file names in `node_modules/@fortawesome/free-solid-svg-icons/*.js`.
+    - `@mdi/light-js`: read `node_modules/@mdi/light-js/mdil.d.ts`.
+  - `@mui/icons-material` icons are ready-to-use components. Render a Material Design Icons path via `MdiSvgIcon` and a Font Awesome icon via `FaSvgIcon`, e.g. `<MdiSvgIcon path={mdiTruck} />` or `<FaSvgIcon icon={faTruck} />`.
 
 - File naming conventions:
   - React component: PascalCase (`CustomLink.tsx`)

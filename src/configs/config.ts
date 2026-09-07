@@ -5,6 +5,7 @@ const defaultConfig: ConfigType = {
   API_URL: import.meta.env.VITE_API_URL,
   FILE_URL: import.meta.env.VITE_FILE_URL,
   GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  FACEBOOK_APP_ID: import.meta.env.VITE_FACEBOOK_APP_ID,
   IS_AWESOME: import.meta.env.VITE_IS_AWESOME === "true" ? true : false,
   LAYOUT_PADDING: 1,
   EMPTY_FUNCTION: () => { },

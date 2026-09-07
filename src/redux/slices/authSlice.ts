@@ -119,7 +119,8 @@ const authSlice = createSlice({
           authApi.endpoints.refreshToken.matchFulfilled,
           authApi.endpoints.registerConfirmedEmail.matchFulfilled,
           authApi.endpoints.login2fa.matchFulfilled,
-          authApi.endpoints.loginGoogle.matchFulfilled
+          authApi.endpoints.loginGoogle.matchFulfilled,
+          authApi.endpoints.loginFacebook.matchFulfilled
         ),
         (state: AuthState, action: PayloadAction<LoginResponse>) => {
           const newAction = authSlice.actions.setAuthState(action.payload);

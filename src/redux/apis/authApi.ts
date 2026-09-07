@@ -4,6 +4,7 @@ import { ConfirmChangeEmailCommand } from "@/models/apis/auth/confirmChangeEmail
 import { ForgotPasswordCommand, ForgotPasswordResponse } from "@/models/apis/auth/forgotPassword";
 import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
 import { Login2faCommand } from "@/models/apis/auth/login2fa";
+import { LoginFacebookCommand } from "@/models/apis/auth/loginFacebook";
 import { LoginGoogleCommand } from "@/models/apis/auth/loginGoogle";
 import { RegisterConfirmedEmailCommand, RegisterResponse } from "@/models/apis/auth/registerConfirmedEmail";
 import { ResetPasswordCommand } from "@/models/apis/auth/resetPassword";
@@ -32,6 +33,13 @@ const authApi = appApi.injectEndpoints({
     loginGoogle: builder.mutation<LoginResponse, LoginGoogleCommand>({
       query: (body) => ({
         url: "/auth/loginGoogle",
+        method: "POST",
+        body,
+      }),
+    }),
+    loginFacebook: builder.mutation<LoginResponse, LoginFacebookCommand>({
+      query: (body) => ({
+        url: "/auth/loginFacebook",
         method: "POST",
         body,
       }),
@@ -108,6 +116,7 @@ export const {
   useRefreshTokenMutation,
   useLoginMutation,
   useLoginGoogleMutation,
+  useLoginFacebookMutation,
   useSendPreConfirmEmailMutation,
   useRegisterConfirmedEmailMutation,
   useLogin2faMutation,

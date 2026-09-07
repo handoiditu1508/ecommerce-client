@@ -9,6 +9,7 @@ type ConfigType = {
    */
   FILE_URL: string;
   GOOGLE_CLIENT_ID: string;
+  FACEBOOK_APP_ID: string;
   IS_AWESOME: boolean;
   /**
    * theme.spacing(CONFIG.LAYOUT_PADDING)

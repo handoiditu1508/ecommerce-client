@@ -1,7 +1,8 @@
 import { LoginCommand, LoginResponse } from "@/models/apis/auth/login";
 import { useReducer } from "react";
 
-export type LoginMethod = "password" | "google";
+export type LoginMethod = "password" | "google" | "facebook";
+export type ExternalLoginMethod = Exclude<LoginMethod, "password">;
 
 export type LoginReducerState = {
   loginCommand: LoginCommand;
@@ -15,9 +16,9 @@ export type LoginReducerAction = {
   type: "SET_LOGIN_COMMAND";
   payload: LoginCommand;
 } | {
-  type: "SET_GOOGLE_LOGIN_USERNAME";
-  // Google account's verified email, used as the "username" for the follow-up Login2fa step.
-  payload: string;
+  type: "SET_EXTERNAL_LOGIN_USERNAME";
+  // The third-party account's verified email, used as the "username" for the follow-up Login2fa step.
+  payload: { method: ExternalLoginMethod; username: string; };
 } | {
   type: "SET_EMAIL_COUNTDOWN_FROM_RESPONSE";
   payload: Pick<LoginResponse, "sentTime" | "cooldown">;
@@ -47,14 +48,14 @@ const useLoginReducer = () =>
             loginCommand: action.payload,
             loginMethod: "password",
           };
-        case "SET_GOOGLE_LOGIN_USERNAME":
+        case "SET_EXTERNAL_LOGIN_USERNAME":
           return {
             ...state,
             loginCommand: {
               ...state.loginCommand,
-              username: action.payload,
+              username: action.payload.username,
             },
-            loginMethod: "google",
+            loginMethod: action.payload.method,
           };
         case "SET_EMAIL_COUNTDOWN_FROM_RESPONSE":
           const sentTimeMilis = Date.parse(action.payload.sentTime);

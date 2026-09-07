@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_FILE_URL: string;
   readonly VITE_GOOGLE_CLIENT_ID: string;
+  readonly VITE_FACEBOOK_APP_ID: string;
   // more env variables...
 }
 
