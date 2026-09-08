@@ -69,6 +69,7 @@ function FacebookSignInButton({ onCredential, disabled = false }: FacebookSignIn
       variant="outlined"
       disabled={disabled || loading}
       startIcon={<FacebookIcon sx={{ color: "#1877F2" }} />}
+      sx={{ height: 40 }}
       onClick={handleClick}
     >
       Facebook

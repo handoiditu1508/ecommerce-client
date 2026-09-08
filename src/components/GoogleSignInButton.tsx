@@ -81,6 +81,8 @@ function GoogleSignInButton({ onCredential, disabled = false, size = "large", te
       ref={containerRef}
       sx={{
         width: "100%",
+        overflow: "hidden",
+        borderRadius: 1,
         opacity: disabled ? 0.5 : 1,
         pointerEvents: disabled ? "none" : "auto",
         "& > div": { width: "100% !important" },
