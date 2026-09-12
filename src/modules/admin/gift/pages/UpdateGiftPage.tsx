@@ -88,7 +88,9 @@ function UpdateGiftPage() {
     if (thumbnailSelection === UPLOAD_NEW_ID && previousThumbnailSelectionRef.current !== undefined) {
       fileInputRef.current?.click();
     }
-    previousThumbnailSelectionRef.current = thumbnailSelection;
+    if (thumbnailSelection !== UPLOAD_NEW_ID) {
+      previousThumbnailSelectionRef.current = thumbnailSelection;
+    }
   }, [thumbnailSelection]);
 
   if (!Number.isInteger(id)) return <Alert severity="error">{t("invalid_gift_id")}</Alert>;

@@ -8,6 +8,7 @@
   "create_invoice_discount": "Create Invoice Discount",
   "create_product": "Create Product",
   "create_product_discount": "Create Product Discount",
+  "create_promotion_banner": "Create Promotion Banner",
   "create_user": "Create User",
   "gift_promotions": "Gift Promotions",
   "gifts": "Gifts",
@@ -17,6 +18,7 @@
   "none": "None",
   "product_discounts": "Product Discounts",
   "products": "Products",
+  "promotion_banners": "Promotion Banners",
   "promotions": "Promotions",
   "users": "Users"
 }

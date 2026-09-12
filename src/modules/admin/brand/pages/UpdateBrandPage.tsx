@@ -85,7 +85,9 @@ function UpdateBrandPage() {
     if (logoSelection === UPLOAD_NEW_ID && previousLogoSelectionRef.current !== undefined) {
       fileInputRef.current?.click();
     }
-    previousLogoSelectionRef.current = logoSelection;
+    if (logoSelection !== UPLOAD_NEW_ID) {
+      previousLogoSelectionRef.current = logoSelection;
+    }
   }, [logoSelection]);
 
   if (!Number.isInteger(id)) return <Alert severity="error">{t("invalid_brand_id")}</Alert>;

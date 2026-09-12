@@ -65,6 +65,11 @@ enum Policy {
   UpdateBrand = "Update Brand",
   CreateBrand = "Create Brand",
   DeleteBrand = "Delete Brand",
+
+  ViewPromotionBanner = "View Promotion Banner",
+  UpdatePromotionBanner = "Update Promotion Banner",
+  CreatePromotionBanner = "Create Promotion Banner",
+  DeletePromotionBanner = "Delete Promotion Banner",
 }
 
 export const ADMIN_POLICY_EXCLUSION: Policy[] = [Policy.ModifyAdmin];

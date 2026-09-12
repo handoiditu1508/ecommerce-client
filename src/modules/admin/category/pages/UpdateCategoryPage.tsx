@@ -83,7 +83,9 @@ function UpdateCategoryPage() {
     if (iconSelection === UPLOAD_NEW_ID && previousIconSelectionRef.current !== undefined) {
       fileInputRef.current?.click();
     }
-    previousIconSelectionRef.current = iconSelection;
+    if (iconSelection !== UPLOAD_NEW_ID) {
+      previousIconSelectionRef.current = iconSelection;
+    }
   }, [iconSelection]);
 
   if (!Number.isInteger(id)) return <Alert severity="error">{t("invalid_category_id")}</Alert>;

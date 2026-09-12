@@ -6,6 +6,7 @@ import categoryRoutes from "./categoryRoutes";
 import giftRoutes from "./giftRoutes";
 import mainRoutes from "./mainRoutes";
 import productRoutes from "./productRoutes";
+import promotionBannerRoutes from "./promotionBannerRoutes";
 import promotionRoutes from "./promotionRoutes";
 import userRoutes from "./userRoutes";
 
@@ -25,6 +26,7 @@ const adminRoutes: RouteObject[] = [
           ...userRoutes,
           ...promotionRoutes,
           ...giftRoutes,
+          ...promotionBannerRoutes,
         ],
       },
     ],

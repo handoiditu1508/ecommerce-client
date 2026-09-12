@@ -14,6 +14,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import SellIcon from "@mui/icons-material/Sell";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import { useTheme } from "@mui/material/styles";
 import { SwipeableDrawerProps } from "@mui/material/SwipeableDrawer";
 import { ProviderProps, useContext, useEffect, useState } from "react";
@@ -147,6 +148,18 @@ const temporarySidebarTabs: TemporarySidebarTab[][] = [
         {
           title: "create_gift",
           to: "/admin/gifts/new",
+          icon: <AddCircleIcon />,
+        },
+      ],
+    },
+    {
+      title: "promotion_banners",
+      to: "/admin/promotion-banners",
+      icon: <ViewCarouselIcon />,
+      children: [
+        {
+          title: "create_promotion_banner",
+          to: "/admin/promotion-banners/new",
           icon: <AddCircleIcon />,
         },
       ],

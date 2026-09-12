@@ -10,6 +10,7 @@ const ProductDetailPage = React.lazy(() => import("@/modules/product/pages/Produ
 const ProductsPage = React.lazy(() => import("@/modules/product/pages/ProductsPage"));
 const LatestProductsPage = React.lazy(() => import("@/modules/product/pages/LatestProductsPage"));
 const DiscountedProductsPage = React.lazy(() => import("@/modules/product/pages/DiscountedProductsPage"));
+const PromotionProductsPage = React.lazy(() => import("@/modules/product/pages/PromotionProductsPage"));
 
 const productRoutes: RouteObject[] = [
   {
@@ -54,6 +55,10 @@ const productRoutes: RouteObject[] = [
             icon: <MdiSvgIcon path={mdiSale} />,
           },
         } as RouteHandleObject,
+      },
+      {
+        path: "promotion/:promotionId",
+        element: <PromotionProductsPage />,
       },
       {
         path: ":id",

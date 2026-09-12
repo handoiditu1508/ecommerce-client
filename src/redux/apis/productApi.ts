@@ -6,6 +6,7 @@ import { GetDiscountedProductsQuery } from "@/models/apis/product/getDiscountedP
 import { GetLatestProductsQuery } from "@/models/apis/product/getLatestProducts";
 import { GetProductQuery } from "@/models/apis/product/getProduct";
 import { CountProductsQuery, GetProductsQuery } from "@/models/apis/product/getProducts";
+import { CountProductsByPromotionQuery, GetProductsByPromotionQuery } from "@/models/apis/product/getProductsByPromotion";
 import { GetProductsToRehydrateCartQuery } from "@/models/apis/product/getProductsToRehydrateCart";
 import { RecoverProductCommand } from "@/models/apis/product/recoverProduct";
 import { ReorderProductImagesCommand } from "@/models/apis/product/reorderProductImages";
@@ -45,6 +46,14 @@ const productApi = appApi.injectEndpoints({
       }),
       providesTags: (result, error) => providesListTags("Product", result, error),
     }),
+    getProductsByPromotion: builder.query<ProductView[], GetProductsByPromotionQuery>({
+      query: ({ promotionId, ...params }) => ({
+        url: `/products/Promotion/${promotionId}`,
+        method: "GET",
+        params,
+      }),
+      providesTags: (result, error) => providesListTags("Product", result, error),
+    }),
     searchProducts: builder.query<ProductView[], SearchProductsQuery>({
       query: (arg) => ({
         url: "/products/search",
@@ -53,16 +62,23 @@ const productApi = appApi.injectEndpoints({
       }),
     }),
     countAllProducts: builder.query<number, void>({
-      query: () => "/products/count/all",
+      query: () => "/products/all/count",
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
     countDiscountedProducts: builder.query<number, void>({
-      query: () => "/products/count/discount",
+      query: () => "/products/discount/count",
+      providesTags: (_result, error) => providesCountTag("Product", error),
+    }),
+    countProductsByPromotion: builder.query<number, CountProductsByPromotionQuery>({
+      query: ({ promotionId }) => ({
+        url: `/products/Promotion/${promotionId}/Count`,
+        method: "GET",
+      }),
       providesTags: (_result, error) => providesCountTag("Product", error),
     }),
     countSearchProducts: builder.query<number, CountSearchProductsQuery>({
       query: (arg) => ({
-        url: "/products/count/search",
+        url: "/products/search/count",
         method: "GET",
         params: arg,
       }),
@@ -277,6 +293,8 @@ export const {
   useCountAllProductsQuery,
   useGetDiscountedProductsQuery,
   useCountDiscountedProductsQuery,
+  useGetProductsByPromotionQuery,
+  useCountProductsByPromotionQuery,
   useSearchProductsQuery,
   useLazySearchProductsQuery,
   useCountSearchProductsQuery,
