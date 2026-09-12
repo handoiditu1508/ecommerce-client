@@ -33,7 +33,7 @@ const userApi = appApi.injectEndpoints({
     }),
     updateUser: builder.mutation<User, UpdateUserCommand>({
       query: (body) => ({
-        url: "/users",
+        url: `/users/${body.id}`,
         method: "PUT",
         body,
       }),
